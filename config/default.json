@@ -1,0 +1,5 @@
+{
+  "env": "local",
+  "api_doc_path": "../api_doc",
+  "base_test_case_path": "../test_case/base"
+}
