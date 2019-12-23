@@ -1,5 +1,7 @@
 const Task = require("./task");
 const flow = require("../api_flow");
+const Log = require("../middleware/log");
+const {ERROR} = require("../lib/common");
 
 class TaskQueue {
     constructor() {
@@ -16,6 +18,8 @@ class TaskQueue {
 
     async init() {
         for(let i in flow) {
+            if(typeof i !== "string" || !Array.isArray(flow[i])) throw new TypeError(ERROR.API_FLOW_ERROR);
+
             await this._addTask(i, flow[i]);
         }
     }
@@ -32,8 +36,12 @@ class TaskQueue {
     }
 
     async execute() {
-        for(let i in this._queue) {
-            this._queue[i].execute();
+        try{
+            for(let i in this._queue) {
+                this._queue[i].execute();
+            }
+        } catch(e) {
+            Log.getInstance().error("TaskQueue execute fail!!");
         }
     }
 }

@@ -1,22 +1,29 @@
-//faker
-const faker = require("json-schema-faker");
-const api_doc = require("../api_doc");
-const config = require('config');
+
 const fs = require("fs");
 
-async function generateCaseInit() {
+const api_doc = require("../api_doc");
+const {publicInit} = require("../middleware/assist_macro");
+const Filter = require("../model/filter");
+const Parser = require("../model/parser");
+const Setting = require("../middleware/setting");
 
+async function init() {
+    await publicInit();
+
+    let result_arr = [];
+    for(let i in api_doc) {
+        let api = api_doc[i];
+        if(Filter.getInstance().isUseless(api.api_name)) continue;
+
+        let result = await Parser.getInstance().parseDoc2Info(api);
+        result_arr.push(result);
+    }
+
+    fs.writeFileSync(Setting.getInstance().getSetting("temp_test_case_path"), result_arr);
 }
 
-const temp_test_case_path =  config.get("base_test_case_path") + "//" + "temp_test_case";
+init();
+
+//
 
 //区分query和body
-for(let i in api_doc) {
-    faker.resolve(api_doc[i].request.body).then(sample => {
-        console.log(sample);
-    });
-}
-
-
-
-//加载flow并自动生成文件

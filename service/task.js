@@ -1,3 +1,4 @@
+const Log = require("../middleware/log");
 
 class Task {
     constructor(task_name, api_queue) {
@@ -13,7 +14,10 @@ class Task {
         return this._instance;
     }
 
-    execute() {
+    async execute() {
+        //判断api_queue以及task_name error
+        //记录task_name
+
 
     }
 
@@ -21,5 +25,3 @@ class Task {
 }
 
 module.exports = Task;
-
-//加载任务，加载公用数据到loader中

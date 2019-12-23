@@ -1,12 +1,22 @@
+const Setting = require("../middleware/setting");
+const Log = require("./log");
 const Filter = require("../model/filter");
 const Loader = require("../model/loader");
-const Parser = require("../model/parser");
+
+const publicInit = async() => {
+    await Setting.getInstance().init();
+    await Log.getInstance().init();
+
+    await Filter.getInstance().init();
+    // await
+};
 
 const exportApi = async(api) =>  {
     if(await Filter.getInstance().isUseless(api)) return;
 
-    let api_obj = await Parser.getInstance().parseDoc2Info();// ?
-    await Loader.getInstance().load(api_obj);
+
+    await Loader.getInstance().load(api);
 };
 
-module.exports = exportApi;
+
+module.exports = {publicInit, exportApi};

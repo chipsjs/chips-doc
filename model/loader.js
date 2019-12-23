@@ -1,6 +1,6 @@
 class Loader {
     constructor() {
-        this._map = new Map();
+        this._api_map = new Map();
     }
 
     static getInstance() {
@@ -15,8 +15,8 @@ class Loader {
 
     }
 
-    async load(api) {
-        this._map[api.name] = api.info;
+    async load(api_name, test_case_arr) {
+        this._api_map[api_name] = test_case_arr;
     }
 }
 
