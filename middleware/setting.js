@@ -20,24 +20,24 @@ class Setting {
         return this._instance;
     }
 
-    async getSetting(key) {
-        return this._config.key;
+    getSetting(key) {
+        return this._config[key];
     }
 
-    async _loadBaseConfig() {
+    _loadBaseConfig() {
 
     }
 
-    async _loadEnvConfig() {
+    _loadEnvConfig() {
         this._config.env = typeof process.env.ENV !== "undefined" ? process.env.ENV : config.get("env");
         this._config.api_doc_path = typeof process.env.API_DOC_PATH !== "undefined" ? process.env.API_DOC_PATH : config.get("api_doc_path");
         this._config.base_test_case_path = typeof process.env.BASE_TEST_CASE_PATH !== "undefined" ? process.env.BASE_TEST_CASE_PATH : config.get("base_test_case_path");
-        this._config.temp_test_case_path =  this._config.base_test_case_path + "//" + "temp_test_case";
+        this._config.temp_test_case_path =  this._config.api_doc_path + "/" + "temp.js";
     }
 
     async init() {
-        await this._loadBaseConfig();
-        await this._loadEnvConfig();
+        this._loadBaseConfig();
+        this._loadEnvConfig();
     }
 }
 

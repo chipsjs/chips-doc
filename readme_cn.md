@@ -17,10 +17,10 @@
 |   +-- assist_macro.js 辅助宏
 |   +-- log.js  日志模块,多实例，不同的request_id
 +-- model 数据处理层
-|   +-- formatter.js 转换jsonschema->swagger
-|   +-- loader.js 加载测试用例,包含一些api的具体信息
+|   +-- formatter.js 不同数据类型间的转换(无用)
+|   +-- loader.js 加载api_doc/api_flow以及测试用例,包含一些api的具体信息
 |   +-- filter.js 过滤无用的api
-|   +-- parser.js 解析apidoc,jsonschema->test_case，
+|   +-- parser.js 解析apidoc里的jsonschema + apiflow中的特定规则生成test_case(暂时无用)
 +-- service 服务层
 |   +-- task.js 测试任务，一个task包含多个api，例如注册流程，生成一个log实例
 |   +-- taskqueue.js 任务队列

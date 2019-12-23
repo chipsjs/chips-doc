@@ -7,12 +7,13 @@ const publicInit = async() => {
     await Setting.getInstance().init();
     await Log.getInstance().init();
 
-    await Filter.getInstance().init();
+    await Loader.getInstance().init(Log.getInstance());
+    // await Filter.getInstance().init();
     // await
 };
 
 const exportApi = async(api) =>  {
-    if(await Filter.getInstance().isUseless(api)) return;
+    if(Filter.getInstance().isUseless(api)) return;
 
 
     await Loader.getInstance().load(api);

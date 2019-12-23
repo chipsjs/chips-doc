@@ -14,7 +14,7 @@ class Filter {
         return this._instance;
     }
 
-    async _addApi(api_name) {
+    _addApi(api_name) {
         this._api_set.add(api_name);
     }
 
@@ -22,12 +22,14 @@ class Filter {
         for(let i in flow) {
             if(typeof i !== "string" || !Array.isArray(flow[i])) throw new TypeError(ERROR.API_FLOW_ERROR);
 
-            await this._addApi(flow[i]);
+            for(let j in flow[i]) {
+                this._addApi(flow[i][j]);
+            }
         }
     }
 
-    async isUseless(api) {
-        return !this._api_set.has(api);
+    isUseless(api_name) {
+        return !this._api_set.has(api_name);
     }
 }
 

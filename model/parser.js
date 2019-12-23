@@ -37,6 +37,10 @@ class Parser {
         };
     }
 
+    parseApiFlow(api_flow) {
+
+    }
+
     async parseDoc2Info(api_obj) {
         this._checkType(api_obj);
 
