@@ -42,5 +42,6 @@ test_case层 -> middleware层 -> service层
 ## todo
 - 对base_case生成test_case的处理
 - 对case result的处理
-- 针对特定流程进行加载
+- 针对api_flow中的特定流程进行加载
 - 搭建swagger ui
+- http request bind
