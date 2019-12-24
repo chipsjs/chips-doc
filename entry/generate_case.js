@@ -1,6 +1,4 @@
-
 const fs = require("fs");
-
 
 const {publicInit} = require("../middleware/assist_macro");
 const Loader = require("../model/loader");
@@ -16,7 +14,7 @@ async function execute() {
 
         let test_case_flow = await Loader.getInstance().outputTestCaseFlow();
         fs.writeFileSync(Setting.getInstance().getSetting("temp_test_case_path"), "module.exports = " + JSON.stringify(test_case_flow, null, 4) + ";");
-    }catch (e) {
+    } catch (e) {
         Log.getInstance().error(e.message);
     }
 }

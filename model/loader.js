@@ -84,7 +84,8 @@ class Loader {
         let result = {
             api_name: api_info.api_name,
             method_type: api_info.method_type,
-            url: api_info.url // temp,todo
+            url: api_info.url, // temp,todo
+            response: api_info.response
         };
 
         //暂时不考虑path中的转换
@@ -147,11 +148,6 @@ class Loader {
     outputTestCaseFlow() {
         return this._test_case_map;
     }
-
-    // //加载api_flow
-    // async load(api_name, test_case_arr) {
-    //     this._api_map[api_name] = test_case_arr;
-    // }
 }
 
 module.exports = Loader;

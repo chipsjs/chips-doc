@@ -1,7 +1,6 @@
 const Task = require("./task");
-const flow = require("../api_flow");
+const Setting = require("../middleware/setting");
 const Log = require("../middleware/log");
-const {ERROR} = require("../lib/common");
 
 class TaskQueue {
     constructor() {
@@ -17,31 +16,23 @@ class TaskQueue {
     }
 
     async init() {
-        for(let i in flow) {
-            if(typeof i !== "string" || !Array.isArray(flow[i])) throw new TypeError(ERROR.API_FLOW_ERROR);
+        let test_case_flow_arr = require(Setting.getInstance().getSetting("temp_test_case_path"));
 
-            await this._addTask(i, flow[i]);
+        for(let i in test_case_flow_arr) {
+            if(typeof i !== "string" || !Array.isArray(test_case_flow_arr[i])) throw new TypeError("TaskQueue::init: test case - " + i + " parse error.please check key and value in test_case.js;it must be promised key is string and value is array");
+
+            await this._addTask(i, test_case_flow_arr[i]);
         }
     }
 
     async _addTask(task_name, api_queue) {
-        try {
-            let task =  new Task(task_name, api_queue);
-            this._queue.push(task);
-
-            return true;
-        } catch(e) {
-            return false;
-        }
+        let task =  new Task(task_name, api_queue);
+        this._queue.push(task);
     }
 
     async execute() {
-        try{
-            for(let i in this._queue) {
-                this._queue[i].execute();
-            }
-        } catch(e) {
-            Log.getInstance().error("TaskQueue execute fail!!");
+        for(let i in this._queue) {
+            this._queue[i].execute();
         }
     }
 }

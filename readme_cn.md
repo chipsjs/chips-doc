@@ -1,13 +1,15 @@
 # 结构介绍
+- 流程图见项目下cola-doc流程图.jpg
 
 ## 文件结构 
 ```
 .
 +-- script 脚本
-+-- apidoc jsonschema接口文档
++-- api_doc jsonschema接口文档
++-- api_flow 业务逻辑flow,用户自定义控制 
 +-- test_case 测试数据
 |   +-- temp 根据json_schema随机生成的测试用例
-|   +-- base 一些必须跑的测试用例（手写）
+|   +-- base 一些必须跑的测试用例（手写，会增加到temp_test_case中）
 +-- store 临时文件
 |   +-- log_store 日志文件
 |   +-- swagger_store jsonschema转为swagger的输出
@@ -25,21 +27,20 @@
 +-- entry 入口
 |   +-- mock.js test_case输入进行测试
 |   +-- generate_case.js 根据json_schema自动生成test case
-+-- api_flow.js 业务逻辑flow,用户自定义控制 
 ```
 
 ## 项目层次结构
+### generate_case module
 ```
-grap
-test_case层 -> model层 -> middleware层 -> service层           
+api_doc/api_flow层 -> model层 -> middleware层 -> test_case层           
 ```
-
-## 一期目的
-- json_schema 利用faker自动生成test_case
+### mock module
+```
+test_case层 -> middleware层 -> service层           
+```
 
 ## todo
-- 针对不同的定义流程进行加载
-- json_schema自动生成test_case
-- 合并一些特殊的test_case
-- 环境变量，是否重新生成case
-- 考虑是否搭建网站ui
+- 对base_case生成test_case的处理
+- 对case result的处理
+- 针对特定流程进行加载
+- 搭建swagger ui

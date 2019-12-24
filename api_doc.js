@@ -26,6 +26,10 @@ const api_doc_arr = [
         },
         required: [ "productId", "productName", "price" ]
       }
+    },
+    response: {
+      result: "success",//特定的
+      //todo,类型的判断
     }
   },
   {
