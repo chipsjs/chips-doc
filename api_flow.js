@@ -4,7 +4,8 @@ const api_flow_arr = {
         // test1: {
         //
         // } 特定的一些行为
-        //public_param
+        public_param: ["productId"]
+
     },
 };
 //这份文件的自定义，还要考虑
