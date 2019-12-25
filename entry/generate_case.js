@@ -13,7 +13,7 @@ async function execute() {
         await Loader.getInstance().loadApiFlow();
 
         let test_case_flow = await Loader.getInstance().outputTestCaseFlow();
-        fs.writeFileSync(Setting.getInstance().getSetting("temp_test_case_path"), "module.exports = " + JSON.stringify(test_case_flow, null, 4) + ";");
+        fs.writeFileSync(Setting.getInstance().getSetting("temp_test_case_path_in_generate_module"), "module.exports = " + JSON.stringify(test_case_flow, null, 4) + ";");
     } catch (e) {
         Log.getInstance().error(e.message);
     }

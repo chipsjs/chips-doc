@@ -1,7 +1,7 @@
 const api_doc_arr = [
   {
     api_name: "test1",
-    method_type: "post",
+    method_type: "get",
     url: "localhost://users",
     description: "A product from Acme's catalog",
     // scopes todo

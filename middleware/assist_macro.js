@@ -12,12 +12,12 @@ const publicInit = async() => {
     // await
 };
 
-const exportApi = async(api) =>  {
-    if(Filter.getInstance().isUseless(api)) return;
+// const exportApi = async(api) =>  {
+//     if(Filter.getInstance().isUseless(api)) return;
+//
+//
+//     await Loader.getInstance().load(api);
+// };
 
 
-    await Loader.getInstance().load(api);
-};
-
-
-module.exports = {publicInit, exportApi};
+module.exports = {publicInit};

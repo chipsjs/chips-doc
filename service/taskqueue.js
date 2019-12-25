@@ -16,7 +16,7 @@ class TaskQueue {
     }
 
     async init() {
-        let test_case_flow_arr = require(Setting.getInstance().getSetting("temp_test_case_path"));
+        let test_case_flow_arr = require(Setting.getInstance().getSetting("temp_test_case_path_in_mock_module"));
 
         for(let i in test_case_flow_arr) {
             if(typeof i !== "string" || !Array.isArray(test_case_flow_arr[i])) throw new TypeError("TaskQueue::init: test case - " + i + " parse error.please check key and value in test_case.js;it must be promised key is string and value is array");
@@ -32,7 +32,7 @@ class TaskQueue {
 
     async execute() {
         for(let i in this._queue) {
-            this._queue[i].execute();
+            await this._queue[i].execute();
         }
     }
 }

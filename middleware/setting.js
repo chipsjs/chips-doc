@@ -30,9 +30,8 @@ class Setting {
 
     _loadEnvConfig() {
         this._config.env = typeof process.env.ENV !== "undefined" ? process.env.ENV : config.get("env");
-        this._config.api_doc_path = typeof process.env.API_DOC_PATH !== "undefined" ? process.env.API_DOC_PATH : config.get("api_doc_path");
-        this._config.base_test_case_path = typeof process.env.BASE_TEST_CASE_PATH !== "undefined" ? process.env.BASE_TEST_CASE_PATH : config.get("base_test_case_path");
-        this._config.temp_test_case_path =  this._config.api_doc_path + "/" + "temp.js";
+        this._config.temp_test_case_path_in_generate_module = "./" + config.get("temp_test_case_path");
+        this._config.temp_test_case_path_in_mock_module = "../" + config.get("temp_test_case_path");
     }
 
     async init() {

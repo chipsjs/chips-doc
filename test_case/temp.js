@@ -2,15 +2,15 @@ module.exports = {
     "register": [
         {
             "api_name": "test1",
-            "method_type": "post",
+            "method_type": "get",
             "url": "localhost://users",
             "response": {
                 "result": "success"
             },
             "body": {
-                "productId": 69767671,
-                "productName": "fugiat cupidatat",
-                "price": -69614691.75144641
+                "productId": -3512715,
+                "productName": "quis anim eu officia",
+                "price": 70919383.54970235
             }
         },
         {
@@ -18,9 +18,9 @@ module.exports = {
             "method_type": "get",
             "url": "localhost://users",
             "query": {
-                "productId": 69767671,
-                "productName": "dolor consectetur occaecat pariatur do",
-                "price": -43374497.19882414
+                "productId": -3512715,
+                "productName": "a",
+                "price": 79754266.93257144
             }
         }
     ]

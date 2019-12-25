@@ -39,9 +39,12 @@ api_doc/api_flow层 -> model层 -> middleware层 -> test_case层
 test_case层 -> middleware层 -> service层           
 ```
 
+# feature
+- 对case result校验的处理
+- todo
+
 ## todo
 - 对base_case生成test_case的处理
-- 对case result的处理
 - 针对api_flow中的特定流程进行加载
 - 搭建swagger ui
-- http request bind
+- 对path的generate处理
