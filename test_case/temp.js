@@ -3,14 +3,14 @@ module.exports = {
         {
             "api_name": "test1",
             "method_type": "get",
-            "url": "localhost://users",
+            "url": "http://localhost/ut adipisicing/abc/Ut tempor Excepteur fugiat",
             "response": {
                 "result": "success"
             },
             "body": {
-                "productId": -3512715,
-                "productName": "quis anim eu officia",
-                "price": 70919383.54970235
+                "productId": 95757598,
+                "productName": "elit",
+                "price": 90371417.8410469
             }
         },
         {
@@ -18,9 +18,9 @@ module.exports = {
             "method_type": "get",
             "url": "localhost://users",
             "query": {
-                "productId": -3512715,
-                "productName": "a",
-                "price": 79754266.93257144
+                "productId": 95757598,
+                "productName": "minim mollit",
+                "price": -79789428.4132294
             }
         }
     ]

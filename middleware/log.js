@@ -20,7 +20,7 @@ class Log {
     }
 
     _init() {
-        //输出到命令台,todo 未来可以输出到文件
+        //输出到命令台,todo 设置日志等级以及未来设置日志等级以及未来可以输出到文件可以输出到文件
         this.logger.level = 'debug';
     }
 

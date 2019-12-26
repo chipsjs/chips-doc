@@ -2,11 +2,19 @@ const api_doc_arr = [
   {
     api_name: "test1",
     method_type: "get",
-    url: "localhost://users",
+    url: "http://localhost/{userID}/abc/{lockID}",
     description: "A product from Acme's catalog",
     // scopes todo
     // tag: todo
     request: {
+      path: {
+        lockID: {
+          type: "string",
+        },
+        userID: {
+          type: "string"
+        }
+      },
       body: {
         type: "object",
         properties: {

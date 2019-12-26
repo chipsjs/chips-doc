@@ -43,23 +43,23 @@ class Loader {
     }
 
     _overwriteByPublicParam(public_param_obj, api_result) {
-        for(let j in api_result.body) {
-            if(!public_param_obj.hasOwnProperty(j)) continue;
+        for(let i in api_result.body) {
+            if(!public_param_obj.hasOwnProperty(i)) continue;
 
-            if(!public_param_obj[j]) {
-                public_param_obj[j] = api_result.body[j];
+            if(!public_param_obj[i]) {
+                public_param_obj[i] = api_result.body[i];
             } else {
-                api_result.body[j] = public_param_obj[j];
+                api_result.body[i] = public_param_obj[i];
             }
         }
 
-        for(let j in api_result.query) {
-            if(!public_param_obj.hasOwnProperty(j)) continue;
+        for(let i in api_result.query) {
+            if(!public_param_obj.hasOwnProperty(i)) continue;
 
-            if(!public_param_obj[j]) {
-                public_param_obj[j] = api_result.query[j];
+            if(!public_param_obj[i]) {
+                public_param_obj[i] = api_result.query[i];
             } else {
-                api_result.query[j] = public_param_obj[j];
+                api_result.query[i] = public_param_obj[i];
             }
         }
     }
@@ -80,15 +80,23 @@ class Loader {
         let api_info = this._api_doc_map.get(api_name);
 
         // if(typeof api_info === "undefined" ||  typeof api_info.request === "undefined") throw new TypeError("Loader::_parseDoc2Info:parser api_doc fail!!please check data type");
-
         let result = {
             api_name: api_info.api_name,
             method_type: api_info.method_type,
-            url: api_info.url, // temp,todo
+            url: api_info.url,
             response: api_info.response
         };
 
-        //暂时不考虑path中的转换
+        //path faker
+        if(typeof api_info.request.path !== "undefined") {
+            let path = await this._fakerData(api_info.request.path);
+
+            for(let i of Object.keys(path)) {
+                let temp_str = "{" + i +  "}";
+                result.url = result.url.replace(temp_str, path[i]);
+            }
+        }
+
         if(typeof api_info.request.body !== "undefined") {
             result.body = await this._fakerData(api_info.request.body);
         }

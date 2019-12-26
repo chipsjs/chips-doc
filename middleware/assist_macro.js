@@ -1,6 +1,5 @@
 const Setting = require("../middleware/setting");
 const Log = require("./log");
-const Filter = require("../model/filter");
 const Loader = require("../model/loader");
 
 const publicInit = async() => {
