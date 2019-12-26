@@ -47,6 +47,8 @@ test_case层 -> middleware层 -> service层
 - 对base_case生成test_case的处理
 - 针对api_flow中的特定流程进行加载
 - 搭建swagger ui
-
-## idea
+- result check对类型进行判断
+- result check强判断（预留）
 - api某些固定的调用依赖可以定义
+- 设计固定的上下文字段，用于response中值的更新
+

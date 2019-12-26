@@ -89,6 +89,9 @@ const api_doc_arr = [
         },
         required: [ "limit", "clientSerial" ]
       }
+    },
+    response: {
+
     }
   }
 ];

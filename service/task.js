@@ -1,5 +1,6 @@
 const Log = require("../middleware/log");
 const {httpRequest} = require("../middleware/promisify");
+const {header} = require("../api_base");
 
 class Task {
     constructor(task_name, test_case_queue) {
@@ -35,13 +36,16 @@ class Task {
         let url = test_case.url;
 
         if(typeof test_case.query === "object") {
-            url += + "?" + this._joinQueryField(test_case.query);
+            url += "?" + this._joinQueryField(test_case.query);
         }
 
         let response = {};
         switch (test_case.method_type) {
             case "get":
-                response = await httpRequest.get(url);
+                response = await httpRequest.get({
+                    url: url,
+                    headers: header
+                });
                 break;
             case "post":
                 response = await httpRequest.post(url, test_case.body);
@@ -58,7 +62,7 @@ class Task {
 
         this._checkResponse(response, test_case);
         Log.getInstance().debug("Task::_sendHttpGet:task name is " + this._task_name +
-                        " , api_name is " + test_case.api_name + ", result is " + response);
+                        " , api_name is " + test_case.api_name + ", result is " + response.body);
     }
 
     async execute() {
