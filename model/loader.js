@@ -42,7 +42,7 @@ class Loader {
         return true;
     }
 
-    _overwriteByPublicParam(public_param_obj, api_result) {
+    async _overwriteByPublicParam(public_param_obj, api_result) {
         for(let i in api_result.body) {
             if(!public_param_obj.hasOwnProperty(i)) continue;
 
@@ -64,8 +64,35 @@ class Loader {
         }
     }
 
-    _overwriteBySpecialCondition(api_flow, api_result) {
-        //TODO
+    async _overwriteBySpecialCondition(special_condition, api_result) {
+        if(typeof special_condition !== "object") return;
+
+        for(let i of Object.keys(special_condition)) {
+            if(typeof api_result.query !=="object" || !api_result.query.hasOwnProperty(i)) continue;
+            api_result.query[i] = special_condition[i];
+
+            if(typeof api_result.body !=="object" || !api_result.body.hasOwnProperty(i)) continue;
+            api_result.body[i] = special_condition[i];
+
+            // if(typeof fixed_path !== "object") continue;
+            // fixed_path[i] = special_condition[i];
+        }
+    }
+
+    async _generatePath(special_condition, path_condition, api_result) {
+        if(typeof special_condition !== "object" || typeof path_condition !== "object")  return;
+
+        let path = await this._fakerData(path_condition);
+        for(let i of Object.keys(special_condition)) {
+            if(!path.hasOwnProperty(i)) continue;
+
+            path[i] = special_condition[i];
+        }
+
+        for(let i of Object.keys(path)) {
+            let temp_str = ":" + i;
+            api_result.url = api_result.url.replace(temp_str, path[i]);
+        }
     }
 
     async _fakerData(input) {
@@ -76,7 +103,7 @@ class Loader {
         });
     }
 
-    async _parseDoc2Info(api_name) {
+    async _parseDoc2Info({api_name = "", public_param_obj = {}, special_condition = {}}) {
         let api_info = this._api_doc_map.get(api_name);
 
         // if(typeof api_info === "undefined" ||  typeof api_info.request === "undefined") throw new TypeError("Loader::_parseDoc2Info:parser api_doc fail!!please check data type");
@@ -87,16 +114,6 @@ class Loader {
             response: api_info.response
         };
 
-        //path faker
-        if(typeof api_info.request.path !== "undefined") {
-            let path = await this._fakerData(api_info.request.path);
-
-            for(let i of Object.keys(path)) {
-                let temp_str = "{" + i +  "}";
-                result.url = result.url.replace(temp_str, path[i]);
-            }
-        }
-
         if(typeof api_info.request.body !== "undefined") {
             result.body = await this._fakerData(api_info.request.body);
         }
@@ -104,6 +121,10 @@ class Loader {
         if(typeof api_info.request.query !== "undefined") {
             result.query = await this._fakerData(api_info.request.query);
         }
+
+        await this._overwriteByPublicParam(public_param_obj, result);
+        await this._overwriteBySpecialCondition(special_condition, result);
+        await this._generatePath(special_condition, api_info.request.path ,result);
 
         return result;
     }
@@ -125,9 +146,12 @@ class Loader {
                 throw new TypeError("Loader::_generateTestCaseFlow: generate test case fail! The most likely reason is that " + api_name + " does not exist in api_doc.js or its format is error");
             }
 
-            let api_result = await this._parseDoc2Info(api_name);
-            this._overwriteByPublicParam(public_param_obj, api_result);
-            this._overwriteBySpecialCondition(api_flow, api_result);
+            let api_result = await this._parseDoc2Info({
+                api_name: api_name,
+                public_param_obj: public_param_obj,
+                special_condition: api_flow[api_name]
+            });
+
 
             test_case_arr.push(api_result);
         }
@@ -136,24 +160,22 @@ class Loader {
     }
 
     loadApiDoc() {
-        for(let i in api_doc_arr) {
-            if(!this._docCheck(api_doc_arr[i])) continue;
-
-            this._api_doc_map.set(api_doc_arr[i].api_name, api_doc_arr[i]);
-        }
+        api_doc_arr.forEach(ele => {
+            if(this._docCheck(ele)) {
+                this._api_doc_map.set(ele.api_name, ele);
+            }
+        })
     }
 
     _existInApiDoc(key) {
         return this._api_doc_map.has(key);
     }
 
-    async loadApiFlow() {
+    async outputTestCaseFlow() {
         for(let i in api_flow_arr) {
             this._test_case_map[i] = await this._generateTestCaseFlow(api_flow_arr[i]);
         }
-    }
 
-    outputTestCaseFlow() {
         return this._test_case_map;
     }
 }

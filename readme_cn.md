@@ -47,4 +47,6 @@ test_case层 -> middleware层 -> service层
 - 对base_case生成test_case的处理
 - 针对api_flow中的特定流程进行加载
 - 搭建swagger ui
-- 对path的generate处理
+
+## idea
+- api某些固定的调用依赖可以定义
