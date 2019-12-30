@@ -1,10 +1,13 @@
 const {publicInit} = require("../middleware/assist_macro");
-const TaskQueue = require("../service/taskqueue");
+const TaskQueue = require("../middleware/taskqueue");
 const Log = require("../middleware/log");
+const Report = require("../middleware/report");
+const Setting = require("../middleware/setting");
 
 async function execute() {
     try {
         await publicInit();
+        await Report.getInstance().init(Setting.getInstance().getSetting("report_path"));
 
         await TaskQueue.getInstance().init();
         await TaskQueue.getInstance().execute();//记住判断一个流程中是否有不在loader过程中的，报错，这种一般是该api的测试用例没有生成

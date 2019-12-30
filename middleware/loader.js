@@ -1,7 +1,9 @@
 const faker = require("json-schema-faker");
+const fs = require("fs");
 
-const api_doc_arr = require("../api_doc");
-const api_flow_arr = require("../api_flow");
+const Setting = require("./setting");
+const api_doc_json = require("../api_doc.json");
+const api_flow_json = require("../api_flow.json");
 
 class Loader {
     constructor() {
@@ -23,9 +25,9 @@ class Loader {
     }
 
     //generate_case module
-    _docCheck(api_doc_info) {
-        if(typeof api_doc_info.api_name === "undefined" || typeof api_doc_info.method_type === "undefined" || typeof api_doc_info.url === "undefined")  {
-            throw new TypeError("Loader::_docCheck: api doc format error! api name is " + api_doc_info.api_name);
+    _docCheck(api_name, api_doc_info) {
+        if(typeof api_name === "undefined" || typeof api_doc_info.method_type === "undefined" || typeof api_doc_info.url === "undefined")  {
+            throw new TypeError("Loader::_docCheck: api doc format error! api name is " + api_name);
         }
 
         switch(api_doc_info.method_type) {
@@ -36,7 +38,7 @@ class Loader {
                 //do nothing;
                 break;
             default:
-                throw new TypeError("Loader::_docCheck: api doc format error! api name is " + api_doc_info.api_name);
+                throw new TypeError("Loader::_docCheck: api doc format error! api name is " + api_name);
         }
 
         return true;
@@ -108,10 +110,9 @@ class Loader {
 
         // if(typeof api_info === "undefined" ||  typeof api_info.request === "undefined") throw new TypeError("Loader::_parseDoc2Info:parser api_doc fail!!please check data type");
         let result = {
-            api_name: api_info.api_name,
+            api_name: api_name,
             method_type: api_info.method_type,
-            url: api_info.url,
-            response: api_info.response
+            url: api_info.url
         };
 
         if(typeof api_info.request.body !== "undefined") {
@@ -125,6 +126,8 @@ class Loader {
         await this._overwriteByPublicParam(public_param_obj, result);
         await this._overwriteBySpecialCondition(special_condition, result);
         await this._generatePath(special_condition, api_info.request.path ,result);
+
+        result.response = api_info.response;
 
         return result;
     }
@@ -160,11 +163,11 @@ class Loader {
     }
 
     loadApiDoc() {
-        api_doc_arr.forEach(ele => {
-            if(this._docCheck(ele)) {
-                this._api_doc_map.set(ele.api_name, ele);
-            }
-        })
+        for(let i of Object.keys(api_doc_json)) {
+            if(!this._docCheck(i, api_doc_json[i])) continue;
+
+            this._api_doc_map.set(i, api_doc_json[i]);
+        }
     }
 
     _existInApiDoc(key) {
@@ -172,11 +175,11 @@ class Loader {
     }
 
     async outputTestCaseFlow() {
-        for(let i in api_flow_arr) {
-            this._test_case_map[i] = await this._generateTestCaseFlow(api_flow_arr[i]);
+        for(let i of Object.keys(api_flow_json)) {
+            this._test_case_map[i] = await this._generateTestCaseFlow(api_flow_json[i]);
         }
 
-        return this._test_case_map;
+        fs.writeFileSync(Setting.getInstance().getSetting("temp_test_case_path_in_generate_module"), JSON.stringify(this._test_case_map, null, 4));
     }
 }
 

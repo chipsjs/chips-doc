@@ -1,0 +1,44 @@
+{
+    "getHouseLog": {
+        "method_type": "get",
+        "url": "http://127.0.0.1:3030/houses/:houseID/activities",
+        "request": {
+          "path": {
+            "houseID": {
+              "type": "string"
+            }
+          },
+          "query": {
+            "type": "object",
+            "properties": {
+              "limit": {
+                "description": "log limit num",
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 50
+              },
+              "clientSerial": {
+                "description": "serial of the product",
+                "type": "string"
+              }
+            },
+            "required": [
+              "limit",
+              "clientSerial"
+            ]
+          }
+        },
+        "response": {
+            "type": "array",
+            "properties": {
+              "entities": {
+                "type": "object"
+              },
+              "house": {
+                "type": "object"
+              }
+            }
+        }
+    }
+}
+

@@ -1,6 +1,7 @@
-const Log = require("../middleware/log");
-const {httpRequest} = require("../middleware/promisify");
-const {header} = require("../api_base");
+const Log = require("./log");
+const Report = require("./report");
+const {httpRequest, dataValidate} = require("./assist_macro");
+const header = require("../api_dependence.json").header;
 
 class Task {
     constructor(task_name, test_case_queue) {
@@ -20,16 +21,6 @@ class Task {
             str += (i + "=" + query[i] + "&");
         }
         return str.substr(0, str.length - 1);
-    }
-
-    _checkResponse(response, test_case) {
-        let expect_result = test_case.response;
-
-        if(typeof expect_result === "object") {
-            for(let i of Object.keys(expect_result)) {
-                if(expect_result[i] !== response[i]) throw new TypeError("api response no match expect, api_name is " + test_case.api_name);
-            }
-        }
     }
 
     async _sendHttpRequest(test_case) {
@@ -60,7 +51,11 @@ class Task {
                 throw new TypeError("Task::sendHttpRequest: fail! task name is " + this._task_name) + ". It has unsupported method_type";
         }
 
-        this._checkResponse(response, test_case);
+        if(response.statusCode === 200) {
+            let result = dataValidate(response.body, test_case.response);
+            if(Array.isArray(result.errors) && result.errors.length !== 0) throw new TypeError(result.errors.toString());
+        }
+
         Log.getInstance().debug("Task::_sendHttpGet:task name is " + this._task_name +
                         " , api_name is " + test_case.api_name + ", result is " + response.body);
     }
@@ -73,9 +68,9 @@ class Task {
 
                 await this._sendHttpRequest(test_case);
             }
-            Log.getInstance().info("Task:: " + this._task_name + " execute success!!!");
+            Report.getInstance().successReport("Task:: [" + this._task_name + "] execute success!!!");
         } catch(e) {
-            throw new TypeError("Task:: " + this._task_name + " execute fail!err_msg is " + e.message);
+            Report.getInstance().failReport("Task:: [" + this._task_name + "] execute fail!err_msg is " + e.message);
         }
     }
 }

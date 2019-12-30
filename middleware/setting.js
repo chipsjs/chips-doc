@@ -29,9 +29,10 @@ class Setting {
     }
 
     _loadEnvConfig() {
-        this._config.env = typeof process.env.ENV !== "undefined" ? process.env.ENV : config.get("env");
+        this._config.log_level = process.env.LOG_LEVEL || config.get("log_level");
         this._config.temp_test_case_path_in_generate_module = "./" + config.get("temp_test_case_path");
         this._config.temp_test_case_path_in_mock_module = "../" + config.get("temp_test_case_path");
+        this._config.report_path = process.env.REPORT_PATH || config.get("report_path");
     }
 
     async init() {

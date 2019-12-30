@@ -4,7 +4,7 @@ const log4js = require('log4js');
 
 class Log {
     constructor() {
-        this.logger = log4js.getLogger();
+        this._logger = log4js.getLogger();
     }
 
     static getInstance() {
@@ -15,24 +15,24 @@ class Log {
         return this.instance;
     }
 
-    init() {
-        this._init();
+    init(log_level) {
+        this._init(log_level);
     }
 
-    _init() {
-        //输出到命令台,todo 设置日志等级以及未来设置日志等级以及未来可以输出到文件可以输出到文件
-        this.logger.level = 'debug';
+    _init(log_level) {
+        //输出到命令台
+        this._logger.level = log_level;
     }
 
     error(msg) {
-        this.logger.error(msg);
+        this._logger.error(msg);
     }
     info(msg) {
-        this.logger.info(msg);
+        this._logger.info(msg);
     };
 
     debug(msg) {
-        this.logger.debug(msg);
+        this._logger.debug(msg);
     };
 }
 

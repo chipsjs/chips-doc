@@ -1,0 +1,10 @@
+//标准template
+// const template = {
+//     register: {
+//         flow: ["test1", "test2"],
+//         // test1: {
+//         //
+//         // } 特定的一些行为
+//         public_param: ["productId"]
+//     },
+// };

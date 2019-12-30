@@ -1,4 +1,5 @@
 {
-  "env": "local",
-  "temp_test_case_path": "test_case/temp.js"
+  "log_level": "info",
+  "temp_test_case_path": "test_case/temp.json",
+  "report_path": "report"
 }

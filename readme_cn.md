@@ -18,10 +18,7 @@
 |   +-- setting.js  配置中心
 |   +-- assist_macro.js 辅助宏
 |   +-- log.js  日志模块,多实例，不同的request_id
-+-- model 数据处理层
-|   +-- loader.js 加载api_doc/api_flow并输出test_case
-|   +-- filter.js 过滤无用的api(暂时无用)
-+-- service 服务层
+|   +-- loader.js 数据处理，加载api_doc/api_flow并输出test_case
 |   +-- task.js 测试任务，一个task包含多个api，例如注册流程，生成一个log实例
 |   +-- taskqueue.js 任务队列
 +-- entry 入口
@@ -40,15 +37,31 @@ test_case层 -> middleware层 -> service层
 ```
 
 # feature
-- 对case result校验的处理
-- todo
+- script for main flow checking
+
+## 由接口文档自动生成test_case模块
+- 从接口文档中自动fake接口的body/params/path数据
+- 同一个flow中可自定义多个api请求的public字段
+- 支持flow中定义多个api，支持对flow中api的特殊要求（例如一个flow中某个api的特殊的数据）
+
+## mock以及check业务flow模块
+- 支持多flow从test_case中加载测试用例并同步发送多api的http请求
+- 支持case response校验的数据类型处理（需要完善，除数据类型外，对特定的值进行判断）
+- 输出每个flow的报告
 
 ## todo
-- 对base_case生成test_case的处理
-- 针对api_flow中的特定流程进行加载
-- 搭建swagger ui
-- result check对类型进行判断
-- result check强判断（预留）
-- api某些固定的调用依赖可以定义
+### part 4 
 - 设计固定的上下文字段，用于response中值的更新
+- 对特殊的base_case生成test_case的处理，比如某种case会直接导致失败
+
+### part 5
+- 报告完善，格式优化
+- 对接口response的强check（除类型判断外，会有一些特定值进行判断）
+- 实际flow的编写
+
+### 二期
+- 搭建swagger ui
+- api_doc实际业务的编写
+- api某些固定的调用依赖可以定义
+
 
