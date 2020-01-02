@@ -1,32 +1,26 @@
 const log4js = require('log4js');
 const fs = require('fs');
-const dateFormat = require('dateformat');
+const moment = require('moment');
 
-class Report {
-    constructor() {
-    }
+const Base = require("../lib/base_class");
 
-    static getInstance() {
-        if(!this.instance) {
-            this.instance = new Report();
-        }
+class Report extends Base.factory(){
+    static initialize({report_path}) {
+        this.loadInstance({
+            read_only_properties: {
+                report_path: report_path
+            }
+        });
 
-        return this.instance;
-    }
-
-    async init(report_path) {
         if (!fs.existsSync(report_path)) {
             fs.mkdirSync(report_path);
         }
 
-        let time = dateFormat(new Date(), "yyyy-mm-dd HH:MM:ss");
-        this._success_report_path = report_path +  "/" + time + ".success";
-        this._fail_report_path = report_path +  "/" + time + ".fail";
-
+        let time = moment().format('YYYY-M-D h:mm:ss');
         log4js.configure({
             appenders: {
-                success: { type: 'file', filename: this._success_report_path },
-                failure: { type: 'file', filename: this._fail_report_path }
+                success: { type: 'file', filename: report_path +  "/" + time + ".success" },
+                failure: { type: 'file', filename: report_path +  "/" + time + ".fail" }
             },
             categories: {
                 default: { appenders: ['success'], level: 'info' },
@@ -34,16 +28,28 @@ class Report {
                 failure: { appenders: ['failure'], level: 'info' }
             }
         });
-
-        this._success_report = log4js.getLogger("success");
-        this._fail_report = log4js.getLogger("failure");
     }
 
-    successReport(msg) {
+    report(result) {
+        if(result.success_flag === true) {
+            this._successReport(result.msg);
+        } else {
+            this._failReport(result.msg);
+        }
+    }
+
+    _successReport(msg) {
+        if(!this._success_report) {
+            this._success_report = log4js.getLogger("success");
+        }
         this._success_report.info(msg);
     }
 
-    failReport(msg) {
+    _failReport(msg) {
+        if(!this._fail_report_path) {
+            this._fail_report = log4js.getLogger("failure");
+        }
+
         this._fail_report.error(msg);
     }
 }

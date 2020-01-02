@@ -1,9 +1,18 @@
 {
     "test": {
-        "flow": ["getHouseLog"],
+        "flow": ["getHouseLog", "getHouseLog"],
+        "context": {
+
+        },
         "getHouseLog": {
             "clientSerial": "4DD02574-CF63-4BEC-B3BF-75CE3ECAD057",
             "houseID": "3818a476-5a9c-43fe-8523-7787327cdfd4"
+        }
+    },
+    "test2": {
+        "flow": ["getLockID"],
+        "getLockID": {
+            "clientSerial": "D00B5B7A-5A10-4E02-926E-F22730F14724"
         }
     }
 }

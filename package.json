@@ -8,14 +8,15 @@
   },
   "dependencies": {
     "config": "^3.2.4",
-    "dateformat": "^3.0.3",
-    "fs": "^0.0.1-security",
     "json-schema-faker": "^0.5.0-rc23",
     "jsonschema": "^1.2.5",
     "log4js": "^6.1.0",
+    "moment": "^2.24.0",
     "request": "^2.88.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "eslint-config-airbnb-base": "^14.0.0"
+  },
   "scripts": {
     "generate": "node ./entry/generate_case.js",
     "mock": "node ./entry/mock.js"

@@ -39,6 +39,29 @@
               }
             }
         }
+    },
+    "getLockID": {
+      "method_type": "get",
+      "url": "http://127.0.0.1:3030/locks/:lockID",
+      "request": {
+        "path": {
+          "lockID": {
+            "type": "string"
+          }
+        },
+        "query": {
+          "type": "object",
+          "properties": {
+            "clientSerial": {
+              "description": "serial of the product",
+              "type": "string"
+            }
+          },
+          "required": [
+            "clientSerial"
+          ]
+        }
+      }
     }
 }
 

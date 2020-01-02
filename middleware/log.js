@@ -1,38 +1,27 @@
 const log4js = require('log4js');
-// const fs = require('fs');
-// const dateFormat = require('dateformat');
+const Base = require("../lib/base_class");
 
-class Log {
-    constructor() {
-        this._logger = log4js.getLogger();
-    }
+class Log extends Base.factory(){
+    static initialize(log_level) {
+        let logger = log4js.getLogger();
+        logger.level = log_level;
 
-    static getInstance() {
-        if(!this.instance) {
-            this.instance = new Log();
-        }
-
-        return this.instance;
-    }
-
-    init(log_level) {
-        this._init(log_level);
-    }
-
-    _init(log_level) {
-        //输出到命令台
-        this._logger.level = log_level;
+        this.loadInstance({
+            read_only_properties: {
+                logger: logger
+            }
+        });
     }
 
     error(msg) {
-        this._logger.error(msg);
+        this.logger().error(msg);
     }
     info(msg) {
-        this._logger.info(msg);
+        this.logger().info(msg);
     };
 
     debug(msg) {
-        this._logger.debug(msg);
+        this.logger().debug(msg);
     };
 }
 

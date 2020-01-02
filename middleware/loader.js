@@ -1,29 +1,25 @@
 const faker = require("json-schema-faker");
 const fs = require("fs");
 
-const Setting = require("./setting");
+const Base = require("../lib/base_class");
 const api_doc_json = require("../api_doc.json");
 const api_flow_json = require("../api_flow.json");
 
-class Loader {
+class Loader extends Base.factory() {
     constructor() {
+        super();
         this._api_doc_map = new Map();
         this._test_case_map = {};
-        this._logger = console;
     }
 
-    static getInstance() {
-        if(!this._instance) {
-            this._instance = new Loader();
-        }
-
-        return this._instance;
+    static initialize({log_module, temp_test_case_path}) {
+        this.loadInstance({
+            read_only_properties: {
+                logger: log_module || console,
+                temp_test_case_path: temp_test_case_path,
+            }
+        });
     }
-
-    init(log_module) {
-        this._logger = log_module;
-    }
-
     //generate_case module
     _docCheck(api_name, api_doc_info) {
         if(typeof api_name === "undefined" || typeof api_doc_info.method_type === "undefined" || typeof api_doc_info.url === "undefined")  {
@@ -69,32 +65,31 @@ class Loader {
     async _overwriteBySpecialCondition(special_condition, api_result) {
         if(typeof special_condition !== "object") return;
 
-        for(let i of Object.keys(special_condition)) {
-            if(typeof api_result.query !=="object" || !api_result.query.hasOwnProperty(i)) continue;
-            api_result.query[i] = special_condition[i];
+        Object.keys(special_condition).forEach(i => {
+            if(typeof api_result.query ==="object" && api_result.query.hasOwnProperty(i)) {
+                api_result.query[i] = special_condition[i];
+            }
 
-            if(typeof api_result.body !=="object" || !api_result.body.hasOwnProperty(i)) continue;
-            api_result.body[i] = special_condition[i];
-
-            // if(typeof fixed_path !== "object") continue;
-            // fixed_path[i] = special_condition[i];
-        }
+            if(typeof api_result.body ==="object" && !api_result.body.hasOwnProperty(i)) {
+                api_result.body[i] = special_condition[i];
+            }
+        })
     }
 
     async _generatePath(special_condition, path_condition, api_result) {
         if(typeof special_condition !== "object" || typeof path_condition !== "object")  return;
 
         let path = await this._fakerData(path_condition);
-        for(let i of Object.keys(special_condition)) {
-            if(!path.hasOwnProperty(i)) continue;
+        Object.keys(special_condition).forEach(i => {
+            if(path.hasOwnProperty(i)) {
+                path[i] = special_condition[i];
+            }
+        });
 
-            path[i] = special_condition[i];
-        }
-
-        for(let i of Object.keys(path)) {
+        Object.keys(path).forEach(i => {
             let temp_str = ":" + i;
             api_result.url = api_result.url.replace(temp_str, path[i]);
-        }
+        });
     }
 
     async _fakerData(input) {
@@ -163,11 +158,11 @@ class Loader {
     }
 
     loadApiDoc() {
-        for(let i of Object.keys(api_doc_json)) {
-            if(!this._docCheck(i, api_doc_json[i])) continue;
-
-            this._api_doc_map.set(i, api_doc_json[i]);
-        }
+        Object.keys(api_doc_json).forEach(i => {
+            if(this._docCheck(i, api_doc_json[i])) {
+                this._api_doc_map.set(i, api_doc_json[i]);
+            }
+        });
     }
 
     _existInApiDoc(key) {
@@ -175,11 +170,11 @@ class Loader {
     }
 
     async outputTestCaseFlow() {
-        for(let i of Object.keys(api_flow_json)) {
+        for(const i of Object.keys(api_flow_json)) {
             this._test_case_map[i] = await this._generateTestCaseFlow(api_flow_json[i]);
         }
 
-        fs.writeFileSync(Setting.getInstance().getSetting("temp_test_case_path_in_generate_module"), JSON.stringify(this._test_case_map, null, 4));
+        fs.writeFileSync(this.temp_test_case_path(), JSON.stringify(this._test_case_map, null, 4));
     }
 }
 

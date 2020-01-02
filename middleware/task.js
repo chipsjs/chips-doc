@@ -1,12 +1,11 @@
-const Log = require("./log");
-const Report = require("./report");
-const {httpRequest, dataValidate} = require("./assist_macro");
+const {httpRequest, dataValidate} = require("../lib/assist_macro");
 const header = require("../api_dependence.json").header;
 
 class Task {
-    constructor(task_name, test_case_queue) {
+    constructor(task_name, test_case_queue, log_module) {
         this._task_name = task_name;
         this._test_case_queue = test_case_queue;
+        this._logger = log_module;
     }
 
     _check(test_case) {
@@ -52,11 +51,12 @@ class Task {
         }
 
         if(response.statusCode === 200) {
-            let result = dataValidate(response.body, test_case.response);
+            let result = dataValidate( JSON.parse(response.body), test_case.response);
             if(Array.isArray(result.errors) && result.errors.length !== 0) throw new TypeError(result.errors.toString());
         }
+        //todo，statusCode other的处理
 
-        Log.getInstance().debug("Task::_sendHttpGet:task name is " + this._task_name +
+        this._logger().debug("Task::_sendHttpGet:task name is " + this._task_name +
                         " , api_name is " + test_case.api_name + ", result is " + response.body);
     }
 
@@ -68,9 +68,17 @@ class Task {
 
                 await this._sendHttpRequest(test_case);
             }
-            Report.getInstance().successReport("Task:: [" + this._task_name + "] execute success!!!");
+
+            //do, task_prefix
+            return {
+                msg: "Task:: [" + this._task_name + "] execute success!!!",
+                success_flag: true
+            };
         } catch(e) {
-            Report.getInstance().failReport("Task:: [" + this._task_name + "] execute fail!err_msg is " + e.message);
+            return {
+                msg: "Task:: [" + this._task_name + "] execute fail!err_msg is " + e.message,
+                isSuccess: false
+            };
         }
     }
 }

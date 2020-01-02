@@ -53,6 +53,11 @@ test_case层 -> middleware层 -> service层
 ### part 4 
 - 设计固定的上下文字段，用于response中值的更新
 - 对特殊的base_case生成test_case的处理，比如某种case会直接导致失败
+- 增加editorconfig
+- airbnb风格开发
+- base_url变量的处理
+- test2的编写
+- statusOther的处理
 
 ### part 5
 - 报告完善，格式优化
@@ -63,5 +68,6 @@ test_case层 -> middleware层 -> service层
 - 搭建swagger ui
 - api_doc实际业务的编写
 - api某些固定的调用依赖可以定义
+- special_case等改成文件夹，自动加载
 
 

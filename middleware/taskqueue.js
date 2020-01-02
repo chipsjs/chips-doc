@@ -1,38 +1,36 @@
 const Task = require("./task");
-const Setting = require("./setting");
-// const Log = require("../middleware/log");
+const Base = require("../lib/base_class");
 
-class TaskQueue {
+class TaskQueue extends Base.factory(){
     constructor() {
+        super();
         this._queue = [];
     }
 
-    static getInstance() {
-        if(!this._instance) {
-            this._instance = new TaskQueue();
-        }
-
-        return this._instance;
+    static initialize({log_module, report_module, temp_test_case_path}) {
+        this.loadInstance({
+            read_only_properties: {
+                logger: log_module || console,
+                temp_test_case_path: temp_test_case_path,
+                report: report_module || console
+            }
+        });
     }
 
-    async init() {
-        let test_case_flow_json = require(Setting.getInstance().getSetting("temp_test_case_path_in_mock_module"));
+    loadTask() {
+        let test_case_flow_json = require(this.temp_test_case_path());
 
-        for(let i of Object.keys(test_case_flow_json)) {
-            if(typeof i !== "string" || !Array.isArray(test_case_flow_json[i])) throw new TypeError("TaskQueue::init: test case - " + i + " parse error.please check key and value in test_case.js;it must be promised key is string and value is array");
-
-            await this._addTask(i, test_case_flow_json[i]);
-        }
-    }
-
-    async _addTask(task_name, api_queue) {
-        let task =  new Task(task_name, api_queue);
-        this._queue.push(task);
+        Object.keys(test_case_flow_json).forEach( ele => {
+            if(typeof ele !== "string" || !Array.isArray(test_case_flow_json[ele])) throw new TypeError("TaskQueue::init: test case - " + i + " parse error.please check key and value in test_case.js;it must be promised key is string and value is array");
+            let task =  new Task(ele, test_case_flow_json[ele], this.logger());
+            this._queue.push(task);
+        });
     }
 
     async execute() {
         for(let i in this._queue) {
-            await this._queue[i].execute();
+            let result = await this._queue[i].execute();
+            this.report().report(result);
         }
     }
 }
