@@ -51,7 +51,7 @@ class Task {
         }
 
         if(response.statusCode === 200) {
-            let result = dataValidate( JSON.parse(response.body), test_case.response);
+            let result = dataValidate(JSON.parse(response.body), test_case.response);
             if(Array.isArray(result.errors) && result.errors.length !== 0) throw new TypeError(result.errors.toString());
         }
         //todo，statusCode other的处理
