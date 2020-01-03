@@ -5,6 +5,10 @@ const Setting = require("../middleware/setting");
 async function execute() {
     try {
         await Setting.getInstance().init();
+    } catch(e) {
+        console.log(e.message);
+    }
+    try {
         Log.initialize(Setting.getInstance().getSetting("log_level"));
         Loader.initialize({
             log_module: Log.getInstance(),

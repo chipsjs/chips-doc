@@ -6,6 +6,11 @@ const Setting = require("../middleware/setting");
 async function execute() {
     try {
         await Setting.getInstance().init();
+    } catch(e) {
+        console.log(e.message);
+    }
+
+    try {
         Log.initialize(Setting.getInstance().getSetting("log_level"));
         Report.initialize({
             report_path: Setting.getInstance().getSetting("report_path")
