@@ -50,9 +50,9 @@ test_case层 -> middleware层 -> service层
 - 分为成功和失败输出每个flow的报告
 - 设计固定的上下文字段，用于response中值的更新 
 - base_url变量的处理(to optimize, 未来支持不同url的变量)
+- 对特定的special_test_case的处理
 
 ## todo
-- 对特殊的base_case生成test_case的处理，比如某种case会直接导致失败
 - 增加editorconfig
 - airbnb风格开发
 
