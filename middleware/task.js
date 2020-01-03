@@ -1,15 +1,15 @@
 const {httpRequest, dataValidate} = require("../lib/assist_macro");
-const header = require("../api_dependence.json").header;
+const {header, base_url} = require("../api_dependence.json");
+//to optimize,智能识别所有url并替换,第一期先只要base_url
 
 class Task {
     constructor(task_name, test_case_queue, context, log_module) {
         this._task_name = task_name;
         this._test_case_queue = test_case_queue;
         this._logger = log_module;
+        this._context = new Map();
 
-        if(Array.isArray(this._context) === true || this._context.length !== 0) {
-            this._context = new Map();
-
+        if(Array.isArray(context) === true && context.length !== 0) {
             context.forEach(ele => {
                 this._context.set(ele, null);
             })
@@ -55,8 +55,12 @@ class Task {
         });
     }
 
+    _replaceUrl(url) {
+        return url.replace("${base_url}", base_url);
+    }
+
     async _sendHttpRequest(test_case) {
-        let url = test_case.url;
+        let url = this._replaceUrl(test_case.url);
 
         this._overwriteDataByContext(test_case.query);
         this._overwriteDataByContext(test_case.body);
@@ -103,7 +107,7 @@ class Task {
             }
         }
 
-        this._logger().debug("Task::_sendHttpGet:task name is " + this._task_name +
+        this._logger.debug("Task::_sendHttpGet:task name is " + this._task_name +
                         " , api_name is " + test_case.api_name + ", result is " + response.body);
     }
 

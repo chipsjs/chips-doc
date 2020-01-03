@@ -67,6 +67,49 @@
           ]
         }
       }
+    },
+  "getPinCode": {
+    "method_type": "get",
+    "url": "${base_url}/locks/:lockID/pin",
+    "request": {
+      "path": {
+        "lockID": {
+          "type": "string"
+        }
+      }
     }
+  },
+  "otherUserPin": {
+    "method_type": "put",
+    "url": "${base_url}/locks/users/:lockID/:otherUserID/pin",
+    "request": {
+      "path": {
+        "lockID": {
+          "type": "string"
+        },
+        "otherUserID": {
+          "type": "string"
+        }
+      },
+      "body": {
+        "slot": {
+          "description": "111",
+          "type": "integer"
+        },
+        "action": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        },
+        "pin": {
+          "type": "string"
+        },
+        "accessType": {
+          "type": "string"
+        }
+      }
+    }
+  }
 }
 

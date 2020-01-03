@@ -1,16 +1,17 @@
 {
-    "test": {
-        "flow": ["getHouseLog", "getHouseLog"],
-        "context": ["houseID"],
-        "getHouseLog": {
-            "clientSerial": "4DD02574-CF63-4BEC-B3BF-75CE3ECAD057",
-            "houseID": "3818a476-5a9c-43fe-8523-7787327cdfd4"
-        }
-    },
-    "test2": {
-        "flow": ["getLockID"],
-        "getLockID": {
-            "clientSerial": "D00B5B7A-5A10-4E02-926E-F22730F14724"
+    "context_public_demo": {
+        "flow": ["getPinCode", "otherUserPin"],
+        "context": ["pin", "slot"],
+        "public_param": ["lockID"],
+        "getPinCode": {
+            "lockID": "todo",
+            "otherUserID": "todo"
+        },
+        "otherUserPin": {
+            "action": "commit",
+            "accessType": "always",
+            "state": "load",
+            "otherUserID": "todo"
         }
     }
 }

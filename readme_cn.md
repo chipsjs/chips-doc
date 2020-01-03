@@ -46,23 +46,15 @@ test_case层 -> middleware层 -> service层
 
 ## mock以及check业务flow模块
 - 支持多flow从test_case中加载测试用例并同步发送多api的http请求
-- 支持case response校验的数据类型处理（需要完善，除数据类型外，对特定的值进行判断）
-- 输出每个flow的报告
+- 支持case response的数据类型校验（to optimize，除数据类型外，对特定的值进行判断）
+- 分为成功和失败输出每个flow的报告
+- 设计固定的上下文字段，用于response中值的更新 
+- base_url变量的处理(to optimize, 未来支持不同url的变量)
 
 ## todo
-### part 4 
-- 设计固定的上下文字段，用于response中值的更新 check
 - 对特殊的base_case生成test_case的处理，比如某种case会直接导致失败
 - 增加editorconfig
 - airbnb风格开发
-- base_url变量的处理
-- test2的编写
-- statusOther的处理 check 
-
-### part 5
-- 报告完善，格式优化 done
-- 对接口response的强check（除类型判断外，会有一些特定值进行判断）need check
-- 实际flow的编写
 
 ### 二期
 - 搭建swagger ui
