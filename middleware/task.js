@@ -2,10 +2,18 @@ const {httpRequest, dataValidate} = require("../lib/assist_macro");
 const header = require("../api_dependence.json").header;
 
 class Task {
-    constructor(task_name, test_case_queue, log_module) {
+    constructor(task_name, test_case_queue, context, log_module) {
         this._task_name = task_name;
         this._test_case_queue = test_case_queue;
         this._logger = log_module;
+
+        if(Array.isArray(this._context) === true || this._context.length !== 0) {
+            this._context = new Map();
+
+            context.forEach(ele => {
+                this._context.set(ele, null);
+            })
+        }
     }
 
     _check(test_case) {
@@ -22,8 +30,36 @@ class Task {
         return str.substr(0, str.length - 1);
     }
 
+    _overwriteDataByContext(obj) {
+        if(typeof obj !== "object") return;
+
+        Object.keys(obj).forEach(ele => {
+            if(this._context.has(ele)) {
+                let  value = this._context.get(ele);
+                if(value !== null) {
+                    obj[ele] =  value;
+                } else {
+                    this._context.set(ele, obj[ele]);
+                }
+            }
+        });
+    }
+
+    _overwriteContextByResponse(obj) {
+        if(typeof obj !== "object") return;
+
+        Object.keys(obj).forEach(ele => {
+            if(this._context.has(ele)) {
+                this._context.set(ele, obj[ele]);
+            }
+        });
+    }
+
     async _sendHttpRequest(test_case) {
         let url = test_case.url;
+
+        this._overwriteDataByContext(test_case.query);
+        this._overwriteDataByContext(test_case.body);
 
         if(typeof test_case.query === "object") {
             url += "?" + this._joinQueryField(test_case.query);
@@ -50,11 +86,22 @@ class Task {
                 throw new TypeError("Task::sendHttpRequest: fail! task name is " + this._task_name) + ". It has unsupported method_type";
         }
 
+        //response check
         if(response.statusCode === 200) {
-            let result = dataValidate(JSON.parse(response.body), test_case.response);
-            if(Array.isArray(result.errors) && result.errors.length !== 0) throw new TypeError(result.errors.toString());
+            //context overwrite
+            let response_body = JSON.parse(response.body);
+            this._overwriteContextByResponse(response_body);
+
+            if(typeof test_case.response === "object" && test_case.response.success === "object") {
+                let result = dataValidate(response_body, test_case.response.success);
+                if(Array.isArray(result.errors) && result.errors.length !== 0) throw new TypeError(result.errors.toString());
+            }
+        } else {
+            if(typeof test_case.response === "object" && test_case.response.failure === "object") {
+                let result = dataValidate(JSON.parse(response.body), test_case.response.failure);
+                if(Array.isArray(result.errors) && result.errors.length !== 0) throw new TypeError(result.errors.toString());
+            }
         }
-        //todo，statusCode other的处理
 
         this._logger().debug("Task::_sendHttpGet:task name is " + this._task_name +
                         " , api_name is " + test_case.api_name + ", result is " + response.body);
@@ -69,7 +116,7 @@ class Task {
                 await this._sendHttpRequest(test_case);
             }
 
-            //do, task_prefix
+            //todo, task_prefix
             return {
                 msg: "Task:: [" + this._task_name + "] execute success!!!",
                 success_flag: true

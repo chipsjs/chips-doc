@@ -1,5 +1,6 @@
 const Task = require("./task");
 const Base = require("../lib/base_class");
+const api_flow_json = require("../api_flow.json");
 
 class TaskQueue extends Base.factory(){
     constructor() {
@@ -22,7 +23,8 @@ class TaskQueue extends Base.factory(){
 
         Object.keys(test_case_flow_json).forEach( ele => {
             if(typeof ele !== "string" || !Array.isArray(test_case_flow_json[ele])) throw new TypeError("TaskQueue::init: test case - " + i + " parse error.please check key and value in test_case.js;it must be promised key is string and value is array");
-            let task =  new Task(ele, test_case_flow_json[ele], this.logger());
+
+            let task =  new Task(ele, test_case_flow_json[ele], api_flow_json[ele].context || [],  this.logger());
             this._queue.push(task);
         });
     }

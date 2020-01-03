@@ -29,6 +29,7 @@
           }
         },
         "response": {
+          "success": {
             "type": "array",
             "properties": {
               "entities": {
@@ -38,6 +39,10 @@
                 "type": "object"
               }
             }
+          },
+          "failure": {
+
+          }
         }
     },
     "getLockID": {

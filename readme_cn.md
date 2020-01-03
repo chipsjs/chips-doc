@@ -51,17 +51,17 @@ test_case层 -> middleware层 -> service层
 
 ## todo
 ### part 4 
-- 设计固定的上下文字段，用于response中值的更新
+- 设计固定的上下文字段，用于response中值的更新 check
 - 对特殊的base_case生成test_case的处理，比如某种case会直接导致失败
 - 增加editorconfig
 - airbnb风格开发
 - base_url变量的处理
 - test2的编写
-- statusOther的处理
+- statusOther的处理 check 
 
 ### part 5
-- 报告完善，格式优化
-- 对接口response的强check（除类型判断外，会有一些特定值进行判断）
+- 报告完善，格式优化 done
+- 对接口response的强check（除类型判断外，会有一些特定值进行判断）need check
 - 实际flow的编写
 
 ### 二期
@@ -70,4 +70,42 @@ test_case层 -> middleware层 -> service层
 - api某些固定的调用依赖可以定义
 - special_case等改成文件夹，自动加载
 
+# 文档编写教程
+- 首先，让我们统一上下文。flow指的是一个工作流，比如一个注册流程，其中包含多个case。
 
+## api_doc.json
+- api_doc是api粒度的接口文档，其中key是接口名，value是一个对象，需要包含以下内容
+```
+.
++-- method_type http的方法，例如get
++-- url 例如http://127.0.0.1:3030/locks/proide
++-- request     (optional,每个字段都是Json_schema形式)
+|   +-- path    url中可变字段
+|   +-- query   http params
+|   +-- body    http body
++-- response    (optional，每个字段都是Json_schema形式)
+|   +-- success statuscode为200的回复
+|   +-- failure 除200外的回复（未来会新增其他statuscode，todo）
+```
+
+## api_flow.json
+- 用于自定义用户mock,不在此文件中的接口不会被生成测试用例.key为flow名字， value是一个对象，需要包含以下内容
+```
+
+        "": ["getHouseLog", "getHouseLog"],
+        "context": ["houseID"],
+        "getHouseLog": {
+            "clientSerial": "4DD02574-CF63-4BEC-B3BF-75CE3ECAD057",
+            "houseID": "3818a476-5a9c-43fe-8523-7787327cdfd4"
+        }
+.
++-- flow 具体flow需要依次跑的case排序
++-- context 会根据request,reponse变化的Flow上下文字段
++-- api_case名     (optional) 一个对象，代表这个api中一些特定的字段
+```
+
+## api_flow_template.json
+- 该文档是api_flow的模板文档，放置所有编写的api_flow，用户可以从里面找对应flow并放到自定义的api_flow中
+
+## api_special_case.json
+- 一些特殊用例
