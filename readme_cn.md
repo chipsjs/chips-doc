@@ -7,13 +7,13 @@
 +-- script 脚本
 +-- api_doc jsonschema接口文档
 +-- api_flow 业务逻辑flow,用户自定义控制 
++-- report 根据启动日期生成文件
 +-- test_case 测试数据
 |   +-- temp 根据json_schema随机生成的测试用例
 |   +-- base 一些必须跑的测试用例（手写，会增加到temp_test_case中）
 +-- store 临时文件
 |   +-- log_store 日志文件
-|   +-- swagger_store jsonschema转为swagger的输出
-|   +-- report 根据启动日期生成文件
+|   +-- swagger_store jsonschema转为swagger的输出（todo）
 +-- middleware  中间件
 |   +-- setting.js  配置中心
 |   +-- assist_macro.js 辅助宏

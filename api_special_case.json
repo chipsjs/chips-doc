@@ -1,8 +1,19 @@
 {
-  "test": [
+  "getPinCode": [
     {
-      "getHouseLog": {
-
+      "query": {
+        "slot": -3083163,
+        "action": "nostr",
+        "state": "adipisicing veniam eiusmod in",
+        "pin": "et in enim",
+        "accessType": "Lorem ad dolore",
+        "otherUserID": "todo"
+      },
+      "response": {
+        "success": {
+          "pin": "111",
+          "slot": 111
+        }
       }
     }
   ]

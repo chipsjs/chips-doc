@@ -4,6 +4,7 @@ const fs = require("fs");
 const Base = require("../lib/base_class");
 const api_doc_json = require("../api_doc.json");
 const api_flow_json = require("../api_flow.json");
+const api_special_json = require("../api_special_case.json");
 
 class Loader extends Base.factory() {
     constructor() {
@@ -12,11 +13,12 @@ class Loader extends Base.factory() {
         this._test_case_map = {};
     }
 
-    static initialize({log_module, temp_test_case_path}) {
+    static initialize({log_module, temp_test_case_path, special_test_case_path}) {
         this.loadInstance({
             read_only_properties: {
                 logger: log_module || console,
                 temp_test_case_path: temp_test_case_path,
+                special_test_case_path: special_test_case_path
             }
         });
     }
@@ -167,6 +169,32 @@ class Loader extends Base.factory() {
 
     _existInApiDoc(key) {
         return this._api_doc_map.has(key);
+    }
+
+    async outputSpecialCase() {
+        let special_json = {};
+
+        Object.keys(api_special_json).forEach(i => {
+            if(this._existInApiDoc(i)) {
+                let key = i;
+                let api_doc = this._api_doc_map.get(i);
+                let value = {};
+                value.method_type = api_doc.method_type;
+                value.url = api_doc.url;
+                if(Array.isArray(api_special_json[i]) === true ) {
+                    api_special_json[i].forEach(j => {
+                        //todo,校验数据格式
+                    });
+                }
+                value.cases = api_special_json[i];
+
+                special_json[key] = value;
+            }
+        });
+
+        if(Object.keys(special_json).length !== 0) {
+            fs.writeFileSync(this.special_test_case_path(), JSON.stringify(special_json, null, 4));
+        }
     }
 
     async outputTestCaseFlow() {
