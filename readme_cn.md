@@ -102,3 +102,13 @@ test_case层 -> middleware层 -> service层
 
 ## api_special_case.json
 - 一些特殊用例
+
+# 优势
+- 比postman更强大，基于flow的数据模拟，支持粒度更广，对header等公用字段的便捷化统一定义
+- 比swagger更强大，自动生成测试用例并支持自动request以及response 强check
+- 便于调试与定位bug，一次编写全组（cloud,android,ios）使用,不用再费心调配各种环境
+- 解决同事之间的低效沟通，规范后端与移动端之间的开发接口，避免出现一个业务流程中少api，调错api以及调乱api的情况 
+- 对不熟悉模块的开发更友善，能更快熟悉相关业务逻辑
+
+# todo
+- api_1, api_2

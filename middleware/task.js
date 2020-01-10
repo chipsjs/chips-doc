@@ -1,5 +1,6 @@
 const {httpRequest, dataValidate} = require("../lib/assist_macro");
 const {header, base_url} = require("../api_dependence.json");
+const queryString = require("query-string");
 //to optimize,智能识别所有url并替换,第一期先只要base_url
 
 class Task {
@@ -23,11 +24,7 @@ class Task {
     }
 
     _joinQueryField(query) {
-        let str = "";
-        for(let i in query) {
-            str += (i + "=" + query[i] + "&");
-        }
-        return str.substr(0, str.length - 1);
+        return queryString.stringify(query);
     }
 
     _overwriteDataByContext(obj) {
