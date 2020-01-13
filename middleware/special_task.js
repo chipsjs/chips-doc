@@ -75,6 +75,8 @@ class SpecialTask {
                 await this._sendHttpRequest(this._task_info.method_type, url, test_case);
             }
 
+            // to optimize, 对具体报错的case进行记录
+
             return {
                 msg: "SpecialTask:: [" + this._task_name + "] execute success!!!",
                 success_flag: true

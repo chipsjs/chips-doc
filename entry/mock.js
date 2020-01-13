@@ -5,20 +5,20 @@ const Setting = require("../middleware/setting");
 
 async function execute() {
     try {
-        await Setting.getInstance().init();
+        Setting.initialize();
     } catch(e) {
         console.log(e.message);
     }
 
     try {
-        Log.initialize(Setting.getInstance().getSetting("log_level"));
+        Log.initialize(Setting.getInstance().log_level());
         Report.initialize({
-            report_path: Setting.getInstance().getSetting("report_path")
+            report_path: Setting.getInstance().report_path()
         });
         TaskQueue.initialize({
-            temp_test_case_path: Setting.getInstance().getSetting("temp_test_case_path_in_mock_module"),
+            temp_test_case_path: Setting.getInstance().temp_test_case_path_in_mock_module(),
             report_module: Report.getInstance(),
-            special_test_case_path: Setting.getInstance().getSetting("special_test_case_path_in_mock_module")
+            special_test_case_path: Setting.getInstance().special_test_case_path_in_mock_module()
         });
 
         await TaskQueue.getInstance().loadTask();
