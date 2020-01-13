@@ -10,7 +10,7 @@ class Loader extends Base.factory() {
     constructor() {
         super();
         this._api_doc_map = new Map();
-        this._test_case_map = {};
+        this._test_cases = {};
     }
 
     static initialize({log_module, temp_test_case_path, special_test_case_path}) {
@@ -199,10 +199,10 @@ class Loader extends Base.factory() {
 
     async outputTestCaseFlow() {
         for(const i of Object.keys(api_flow_json)) {
-            this._test_case_map[i] = await this._generateTestCaseFlow(api_flow_json[i]);
+            this._test_cases[i] = await this._generateTestCaseFlow(api_flow_json[i]);
         }
 
-        fs.writeFileSync(this.temp_test_case_path(), JSON.stringify(this._test_case_map, null, 4));
+        fs.writeFileSync(this.temp_test_case_path(), JSON.stringify(this._test_cases, null, 4));
     }
 }
 

@@ -47,12 +47,12 @@ class TaskQueue extends Base.factory(){
     async execute() {
         for(let i in this._queue) {
             let result = await this._queue[i].execute();
-            this.report().report(result);
+            this.report().addReport(result);
         }
 
         for(let i in this._special_queue) {
             let result = await this._special_queue[i].execute();
-            this.report().report(result);
+            this.report().addReport(result);
         }
     }
 }
