@@ -23,7 +23,7 @@
 |   +-- taskqueue.js 任务队列
 +-- entry 入口
 |   +-- mock.js test_case输入进行测试
-|   +-- generate_case.js 根据json_schema自动生成test case
+|   +-- fake.js 根据json_schema自动生成test case
 ```
 
 ## 项目层次结构

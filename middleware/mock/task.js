@@ -1,5 +1,5 @@
-const {httpRequest, dataValidate} = require("../lib/assist_macro");
-const {header, base_url} = require("../api_dependence.json");
+const {httpRequest, dataValidate} = require("../../lib/assist_macro");
+const {header, base_url} = require("../../api_dependence.json");
 const queryString = require("query-string");
 //to optimize,智能识别所有url并替换,第一期先只要base_url
 
@@ -117,7 +117,6 @@ class Task {
                 await this._sendHttpRequest(test_case);
             }
 
-            //todo, task_prefix
             return {
                 msg: "Task:: [" + this._task_name + "] execute success!!!",
                 success_flag: true

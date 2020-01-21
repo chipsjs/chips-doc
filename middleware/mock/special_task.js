@@ -1,5 +1,5 @@
-const {httpRequest, dataValidate} = require("../lib/assist_macro");
-const {header, base_url} = require("../api_dependence.json");
+const {httpRequest, dataValidate} = require("../../lib/assist_macro");
+const {header, base_url} = require("../../api_dependence.json");
 //to optimize
 
 class SpecialTask {
@@ -76,7 +76,6 @@ class SpecialTask {
             }
 
             // to optimize, 对具体报错的case进行记录
-
             return {
                 msg: "SpecialTask:: [" + this._task_name + "] execute success!!!",
                 success_flag: true

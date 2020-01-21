@@ -1,10 +1,10 @@
 const faker = require("json-schema-faker");
 const fs = require("fs");
 
-const Base = require("../lib/base_class");
-const api_doc_json = require("../api_doc.json");
-const api_flow_json = require("../api_flow.json");
-const api_special_json = require("../api_special_case.json");
+const Base = require("../../lib/base_class");
+const api_doc_json = require("../../api_doc.json");
+const api_flow_json = require("../../api_flow.json");
+const api_special_json = require("../../api_special_case.json");
 
 class Loader extends Base.factory() {
     constructor() {
@@ -102,12 +102,13 @@ class Loader extends Base.factory() {
         });
     }
 
-    async _parseDoc2Info({api_name = "", public_param_obj = {}, special_condition = {}}) {
-        let api_info = this._api_doc_map.get(api_name);
+    async _parseDoc2Info({api_name = "", real_api_name = "", public_param_obj = {}, special_condition = {}}) {
+        let api_info = this._getApiDoc(real_api_name);
 
         // if(typeof api_info === "undefined" ||  typeof api_info.request === "undefined") throw new TypeError("Loader::_parseDoc2Info:parser api_doc fail!!please check data type");
         let result = {
             api_name: api_name,
+            real_api_name: real_api_name,
             method_type: api_info.method_type,
             url: api_info.url
         };
@@ -142,16 +143,18 @@ class Loader extends Base.factory() {
 
         for(let i in api_flow.flow) {
             let api_name = api_flow.flow[i];
-            if(!this._existInApiDoc(api_name)) {
-                throw new TypeError("Loader::_generateTestCaseFlow: generate test case fail! The most likely reason is that " + api_name + " does not exist in api_doc.js or its format is error");
+            let real_api_name = api_name;
+            let pos = api_name.indexOf("_");
+            if(pos !== -1 ) {
+                real_api_name =  api_name.substr(0,  pos);
             }
 
             let api_result = await this._parseDoc2Info({
                 api_name: api_name,
+                real_api_name: real_api_name,
                 public_param_obj: public_param_obj,
                 special_condition: api_flow[api_name]
             });
-
 
             test_case_arr.push(api_result);
         }
@@ -168,7 +171,17 @@ class Loader extends Base.factory() {
     }
 
     _existInApiDoc(key) {
-        return this._api_doc_map.has(key);
+        if(!this._api_doc_map.has(key)) {
+            throw new TypeError("Loader::_generateTestCaseFlow: generate test case fail! The most likely reason is that " + key + " does not exist in api_doc.js or its format is error");
+        }
+
+        return true;
+    }
+
+    _getApiDoc(key) {
+        if(this._existInApiDoc(key)) {
+            return this._api_doc_map.get(key);
+        }
     }
 
     async outputSpecialCase() {

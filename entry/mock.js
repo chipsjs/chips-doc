@@ -1,17 +1,17 @@
-const TaskQueue = require("../middleware/taskqueue");
+const TaskQueue = require("../middleware/mock/taskqueue");
 const Log = require("../middleware/log");
-const Report = require("../middleware/report");
+const Report = require("../middleware/mock/report");
 const Setting = require("../middleware/setting");
 
 async function execute() {
     try {
         Setting.initialize();
+        Log.initialize(Setting.getInstance().log_level());
     } catch(e) {
         console.log(e.message);
     }
 
     try {
-        Log.initialize(Setting.getInstance().log_level());
         Report.initialize({
             report_path: Setting.getInstance().report_path()
         });

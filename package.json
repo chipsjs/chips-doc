@@ -19,7 +19,7 @@
     "eslint-config-airbnb-base": "^14.0.0"
   },
   "scripts": {
-    "generate": "node ./entry/generate_case.js",
+    "fake": "node ./entry/fake.js",
     "mock": "node ./entry/mock.js"
   },
   "repository": {

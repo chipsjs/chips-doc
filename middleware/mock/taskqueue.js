@@ -1,7 +1,7 @@
 const Task = require("./task");
 const SpecialTask = require("./special_task");
-const Base = require("../lib/base_class");
-const api_flow_json = require("../api_flow.json");
+const Base = require("../../lib/base_class");
+const api_flow_json = require("../../api_flow.json");
 
 class TaskQueue extends Base.factory(){
     constructor() {

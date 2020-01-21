@@ -2,7 +2,7 @@ const log4js = require('log4js');
 const fs = require('fs');
 const moment = require('moment');
 
-const Base = require("../lib/base_class");
+const Base = require("../../lib/base_class");
 
 class Report extends Base.factory(){
     constructor() {
@@ -28,7 +28,7 @@ class Report extends Base.factory(){
                 report: { type: 'file', filename: report_path +  "/" + time + ".report" }
             },
             categories: {
-                default: { appenders: ['success'], level: 'info' }
+                default: { appenders: ['report'], level: 'info' }
             }
         });
     }
