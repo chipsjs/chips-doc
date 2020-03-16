@@ -1,13 +1,11 @@
 {
-    "context_public_demo": {
-        "flow": ["getPinCode", "otherUserPin"],
-        "context": ["pin", "slot"],
-        "public_param": ["lockID"],
-        "getPinCode": {
+    "register": {
+        "flow": ["postUser", "postValidation_1", "postValidation_2"],
+        "postUser": {
             "lockID": "todo",
             "otherUserID": "todo"
         },
-        "otherUserPin": {
+        "postValidation_1": {
             "action": "commit",
             "accessType": "always",
             "state": "load",

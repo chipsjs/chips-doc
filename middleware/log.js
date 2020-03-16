@@ -1,14 +1,14 @@
-const log4js = require('log4js');
+const {getLogger} = require('log4js');
 const Base = require("../lib/base_class");
 
 class Log extends Base.factory(){
     static initialize(log_level) {
-        let logger = log4js.getLogger();
-        logger.level = log_level;
+        let log = getLogger();
+        log.level = log_level;
 
         this.loadInstance({
             read_only_properties: {
-                logger: logger
+                logger: log
             }
         });
     }

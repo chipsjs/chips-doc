@@ -1,73 +1,144 @@
 {
-    "getHouseLog": {
-        "method_type": "get",
-        "url": "http://127.0.0.1:3030/houses/:houseID/activities",
-        "request": {
-          "path": {
-            "houseID": {
+  "usersCheck": {
+    "method_type": "get",
+    "url": "${base_url}/users/checkExist",
+    "request": {
+      "query": {
+        "phone": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "getUser": {
+    "method_type": "get",
+    "url": "${base_url}/users/:otherUserID",
+    "request": {
+      "path": {
+        "otherUserID": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "postUser": {
+    "method_type": "post",
+    "url": "${base_url}/users",
+    "request": {
+        "body": {
+          "type": "object",
+          "properties": {
+            "FirstName": {
+              "description": "user first name",
+              "type": "string"
+            },
+            "LastName": {
+              "description": "user last name",
+              "type": "string"
+            },
+            "password": {
+              "description": "user password",
               "type": "string"
             }
           },
-          "query": {
-            "type": "object",
-            "properties": {
-              "limit": {
-                "description": "log limit num",
-                "type": "integer",
-                "minimum": 1,
-                "maximum": 50
-              },
-              "clientSerial": {
-                "description": "serial of the product",
-                "type": "string"
-              }
-            },
-            "required": [
-              "limit",
-              "clientSerial"
-            ]
-          }
-        },
-        "response": {
-          "success": {
-            "type": "array",
-            "properties": {
-              "entities": {
-                "type": "object"
-              },
-              "house": {
-                "type": "object"
-              }
-            }
-          },
-          "failure": {
-
-          }
+          "required": [
+            "FirstName",
+            "LastName",
+            "password"
+          ]
         }
-    },
-    "getLockID": {
+    }
+  },
+  "postValidation": {
+    "method_type": "post",
+    "url": "${base_url}/validation/:idtype",
+    "request": {
+      "query": {
+        "idtype": {
+          "type": "string",
+          "enum": ["email", "phone"]
+        }
+      },
+      "body": {
+        "value": {
+          "description": "value following the idtype, can be phone or email",
+          "type": "string"
+        }
+      }
+    }
+  },
+  "getHouseLog": {
       "method_type": "get",
-      "url": "http://127.0.0.1:3030/locks/:lockID",
+      "url": "http://127.0.0.1:3030/houses/:houseID/activities",
       "request": {
         "path": {
-          "lockID": {
+          "houseID": {
             "type": "string"
           }
         },
         "query": {
           "type": "object",
           "properties": {
+            "limit": {
+              "description": "log limit num",
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50
+            },
             "clientSerial": {
               "description": "serial of the product",
               "type": "string"
             }
           },
           "required": [
+            "limit",
             "clientSerial"
           ]
         }
+      },
+      "response": {
+        "success": {
+          "type": "array",
+          "properties": {
+            "entities": {
+              "type": "object"
+            },
+            "house": {
+              "type": "object"
+            }
+          }
+        },
+        "failure": {
+
+        }
       }
-    },
+  },
+  "getLockID": {
+    "method_type": "get",
+    "url": "http://127.0.0.1:3030/locks/:lockID",
+    "request": {
+      "path": {
+        "lockID": {
+          "type": "string"
+        }
+      },
+      "query": {
+        "type": "object",
+        "properties": {
+          "clientSerial": {
+            "description": "serial of the product",
+            "type": "string"
+          }
+        },
+        "required": [
+          "clientSerial"
+        ]
+      }
+    }
+  },
   "getPinCode": {
     "method_type": "get",
     "url": "${base_url}/locks/:lockID/pin",

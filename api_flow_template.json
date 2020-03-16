@@ -1,4 +1,17 @@
 {
+  "register": {
+    "flow": ["postUser", "postValidation_1", "postValidation_2"],
+    "postUser": {
+      "lockID": "todo",
+      "otherUserID": "todo"
+    },
+    "postValidation_1": {
+      "action": "commit",
+      "accessType": "always",
+      "state": "load",
+      "otherUserID": "todo"
+    }
+  },
   "test": {
     "flow": ["getHouseLog", "getHouseLog"],
     "context": ["houseID"],
