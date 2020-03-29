@@ -1,4 +1,5 @@
 const Base = require("../../lib/base_class");
+const fs = require("fs");
 
 class SpecConvert extends Base.factory() {
     constructor() {
@@ -13,10 +14,181 @@ class SpecConvert extends Base.factory() {
         });
     }
 
-    run(version, output_path) {
+    /**
+     *
+     * @param {string} description -
+     * @return {string} type - string | number | object | array | boolean | unknown
+     */
+    _parseType(description) {
+        if(typeof description !== 'string') {
+            return 'unknown';
+        }
 
+        const lower_case_description = description.toLowerCase();
+        const prefix_type = lower_case_description.substr(0, 6);
+
+        //there are two different schema: 1.[optional] string: or 2.String/string
+
+        if(prefix_type === 'string' || lower_case_description.indexOf('string:') !== -1) {
+            return 'string';
+        } else if(prefix_type === 'number' || lower_case_description.indexOf('number:') !== -1) {
+            return 'number'
+        } else if(prefix_type === 'object') {
+            return 'object';
+        } else if(lower_case_description.substr(0, 5) === 'array') {
+            return 'array'
+        } else if(lower_case_description.substr(0, 7) === 'boolean') {
+            return 'boolean'
+        } else {
+            return 'unknown';
+        }
     }
 
+    /**
+     *
+     * @param {object} schema - {pin: 'the pin for this user', slot: 'the slot for user'}
+     * @return {object} value
+     * @return {object} value.convert_schema - {pin: {descriptions: 'the pin for this user', type: 'string' }, slot: {descriptions: 'the slot for user', type: 'number' }}
+     * @return {array} value.required_param_arr -  ['pin', 'slot']
+     */
+    _parseDetailSchema(schema) {
+        const convert_schema = {};
+
+        const param_arr = Object.keys(schema).map(param_name => {
+            if(typeof schema[param_name] === 'string') {
+                convert_schema[param_name] = {
+                    description: schema[param_name],
+                    type: this._parseType(schema[param_name])
+                };
+            } else if(schema[param_name] && typeof schema[param_name] === 'object') {
+                const convert_child_schema = this._parseDetailSchema(schema[param_name]);
+                convert_schema[param_name] = {
+                    "type": "object",
+                    "properties": convert_child_schema.convert_schema
+                };
+            } else {
+                convert_schema[param_name] = {
+                    description: 'unknown',
+                    type: 'unknown'
+                };
+            }
+
+            return param_name;
+        });
+
+        return {convert_schema, param_arr}
+    }
+
+    /**
+     *
+     * @param {object} spec_query - request: {
+        headers: standardResponseHeaders,
+        body: {
+          required: {
+            pin: 'the pin for this user', // the pin of response will included only if 'type' equals 'pin'
+            slot: 'the slot for user',
+          }
+        }
+      },
+     * @return {object} convert_query - {
+     *     'type': "object",
+     *     "properties": {
+     *         "body": {
+     *             "pin": {
+     *                 "description": "the pin for this user",
+     *                 "type": "string"
+     *             },
+     *             "slot": {
+     *                 "description": "the slot for user",
+     *                 "type": "number"
+     *             },
+     *             "required": ['pin', 'slot']
+     *         }
+     *
+     *     }
+     * }
+
+     */
+    _parseQueryOrBodySchema(spec_query) {
+        //filter spec_query is string
+        if(typeof spec_query !== 'object') return {};
+
+        const convert_query = {
+            "type": "object",
+            "properties": {}
+        };
+
+        let convert_required_param_arr = [];
+
+        //there are two different schema in api_spec, such as query.required.pin or query.pin
+        if(spec_query.hasOwnProperty('required')) {
+            const {convert_schema, param_arr} = this._parseDetailSchema(spec_query.required);
+            Object.assign(convert_query.properties, convert_schema);
+            convert_required_param_arr = param_arr;
+            delete spec_query.required;
+        }
+
+        if(spec_query.hasOwnProperty('optional')) {
+            const {convert_schema} = this._parseDetailSchema(spec_query.optional);
+            Object.assign(convert_query.properties, convert_schema);
+            delete spec_query.optional;
+        }
+
+        if(spec_query.hasOwnProperty('headers')) {
+            //do nothing
+            delete spec_query.headers;
+        }
+
+        const {convert_schema} = this._parseDetailSchema(spec_query);
+        Object.assign(convert_query.properties, convert_schema);
+
+        convert_query.required = convert_required_param_arr;
+
+        return convert_query;
+    }
+
+    parseRequestSchema(spec_request) {
+        const convert_request = {};
+
+        if(spec_request.hasOwnProperty('query')) {
+            convert_request.query = this._parseQueryOrBodySchema(spec_request.query);
+        }
+
+        if(spec_request.hasOwnProperty('body')) {
+            convert_request.body = this._parseQueryOrBodySchema(spec_request.body);
+        }
+
+        return convert_request;
+    }
+
+    parseResponseSchema() {
+        return {};
+    }
+
+    //success fail
+    run(old_format_doc, spec_output_path) {
+        const new_format_doc = {};
+        let current_api_name = {};
+
+        try {
+            Object.keys(old_format_doc).forEach(api_name => {
+                current_api_name = api_name;
+                const api = old_format_doc[api_name];
+                new_format_doc[api_name] = {
+                    method_type: api.method || api.method_type
+                };
+                delete api.method;
+                Object.assign(new_format_doc[api_name], api);
+                new_format_doc[api_name].request = this.parseRequestSchema(api.request);
+                new_format_doc[api_name].response = this.parseResponseSchema(api.response);
+            });
+        } catch(err) {
+            throw new TypeError(`SpecConvert::run: ${current_api_name} fail!!!`);
+        }
+
+        spec_output_path = `${spec_output_path}_api_doc.json`;
+        fs.writeFileSync(spec_output_path, JSON.stringify(new_format_doc, null, 4));
+    }
 }
 
-module.exports = Loader;
+module.exports = SpecConvert;

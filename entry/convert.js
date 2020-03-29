@@ -13,13 +13,17 @@ async function execute() {
     try {
         Convert.initialize({log_module: Log.getInstance()});
 
-        Convert.getInstance().run("0.0.1", "../spec/0.0.1/");
-        Convert.getInstance().run("2.0.0", "../");
-        Convert.getInstance().run("2.1.0", "../");
-        Convert.getInstance().run("3.0.0", "../");
+        const { paths } = require('../api_spec').api_all_spec;
+        //Convert.getInstance().run(paths["test"], "spec/test");
+        Convert.getInstance().run(paths["0.0.1"], "spec/0.0.1"); // it will output in cola-doc/spec/0.0.1_api_doc.json
+        Convert.getInstance().run(paths["2.0.0"], "spec/2.0.0");
+        Convert.getInstance().run(paths["2.1.0"], "spec/2.1.0");
+        Convert.getInstance().run(paths["3.0.0"], "spec/3.0.0");
     } catch (e) {
         Log.getInstance().error(e.message);
     }
 }
+
+execute();
 
  
