@@ -161,8 +161,14 @@ class SpecConvert extends Base.factory() {
         return convert_request;
     }
 
-    parseResponseSchema() {
-        return {};
+    parseResponseSchema(spec_response) {
+        const convert_response = {};
+
+        if(spec_response.hasOwnProperty('body')) {
+            convert_response.success = this._parseQueryOrBodySchema(spec_response.body);
+        }
+
+        return convert_response;
     }
 
     //success fail
