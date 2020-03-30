@@ -24,6 +24,7 @@ module.exports = {
     'no-restricted-syntax': 2,
     'linebreak-style': 0,
     semi: 0,
-    'comma-dangle': 0
+    'comma-dangle': 0,
+    camelcase: 0
   }
 }
