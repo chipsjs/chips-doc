@@ -1,3 +1,5 @@
+const queryString = require('query-string');
+
 const { httpRequest, dataValidate } = require('../../lib/assist_macro');
 const { header, base_url } = require('../../api_dependence.json');
 // to optimize
@@ -10,11 +12,7 @@ class SpecialTask {
   }
 
   _joinQueryField(query) {
-    let str = '';
-    for (const i in query) {
-      str += (`${i}=${query[i]}&`);
-    }
-    return str.substr(0, str.length - 1);
+    return queryString.stringify(query);
   }
 
   _replaceUrl(url) {
