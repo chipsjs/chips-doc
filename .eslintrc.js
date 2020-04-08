@@ -23,6 +23,7 @@ module.exports = {
     'no-param-reassign': 2,
     'no-restricted-syntax': 2,
     'linebreak-style': 0,
+    "max-classes-per-file": ["error", 2],
     semi: 0,
     'comma-dangle': 0,
     camelcase: 0
