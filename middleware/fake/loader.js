@@ -6,6 +6,84 @@ const api_doc_json = require('../../api_doc.json');
 const api_flow_json = require('../../api_flow.json');
 const api_special_json = require('../../api_special_case.json');
 
+// generate_case module
+const docCheck = async (api_name, api_doc_info) => {
+  if (typeof api_name === 'undefined' || typeof api_doc_info.method_type === 'undefined' || typeof api_doc_info.url === 'undefined') {
+    throw new TypeError(`Loader::docCheck: api doc format error! api name is ${api_name}`);
+  }
+
+  switch (api_doc_info.method_type) {
+    case 'get':
+    case 'post':
+    case 'put':
+    case 'delete':
+      // do nothing;
+      break;
+    default:
+      throw new TypeError(`Loader::docCheck: api doc format error! api name is ${api_name}`);
+  }
+
+  return true;
+};
+
+const overwriteByPublicParam = async (public_param_obj, api_result) => {
+  for (const i in api_result.body) {
+    if (!public_param_obj.hasOwnProperty(i)) continue;
+
+    if (!public_param_obj[i]) {
+      public_param_obj[i] = api_result.body[i];
+    } else {
+      api_result.body[i] = public_param_obj[i];
+    }
+  }
+
+  for (const i in api_result.query) {
+    if (!public_param_obj.hasOwnProperty(i)) continue;
+
+    if (!public_param_obj[i]) {
+      public_param_obj[i] = api_result.query[i];
+    } else {
+      api_result.query[i] = public_param_obj[i];
+    }
+  }
+};
+
+const overwriteBySpecialCondition = async (special_condition, api_result) => {
+  if (typeof special_condition !== 'object') return;
+
+  Object.keys(special_condition).forEach((i) => {
+    if (typeof api_result.query === 'object' && api_result.query.hasOwnProperty(i)) {
+      api_result.query[i] = special_condition[i];
+    }
+
+    if (typeof api_result.body === 'object' && !api_result.body.hasOwnProperty(i)) {
+      api_result.body[i] = special_condition[i];
+    }
+  })
+};
+
+const fakerData = async (input) => new Promise((resolve) => {
+  faker.resolve(input).then((result) => {
+    resolve(result);
+  })
+});
+
+const generatePath = async (special_condition, path_condition, api_result) => {
+  if (typeof special_condition !== 'object' || typeof path_condition !== 'object') return;
+
+  const path = await fakerData(path_condition);
+  Object.keys(special_condition).forEach((i) => {
+    if (path.hasOwnProperty(i)) {
+      path[i] = special_condition[i];
+    }
+  });
+
+  Object.keys(path).forEach((i) => {
+    const temp_str = `:${i}`;
+    api_result.url = api_result.url.replace(temp_str, path[i]);
+  });
+}
+
 class Loader extends Base.factory() {
   constructor() {
     super();
@@ -23,92 +101,11 @@ class Loader extends Base.factory() {
     });
   }
 
-  // generate_case module
-  _docCheck(api_name, api_doc_info) {
-    if (typeof api_name === 'undefined' || typeof api_doc_info.method_type === 'undefined' || typeof api_doc_info.url === 'undefined') {
-      throw new TypeError(`Loader::_docCheck: api doc format error! api name is ${api_name}`);
-    }
-
-    switch (api_doc_info.method_type) {
-      case 'get':
-      case 'post':
-      case 'put':
-      case 'delete':
-        // do nothing;
-        break;
-      default:
-        throw new TypeError(`Loader::_docCheck: api doc format error! api name is ${api_name}`);
-    }
-
-    return true;
-  }
-
-  async _overwriteByPublicParam(public_param_obj, api_result) {
-    for (const i in api_result.body) {
-      if (!public_param_obj.hasOwnProperty(i)) continue;
-
-      if (!public_param_obj[i]) {
-        public_param_obj[i] = api_result.body[i];
-      } else {
-        api_result.body[i] = public_param_obj[i];
-      }
-    }
-
-    for (const i in api_result.query) {
-      if (!public_param_obj.hasOwnProperty(i)) continue;
-
-      if (!public_param_obj[i]) {
-        public_param_obj[i] = api_result.query[i];
-      } else {
-        api_result.query[i] = public_param_obj[i];
-      }
-    }
-  }
-
-  async _overwriteBySpecialCondition(special_condition, api_result) {
-    if (typeof special_condition !== 'object') return;
-
-    Object.keys(special_condition).forEach((i) => {
-      if (typeof api_result.query === 'object' && api_result.query.hasOwnProperty(i)) {
-        api_result.query[i] = special_condition[i];
-      }
-
-      if (typeof api_result.body === 'object' && !api_result.body.hasOwnProperty(i)) {
-        api_result.body[i] = special_condition[i];
-      }
-    })
-  }
-
-  async _generatePath(special_condition, path_condition, api_result) {
-    if (typeof special_condition !== 'object' || typeof path_condition !== 'object') return;
-
-    const path = await this._fakerData(path_condition);
-    Object.keys(special_condition).forEach((i) => {
-      if (path.hasOwnProperty(i)) {
-        path[i] = special_condition[i];
-      }
-    });
-
-    Object.keys(path).forEach((i) => {
-      const temp_str = `:${i}`;
-      api_result.url = api_result.url.replace(temp_str, path[i]);
-    });
-  }
-
-  async _fakerData(input) {
-    return new Promise((resolve) => {
-      faker.resolve(input).then((result) => {
-        resolve(result);
-      })
-    });
-  }
-
   async _parseDoc2Info({
     api_name = '', real_api_name = '', public_param_obj = {}, special_condition = {}
   }) {
     const api_info = this._getApiDoc(real_api_name);
 
-    // if(typeof api_info === "undefined" ||  typeof api_info.request === "undefined") throw new TypeError("Loader::_parseDoc2Info:parser api_doc fail!!please check data type");
     const result = {
       api_name,
       real_api_name,
@@ -117,16 +114,16 @@ class Loader extends Base.factory() {
     };
 
     if (typeof api_info.request.body !== 'undefined') {
-      result.body = await this._fakerData(api_info.request.body);
+      result.body = await fakerData(api_info.request.body);
     }
 
     if (typeof api_info.request.query !== 'undefined') {
-      result.query = await this._fakerData(api_info.request.query);
+      result.query = await fakerData(api_info.request.query);
     }
 
-    await this._overwriteByPublicParam(public_param_obj, result);
-    await this._overwriteBySpecialCondition(special_condition, result);
-    await this._generatePath(special_condition, api_info.request.path, result);
+    await overwriteByPublicParam(public_param_obj, result);
+    await overwriteBySpecialCondition(special_condition, result);
+    await generatePath(special_condition, api_info.request.path, result);
 
     result.response = api_info.response;
 
@@ -138,14 +135,14 @@ class Loader extends Base.factory() {
     const test_case_arr = [];
     const public_param_obj = {};
 
-    if (Array.isArray(api_flow.public_param)) {
-      for (const i in api_flow.public_param) {
-        public_param_obj[api_flow.public_param[i]] = null;
-      }
-    }
+    // if (Array.isArray(api_flow.public_param)) {
+    //   for(let key of Object.keys(api_flow.public_param)) {
+    //     public_param_obj[key] = null;
+    //   }
+    // }
 
-    for (const i in api_flow.flow) {
-      const api_name = api_flow.flow[i];
+    for (const [key, value] of Objects.entries(api_flow.flow)) {
+      const api_name = value;
       let real_api_name = api_name;
       const pos = api_name.indexOf('_');
       if (pos !== -1) {
@@ -167,7 +164,7 @@ class Loader extends Base.factory() {
 
   loadApiDoc() {
     Object.keys(api_doc_json).forEach((i) => {
-      if (this._docCheck(i, api_doc_json[i])) {
+      if (docCheck(i, api_doc_json[i])) {
         this._api_doc_map.set(i, api_doc_json[i]);
       }
     });

@@ -9,14 +9,14 @@ module.exports = {
   plugins: ['import', 'mocha'],
   globals: {},
   parserOptions: {
-    ecmaVersion: 2018,
+    ecmaVersion: 2019,
     sourceType: 'module',
     ecmaFeatures: {
       jsx: true
     }
   },
   rules: {
-    'no-underscore-dangle': [2, { allow: ['_id', '__v'] }],
+    'no-underscore-dangle': [2, { "allow": ["foo_", "_fakerData"], "allowAfterThis": true  }],
     'no-multiple-empty-lines': ['error', { max: 1, maxBOF: 1 }],
     'no-await-in-loop': 0,
     'no-unused-vars': 2,
