@@ -15,7 +15,6 @@ async function execute() {
   try {
     Convert.initialize({ log_module: Log.getInstance() });
 
-    // Convert.getInstance().run(paths["test"], "spec/test");
     Convert.getInstance().run(paths['0.0.1'], 'spec/0.0.1'); // it will output in cola-doc/spec/0.0.1_api_doc.json
     Convert.getInstance().run(paths['2.0.0'], 'spec/2.0.0');
     Convert.getInstance().run(paths['2.1.0'], 'spec/2.1.0'); // it has a mistake format

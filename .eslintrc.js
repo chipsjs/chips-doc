@@ -16,7 +16,8 @@ module.exports = {
     }
   },
   rules: {
-    'no-underscore-dangle': [2, { "allow": ["foo_", "_fakerData"], "allowAfterThis": true  }],
+    'no-underscore-dangle': 'off',
+    'class-methods-use-this': 'off',
     'no-multiple-empty-lines': ['error', { max: 1, maxBOF: 1 }],
     'no-await-in-loop': 0,
     'no-unused-vars': 2,
@@ -26,6 +27,6 @@ module.exports = {
     "max-classes-per-file": ["error", 2],
     semi: 0,
     'comma-dangle': 0,
-    camelcase: 0
+    camelcase: 0,
   }
 }
