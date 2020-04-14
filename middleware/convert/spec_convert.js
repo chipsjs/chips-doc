@@ -51,6 +51,7 @@ class SpecConvert extends Base.factory() {
   /**
    *
    * @param {object} schema - {pin: 'the pin for this user', slot: 'the slot for user'}
+   * @param {Boolean} isRequired - when is true, all params in shcema is required
    * @return {object} value
    * @return {object} value.convert_schema - {
    *    pin: {descriptions: 'the pin for this user', type: 'string' },
@@ -58,15 +59,20 @@ class SpecConvert extends Base.factory() {
    * }
    * @return {array} value.required_param_arr -  ['pin', 'slot']
    */
-  _parseDetailSchema(schema) {
+  _parseDetailSchema(schema, isRequired = false) {
     const convert_schema = {};
 
-    const param_arr = Object.keys(schema).map((param_name) => {
+    const param_arr = Object.keys(schema).reduce((result, param_name) => {
+      if (param_name === 'required' || param_name === 'optional' || param_name === 'header') return result;
+
       if (typeof schema[param_name] === 'string') {
         convert_schema[param_name] = {
           description: schema[param_name],
           type: this._parseType(schema[param_name])
         };
+        if (!isRequired && schema[param_name].indexOf('[required]') !== -1) {
+          result.push(param_name);
+        }
       } else if (schema[param_name] && typeof schema[param_name] === 'object') {
         const convert_child_schema = this._parseDetailSchema(schema[param_name]);
         convert_schema[param_name] = {
@@ -80,8 +86,11 @@ class SpecConvert extends Base.factory() {
         };
       }
 
-      return param_name;
-    });
+      if (isRequired) {
+        result.push(param_name);
+      }
+      return result;
+    }, []);
 
     return { convert_schema, param_arr }
   }
@@ -98,27 +107,24 @@ class SpecConvert extends Base.factory() {
 
     // there are two different schema in api_spec, such as query.required.pin or query.pin
     if (spec_query.required) {
-      const { convert_schema, param_arr } = this._parseDetailSchema(spec_query.required);
+      const { convert_schema, param_arr } = this._parseDetailSchema(spec_query.required, true);
       Object.assign(convert_query.properties, convert_schema);
       convert_required_param_arr = param_arr;
-      delete spec_query.required;
     }
 
     if (spec_query.optional) {
       const { convert_schema } = this._parseDetailSchema(spec_query.optional);
       Object.assign(convert_query.properties, convert_schema);
-      delete spec_query.optional;
     }
 
     if (spec_query.headers) {
       // do nothing
-      delete spec_query.headers;
     }
 
-    const { convert_schema } = this._parseDetailSchema(spec_query);
+    const { convert_schema, param_arr } = this._parseDetailSchema(spec_query);
     Object.assign(convert_query.properties, convert_schema);
 
-    convert_query.required = convert_required_param_arr;
+    convert_query.required = convert_required_param_arr.concat(param_arr);
 
     return convert_query;
   }
@@ -147,7 +153,6 @@ class SpecConvert extends Base.factory() {
     return convert_response;
   }
 
-  // success fail
   run(old_format_doc, spec_output_path) {
     const new_format_doc = {};
     let current_api_name = {};
@@ -159,7 +164,7 @@ class SpecConvert extends Base.factory() {
         new_format_doc[api_name] = {
           method_type: api.method || api.method_type
         };
-        delete api.method;
+
         Object.assign(new_format_doc[api_name], api);
         new_format_doc[api_name].request = this.parseRequestSchema(api.request);
         new_format_doc[api_name].response = this.parseResponseSchema(api.response);

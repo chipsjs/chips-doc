@@ -9,10 +9,6 @@ const config = require('config');
 const Base = require('../lib/base_class');
 
 class Setting extends Base.factory() {
-  constructor() {
-    super();
-  }
-
   static initialize() {
     this.loadInstance({
       read_only_properties: {
