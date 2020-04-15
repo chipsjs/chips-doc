@@ -29,7 +29,7 @@ class SpecConvert extends Base.factory() {
       return 'string';
     }
 
-    if (prefix_type === 'number' || lower_case_description.indexOf('number:') !== -1) {
+    if (prefix_type === 'number' || lower_case_description.indexOf('number:') !== -1 || lower_case_description === 'int') {
       return 'number'
     }
 
@@ -51,7 +51,7 @@ class SpecConvert extends Base.factory() {
   /**
    *
    * @param {object} schema - {pin: 'the pin for this user', slot: 'the slot for user'}
-   * @param {Boolean} isRequired - when is true, all params in shcema is required
+   * @param {boolean} isRequired - when is true, all params in shcema is required
    * @return {object} value
    * @return {object} value.convert_schema - {
    *    pin: {descriptions: 'the pin for this user', type: 'string' },
@@ -153,19 +153,83 @@ class SpecConvert extends Base.factory() {
     return convert_response;
   }
 
+  /**
+   *
+   * @param {object} old_format_doc - key is api name, 
+   * value is detail info, such as 
+   * {
+          summary: 'check account exist',
+          method: 'get',
+          request: {
+            query: {
+              email: '[optional] string: user email',
+              phone: '[required] string: user phone number,standard format is E164'
+            }
+          },
+          response: {
+            body: {
+              exists: 'boolean',
+              msg: 'string: detail message'
+            },
+          },
+        }
+   * @param {string} spec_output_path - output path
+   * @return {object} new_format_doc - return api_doc_json, key is api name, 
+   * value is detail info follow the api doc, such as 
+   * {
+        "method_type": "get",
+        "summary": "check email or phone for duplicates",
+        "request": {
+            "query": {
+                "type": "object",
+                "properties": {
+                    "email": {
+                        "description": "[optional] string: user email",
+                        "type": "string"
+                    },
+                    "phone": {
+                        "description": "[required] string: user phone number,standard format is E164",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "phone"
+                ]
+            }
+        },
+        "response": {
+            "success": {
+                "type": "object",
+                "properties": {
+                    "exists": {
+                        "description": "boolean",
+                        "type": "boolean"
+                    },
+                    "msg": {
+                        "description": "string: detail message",
+                        "type": "string"
+                    }
+                },
+                "required": []
+            }
+        }    
+      }
+   */
   run(old_format_doc, spec_output_path) {
     const new_format_doc = {};
     let current_api_name = {};
 
     try {
       Object.keys(old_format_doc).forEach((api_name) => {
+        new_format_doc[api_name] = {};
         current_api_name = api_name;
         const api = old_format_doc[api_name];
-        new_format_doc[api_name] = {
-          method_type: api.method || api.method_type
-        };
-
         Object.assign(new_format_doc[api_name], api);
+
+        const method_type = api.method || api.method_type;
+        new_format_doc[api_name].method_type = method_type.toLowerCase()
+        delete new_format_doc[api_name].method;
+
         new_format_doc[api_name].request = this.parseRequestSchema(api.request);
         new_format_doc[api_name].response = this.parseResponseSchema(api.response);
       });

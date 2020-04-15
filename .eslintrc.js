@@ -17,7 +17,7 @@ module.exports = {
   },
   rules: {
     'no-underscore-dangle': 'off',
-    'class-methods-use-this': 'off',
+    'class-methods-use-this': 'off', // optimize the next version
     'no-multiple-empty-lines': ['error', { max: 1, maxBOF: 1 }],
     'no-await-in-loop': 0,
     'no-unused-vars': 2,
@@ -28,5 +28,5 @@ module.exports = {
     semi: 0,
     'comma-dangle': 0,
     camelcase: 0,
-  }
+  },
 }
