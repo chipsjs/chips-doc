@@ -12,8 +12,9 @@ class SpecConvert extends Base.factory() {
   }
 
   /**
+   * parse description to get data type
    *
-   * @param {string} description -
+   * @param {string} description - '[optional] string: user email'
    * @return {string} type - string | number | object | array | boolean | unknown
    */
   _parseType(description) {
@@ -95,6 +96,11 @@ class SpecConvert extends Base.factory() {
     return { convert_schema, param_arr }
   }
 
+  /**
+   * parse old_format_doc[api_name].request.body || old_format_doc[api_name].request.query
+   * @param {object} spec_query - old_format_doc[api_name].request.body || query
+   * @return {object} convert_query - api_doc[api_name].request.body || query
+   */
   parseQueryOrBodySchema(spec_query) {
     // filter spec_query is string
     if (typeof spec_query !== 'object') return {};
@@ -129,6 +135,11 @@ class SpecConvert extends Base.factory() {
     return convert_query;
   }
 
+  /**
+   * parse old_format_doc[api_name].request
+   * @param {object} spec_request - api_spec[api_name].request
+   * @return {object} convert_request - api_doc[api_name].request
+   */
   parseRequestSchema(spec_request) {
     const convert_request = {};
 
@@ -143,6 +154,11 @@ class SpecConvert extends Base.factory() {
     return convert_request;
   }
 
+  /**
+   * parse old_format_doc[api_name].response
+   * @param {object} spec_response - api_spec[api_name].response
+   * @return {object} convert_response - api_doc[api_name].response
+   */
   parseResponseSchema(spec_response) {
     const convert_response = {};
 
@@ -154,67 +170,66 @@ class SpecConvert extends Base.factory() {
   }
 
   /**
-   *
-   * @param {object} old_format_doc - key is api name, 
-   * value is detail info, such as 
+   * convert api spec to api doc json
+   * @param {object} old_format_doc - key is api name,
+   * value is detail info, such as
    * {
-          summary: 'check account exist',
-          method: 'get',
-          request: {
-            query: {
-              email: '[optional] string: user email',
-              phone: '[required] string: user phone number,standard format is E164'
-            }
-          },
-          response: {
-            body: {
-              exists: 'boolean',
-              msg: 'string: detail message'
-            },
-          },
-        }
-   * @param {string} spec_output_path - output path
-   * @return {object} new_format_doc - return api_doc_json, key is api name, 
-   * value is detail info follow the api doc, such as 
-   * {
-        "method_type": "get",
-        "summary": "check email or phone for duplicates",
-        "request": {
-            "query": {
-                "type": "object",
-                "properties": {
-                    "email": {
-                        "description": "[optional] string: user email",
-                        "type": "string"
-                    },
-                    "phone": {
-                        "description": "[required] string: user phone number,standard format is E164",
-                        "type": "string"
-                    }
-                },
-                "required": [
-                    "phone"
-                ]
-            }
+        summary: 'check account exist',
+        method: 'get',
+        request: {
+          query: {
+            email: '[optional] string: user email',
+            phone: '[required] string: user phone number,standard format is E164'
+          }
         },
-        "response": {
-            "success": {
-                "type": "object",
-                "properties": {
-                    "exists": {
-                        "description": "boolean",
-                        "type": "boolean"
-                    },
-                    "msg": {
-                        "description": "string: detail message",
-                        "type": "string"
-                    }
-                },
-                "required": []
-            }
-        }    
+        response: {
+          body: {
+            exists: 'boolean',
+            msg: 'string: detail message'
+          },
+        },
       }
-   */
+   * @param {string} spec_output_path - output path
+   * @return {object} new_format_doc - return api_doc_json, key is api name,
+   * value is detail info follow the api doc, such as
+   * {
+      "method_type": "get",
+      "summary": "check email or phone for duplicates",
+      "request": {
+        "query": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "description": "[optional] string: user email",
+              "type": "string"
+            },
+            "phone": {
+              "description": "[required] string: user phone number,standard format is E164",
+              "type": "string"
+            }
+          },
+          "required": [
+            "phone"
+          ]
+      }
+    },
+    "response": {
+      "success": {
+        "type": "object",
+        "properties": {
+          "exists": {
+            "description": "boolean",
+            "type": "boolean"
+          },
+          "msg": {
+            "description": "string: detail message",
+            "type": "string"
+          }
+        },
+        "required": []
+      }
+    }
+  */
   run(old_format_doc, spec_output_path) {
     const new_format_doc = {};
     let current_api_name = {};
@@ -238,7 +253,7 @@ class SpecConvert extends Base.factory() {
     }
 
     const output_path = `${spec_output_path}_api_doc.json`;
-    fs.writeFileSync(output_path, JSON.stringify(new_format_doc, null, 4));
+    fs.writeFileSync(output_path, JSON.stringify(new_format_doc, null, 2));
 
     return new_format_doc;
   }

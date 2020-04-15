@@ -148,8 +148,8 @@ describe('convert spec to generate api doc', () => {
           method_type: 'GET',
           request: {
             query: {
-                email: '[optional] string: user email',
-                phone: '[required] string: user phone number,standard format is E164'
+              email: '[optional] string: user email',
+              phone: '[required] string: user phone number,standard format is E164'
             }
           },
           response: {
@@ -257,7 +257,7 @@ describe('convert spec to generate api doc', () => {
           method_type: 'Get',
           request: {
             body: {
-                year: 'birdary year'
+              year: 'birdary year'
             }
           },
           response: {
