@@ -2,6 +2,10 @@ const Loader = require('../middleware/fake/loader');
 const Log = require('../middleware/log');
 const Setting = require('../middleware/setting');
 
+const api_doc_json = require('../api_doc.json');
+const api_flow_json = require('../api_flow.json');
+const api_special_json = require('../api_special_case.json');
+
 async function execute() {
   try {
     Setting.initialize();
@@ -17,9 +21,9 @@ async function execute() {
       special_test_case_path: Setting.getInstance().special_test_case_path_in_generate_module(),
     });
 
-    await Loader.getInstance().loadApiDoc();
-    await Loader.getInstance().outputTestCaseFlow();
-    await Loader.getInstance().outputSpecialCase();
+    await Loader.getInstance().loadApiDoc(api_doc_json);
+    await Loader.getInstance().outputTestCaseFlow(api_flow_json);
+    await Loader.getInstance().outputSpecialCase(api_special_json);
   } catch (e) {
     Log.getInstance().error(e.message);
   }

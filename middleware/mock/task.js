@@ -53,7 +53,7 @@ class Task {
   }
 
   _replaceUrl(url) {
-    return url.replace('${base_url}', base_url);
+    return url.replace('{base_url}', base_url);
   }
 
   async _sendHttpRequest(test_case) {
