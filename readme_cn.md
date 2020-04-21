@@ -52,17 +52,6 @@ test_case层 -> middleware层 -> service层
 - base_url变量的处理(to optimize, 未来支持不同url的变量)
 - 对特定的special_test_case的处理
 
-## todo
-- 增加editorconfig
-- airbnb风格开发
-
-### 二期
-- 搭建swagger ui
-- api_flow和api_doc的前端界面
-- api_doc实际业务的编写
-- api某些固定的调用依赖可以定义
-- special_case等改成文件夹，自动加载
-
 # 文档编写教程
 - 首先，让我们统一上下文。flow指的是一个工作流，比如一个注册流程，其中包含多个case。
 
@@ -111,6 +100,11 @@ test_case层 -> middleware层 -> service层
 - 对不熟悉模块的开发更友善，能更快熟务逻辑
 
 # todo
-- 前端 swagger 
+- 前端 swagger ui (high)
 - 单个mock
-- 编写快速开始的文档
+- 编写快速开始的文档 (high)
+- 支持header的自定义 
+- api_flow和api_doc的前端界面
+- api_doc实际业务的编写
+- api某些固定的调用依赖可以定义
+- special_case等改成文件夹，自动加载
