@@ -256,7 +256,7 @@ describe('convert spec to generate api doc', () => {
     })
   });
 
-  describe('special spec | unkown type', () => {
+  describe('special spec | unknown type', () => {
     before('set source data', () => {
       specJson = {
         'GET /test': {
