@@ -27,7 +27,8 @@
   "scripts": {
     "fake": "node ./entry/fake.js",
     "mock": "node ./entry/mock.js",
-    "test": "mocha"
+    "test": "mocha",
+    "coverage": "nyc npm run test"
   },
   "repository": {
     "type": "git",

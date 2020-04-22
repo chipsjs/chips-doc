@@ -237,7 +237,7 @@ class SpecConvert extends Base.factory() {
       Object.keys(old_format_doc).forEach((api_name) => {
         current_api_name = api_name;
         // api_name like 'GET /houses/:houseID/activities'
-        const index = api_name.indexOf(' ');
+        const index = api_name.lastIndexOf(' ');
         if (index === -1) {
           throw new TypeError('api_name is not supported');
         }
@@ -256,7 +256,7 @@ class SpecConvert extends Base.factory() {
         new_format_doc[api_name].response = this.parseResponseSchema(api.response);
       });
     } catch (err) {
-      throw new TypeError(`SpecConvert::run: ${current_api_name} fail!err_msg is ${err.message}`);
+      throw new TypeError(`SpecConvert::run: ${current_api_name} fail!err_msg: ${err.message}`);
     }
 
     const output_path = `${spec_output_path}_api_doc.json`;

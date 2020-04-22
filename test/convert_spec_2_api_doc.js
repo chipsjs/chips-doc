@@ -56,9 +56,9 @@ describe('convert spec to generate api doc', () => {
         response: { body: inputResponse }
       } = specJson[api_name];
 
-      assert.deepEqual(method_type, method);
-      assert.deepEqual(outputSummary, inputSummary);
-      assert.deepEqual(url, '{base_url}/test1');
+      assert.strictEqual(method_type, method);
+      assert.strictEqual(outputSummary, inputSummary);
+      assert.strictEqual(url, '{base_url}/test1');
       assert.exists(outputRequestQuery.type);
       assert.nestedPropertyVal(outputRequestQuery, 'properties.email.description', inputQuery.email);
       assert.nestedPropertyVal(outputRequestQuery, 'properties.email.type', 'string');
@@ -205,7 +205,7 @@ describe('convert spec to generate api doc', () => {
     })
   });
 
-  describe('sepcial spec | has special type, such as int/Boolean', () => {
+  describe('special spec | has special type, such as int/Boolean', () => {
     before('set source data', () => {
       specJson = {
         'GET /test': {
@@ -256,6 +256,162 @@ describe('convert spec to generate api doc', () => {
     })
   });
 
+  describe('special spec | has special type, such as object', () => {
+    before('set source data', () => {
+      specJson = {
+        'GET /test': {
+          method_type: 'GET',
+          request: {
+            body: {
+              year: 'object start_year'
+            }
+          },
+          response: {
+            body: {
+              exists: 'Boolean',
+            },
+          }
+        }
+      };
+    });
+
+    before('convert special spec to api doc', () => {
+      specResult = Convert.getInstance().run(specJson, 'test/temp/special');
+    });
+
+    it('should generate correct api doc', () => {
+      const api_name = 'GET /test';
+
+      const {
+        url,
+        method_type,
+        request: { body: outputRequestQuery },
+        response: { success: outputResponseBody }
+      } = specResult[api_name];
+      const {
+        request: { body: inputQuery },
+        response: { body: inputResponse }
+      } = specJson[api_name];
+
+      assert.equal(method_type, 'get');
+      assert.equal(url, '{base_url}/test');
+      assert.exists(outputRequestQuery.type);
+      assert.nestedPropertyVal(outputRequestQuery, 'properties.year.description', inputQuery.year);
+      assert.nestedPropertyVal(outputRequestQuery, 'properties.year.type', 'object');
+      assert.nestedPropertyVal(outputResponseBody, 'properties.exists.type', 'boolean');
+      assert.nestedPropertyVal(outputResponseBody, 'properties.exists.description', inputResponse.exists);
+    });
+
+    after('clean file', () => {
+      fs.unlinkSync('test/temp/special_api_doc.json');
+    })
+  });
+
+  describe('special spec | has special type, such as array', () => {
+    before('set source data', () => {
+      specJson = {
+        'GET /test': {
+          method_type: 'GET',
+          request: {
+            body: {
+              year: 'array start_year'
+            }
+          },
+          response: {
+            body: {
+              exists: 'Boolean',
+            },
+          }
+        }
+      };
+    });
+
+    before('convert special spec to api doc', () => {
+      specResult = Convert.getInstance().run(specJson, 'test/temp/special');
+    });
+
+    it('should generate correct api doc', () => {
+      const api_name = 'GET /test';
+
+      const {
+        url,
+        method_type,
+        request: { body: outputRequestQuery },
+        response: { success: outputResponseBody }
+      } = specResult[api_name];
+      const {
+        request: { body: inputQuery },
+        response: { body: inputResponse }
+      } = specJson[api_name];
+
+      assert.equal(method_type, 'get');
+      assert.equal(url, '{base_url}/test');
+      assert.exists(outputRequestQuery.type);
+      assert.nestedPropertyVal(outputRequestQuery, 'properties.year.description', inputQuery.year);
+      assert.nestedPropertyVal(outputRequestQuery, 'properties.year.type', 'array');
+      assert.nestedPropertyVal(outputResponseBody, 'properties.exists.type', 'boolean');
+      assert.nestedPropertyVal(outputResponseBody, 'properties.exists.description', inputResponse.exists);
+    });
+
+    after('clean file', () => {
+      fs.unlinkSync('test/temp/special_api_doc.json');
+    })
+  });
+
+  describe('special spec | has object in object', () => {
+    before('set source data', () => {
+      specJson = {
+        'GET /test': {
+          method_type: 'GET',
+          request: {
+            body: {
+              birth: {
+                year: 'object birth_year'
+              }
+            }
+          },
+          response: {
+            body: {
+              exists: 'Boolean',
+            },
+          }
+        }
+      };
+    });
+
+    before('convert special spec to api doc', () => {
+      specResult = Convert.getInstance().run(specJson, 'test/temp/special');
+    });
+
+    it('should generate correct api doc', () => {
+      const api_name = 'GET /test';
+
+      const {
+        url,
+        method_type,
+        request: { body: outputRequestQuery },
+        response: { success: outputResponseBody }
+      } = specResult[api_name];
+      const {
+        request: { body: inputQuery },
+        response: { body: inputResponse }
+      } = specJson[api_name];
+
+      assert.equal(method_type, 'get');
+      assert.equal(url, '{base_url}/test');
+      assert.exists(outputRequestQuery.type);
+      assert.nestedPropertyVal(outputRequestQuery, 'properties.birth.type', 'object');
+      assert.nestedPropertyVal(outputRequestQuery, 'properties.birth.properties.year.description', 'object birth_year');
+      assert.nestedPropertyVal(outputRequestQuery, 'properties.birth.properties.year.type', 'object');
+      assert.nestedPropertyVal(outputResponseBody, 'properties.exists.type', 'boolean');
+      assert.nestedPropertyVal(outputResponseBody, 'properties.exists.description', inputResponse.exists);
+    });
+
+    after('clean file', () => {
+      fs.unlinkSync('test/temp/special_api_doc.json');
+    })
+  });
+
   describe('special spec | unknown type', () => {
     before('set source data', () => {
       specJson = {
@@ -293,6 +449,44 @@ describe('convert spec to generate api doc', () => {
       assert.exists(outputRequestQuery.type);
       assert.nestedPropertyVal(outputRequestQuery, 'properties.year.description', inputQuery.year);
       assert.nestedPropertyVal(outputRequestQuery, 'properties.year.type', 'unknown');
+    });
+
+    after('clean file', () => {
+      fs.unlinkSync('test/temp/special_api_doc.json');
+    })
+  });
+
+  describe('special spec | api name have too many space', () => {
+    before('set source data', () => {
+      specJson = {
+        'GET    /test': {
+          name: 'check whether an email or phone exists',
+          method: 'get',
+          request: {
+          },
+          response: {
+            body: {
+              exists: 'boolean',
+            },
+          },
+        }
+      };
+    });
+
+    before('convert spec to api doc', () => {
+      specResult = Convert.getInstance().run(specJson, 'test/temp/special');
+    });
+
+    it('should generate correct api doc', () => {
+      const api_name = 'GET    /test';
+
+      const {
+        url,
+        method_type
+      } = specResult[api_name];
+
+      assert.strictEqual(method_type, 'get');
+      assert.strictEqual(url, '{base_url}/test');
     });
 
     after('clean file', () => {
@@ -413,5 +607,38 @@ describe('convert spec to generate api doc', () => {
     after('clean file', () => {
       fs.unlinkSync('test/temp/multi_api_doc.json');
     })
+  });
+
+  describe('error spec | api name is error', () => {
+    before('set source data', () => {
+      specJson = {
+        postTest: {
+          name: 'check  whether an email or phone exists',
+          method: 'get',
+          request: {
+            query: {
+              email: '[optional] string: user email'
+            }
+          },
+          response: {
+            body: {
+              exists: 'boolean',
+            },
+          },
+        }
+      };
+    });
+
+    before('convert spec to api doc', () => {
+      try {
+        Convert.getInstance().run(specJson, 'test/temp/error');
+      } catch (err) {
+        specResult = err.message;
+      }
+    });
+
+    it('should generate correct api doc', () => {
+      assert.strictEqual(specResult, 'SpecConvert::run: postTest fail!err_msg: api_name is not supported');
+    });
   });
 });

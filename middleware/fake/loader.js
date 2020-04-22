@@ -141,18 +141,20 @@ class Loader extends Base.factory() {
       url: await _generateUrl(special_condition, api_info.request.path, api_info.url)
     };
 
-    if (typeof api_info.request.body !== 'undefined') {
-      test_case.body = await _fakerData(api_info.request.body);
-      await _overwriteByPublicParam(public_param_obj, test_case.body);
-      await _overwriteBySpecialCondition(special_condition, test_case.body);
+    if (typeof api_info.request !== 'undefined') {
+      if (typeof api_info.request.body !== 'undefined') {
+        test_case.body = await _fakerData(api_info.request.body);
+        await _overwriteByPublicParam(public_param_obj, test_case.body);
+        await _overwriteBySpecialCondition(special_condition, test_case.body);
+      }
+      if (typeof api_info.request.query !== 'undefined') {
+        test_case.query = await _fakerData(api_info.request.query);
+        await _overwriteByPublicParam(public_param_obj, test_case.query);
+        await _overwriteBySpecialCondition(special_condition, test_case.query);
+      }
     }
-    if (typeof api_info.request.query !== 'undefined') {
-      test_case.query = await _fakerData(api_info.request.query);
-      await _overwriteByPublicParam(public_param_obj, test_case.query);
-      await _overwriteBySpecialCondition(special_condition, test_case.query);
-    }
-    test_case.response = api_info.response;
 
+    test_case.response = api_info.response;
     return test_case;
   }
 

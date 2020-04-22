@@ -16,7 +16,7 @@ class SpecialTask {
   }
 
   _replaceUrl(url) {
-    return url.replace('${base_url}', base_url);
+    return url.replace('{base_url}', base_url);
   }
 
   async _sendHttpRequest(method_type, url, test_case) {

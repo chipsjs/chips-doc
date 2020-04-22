@@ -15,7 +15,6 @@ describe('fake pai doc to generate test case', () => {
     const api_doc = {
       getUser: {
         method_type: 'get',
-        // eslint-disable-next-line no-template-curly-in-string
         url: '{base_url}/users/:otherUserID',
         request: {
           path: {
@@ -36,7 +35,7 @@ describe('fake pai doc to generate test case', () => {
     };
   });
 
-  describe('specail case || have public param', () => {
+  describe('special case || have public param', () => {
 
   });
 });
