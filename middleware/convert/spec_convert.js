@@ -74,7 +74,7 @@ class SpecConvert extends Base.factory() {
         if (!isRequired && schema[param_name].indexOf('[required]') !== -1) {
           result.push(param_name);
         }
-      } else if (schema[param_name] && typeof schema[param_name] === 'object') {
+      } else if (schema[param_name] && typeof schema[param_name] === 'object' && (Array.isArray(schema[param_name]) === false)) {
         const convert_child_schema = this._parseDetailSchema(schema[param_name]);
         convert_schema[param_name] = {
           type: 'object',

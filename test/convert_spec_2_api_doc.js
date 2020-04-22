@@ -393,7 +393,6 @@ describe('convert spec to generate api doc', () => {
         response: { success: outputResponseBody }
       } = specResult[api_name];
       const {
-        request: { body: inputQuery },
         response: { body: inputResponse }
       } = specJson[api_name];
 
@@ -412,7 +411,7 @@ describe('convert spec to generate api doc', () => {
     })
   });
 
-  describe('special spec | unknown type', () => {
+  describe('special spec | unknown type 1', () => {
     before('set source data', () => {
       specJson = {
         'GET /test': {
@@ -448,6 +447,47 @@ describe('convert spec to generate api doc', () => {
       assert.equal(url, '{base_url}/test');
       assert.exists(outputRequestQuery.type);
       assert.nestedPropertyVal(outputRequestQuery, 'properties.year.description', inputQuery.year);
+      assert.nestedPropertyVal(outputRequestQuery, 'properties.year.type', 'unknown');
+    });
+
+    after('clean file', () => {
+      fs.unlinkSync('test/temp/special_api_doc.json');
+    })
+  });
+
+  describe('special spec | unknown type 2', () => {
+    before('set source data', () => {
+      specJson = {
+        'GET /test': {
+          method_type: 'Get',
+          request: {
+            body: {
+              year: []
+            }
+          },
+          response: {
+          }
+        }
+      };
+    });
+
+    before('convert special spec to api doc', () => {
+      specResult = Convert.getInstance().run(specJson, 'test/temp/special');
+    });
+
+    it('should generate correct api doc', () => {
+      const api_name = 'GET /test';
+
+      const {
+        url,
+        method_type,
+        request: { body: outputRequestQuery }
+      } = specResult[api_name];
+
+      assert.equal(method_type, 'get');
+      assert.equal(url, '{base_url}/test');
+      assert.exists(outputRequestQuery.type);
+      assert.nestedPropertyVal(outputRequestQuery, 'properties.year.description', 'unknown');
       assert.nestedPropertyVal(outputRequestQuery, 'properties.year.type', 'unknown');
     });
 
