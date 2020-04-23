@@ -18,7 +18,7 @@
 |   +-- setting.js  配置中心
 |   +-- assist_macro.js 辅助宏
 |   +-- log.js  日志模块,多实例，不同的request_id
-|   +-- loader.js 数据处理，加载api_doc/api_flow并输出test_case
+|   +-- fake.js 数据处理，加载api_doc/api_flow并输出test_case
 |   +-- task.js 测试任务，一个task包含多个api，例如注册流程，生成一个log实例
 |   +-- taskqueue.js 任务队列
 +-- entry 入口
@@ -108,3 +108,9 @@ test_case层 -> middleware层 -> service层
 - api_doc实际业务的编写
 - api某些固定的调用依赖可以定义
 - special_case等改成文件夹，自动加载
+- faker的ut需要有一个服务(high)
+
+# important!!!
+## flow的flow
+- flow前的多个flow需要指定context param
+- 复杂度: 1.就是写多个flow 2.自下而上 3.图 4.自上而下 (todo)

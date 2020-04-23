@@ -1,0 +1,8 @@
+{
+  "single_1": {
+    "flow": ["basic"]
+  },
+  "single_2": {
+    "flow": ["string_types"]
+  }
+}

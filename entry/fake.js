@@ -1,4 +1,4 @@
-const Loader = require('../middleware/fake/loader');
+const Fake = require('../middleware/fake/fake');
 const Log = require('../middleware/log');
 const Setting = require('../middleware/setting');
 
@@ -15,15 +15,17 @@ async function execute() {
   }
 
   try {
-    Loader.initialize({
+    Fake.initialize({
       log_module: Log.getInstance(),
       temp_test_case_path: Setting.getInstance().temp_test_case_path_in_generate_module(),
       special_test_case_path: Setting.getInstance().special_test_case_path_in_generate_module(),
     });
 
-    await Loader.getInstance().loadApiDoc(api_doc_json);
-    await Loader.getInstance().outputTestCaseFlow(api_flow_json);
-    await Loader.getInstance().outputSpecialCase(api_special_json);
+    await Fake.getInstance().loadApiDoc(api_doc_json);
+    // await Fake.getInstance().outputTestCaseFlow(api_flow_json);
+    // await Fake.getInstance().outputSpecialCase(api_special_json);
+    await Fake.getInstance().outputSingleTestCaseFlow(xxx, "/home/kris/abc");
+
   } catch (e) {
     Log.getInstance().error(e.message);
   }

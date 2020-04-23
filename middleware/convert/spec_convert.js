@@ -18,10 +18,6 @@ class SpecConvert extends Base.factory() {
    * @return {string} type - string | number | object | array | boolean | unknown
    */
   _parseType(description) {
-    if (typeof description !== 'string') {
-      return 'unknown';
-    }
-
     const lower_case_description = description.toLowerCase();
     const prefix_type = lower_case_description.substr(0, 6);
 
