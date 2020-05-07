@@ -1,5 +1,7 @@
 const queryString = require('query-string');
-const { httpRequest, dataValidate } = require('../../lib/assist_macro');
+const dataValidate = require('jsonschema').validate;
+
+const { httpRequest } = require('../../lib/assist_macro');
 const { header, base_url } = require('../../api_dependence.json');
 // to optimize,智能识别所有url并替换,第一期先只要base_url
 

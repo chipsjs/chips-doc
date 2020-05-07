@@ -1,6 +1,8 @@
 const fs = require('fs');
+const _ = require('lodash');
 
 const Base = require('../../lib/base_class');
+const { OpenApiObject, InfoObject } = require('../../lib/swagger_struct');
 
 class SpecConvert extends Base.factory() {
   static initialize({ log_module }) {
@@ -158,7 +160,7 @@ class SpecConvert extends Base.factory() {
   parseResponseSchema(spec_response) {
     const convert_response = {};
     if (spec_response.body) {
-      convert_response.success = this.parseQueryOrBodySchema(spec_response.body);
+      convert_response['200'] = this.parseQueryOrBodySchema(spec_response.body);
     }
 
     return convert_response;
@@ -226,39 +228,38 @@ class SpecConvert extends Base.factory() {
     }
   */
   run(old_format_doc, spec_output_path) {
-    const new_format_doc = {};
-    let current_api_name = {};
+    const path_items = {};
+    let current_api_name = '';
 
     try {
       Object.keys(old_format_doc).forEach((api_name) => {
         current_api_name = api_name;
-        // api_name like 'GET /houses/:houseID/activities'
         const index = api_name.lastIndexOf(' ');
         if (index === -1) {
           throw new TypeError('api_name is not supported');
         }
+        // api_name is 'GET /test/:id/' and real_api_name is '/test/:id/'
+        const real_api_name = api_name.substring(index + 1);
 
-        new_format_doc[api_name] = {
-          url: `{base_url}${api_name.substr(index + 1)}`,
-        };
         const api = old_format_doc[api_name];
-        Object.assign(new_format_doc[api_name], api);
-
-        const method_type = api.method || api.method_type;
-        new_format_doc[api_name].method_type = method_type.toLowerCase()
-        delete new_format_doc[api_name].method;
-
-        new_format_doc[api_name].request = this.parseRequestSchema(api.request);
-        new_format_doc[api_name].response = this.parseResponseSchema(api.response);
+        const method_type = (api.method || api.method_type).toLowerCase();
+        // todo api.name, header;
+        _.set(path_items, [real_api_name, method_type, 'summary'], api.summary);
+        _.set(path_items, [real_api_name, method_type, 'description'], api.note);
+        _.set(path_items, [real_api_name, method_type, 'request'], this.parseRequestSchema(api.request));// todo
+        _.set(path_items, [real_api_name, method_type, 'responses'], this.parseRequestSchema(api.response));// todo
       });
     } catch (err) {
       throw new TypeError(`SpecConvert::run: ${current_api_name} fail!err_msg: ${err.message}`);
     }
 
-    const output_path = `${spec_output_path}_api_doc.json`;
-    fs.writeFileSync(output_path, JSON.stringify(new_format_doc, null, 2));
+    const info_obj = new InfoObject('august-rest-api', 'august api server for mobile', '{base_url}', '8.8.0');
+    const openapi_obj = new OpenApiObject('3.0.0', info_obj, [], path_items);
 
-    return new_format_doc;
+    const output_path = `${spec_output_path}_api_doc.json`;
+    fs.writeFileSync(output_path, JSON.stringify(openapi_obj, null, 2));
+
+    return path_items;
   }
 }
 

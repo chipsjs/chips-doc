@@ -1,6 +1,7 @@
 const queryString = require('query-string');
+const dataValidate = require('jsonschema').validate;
 
-const { httpRequest, dataValidate } = require('../../lib/assist_macro');
+const { httpRequest } = require('../../lib/assist_macro');
 const { header, base_url } = require('../../api_dependence.json');
 // to optimize
 

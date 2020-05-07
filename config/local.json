@@ -1,5 +1,6 @@
 {
   "log_level": "info",
   "temp_test_case_path": "test_case/temp.json",
-  "report_path": "report"
+  "report_path": "report",
+  "openapi_version": "3.0.0"
 }

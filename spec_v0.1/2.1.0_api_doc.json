@@ -1,0 +1,70 @@
+{
+    "GET /partners": {
+        "method_type": "GET",
+        "name": "get August partners enabled for display",
+        "summary": "retrives a list of partners",
+        "request": {},
+        "response": {
+            "success": {
+                "type": "object",
+                "properties": {
+                    "0": {
+                        "type": "object",
+                        "properties": {
+                            "_id": {
+                                "description": "ID of partner",
+                                "type": "unknown"
+                            },
+                            "name": {
+                                "description": "name of partner",
+                                "type": "unknown"
+                            },
+                            "heroImageURL": {
+                                "description": "URL to partner hero image",
+                                "type": "unknown"
+                            },
+                            "partnerURL": {
+                                "description": "URL to partner homepage",
+                                "type": "unknown"
+                            },
+                            "logoURL": {
+                                "description": "URL to partner logo",
+                                "type": "unknown"
+                            },
+                            "wordmarkURL": {
+                                "description": "URL to partner wordmark",
+                                "type": "unknown"
+                            },
+                            "partnerTagline": {
+                                "description": "partner tagline",
+                                "type": "unknown"
+                            },
+                            "jointTagline": {
+                                "description": "tagline tailored to August",
+                                "type": "unknown"
+                            },
+                            "partnerDescription": {
+                                "description": "company description",
+                                "type": "unknown"
+                            },
+                            "jointDescription": {
+                                "description": "service offering description",
+                                "type": "unknown"
+                            },
+                            "promotion": {
+                                "description": "available partnership promotions",
+                                "type": "unknown"
+                            },
+                            "locations": {
+                                "description": "where the service is provided",
+                                "type": "unknown"
+                            }
+                        }
+                    }
+                },
+                "required": []
+            }
+        },
+        "note": ""
+    }
+}

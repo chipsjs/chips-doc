@@ -1,0 +1,48 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+      {
+          "type": "node",
+          "request": "launch",
+          "name": "test convert",
+          "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
+          "args": [
+              "${workspaceFolder}/test/convert_spec_2_api_doc.js"
+          ],
+          "env": {
+              "NODE_ENV": "test"
+          },
+      },
+      {
+          "type": "node",
+          "request": "launch",
+          "name": "convert",
+          "program": "${workspaceFolder}/entry/convert.js",
+          "env": {
+              "NODE_ENV": "local"
+          },
+      },
+      {
+        "type": "node",
+        "request": "launch",
+        "name": "fake",
+        "program": "${workspaceFolder}/entry/fake.js",
+        "env": {
+            "NODE_ENV": "local"
+        },
+      },
+      {
+        "type": "node",
+        "request": "launch",
+        "name": "mock",
+        "program": "${workspaceFolder}/entry/mock.js",
+        "env": {
+            "NODE_ENV": "local"
+        },
+      }
+    
+  ]
+}

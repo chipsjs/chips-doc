@@ -1,0 +1,59 @@
+{
+    "GET /houses/:houseID/activities": {
+        "method_type": "GET",
+        "name": "Get House Logs.",
+        "summary": "This gets all the logs for a given house, allows to provide a `limit` query string",
+        "note": "",
+        "request": {},
+        "response": {
+            "success": {
+                "type": "object",
+                "properties": {
+                    "events": {
+                        "type": "object",
+                        "properties": {
+                            "0": {
+                                "type": "object",
+                                "properties": {
+                                    "timestamp": {
+                                        "description": "unknown",
+                                        "type": "unknown"
+                                    },
+                                    "action": {
+                                        "description": "unknown",
+                                        "type": "unknown"
+                                    },
+                                    "deviceID": {
+                                        "description": "unknown",
+                                        "type": "unknown"
+                                    },
+                                    "deviceType": {
+                                        "description": "unknown",
+                                        "type": "unknown"
+                                    },
+                                    "user": {
+                                        "description": "unknown",
+                                        "type": "unknown"
+                                    },
+                                    "title": {
+                                        "description": "unknown",
+                                        "type": "unknown"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "nextPage": {
+                        "description": "unknown",
+                        "type": "unknown"
+                    },
+                    "prevPage": {
+                        "description": "unknown",
+                        "type": "unknown"
+                    }
+                },
+                "required": []
+            }
+        }
+    }
+}

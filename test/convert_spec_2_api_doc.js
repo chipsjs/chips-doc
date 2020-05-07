@@ -205,7 +205,7 @@ describe('convert spec to generate api doc', () => {
     })
   });
 
-  describe('special spec | has special type, such as int/Boolean', () => {
+  describe('special spec | has special type, such as int/Boolean instead of number/boolean', () => {
     before('set source data', () => {
       specJson = {
         'GET /test': {
@@ -256,7 +256,7 @@ describe('convert spec to generate api doc', () => {
     })
   });
 
-  describe('special spec | has special type, such as object', () => {
+  describe('special spec | has special type, such as object prefix in description', () => {
     before('set source data', () => {
       specJson = {
         'GET /test': {
@@ -307,7 +307,7 @@ describe('convert spec to generate api doc', () => {
     })
   });
 
-  describe('special spec | has special type, such as array', () => {
+  describe('special spec | has special type, such as array prefix in description', () => {
     before('set source data', () => {
       specJson = {
         'GET /test': {

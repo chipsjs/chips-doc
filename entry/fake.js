@@ -22,10 +22,8 @@ async function execute() {
     });
 
     await Fake.getInstance().loadApiDoc(api_doc_json);
-    // await Fake.getInstance().outputTestCaseFlow(api_flow_json);
-    // await Fake.getInstance().outputSpecialCase(api_special_json);
-    await Fake.getInstance().outputSingleTestCaseFlow(xxx, "/home/kris/abc");
-
+    await Fake.getInstance().outputTestCaseFlow(api_flow_json);
+    await Fake.getInstance().outputSpecialCase(api_special_json);
   } catch (e) {
     Log.getInstance().error(e.message);
   }

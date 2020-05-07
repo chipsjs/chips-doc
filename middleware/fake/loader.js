@@ -39,6 +39,7 @@ const docCheck = async (api_name, api_doc_info) => {
  */
 const _overwriteByPublicParam = async (public_param_obj, request_param = {}) => {
   Object.entries(request_param).forEach(([key, value]) => {
+    // eslint-disable-next-line no-prototype-builtins
     if (value && public_param_obj.hasOwnProperty(key)) {
       if (!public_param_obj[key]) {
         // eslint-disable-next-line no-param-reassign
@@ -103,99 +104,80 @@ const _generateUrl = async (special_condition, path_condition, url) => {
   return new_url;
 }
 
-class Fake extends Base.factory() {
+class Loader extends Base.factory() {
   constructor() {
     super();
     this._api_doc_map = new Map();
+    this._test_cases = {};
   }
 
   static initialize({ log_module, temp_test_case_path, special_test_case_path }) {
     this.loadInstance({
       read_only_properties: {
         logger: log_module || console,
-      },
-      written_properties: {
         temp_test_case_path,
-        special_test_case_path,
+        special_test_case_path
       }
     });
   }
 
-  /**
-   * parse api doc format to test case
-   * @param {object} [doc] -
-   * @param {string} [doc.api_name] - such as postUser_1 || postUser_2
-   * @param {string} [doc.real_api_name] - such as postUser
-   * @param {object} [doc.public_param_obj] - context param
-   * @param {object} [doc.special_condition] - param need to be specified
-   * @return {object} test_case - test case which has faker data
-   */
-  async _parseDoc2TestCase({
+  async _parseDoc2Info({
     api_name = '', real_api_name = '', public_param_obj = {}, special_condition = {}
   }) {
     const api_info = this._getApiDoc(real_api_name);
     if (!api_info) throw new TypeError(`no exist ${real_api_name} in api doc`);
-    const test_case = {
+    const result = {
       api_name,
       real_api_name,
       method_type: api_info.method_type,
-      url: await _generateUrl(special_condition, api_info.request.path, api_info.url)
+      url: api_info.url
     };
 
-    if (typeof api_info.request !== 'undefined') {
-      if (typeof api_info.request.body !== 'undefined') {
-        test_case.body = await _fakerData(api_info.request.body);
-        await _overwriteByPublicParam(public_param_obj, test_case.body);
-        await _overwriteBySpecialCondition(special_condition, test_case.body);
-      }
-      if (typeof api_info.request.query !== 'undefined') {
-        test_case.query = await _fakerData(api_info.request.query);
-        await _overwriteByPublicParam(public_param_obj, test_case.query);
-        await _overwriteBySpecialCondition(special_condition, test_case.query);
-      }
+    if (typeof api_info.request.body !== 'undefined') {
+      result.body = await _fakerData(api_info.request.body);
+      await _overwriteByPublicParam(public_param_obj, result.body);
+      await _overwriteBySpecialCondition(special_condition, result.body);
     }
+    if (typeof api_info.request.query !== 'undefined') {
+      result.query = await _fakerData(api_info.request.query);
+      await _overwriteByPublicParam(public_param_obj, result.query);
+      await _overwriteBySpecialCondition(special_condition, result.query);
+    }
+    result.url = await _generateUrl(special_condition, api_info.request.path, result.url);
+    result.response = api_info.response;
 
-    test_case.response = api_info.response;
-    return test_case;
+    return result;
   }
 
-  /**
-   * parse api doc format to test case
-   * @param {object} [api_flow] - api doc flow based on specific rules,
-   *    such as one item in api_flow_template.json
-   * @param {object} [api_flow.public_param] - optional, context param in one flow
-   * @param {array} [api_flow.flow] - The order of apis to be invoked
-   * @return {object} test_case_flow - test case flow which has faker data
-   */
+  // 解析apidoc里的jsonschema + apiflow中的特定规则生成test_case;
   async _generateTestCaseFlow(api_flow) {
     const public_param_obj = {};
-    // necessary
+
     if (Array.isArray(api_flow.public_param)) {
       Object.keys(api_flow.public_param).forEach((key) => {
         public_param_obj[key] = null;
       });
     }
 
-    const test_case_flow = await loop.reduce(api_flow.flow.values(),
-      async (temp_test_case_flow, api_name) => {
-        let real_api_name = api_name;
-        const pos = api_name.indexOf('_');
-        if (pos !== -1) {
-          real_api_name = api_name.substr(0, pos);
-        }
+    const test_case_arr = await loop.reduce(api_flow.flow.values(), async (result, item) => {
+      const api_name = api_flow.flow[item];
+      let real_api_name = api_name;
+      const pos = api_name.indexOf('_');
+      if (pos !== -1) {
+        real_api_name = api_name.substr(0, pos);
+      }
 
-        const test_case = await this._parseDoc2TestCase({
-          api_name,
-          real_api_name,
-          public_param_obj,
-          special_condition: api_flow[api_name]
-        });
+      const api_result = await this._parseDoc2Info({
+        api_name,
+        real_api_name,
+        public_param_obj,
+        special_condition: api_flow[api_name]
+      });
 
-        temp_test_case_flow.push(test_case);
-        return temp_test_case_flow;
-      }, []);
+      result.push(api_result);
+    }, []);
 
-    return test_case_flow;
+    return test_case_arr;
   }
 
   /**
@@ -211,58 +193,41 @@ class Fake extends Base.factory() {
     });
   }
 
-  /**
-   * exist this api_name in api doc
-   * @param {string} api_name - api name
-   * @return {boolean} - true || false
-   */
-  _existInApiDoc(api_name) {
-    if (!this._api_doc_map.has(api_name)) {
-      return false;
+  _existInApiDoc(key) {
+    if (!this._api_doc_map.has(key)) {
+      throw new TypeError(`Loader::_generateTestCaseFlow: generate test case fail! The most likely reason is that ${key} does not exist in api_doc.js or its format is error`);
     }
 
     return true;
   }
 
-  /**
-   * get api doc after loadApiDoc
-   * @param {string} api_name - json that follows api doc format which is generated by convert.js
-   * @return {object} - one api in api doc
-   */
-  _getApiDoc(api_name) {
-    if (!this._existInApiDoc(api_name)) {
-      throw new TypeError(`Loader::_existInApiDoc: generate test case fail! The most likely reason is that ${api_name} does not exist in api_doc.js or its format is error`);
+  _getApiDoc(key) {
+    if (this._existInApiDoc(key)) {
+      return this._api_doc_map.get(key);
     }
-
-    return this._api_doc_map.get(api_name);
+    return null;
   }
 
-  /**
-   * output file which is test case flow
-   * @param {json} api_special_json -
-   *    json that follows api doc format which is generate by user specify
-   * @return {valid}
-   */
-  // todo
   async outputSpecialCase(api_special_json) {
-    const special_json = Object.entries(api_special_json).reduce(temp_test_case_flow, ([key, value]) => {
-      if (this._existInApiDoc(key)) {
-        const api_doc = this._api_doc_map.get(key);
-        const test_case = {
-          method_type: api_doc.method_type,
-          url: api_doc.url
-        };
+    const special_json = {};
+
+    Object.keys(api_special_json).forEach((i) => {
+      if (this._existInApiDoc(i)) {
+        const key = i;
+        const api_doc = this._api_doc_map.get(i);
+        const value = {};
+        value.method_type = api_doc.method_type;
+        value.url = api_doc.url;
         // if (Array.isArray(api_special_json[i]) === true) {
         //   api_special_json[i].forEach((j) => {
         //     // todo,校验数据格式
         //   });
         // }
-        test_case.cases = value;
+        value.cases = api_special_json[i];
 
-        temp_test_case_flow[key] = value;
-        return temp_test_case_flow;
+        special_json[key] = value;
       }
-    }, {});
+    });
 
     if (Object.keys(special_json).length !== 0) {
       fs.writeFileSync(this.special_test_case_path(), JSON.stringify(special_json, null, 2));
@@ -271,41 +236,17 @@ class Fake extends Base.factory() {
 
   /**
    * output file which is test case flow
-   * @param {object} api_flows - json that follows api doc format which is generated by convert.js
-   * @param {boolean} isSingle - It is a single flow when true
-   * @return {object} test_cases - todo
-   */
-  async outputTestCaseFlow(api_flows) {
-    const test_cases = await loop.reduce(Object.entries(api_flows).values(), async (prev, flow) => {
-      const [key, value] = flow;
-      // eslint-disable-next-line no-param-reassign
-      prev[key] = await this._generateTestCaseFlow(value);
-    }, {});
-
-    fs.writeFileSync(this.temp_test_case_path(), JSON.stringify(test_cases, null, 2));
-
-    return test_cases;
-  }
-
-  async outputSingleTestCaseFlow(api_flows, flow_name_arr, output_path) {
-    const test_cases = {};
-
-    await loop.forEach(flow_name_arr.values(), async (flow_name) => {
-      test_cases[flow_name] = await this._generateTestCaseFlow(api_flows[flow_name].flow);
-    });
-
-    fs.writeFileSync(output_path, JSON.stringify(test_cases, null, 2));
-
-    return test_cases;
-  }
-  /**
-   * clean env
+   * @param {json} api_doc_json - json that follows api doc format
    * @return {valid}
    */
-  async clean() {
-    this._api_doc_map.clear();
-    fs.unlinkSync(this.temp_test_case_path());
+  async outputTestCaseFlow(api_flow_json) {
+    // const test_cases = await loop.reduce(Object.entries(api_flow_json), async (prev,( [key, value])) => {
+    //   // eslint-disable-next-line no-param-reassign
+    //   prev[key] = await this._generateTestCaseFlow(value);
+    // }, {});
+
+    fs.writeFileSync(this.temp_test_case_path(), JSON.stringify(test_cases, null, 2));
   }
 }
 
-module.exports = Fake;
+module.exports = Loader;

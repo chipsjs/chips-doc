@@ -1,59 +1,39 @@
 {
-    "GET /houses/:houseID/activities": {
-        "method_type": "GET",
-        "name": "Get House Logs.",
+  "openapi": "3.0.0",
+  "info": {
+    "title": "august-rest-api",
+    "description": "august api server for mobile",
+    "termsOfService": "{base_url}",
+    "version": "8.8.0"
+  },
+  "servers": [],
+  "paths": {
+    "/houses/:houseID/activities": {
+      "get": {
         "summary": "This gets all the logs for a given house, allows to provide a `limit` query string",
-        "note": "",
+        "description": "",
         "request": {},
-        "response": {
-            "success": {
-                "type": "object",
-                "properties": {
-                    "events": {
-                        "type": "object",
-                        "properties": {
-                            "0": {
-                                "type": "object",
-                                "properties": {
-                                    "timestamp": {
-                                        "description": "unknown",
-                                        "type": "unknown"
-                                    },
-                                    "action": {
-                                        "description": "unknown",
-                                        "type": "unknown"
-                                    },
-                                    "deviceID": {
-                                        "description": "unknown",
-                                        "type": "unknown"
-                                    },
-                                    "deviceType": {
-                                        "description": "unknown",
-                                        "type": "unknown"
-                                    },
-                                    "user": {
-                                        "description": "unknown",
-                                        "type": "unknown"
-                                    },
-                                    "title": {
-                                        "description": "unknown",
-                                        "type": "unknown"
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "nextPage": {
-                        "description": "unknown",
-                        "type": "unknown"
-                    },
-                    "prevPage": {
-                        "description": "unknown",
-                        "type": "unknown"
-                    }
-                },
-                "required": []
-            }
+        "responses": {
+          "body": {
+            "type": "object",
+            "properties": {
+              "events": {
+                "description": "unknown",
+                "type": "unknown"
+              },
+              "nextPage": {
+                "description": "unknown",
+                "type": "unknown"
+              },
+              "prevPage": {
+                "description": "unknown",
+                "type": "unknown"
+              }
+            },
+            "required": []
+          }
         }
+      }
     }
+  }
 }
