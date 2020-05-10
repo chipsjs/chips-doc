@@ -2,7 +2,7 @@ const fs = require('fs');
 const _ = require('lodash');
 
 const Base = require('../../lib/base_class');
-const { OpenApiObject, InfoObject } = require('../../lib/swagger_struct');
+const { Swagger, InfoObject } = require('../../lib/swagger_convert');
 
 class SpecConvert extends Base.factory() {
   static initialize({ log_module }) {
@@ -60,29 +60,51 @@ class SpecConvert extends Base.factory() {
    */
   _parseDetailSchema(schema, isRequired = false) {
     const convert_schema = {};
-
     const param_arr = Object.keys(schema).reduce((result, param_name) => {
       if (param_name === 'required' || param_name === 'optional' || param_name === 'header') return result;
-
-      if (typeof schema[param_name] === 'string') {
-        convert_schema[param_name] = {
-          description: schema[param_name],
-          type: this._parseType(schema[param_name])
-        };
-        if (!isRequired && schema[param_name].indexOf('[required]') !== -1) {
-          result.push(param_name);
+      if (schema[param_name]) {
+        switch (typeof schema[param_name]) {
+          case 'string':
+            convert_schema[param_name] = {
+              description: schema[param_name],
+              type: this._parseType(schema[param_name])
+            };
+            if (!isRequired && schema[param_name].indexOf('[required]') !== -1) {
+              result.push(param_name);
+            }
+            break;
+          case 'object':
+            if (Array.isArray(schema[param_name])) {
+              // default spec format is as the same as api_spec['3.0,0'].xxx.events
+              const convert_child_schema = this._parseDetailSchema(schema[param_name][0]);
+              convert_schema[param_name] = {
+                type: 'array',
+                items: {
+                  type: 'object',
+                  properties: convert_child_schema.convert_schema
+                }
+              };
+            } else {
+              const convert_child_schema = this._parseDetailSchema(schema[param_name]);
+              convert_schema[param_name] = {
+                type: 'object',
+                properties: convert_child_schema.convert_schema
+              };
+            }
+            break;
+          case 'function': // super special schema, like spec[3.0.0].xxx.nextPage
+            convert_schema[param_name] = {
+              description: '',
+              type: this._parseType(schema[param_name].name)
+            };
+            break;
+          default:
+            convert_schema[param_name] = {
+              description: 'unknown',
+              type: 'unknown'
+            };
+            break;
         }
-      } else if (schema[param_name] && typeof schema[param_name] === 'object' && (Array.isArray(schema[param_name]) === false)) {
-        const convert_child_schema = this._parseDetailSchema(schema[param_name]);
-        convert_schema[param_name] = {
-          type: 'object',
-          properties: convert_child_schema.convert_schema
-        };
-      } else {
-        convert_schema[param_name] = {
-          description: 'unknown',
-          type: 'unknown'
-        };
       }
 
       if (isRequired) {
@@ -95,137 +117,99 @@ class SpecConvert extends Base.factory() {
   }
 
   /**
-   * parse old_format_doc[api_name].request.body || old_format_doc[api_name].request.query
-   * @param {object} spec_query - old_format_doc[api_name].request.body || query
-   * @return {object} convert_query - api_doc[api_name].request.body || query
+   * parse old_format_doc[api_name].request.body
+   * @param {object} spec_schema - old_format_doc[api_name].request.body
+   * @return {object} convert_query - api_doc[api_name].request.body
    */
-  parseQueryOrBodySchema(spec_query) {
+  _parseBodySchema(spec_schema) {
     // filter spec_query is string
-    if (typeof spec_query !== 'object') return {};
+    if (typeof spec_schema !== 'object') return {};
+    let required_param_arr = [];
 
-    const convert_query = {
+    if (Array.isArray(spec_schema)) {
+      const { convert_schema: new_detail_schema } = this._parseDetailSchema(spec_schema[0]);
+      const new_schema = {
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: new_detail_schema
+        }
+      };
+
+      return { new_schema, required_param_arr };
+    }
+
+    const new_schema = {
       type: 'object',
       properties: {}
     };
-    let convert_required_param_arr = [];
 
     // there are two different schema in api_spec, such as query.required.pin or query.pin
-    if (spec_query.required) {
-      const { convert_schema, param_arr } = this._parseDetailSchema(spec_query.required, true);
-      Object.assign(convert_query.properties, convert_schema);
-      convert_required_param_arr = param_arr;
+    if (spec_schema.required) {
+      const { convert_schema: new_detail_schema, param_arr } = this._parseDetailSchema(spec_schema.required, true);
+      Object.assign(new_schema.properties, new_detail_schema);
+      required_param_arr = param_arr;
     }
 
-    if (spec_query.optional) {
-      const { convert_schema } = this._parseDetailSchema(spec_query.optional);
-      Object.assign(convert_query.properties, convert_schema);
+    if (spec_schema.optional) {
+      const { convert_schema: new_detail_schema } = this._parseDetailSchema(spec_schema.optional);
+      Object.assign(new_schema.properties, new_detail_schema);
     }
 
-    if (spec_query.headers) {
+    if (spec_schema.headers) {
       // do nothing
     }
 
-    const { convert_schema, param_arr } = this._parseDetailSchema(spec_query);
-    Object.assign(convert_query.properties, convert_schema);
+    const { convert_schema: new_detail_schema, param_arr } = this._parseDetailSchema(spec_schema);
+    Object.assign(new_schema.properties, new_detail_schema);
+    required_param_arr.concat(param_arr)
 
-    convert_query.required = convert_required_param_arr.concat(param_arr);
-
-    return convert_query;
+    return { new_schema, required_param_arr };
   }
 
   /**
-   * parse old_format_doc[api_name].request
-   * @param {object} spec_request - api_spec[api_name].request
+   * parse old_format_doc[api_name].request.body
+   * @param {object} spec_schema - api_spec[api_name].request.body
    * @return {object} convert_request - api_doc[api_name].request
    */
-  parseRequestSchema(spec_request) {
-    const convert_request = {};
+  parseRequestBodySchema(spec_schema) {
+    if (!spec_schema) return null;
 
-    if (spec_request.query) {
-      convert_request.query = this.parseQueryOrBodySchema(spec_request.query);
-    }
+    const { new_schema, required_param_arr } = this._parseBodySchema(spec_schema);
+    return Swagger.convertJsonSchema2Swagger(new_schema, 'body', { required_param_arr })
+  }
 
-    if (spec_request.body) {
-      convert_request.body = this.parseQueryOrBodySchema(spec_request.body);
-    }
+  /**
+   * parse old_format_doc[api_name].request.query
+   * @param {object} request - api_spec[api_name].request.body
+   * @return {object} convert_request - api_doc[api_name].request
+   */
+  parseQuerySchema(spec_schema) {
+    if (!spec_schema) return null;
 
-    return convert_request;
+    const { new_schema, required_param_arr } = this._parseBodySchema(spec_schema.body);
+    return Swagger.convertJsonSchema2Swagger(new_schema, 'query', { required_param_arr });
   }
 
   /**
    * parse old_format_doc[api_name].response
-   * @param {object} spec_response - api_spec[api_name].response
+   * @param {object} spec_schema - api_spec[api_name].response
    * @return {object} convert_response - api_doc[api_name].response
    */
-  parseResponseSchema(spec_response) {
-    const convert_response = {};
-    if (spec_response.body) {
-      convert_response['200'] = this.parseQueryOrBodySchema(spec_response.body);
-    }
+  parseResponseSchema(spec_schema) {
+    if (!spec_schema) return null;
 
-    return convert_response;
+    const { new_schema } = this._parseBodySchema(spec_schema.body);
+    return Swagger.convertJsonSchema2Swagger(new_schema, 'response');
   }
 
   /**
    * convert api spec to api doc json
    * @param {object} old_format_doc - key is api name,
-   * value is detail info, such as
-   * {
-        summary: 'check account exist',
-        method: 'get',
-        request: {
-          query: {
-            email: '[optional] string: user email',
-            phone: '[required] string: user phone number,standard format is E164'
-          }
-        },
-        response: {
-          body: {
-            exists: 'boolean',
-            msg: 'string: detail message'
-          },
-        },
-      }
+   * value is detail info
    * @param {string} spec_output_path - output path
    * @return {object} new_format_doc - return api_doc_json, key is api name,
    * value is detail info follow the api doc, such as
-   * {
-      "method_type": "get",
-      "summary": "check email or phone for duplicates",
-      "request": {
-        "query": {
-          "type": "object",
-          "properties": {
-            "email": {
-              "description": "[optional] string: user email",
-              "type": "string"
-            },
-            "phone": {
-              "description": "[required] string: user phone number,standard format is E164",
-              "type": "string"
-            }
-          },
-          "required": [
-            "phone"
-          ]
-      }
-    },
-    "response": {
-      "success": {
-        "type": "object",
-        "properties": {
-          "exists": {
-            "description": "boolean",
-            "type": "boolean"
-          },
-          "msg": {
-            "description": "string: detail message",
-            "type": "string"
-          }
-        },
-        "required": []
-      }
-    }
   */
   run(old_format_doc, spec_output_path) {
     const path_items = {};
@@ -240,22 +224,23 @@ class SpecConvert extends Base.factory() {
         }
         // api_name is 'GET /test/:id/' and real_api_name is '/test/:id/'
         const real_api_name = api_name.substring(index + 1);
-
         const api = old_format_doc[api_name];
         const method_type = (api.method || api.method_type).toLowerCase();
-        // todo api.name, header;
-        _.set(path_items, [real_api_name, method_type, 'summary'], api.summary);
-        _.set(path_items, [real_api_name, method_type, 'description'], api.note);
-        _.set(path_items, [real_api_name, method_type, 'request'], this.parseRequestSchema(api.request));// todo
-        _.set(path_items, [real_api_name, method_type, 'responses'], this.parseRequestSchema(api.response));// todo
+
+        _.set(path_items, [real_api_name, method_type], Swagger.packagePathItem({
+          summary: api.summary,
+          description: api.note,
+          response: this.parseResponseSchema(api.response),
+          body: this.parseRequestBodySchema(_.get(api, ['request', 'body'])),
+          query: this.parseQuerySchema(_.get(api, ['request', 'query']))
+        }));
       });
     } catch (err) {
       throw new TypeError(`SpecConvert::run: ${current_api_name} fail!err_msg: ${err.message}`);
     }
 
     const info_obj = new InfoObject('august-rest-api', 'august api server for mobile', '{base_url}', '8.8.0');
-    const openapi_obj = new OpenApiObject('3.0.0', info_obj, [], path_items);
-
+    const openapi_obj = Swagger.packageItems(info_obj, path_items);
     const output_path = `${spec_output_path}_api_doc.json`;
     fs.writeFileSync(output_path, JSON.stringify(openapi_obj, null, 2));
 
