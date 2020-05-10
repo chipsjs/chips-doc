@@ -255,7 +255,7 @@ describe('convert spec to generate api doc', () => {
         response: { body: inputResponse }
       } = specJson['POST /test'];
 
-      const outputRequestBody = _.get(specResult, [api_name, 'post', 'requestBody', 'content', 'schema']);
+      const outputRequestBody = _.get(specResult, [api_name, 'post', 'requestBody', 'content', 'application/json', 'schema']);
       assert.strictEqual(outputRequestBody.type, 'object');
       assert.nestedPropertyVal(outputRequestBody, 'properties.year.type', 'integer');
       assert.nestedPropertyVal(outputRequestBody, 'properties.year.description', inputBody.year);
@@ -303,7 +303,7 @@ describe('convert spec to generate api doc', () => {
         response: { body: inputResponse }
       } = specJson['POST /test'];
 
-      const outputRequestBody = _.get(specResult, [api_name, 'post', 'requestBody', 'content', 'schema']);
+      const outputRequestBody = _.get(specResult, [api_name, 'post', 'requestBody', 'content', 'application/json', 'schema']);
       assert.strictEqual(outputRequestBody.type, 'object');
       assert.nestedPropertyVal(outputRequestBody, 'properties.year.type', 'object');
       assert.nestedPropertyVal(outputRequestBody, 'properties.year.description', inputBody.year);
@@ -351,7 +351,7 @@ describe('convert spec to generate api doc', () => {
         response: { body: inputResponse }
       } = specJson['POST /test'];
 
-      const outputRequestBody = _.get(specResult, [api_name, 'post', 'requestBody', 'content', 'schema']);
+      const outputRequestBody = _.get(specResult, [api_name, 'post', 'requestBody', 'content', 'application/json', 'schema']);
       assert.strictEqual(outputRequestBody.type, 'object');
       assert.nestedPropertyVal(outputRequestBody, 'properties.year.type', 'array');
       assert.nestedPropertyVal(outputRequestBody, 'properties.year.description', inputBody.year);
@@ -401,7 +401,7 @@ describe('convert spec to generate api doc', () => {
         response: { body: inputResponse }
       } = specJson['POST /test'];
 
-      const outputRequestBody = _.get(specResult, [api_name, 'post', 'requestBody', 'content', 'schema']);
+      const outputRequestBody = _.get(specResult, [api_name, 'post', 'requestBody', 'content', 'application/json', 'schema']);
       assert.strictEqual(outputRequestBody.type, 'object');
       assert.nestedPropertyVal(outputRequestBody, 'properties.birth.type', 'object');
       assert.nestedPropertyVal(outputRequestBody, 'properties.birth.properties.year.type', 'object');
@@ -446,7 +446,7 @@ describe('convert spec to generate api doc', () => {
         request: { body: inputBody },
       } = specJson['POST /test'];
 
-      const outputRequestBody = _.get(specResult, [api_name, 'post', 'requestBody', 'content', 'schema']);
+      const outputRequestBody = _.get(specResult, [api_name, 'post', 'requestBody', 'content', 'application/json', 'schema']);
       assert.strictEqual(outputRequestBody.type, 'object');
       assert.nestedPropertyVal(outputRequestBody, 'properties.year.type', 'unknown');
       assert.nestedPropertyVal(outputRequestBody, 'properties.year.description', inputBody.year);
@@ -482,7 +482,7 @@ describe('convert spec to generate api doc', () => {
       assert.exists(specResult[api_name]);
       assert.exists(specResult[api_name].post);
 
-      const outputRequestBody = _.get(specResult, [api_name, 'post', 'requestBody', 'content', 'schema']);
+      const outputRequestBody = _.get(specResult, [api_name, 'post', 'requestBody', 'content', 'application/json', 'schema']);
       assert.strictEqual(outputRequestBody.type, 'object');
       assert.nestedPropertyVal(outputRequestBody, 'properties.year.type', 'array');
       assert.nestedPropertyVal(outputRequestBody, 'properties.year.items.type', 'unknown');
@@ -748,3 +748,5 @@ describe('convert spec to generate api doc', () => {
     })
   });
 });
+
+// TODO, body required

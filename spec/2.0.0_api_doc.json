@@ -361,24 +361,26 @@
         "description": "The user to be notified by this alert is the calling user",
         "requestBody": {
           "content": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "deviceID": {
-                  "description": "Id of device associated with smart alert",
-                  "type": "string"
-                },
-                "deviceType": {
-                  "description": "Type of device to associate smart alert with",
-                  "type": "string"
-                },
-                "otherUserID": {
-                  "description": "User id or system user",
-                  "type": "string"
-                },
-                "schedule": {
-                  "description": "optional ICAL schedule",
-                  "type": "string"
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "deviceID": {
+                    "description": "Id of device associated with smart alert",
+                    "type": "string"
+                  },
+                  "deviceType": {
+                    "description": "Type of device to associate smart alert with",
+                    "type": "string"
+                  },
+                  "otherUserID": {
+                    "description": "User id or system user",
+                    "type": "string"
+                  },
+                  "schedule": {
+                    "description": "optional ICAL schedule",
+                    "type": "string"
+                  }
                 }
               }
             }
@@ -614,38 +616,40 @@
         "description": "Requestor must provide the serial number of the lock and a list of all afvertising locks.If LockID or Name are not present, a Bad Request error is returned.If the user is not a manager or superuser of the house, a Not Authorized error is returned.If the serial number does not match any of the advertising locks, a Not Authorized error is returned.If hostHardwareID is provided but does not exist, 404 ResourceNotFound",
         "requestBody": {
           "content": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "houseID": {
-                  "description": "house id of the house where we wants to add the lock",
-                  "type": "string"
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "houseID": {
+                    "description": "house id of the house where we wants to add the lock",
+                    "type": "string"
+                  },
+                  "serialNumber": {
+                    "description": "serial number of lock [see notes]",
+                    "type": "string"
+                  },
+                  "LockIDs": {
+                    "description": "unique identifiers of advertising locks [see notes]",
+                    "type": "string"
+                  },
+                  "LockName": {
+                    "description": "name of lock",
+                    "type": "string"
+                  },
+                  "hostHardwareID": {
+                    "description": "Host hardware's ID",
+                    "type": "string"
+                  }
                 },
-                "serialNumber": {
-                  "description": "serial number of lock [see notes]",
-                  "type": "string"
-                },
-                "LockIDs": {
-                  "description": "unique identifiers of advertising locks [see notes]",
-                  "type": "string"
-                },
-                "LockName": {
-                  "description": "name of lock",
-                  "type": "string"
-                },
-                "hostHardwareID": {
-                  "description": "Host hardware's ID",
-                  "type": "string"
-                }
+                "required": [
+                  "houseID",
+                  "serialNumber",
+                  "LockIDs",
+                  "LockName"
+                ]
               }
             }
-          },
-          "required": [
-            "houseID",
-            "serialNumber",
-            "LockIDs",
-            "LockName"
-          ]
+          }
         },
         "responses": {
           "200": {

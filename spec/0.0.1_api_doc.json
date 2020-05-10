@@ -42,27 +42,29 @@
         "summary": "Creates a user account.",
         "requestBody": {
           "content": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "password": {
-                  "description": "password for authentication",
-                  "type": "string"
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "password": {
+                    "description": "password for authentication",
+                    "type": "string"
+                  },
+                  "FirstName": {
+                    "description": "first name",
+                    "type": "string"
+                  },
+                  "LastName": {
+                    "description": "last name",
+                    "type": "string"
+                  }
                 },
-                "FirstName": {
-                  "description": "first name",
-                  "type": "string"
-                },
-                "LastName": {
-                  "description": "last name",
-                  "type": "string"
-                }
+                "required": [
+                  "password"
+                ]
               }
             }
-          },
-          "required": [
-            "password"
-          ]
+          }
         },
         "responses": {
           "200": {
@@ -105,23 +107,25 @@
         "description": "Updates the information for callingUser with the information provided.  Can be used to update password, phone number, email address, first name, last name, or username.  If username, email, or phone number already exist in the system, an error will be returned.  Returns an authorization error if no session key is provided or if session has expired.",
         "requestBody": {
           "content": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "anyOf": {
-                  "type": "object",
-                  "properties": {
-                    "password": {
-                      "description": "new password",
-                      "type": "string"
-                    },
-                    "FirstName": {
-                      "description": "first name",
-                      "type": "string"
-                    },
-                    "LastName": {
-                      "description": "last name",
-                      "type": "string"
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "anyOf": {
+                    "type": "object",
+                    "properties": {
+                      "password": {
+                        "description": "new password",
+                        "type": "string"
+                      },
+                      "FirstName": {
+                        "description": "first name",
+                        "type": "string"
+                      },
+                      "LastName": {
+                        "description": "last name",
+                        "type": "string"
+                      }
                     }
                   }
                 }
@@ -416,19 +420,21 @@
         "description": "returns 404 if house not found, 403 if callingUser is not owner of house",
         "requestBody": {
           "content": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "HouseName": {
-                  "description": "description: <Name of house (home, \"crash pad\", ...)",
-                  "type": "string"
-                }
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "HouseName": {
+                    "description": "description: <Name of house (home, \"crash pad\", ...)",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "HouseName"
+                ]
               }
             }
-          },
-          "required": [
-            "HouseName"
-          ]
+          }
         },
         "responses": {
           "200": {
@@ -802,23 +808,25 @@
         "description": "Currently only Lock Name, their Calibration status, and their homeKit ID can be updated",
         "requestBody": {
           "content": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "anyOf": {
-                  "type": "object",
-                  "properties": {
-                    "LockName": {
-                      "description": "name of lock",
-                      "type": "string"
-                    },
-                    "Calibrated": {
-                      "description": "boolean. set to true if it's calibrated",
-                      "type": "boolean"
-                    },
-                    "homeKitUniqueIdentifier": {
-                      "description": "id of homeKit that's specific to the lock",
-                      "type": "string"
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "anyOf": {
+                    "type": "object",
+                    "properties": {
+                      "LockName": {
+                        "description": "name of lock",
+                        "type": "string"
+                      },
+                      "Calibrated": {
+                        "description": "boolean. set to true if it's calibrated",
+                        "type": "boolean"
+                      },
+                      "homeKitUniqueIdentifier": {
+                        "description": "id of homeKit that's specific to the lock",
+                        "type": "string"
+                      }
                     }
                   }
                 }
@@ -866,12 +874,14 @@
         "description": "The only response to this function is a status code.  Returns Bad Request if lock does not exist, otherUser does not exist, or type is invalid.  Valid typs are \"user\" and \"manager\".  Returns Unauthorized if calling user is not a manager or superuser of lock",
         "requestBody": {
           "content": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "Name": {
-                  "description": "string containing name of person to be granted access to lock",
-                  "type": "string"
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "Name": {
+                    "description": "string containing name of person to be granted access to lock",
+                    "type": "string"
+                  }
                 }
               }
             }
@@ -1572,20 +1582,22 @@
         "description": "This API creates a rule which, when applied to a user, allows the user to operate the lock in the specified time frame.  Recurrence is specified as an iCalendar RFC RRULE string.",
         "requestBody": {
           "content": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "startTime": {
-                  "description": "First time when usage window opens (ISO 8601 format)",
-                  "type": "string"
-                },
-                "endTime": {
-                  "description": "First time when usage window closes (ISO 8601 format)",
-                  "type": "string"
-                },
-                "recurrence": {
-                  "description": "expression of rule's recurrence (see notes)",
-                  "type": "string"
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "startTime": {
+                    "description": "First time when usage window opens (ISO 8601 format)",
+                    "type": "string"
+                  },
+                  "endTime": {
+                    "description": "First time when usage window closes (ISO 8601 format)",
+                    "type": "string"
+                  },
+                  "recurrence": {
+                    "description": "expression of rule's recurrence (see notes)",
+                    "type": "string"
+                  }
                 }
               }
             }
@@ -1625,38 +1637,40 @@
         "description": "This API creates a rule which, when applied to a user, allows the user to operate the lock in the specified time frame.  Recurrence is specified as an iCalendar RFC RRULE string.",
         "requestBody": {
           "content": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "startTime": {
-                  "description": "First time when usage window opens  (ISO 8601 format)",
-                  "type": "string"
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "startTime": {
+                    "description": "First time when usage window opens  (ISO 8601 format)",
+                    "type": "string"
+                  },
+                  "endTime": {
+                    "description": "First time when usage window closes  (ISO 8601 format)",
+                    "type": "string"
+                  },
+                  "recurrence": {
+                    "description": "expression of rule's recurrence (see notes)",
+                    "type": "string"
+                  },
+                  "schedule": {
+                    "description": "Rule schedule in iCalender data format (RFC 5545)",
+                    "type": "string"
+                  },
+                  "Name": {
+                    "description": "string containing name of person to be granted access to lock",
+                    "type": "string"
+                  }
                 },
-                "endTime": {
-                  "description": "First time when usage window closes  (ISO 8601 format)",
-                  "type": "string"
-                },
-                "recurrence": {
-                  "description": "expression of rule's recurrence (see notes)",
-                  "type": "string"
-                },
-                "schedule": {
-                  "description": "Rule schedule in iCalender data format (RFC 5545)",
-                  "type": "string"
-                },
-                "Name": {
-                  "description": "string containing name of person to be granted access to lock",
-                  "type": "string"
-                }
+                "required": [
+                  "startTime",
+                  "endTime",
+                  "recurrence",
+                  "schedule"
+                ]
               }
             }
-          },
-          "required": [
-            "startTime",
-            "endTime",
-            "recurrence",
-            "schedule"
-          ]
+          }
         },
         "responses": {
           "200": {
@@ -1978,28 +1992,30 @@
         "description": "###notificationTypes\nA JSON array containing one or more of: \n\nnotificationType | Meaning\n---------------- | -------\noperation | notification of lock usage\nsystemstatus | notification of change in connectivity of remote bridge to service\nbattery | notification of battery status requiring lock owner's attention\naccessmgmt | notification of change in access to the lock by any user\nconfiguration | notification of change in lock configuration including but not limited to lock name and addition/removal of bridge.\n\n###Responses:\nCode | Reason \n---- | ------\n 200 | body = {\"message\": \"OK\"} call succeeded\n 401 | authorization token is not valid.\n 403 | * the user represented by the authorization token is not an owner of the lock\n     | * the Client ID does not have permission to subscribe to notifications on behalf of the user\n     | * or the x-august-api-key header is not valid.\n 404 | the clientID is not known to the system.\n",
         "requestBody": {
           "content": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "url": {
-                  "description": "URL the August access control system will hit with notifications",
-                  "type": "string"
-                },
-                "method": {
-                  "description": "\"POST\" or \"GET\"",
-                  "type": "string"
-                },
-                "token": {
-                  "description": "Token August access control system will present for authentication",
-                  "type": "string"
-                },
-                "clientID": {
-                  "description": "Client ID of third-party service provided by August",
-                  "type": "string"
-                },
-                "notificationTypes": {
-                  "description": "Array of notification types. See Notes.",
-                  "type": "array"
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "url": {
+                    "description": "URL the August access control system will hit with notifications",
+                    "type": "string"
+                  },
+                  "method": {
+                    "description": "\"POST\" or \"GET\"",
+                    "type": "string"
+                  },
+                  "token": {
+                    "description": "Token August access control system will present for authentication",
+                    "type": "string"
+                  },
+                  "clientID": {
+                    "description": "Client ID of third-party service provided by August",
+                    "type": "string"
+                  },
+                  "notificationTypes": {
+                    "description": "Array of notification types. See Notes.",
+                    "type": "array"
+                  }
                 }
               }
             }
@@ -2069,28 +2085,30 @@
         "description": "###notificationTypes\nA JSON array containing one or more of: \n\nnotificationType | Meaning\n---------------- | -------\nmotiondetected   | notification of motion detected by doorbell\nvideoavailable   | notification of doorbell video available\nbuttonpush       | notification of doorbell button pushed\n\n###Responses:\nCode | Reason \n---- | ------\n 200 | body = {\"message\": \"OK\"} call succeeded\n 401 | authorization token is not valid.\n 403 | * the user represented by the authorization token is not an owner of the doorbell\n     | * the Client ID does not have permission to subscribe to notifications on behalf of the user\n     | * or the x-august-api-key header is not valid.\n 404 | the clientID is not known to the system.\n",
         "requestBody": {
           "content": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "url": {
-                  "description": "URL the August access control system will hit with notifications",
-                  "type": "string"
-                },
-                "method": {
-                  "description": "\"POST\" or \"GET\"",
-                  "type": "string"
-                },
-                "token": {
-                  "description": "Token August access control system will present for authentication",
-                  "type": "string"
-                },
-                "clientID": {
-                  "description": "Client ID of third-party service provided by August",
-                  "type": "string"
-                },
-                "notificationTypes": {
-                  "description": "Array of notification types. See Notes.",
-                  "type": "array"
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "url": {
+                    "description": "URL the August access control system will hit with notifications",
+                    "type": "string"
+                  },
+                  "method": {
+                    "description": "\"POST\" or \"GET\"",
+                    "type": "string"
+                  },
+                  "token": {
+                    "description": "Token August access control system will present for authentication",
+                    "type": "string"
+                  },
+                  "clientID": {
+                    "description": "Client ID of third-party service provided by August",
+                    "type": "string"
+                  },
+                  "notificationTypes": {
+                    "description": "Array of notification types. See Notes.",
+                    "type": "array"
+                  }
                 }
               }
             }
@@ -2160,28 +2178,30 @@
         "description": "###notificationTypes\nA JSON array containing one or more of: \n\nnotificationType | Meaning\n---------------- | -------\nlockmembership | changes to a user/lock relationship\n\n###Responses:\nCode | Reason \n---- | ------\n 200 | body = {\"message\": \"OK\"} call succeeded\n 401 | authorization token is not valid.\n 403 | * the user represented by the authorization token is not an owner of the doorbell\n     | * the Client ID does not have permission to subscribe to notifications on behalf of the user\n     | * or the x-august-api-key header is not valid.\n 404 | the clientID is not known to the system.\n",
         "requestBody": {
           "content": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "url": {
-                  "description": "URL the August access control system will hit with notifications",
-                  "type": "string"
-                },
-                "method": {
-                  "description": "\"POST\" or \"GET\"",
-                  "type": "string"
-                },
-                "token": {
-                  "description": "Token August access control system will present for authentication",
-                  "type": "string"
-                },
-                "clientID": {
-                  "description": "Client ID of third-party service provided by August",
-                  "type": "string"
-                },
-                "notificationTypes": {
-                  "description": "Array of notification types. See Notes.",
-                  "type": "array"
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "url": {
+                    "description": "URL the August access control system will hit with notifications",
+                    "type": "string"
+                  },
+                  "method": {
+                    "description": "\"POST\" or \"GET\"",
+                    "type": "string"
+                  },
+                  "token": {
+                    "description": "Token August access control system will present for authentication",
+                    "type": "string"
+                  },
+                  "clientID": {
+                    "description": "Client ID of third-party service provided by August",
+                    "type": "string"
+                  },
+                  "notificationTypes": {
+                    "description": "Array of notification types. See Notes.",
+                    "type": "array"
+                  }
                 }
               }
             }
@@ -2420,57 +2440,59 @@
         "description": "See [Remote PIN Management](https://partners.august.com/userguide/apiguide/remote-pin-management-for-the-august-keypad/)",
         "requestBody": {
           "content": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "commands": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "augustUserID": {
-                        "description": "string: either a phone number identifier, email identifier or an August internal user ID",
-                        "type": "string"
-                      },
-                      "partnerUserID": {
-                        "description": "string: an user id which will be used to report upon completion of each pin command",
-                        "type": "string"
-                      },
-                      "firstName": {
-                        "description": "the firstName of the user, optional",
-                        "type": "string"
-                      },
-                      "lastName": {
-                        "description": "the lastName of the user, optional",
-                        "type": "string"
-                      },
-                      "pin": {
-                        "description": "string: a valid pin, ideally obtained in previous step to avoid failures",
-                        "type": "string"
-                      },
-                      "action": {
-                        "description": "string: load, delete, disable, enable",
-                        "type": "string"
-                      },
-                      "accessType": {
-                        "description": "string: the type of the pin: always, recurring, temporary, oneTime",
-                        "type": "string"
-                      },
-                      "accessTimes": {
-                        "description": "string: this field only required for access types recurring & temporary; for recurring access type possible values are \"STARTSEC=<sec from start of day>[;ENDSEC=<sec from start of day>]\"; if timezone of lock is known this is also valid: \"DTSTART=<ISO date in UTC>[;DTEND=<ISO date in UTC>]\" (end date optional, if not provided is set to 1 hour from start date). For temporary times can be ISO date strings (DTSTART/DTEND) or epoch values, e.g. \"STARTSEC=<epoch value>;[;ENDSEC=<epoch value>].\" Not required when schedule is provided.",
-                        "type": "string"
-                      },
-                      "accessRecurrence": {
-                        "description": "string: only required for access type recurring. See recurrence rules under RFC2445, e.g.: \"FREQ=MONTHLY;BYMONTHDAY=10,15;COUNT=20\". Not required when schedule is provided.",
-                        "type": "string"
-                      },
-                      "schedule": {
-                        "description": "string: iCal data format following RFC5545 (https://tools.ietf.org/html/rfc5545) required for access types recurring & temporary; when accessTimes & accessRecurrence are provided, data of schedule overrides their values.",
-                        "type": "string"
-                      },
-                      "retry": {
-                        "description": "boolean: indicates whether the command should be re-tried in case of failure, optional",
-                        "type": "boolean"
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "commands": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "augustUserID": {
+                          "description": "string: either a phone number identifier, email identifier or an August internal user ID",
+                          "type": "string"
+                        },
+                        "partnerUserID": {
+                          "description": "string: an user id which will be used to report upon completion of each pin command",
+                          "type": "string"
+                        },
+                        "firstName": {
+                          "description": "the firstName of the user, optional",
+                          "type": "string"
+                        },
+                        "lastName": {
+                          "description": "the lastName of the user, optional",
+                          "type": "string"
+                        },
+                        "pin": {
+                          "description": "string: a valid pin, ideally obtained in previous step to avoid failures",
+                          "type": "string"
+                        },
+                        "action": {
+                          "description": "string: load, delete, disable, enable",
+                          "type": "string"
+                        },
+                        "accessType": {
+                          "description": "string: the type of the pin: always, recurring, temporary, oneTime",
+                          "type": "string"
+                        },
+                        "accessTimes": {
+                          "description": "string: this field only required for access types recurring & temporary; for recurring access type possible values are \"STARTSEC=<sec from start of day>[;ENDSEC=<sec from start of day>]\"; if timezone of lock is known this is also valid: \"DTSTART=<ISO date in UTC>[;DTEND=<ISO date in UTC>]\" (end date optional, if not provided is set to 1 hour from start date). For temporary times can be ISO date strings (DTSTART/DTEND) or epoch values, e.g. \"STARTSEC=<epoch value>;[;ENDSEC=<epoch value>].\" Not required when schedule is provided.",
+                          "type": "string"
+                        },
+                        "accessRecurrence": {
+                          "description": "string: only required for access type recurring. See recurrence rules under RFC2445, e.g.: \"FREQ=MONTHLY;BYMONTHDAY=10,15;COUNT=20\". Not required when schedule is provided.",
+                          "type": "string"
+                        },
+                        "schedule": {
+                          "description": "string: iCal data format following RFC5545 (https://tools.ietf.org/html/rfc5545) required for access types recurring & temporary; when accessTimes & accessRecurrence are provided, data of schedule overrides their values.",
+                          "type": "string"
+                        },
+                        "retry": {
+                          "description": "boolean: indicates whether the command should be re-tried in case of failure, optional",
+                          "type": "boolean"
+                        }
                       }
                     }
                   }
@@ -3443,12 +3465,14 @@
         "summary": "sets the legal status of the user vs. eula, tos, privacy",
         "requestBody": {
           "content": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "approved": {
-                  "description": "boolean: true or false",
-                  "type": "boolean"
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "approved": {
+                    "description": "boolean: true or false",
+                    "type": "boolean"
+                  }
                 }
               }
             }
@@ -3472,16 +3496,18 @@
         "summary": "sets the user's language and locale",
         "requestBody": {
           "content": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "language": {
-                  "description": "string: lowercase two-letter ISO 639-1 language code",
-                  "type": "string"
-                },
-                "country": {
-                  "description": "string: uppercase two-letter ISO 3166-1 alpha-2 country code",
-                  "type": "string"
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "language": {
+                    "description": "string: lowercase two-letter ISO 639-1 language code",
+                    "type": "string"
+                  },
+                  "country": {
+                    "description": "string: uppercase two-letter ISO 3166-1 alpha-2 country code",
+                    "type": "string"
+                  }
                 }
               }
             }
@@ -3506,20 +3532,22 @@
         "description": "returns an error if trying to delete the last of an identifier type",
         "requestBody": {
           "content": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "identifer": {
-                  "description": "email or phone",
-                  "type": "string"
-                },
-                "installId": {
-                  "description": "id of the device",
-                  "type": "string"
-                },
-                "password": {
-                  "description": "users password",
-                  "type": "string"
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "identifer": {
+                    "description": "email or phone",
+                    "type": "string"
+                  },
+                  "installId": {
+                    "description": "id of the device",
+                    "type": "string"
+                  },
+                  "password": {
+                    "description": "users password",
+                    "type": "string"
+                  }
                 }
               }
             }
@@ -3568,19 +3596,21 @@
         "description": "At least a house name is required.  The only error from this function is Bad Request when no house name is provided.",
         "requestBody": {
           "content": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "HouseName": {
-                  "description": "description: <Name of house (home, \"crash pad\", ...)",
-                  "type": "string"
-                }
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "HouseName": {
+                    "description": "description: <Name of house (home, \"crash pad\", ...)",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "HouseName"
+                ]
               }
             }
-          },
-          "required": [
-            "HouseName"
-          ]
+          }
         },
         "responses": {
           "200": {
@@ -3850,28 +3880,30 @@
         "description": "Requestor must provide UNIQUE ID of the lock.  If LockID or Name are not present, a Bad Request error is returned. If the user is not a manager or superuser of the house, a Not Authorized error is returned.",
         "requestBody": {
           "content": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "LockID": {
-                  "description": "unique identifier of lock [see notes]",
-                  "type": "string"
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "LockID": {
+                    "description": "unique identifier of lock [see notes]",
+                    "type": "string"
+                  },
+                  "LockName": {
+                    "description": "name of lock",
+                    "type": "string"
+                  },
+                  "hostHardwareID": {
+                    "description": "Host hardware's ID",
+                    "type": "string"
+                  }
                 },
-                "LockName": {
-                  "description": "name of lock",
-                  "type": "string"
-                },
-                "hostHardwareID": {
-                  "description": "Host hardware's ID",
-                  "type": "string"
-                }
+                "required": [
+                  "LockID",
+                  "LockName"
+                ]
               }
             }
-          },
-          "required": [
-            "LockID",
-            "LockName"
-          ]
+          }
         },
         "responses": {
           "200": {
@@ -3927,9 +3959,11 @@
         "description": "move all keys (except key index 0) to deleted",
         "requestBody": {
           "content": {
-            "schema": {
-              "type": "object",
-              "properties": {}
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {}
+              }
             }
           }
         },
@@ -3961,24 +3995,26 @@
         "summary": "acknowledge update of params client was instructed to set by server",
         "requestBody": {
           "content": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "<parameter1 name>": {
-                  "description": "<parameter 1 value>",
-                  "type": "string"
-                },
-                "<parameter2 namee": {
-                  "description": "<parameter 2 value>",
-                  "type": "string"
-                },
-                "...": {
-                  "description": "<parameter value>",
-                  "type": "string"
-                },
-                "<parameter n name>": {
-                  "description": "<parameter n value>",
-                  "type": "string"
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "<parameter1 name>": {
+                    "description": "<parameter 1 value>",
+                    "type": "string"
+                  },
+                  "<parameter2 namee": {
+                    "description": "<parameter 2 value>",
+                    "type": "string"
+                  },
+                  "...": {
+                    "description": "<parameter value>",
+                    "type": "string"
+                  },
+                  "<parameter n name>": {
+                    "description": "<parameter n value>",
+                    "type": "string"
+                  }
                 }
               }
             }
@@ -4009,28 +4045,30 @@
         "summary": "Acquire ownership of a known lock.",
         "requestBody": {
           "content": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "UserID": {
-                  "description": "id of the user whom the offline key is assigned to",
-                  "type": "string"
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "UserID": {
+                    "description": "id of the user whom the offline key is assigned to",
+                    "type": "string"
+                  },
+                  "slot": {
+                    "description": "slot to write the key",
+                    "type": "string"
+                  },
+                  "key": {
+                    "description": "key to write in the slot",
+                    "type": "string"
+                  }
                 },
-                "slot": {
-                  "description": "slot to write the key",
-                  "type": "string"
-                },
-                "key": {
-                  "description": "key to write in the slot",
-                  "type": "string"
-                }
+                "required": [
+                  "UserID",
+                  "slot"
+                ]
               }
             }
-          },
-          "required": [
-            "UserID",
-            "slot"
-          ]
+          }
         },
         "responses": {
           "200": {
@@ -4143,19 +4181,21 @@
         "summary": "Set sound package id of lock.",
         "requestBody": {
           "content": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "soundPackageID": {
-                  "description": "sound package id",
-                  "type": "string"
-                }
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "soundPackageID": {
+                    "description": "sound package id",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "soundPackageID"
+                ]
               }
             }
-          },
-          "required": [
-            "soundPackageID"
-          ]
+          }
         },
         "responses": {
           "200": {
@@ -4261,29 +4301,31 @@
         "description": "Notifies service of lock operation.  If a key is \"in flight\", it closes the loop and finalizes the process.  Creates a log entry for the usage, and triggers notifications to all clients listening for updates on the lock",
         "requestBody": {
           "content": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "action": {
-                  "description": "lock action--lock or unlock",
-                  "type": "string"
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "action": {
+                    "description": "lock action--lock or unlock",
+                    "type": "string"
+                  },
+                  "mechanical": {
+                    "description": "mechanical result:  success or failure",
+                    "type": "string"
+                  },
+                  "crypto": {
+                    "description": "cryptographic result:  sucess or failure",
+                    "type": "string"
+                  }
                 },
-                "mechanical": {
-                  "description": "mechanical result:  success or failure",
-                  "type": "string"
-                },
-                "crypto": {
-                  "description": "cryptographic result:  sucess or failure",
-                  "type": "string"
-                }
+                "required": [
+                  "action",
+                  "mechanical",
+                  "crypto"
+                ]
               }
             }
-          },
-          "required": [
-            "action",
-            "mechanical",
-            "crypto"
-          ]
+          }
         },
         "responses": {
           "200": {
@@ -4394,16 +4436,18 @@
         "summary": "adds an APNS device token associated with the callingUser",
         "requestBody": {
           "content": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "apnstoken": {
-                  "description": "token provided by iOS for the notification system.",
-                  "type": "string"
-                },
-                "voiptoken": {
-                  "description": "token provided by iOS for the VOIP notification system.",
-                  "type": "string"
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "apnstoken": {
+                    "description": "token provided by iOS for the notification system.",
+                    "type": "string"
+                  },
+                  "voiptoken": {
+                    "description": "token provided by iOS for the VOIP notification system.",
+                    "type": "string"
+                  }
                 }
               }
             }
@@ -4428,12 +4472,14 @@
         "description": "If the user specified by otherUserID does not accept notifications, and error is returned",
         "requestBody": {
           "content": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "message": {
-                  "description": "message to send to user specified by otherUserID",
-                  "type": "string"
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "description": "message to send to user specified by otherUserID",
+                    "type": "string"
+                  }
                 }
               }
             }
@@ -4506,16 +4552,18 @@
         "description": "The mobile device PUTs mRand1 and mRand2 to the endpoint and then sends the packet in the response to the lock. When the lock responds, the response is send to the url specified by URL using the method specified by method.  Returns an Invalid Argument error if checksum fails.",
         "requestBody": {
           "content": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "mRand1": {
-                  "description": "random number generated by client",
-                  "type": "string"
-                },
-                "mRand2": {
-                  "description": "random number generated by client",
-                  "type": "string"
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "mRand1": {
+                    "description": "random number generated by client",
+                    "type": "string"
+                  },
+                  "mRand2": {
+                    "description": "random number generated by client",
+                    "type": "string"
+                  }
                 }
               }
             }
@@ -4603,12 +4651,14 @@
         "description": "The mobile device PUTs the response from the exchange key command to this endpiont.  The service returns lRand1 and lRand2 for use in the session key",
         "requestBody": {
           "content": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "LockResponse": {
-                  "description": "hex-encoded response that lock returned from exchange keys command",
-                  "type": "string"
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "LockResponse": {
+                    "description": "hex-encoded response that lock returned from exchange keys command",
+                    "type": "string"
+                  }
                 }
               }
             }
@@ -4677,16 +4727,18 @@
         "description": "sends an verification code to an identifier, if none is specified last identifier of type idtype will be used.  idtype can be either phone or email",
         "requestBody": {
           "content": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "value": {
-                  "description": "email address or phone number",
-                  "type": "string"
-                },
-                "smsHashString": {
-                  "description": "SMS hash string used by SMS Retriever API on Android",
-                  "type": "string"
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "description": "email address or phone number",
+                    "type": "string"
+                  },
+                  "smsHashString": {
+                    "description": "SMS hash string used by SMS Retriever API on Android",
+                    "type": "string"
+                  }
                 }
               }
             }
@@ -4726,32 +4778,34 @@
         "description": "if no identifier is specified in the body last identifier of type idtype will be used to claim the code.  idtype can be either phone or email",
         "requestBody": {
           "content": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "code": {
-                  "description": "the verification code that was sent to the identifier",
-                  "type": "string"
-                },
-                "oneof": {
-                  "type": "object",
-                  "properties": {
-                    "email": {
-                      "description": "email address",
-                      "type": "string"
-                    },
-                    "phone": {
-                      "description": "telephone number",
-                      "type": "string"
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "description": "the verification code that was sent to the identifier",
+                    "type": "string"
+                  },
+                  "oneof": {
+                    "type": "object",
+                    "properties": {
+                      "email": {
+                        "description": "email address",
+                        "type": "string"
+                      },
+                      "phone": {
+                        "description": "telephone number",
+                        "type": "string"
+                      }
                     }
                   }
-                }
+                },
+                "required": [
+                  "code"
+                ]
               }
             }
-          },
-          "required": [
-            "code"
-          ]
+          }
         },
         "responses": {
           "200": {
@@ -4794,28 +4848,30 @@
         "summary": "logs auto unlock actions for debugging use",
         "requestBody": {
           "content": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "event": {
-                  "description": "single-token string describing event",
-                  "type": "string"
-                },
-                "description": {
-                  "description": "optional description of the event",
-                  "type": "string"
-                },
-                "date": {
-                  "description": "integer milliseconds since epoch",
-                  "type": "string"
-                },
-                "LockID": {
-                  "description": "ID of lock",
-                  "type": "string"
-                },
-                "UserID": {
-                  "description": "ID of user",
-                  "type": "string"
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "event": {
+                    "description": "single-token string describing event",
+                    "type": "string"
+                  },
+                  "description": {
+                    "description": "optional description of the event",
+                    "type": "string"
+                  },
+                  "date": {
+                    "description": "integer milliseconds since epoch",
+                    "type": "string"
+                  },
+                  "LockID": {
+                    "description": "ID of lock",
+                    "type": "string"
+                  },
+                  "UserID": {
+                    "description": "ID of user",
+                    "type": "string"
+                  }
                 }
               }
             }
@@ -4867,7 +4923,9 @@
         "summary": "set up notification of type specified for bridge specified",
         "description": "Sets up notifications of type specified for the bridge specified for the calling user.  The only type currently supported is system, and the only channel supported is push.  If no body is specified, the channel will be push.",
         "requestBody": {
-          "content": {}
+          "content": {
+            "application/json": {}
+          }
         },
         "responses": {
           "200": {
@@ -5068,32 +5126,34 @@
         "summary": "Put information about the calling user's choices on setting geofence for automatic unlock foir the given lockID and platform (iOS or Android)",
         "requestBody": {
           "content": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "deviceModel": {
-                  "description": "string describing the device",
-                  "type": "string"
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "deviceModel": {
+                    "description": "string describing the device",
+                    "type": "string"
+                  },
+                  "movedCenter": {
+                    "description": "boolean -- indicates the user moved the center of the geofence (required)",
+                    "type": "boolean"
+                  },
+                  "changedRadius": {
+                    "description": "boolean -- indicates the user changed the radius from the default value (required)",
+                    "type": "boolean"
+                  },
+                  "newRadius": {
+                    "description": "radius the user set if they changed it (Required if changedRadius is true)",
+                    "type": "string"
+                  }
                 },
-                "movedCenter": {
-                  "description": "boolean -- indicates the user moved the center of the geofence (required)",
-                  "type": "boolean"
-                },
-                "changedRadius": {
-                  "description": "boolean -- indicates the user changed the radius from the default value (required)",
-                  "type": "boolean"
-                },
-                "newRadius": {
-                  "description": "radius the user set if they changed it (Required if changedRadius is true)",
-                  "type": "string"
-                }
+                "required": [
+                  "movedCenter",
+                  "changedRadius"
+                ]
               }
             }
-          },
-          "required": [
-            "movedCenter",
-            "changedRadius"
-          ]
+          }
         },
         "responses": {
           "200": {
@@ -5541,12 +5601,14 @@
         "description": "returns a 404 if the keypad SN is not found, 403 if there is a permission issue, 409 if the resetCode is not valid",
         "requestBody": {
           "content": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "set": {
-                  "description": "unknown",
-                  "type": "unknown"
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "set": {
+                    "description": "unknown",
+                    "type": "unknown"
+                  }
                 }
               }
             }
@@ -5644,19 +5706,21 @@
         "description": "Calling user must be a lock super user.",
         "requestBody": {
           "content": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "nextHandshakeKey": {
-                  "description": "This is the nextHandshakeKey (generated from the same endpoint with a GET request) to replace the currentHandshakeKey.",
-                  "type": "string"
-                }
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "nextHandshakeKey": {
+                    "description": "This is the nextHandshakeKey (generated from the same endpoint with a GET request) to replace the currentHandshakeKey.",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "nextHandshakeKey"
+                ]
               }
             }
-          },
-          "required": [
-            "nextHandshakeKey"
-          ]
+          }
         },
         "responses": {
           "200": {
@@ -5811,20 +5875,22 @@
         "summary": "Create August user/identifiers per given partner user data. Generates access token and (returns) auth code and stores in cache for verification when calling OAuth service.",
         "requestBody": {
           "content": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "userID": {
-                  "description": "Partner user id",
-                  "type": "string"
-                },
-                "name": {
-                  "description": "String containing both first and last name",
-                  "type": "string"
-                },
-                "email": {
-                  "description": "Unverified email address",
-                  "type": "string"
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "userID": {
+                    "description": "Partner user id",
+                    "type": "string"
+                  },
+                  "name": {
+                    "description": "String containing both first and last name",
+                    "type": "string"
+                  },
+                  "email": {
+                    "description": "Unverified email address",
+                    "type": "string"
+                  }
                 }
               }
             }
@@ -5855,20 +5921,22 @@
         "description": "August user id obtained from access token",
         "requestBody": {
           "content": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "userID": {
-                  "description": "Partner user id",
-                  "type": "string"
-                },
-                "name": {
-                  "description": "String containing both first and last name",
-                  "type": "string"
-                },
-                "email": {
-                  "description": "Unverified email address",
-                  "type": "string"
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "userID": {
+                    "description": "Partner user id",
+                    "type": "string"
+                  },
+                  "name": {
+                    "description": "String containing both first and last name",
+                    "type": "string"
+                  },
+                  "email": {
+                    "description": "Unverified email address",
+                    "type": "string"
+                  }
                 }
               }
             }
@@ -5891,20 +5959,22 @@
         "summary": "follows a specific flow of user identifier verifications, optionally creates a new user, and eventually signs-in the user",
         "requestBody": {
           "content": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "type": {
-                  "description": "identifier type, \"email\" or \"phone\"",
-                  "type": "string"
-                },
-                "value": {
-                  "description": "user identifier value, an email address or phone number",
-                  "type": "string"
-                },
-                "code": {
-                  "description": "optional verification code for a previously provided identifier",
-                  "type": "string"
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "description": "identifier type, \"email\" or \"phone\"",
+                    "type": "string"
+                  },
+                  "value": {
+                    "description": "user identifier value, an email address or phone number",
+                    "type": "string"
+                  },
+                  "code": {
+                    "description": "optional verification code for a previously provided identifier",
+                    "type": "string"
+                  }
                 }
               }
             }
@@ -5937,16 +6007,18 @@
         "description": "We chose POST over GET so that we can have the partner provide an encrypted body payload",
         "requestBody": {
           "content": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "email": {
-                  "description": "email address",
-                  "type": "string"
-                },
-                "phone": {
-                  "description": "phone number, starting with +, followed by international country code, followed by phone number, numbers only",
-                  "type": "string"
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "description": "email address",
+                    "type": "string"
+                  },
+                  "phone": {
+                    "description": "phone number, starting with +, followed by international country code, followed by phone number, numbers only",
+                    "type": "string"
+                  }
                 }
               }
             }
@@ -6320,16 +6392,18 @@
         "summary": "pairs a lock and listing based on given parameter ids",
         "requestBody": {
           "content": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "keypadAccess": {
-                  "description": "flag indicating if guests should have access via august keypad",
-                  "type": "string"
-                },
-                "appAccess": {
-                  "description": "flag indicating if guests should have access via august app",
-                  "type": "string"
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "keypadAccess": {
+                    "description": "flag indicating if guests should have access via august keypad",
+                    "type": "string"
+                  },
+                  "appAccess": {
+                    "description": "flag indicating if guests should have access via august app",
+                    "type": "string"
+                  }
                 }
               }
             }
@@ -6380,24 +6454,26 @@
         "description": "creates the association if none exists, updates it if it does exist.",
         "requestBody": {
           "content": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "access_token": {
-                  "description": "Airbnb access token of user",
-                  "type": "string"
-                },
-                "expires_at": {
-                  "description": "Epoch timestamp",
-                  "type": "string"
-                },
-                "refresh_token": {
-                  "description": "Airbnb refresh token",
-                  "type": "string"
-                },
-                "user_id": {
-                  "description": "Airbnb user id",
-                  "type": "string"
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "description": "Airbnb access token of user",
+                    "type": "string"
+                  },
+                  "expires_at": {
+                    "description": "Epoch timestamp",
+                    "type": "string"
+                  },
+                  "refresh_token": {
+                    "description": "Airbnb refresh token",
+                    "type": "string"
+                  },
+                  "user_id": {
+                    "description": "Airbnb user id",
+                    "type": "string"
+                  }
                 }
               }
             }
@@ -6725,24 +6801,26 @@
         "description": "Must put the whole settings object.  Cannot update individual field",
         "requestBody": {
           "content": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "motion_notifications": {
-                  "description": "Boolean",
-                  "type": "boolean"
-                },
-                "buttonpush_notifications": {
-                  "description": "Boolean",
-                  "type": "boolean"
-                },
-                "notify_when_offline": {
-                  "description": "Boolean",
-                  "type": "boolean"
-                },
-                "etc": {
-                  "description": "etc",
-                  "type": "string"
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "motion_notifications": {
+                    "description": "Boolean",
+                    "type": "boolean"
+                  },
+                  "buttonpush_notifications": {
+                    "description": "Boolean",
+                    "type": "boolean"
+                  },
+                  "notify_when_offline": {
+                    "description": "Boolean",
+                    "type": "boolean"
+                  },
+                  "etc": {
+                    "description": "etc",
+                    "type": "string"
+                  }
                 }
               }
             }
@@ -6774,113 +6852,115 @@
         "description": "Returns 404 if doorbell is not found.  Returns Not Authorized if calling user is not a user of the doorbell",
         "requestBody": {
           "content": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "users": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "0": {
-                        "description": "A",
-                        "type": "string"
-                      },
-                      "1": {
-                        "description": "r",
-                        "type": "string"
-                      },
-                      "2": {
-                        "description": "r",
-                        "type": "string"
-                      },
-                      "3": {
-                        "description": "a",
-                        "type": "string"
-                      },
-                      "4": {
-                        "description": "y",
-                        "type": "string"
-                      },
-                      "5": {
-                        "description": " ",
-                        "type": "string"
-                      },
-                      "6": {
-                        "description": "o",
-                        "type": "string"
-                      },
-                      "7": {
-                        "description": "f",
-                        "type": "string"
-                      },
-                      "8": {
-                        "description": " ",
-                        "type": "string"
-                      },
-                      "9": {
-                        "description": "u",
-                        "type": "string"
-                      },
-                      "10": {
-                        "description": "s",
-                        "type": "string"
-                      },
-                      "11": {
-                        "description": "e",
-                        "type": "string"
-                      },
-                      "12": {
-                        "description": "r",
-                        "type": "string"
-                      },
-                      "13": {
-                        "description": " ",
-                        "type": "string"
-                      },
-                      "14": {
-                        "description": "i",
-                        "type": "string"
-                      },
-                      "15": {
-                        "description": "d",
-                        "type": "string"
-                      },
-                      "16": {
-                        "description": "e",
-                        "type": "string"
-                      },
-                      "17": {
-                        "description": "n",
-                        "type": "string"
-                      },
-                      "18": {
-                        "description": "t",
-                        "type": "string"
-                      },
-                      "19": {
-                        "description": "i",
-                        "type": "string"
-                      },
-                      "20": {
-                        "description": "f",
-                        "type": "string"
-                      },
-                      "21": {
-                        "description": "i",
-                        "type": "string"
-                      },
-                      "22": {
-                        "description": "e",
-                        "type": "string"
-                      },
-                      "23": {
-                        "description": "r",
-                        "type": "string"
-                      },
-                      "24": {
-                        "description": "s",
-                        "type": "string"
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "users": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "0": {
+                          "description": "A",
+                          "type": "string"
+                        },
+                        "1": {
+                          "description": "r",
+                          "type": "string"
+                        },
+                        "2": {
+                          "description": "r",
+                          "type": "string"
+                        },
+                        "3": {
+                          "description": "a",
+                          "type": "string"
+                        },
+                        "4": {
+                          "description": "y",
+                          "type": "string"
+                        },
+                        "5": {
+                          "description": " ",
+                          "type": "string"
+                        },
+                        "6": {
+                          "description": "o",
+                          "type": "string"
+                        },
+                        "7": {
+                          "description": "f",
+                          "type": "string"
+                        },
+                        "8": {
+                          "description": " ",
+                          "type": "string"
+                        },
+                        "9": {
+                          "description": "u",
+                          "type": "string"
+                        },
+                        "10": {
+                          "description": "s",
+                          "type": "string"
+                        },
+                        "11": {
+                          "description": "e",
+                          "type": "string"
+                        },
+                        "12": {
+                          "description": "r",
+                          "type": "string"
+                        },
+                        "13": {
+                          "description": " ",
+                          "type": "string"
+                        },
+                        "14": {
+                          "description": "i",
+                          "type": "string"
+                        },
+                        "15": {
+                          "description": "d",
+                          "type": "string"
+                        },
+                        "16": {
+                          "description": "e",
+                          "type": "string"
+                        },
+                        "17": {
+                          "description": "n",
+                          "type": "string"
+                        },
+                        "18": {
+                          "description": "t",
+                          "type": "string"
+                        },
+                        "19": {
+                          "description": "i",
+                          "type": "string"
+                        },
+                        "20": {
+                          "description": "f",
+                          "type": "string"
+                        },
+                        "21": {
+                          "description": "i",
+                          "type": "string"
+                        },
+                        "22": {
+                          "description": "e",
+                          "type": "string"
+                        },
+                        "23": {
+                          "description": "r",
+                          "type": "string"
+                        },
+                        "24": {
+                          "description": "s",
+                          "type": "string"
+                        }
                       }
                     }
                   }
@@ -6915,20 +6995,22 @@
         "description": "Can update individual field \nstatus code 409 if powerProfilePreset is an invalid preset",
         "requestBody": {
           "content": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "powerProfilePreset": {
-                  "description": "[optional] override settings: \n[pirSensitivity, videoResolution, nightModeAlsThreshold, irLedBrightness] with presets.  If passed, must be a valid value. \nThe only valid value for this is the integer 0 and -1 (which custom and will be ignored)",
-                  "type": "string"
-                },
-                "setting1": {
-                  "description": "type of setting 1",
-                  "type": "string"
-                },
-                "etc": {
-                  "description": "type of etc",
-                  "type": "string"
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "powerProfilePreset": {
+                    "description": "[optional] override settings: \n[pirSensitivity, videoResolution, nightModeAlsThreshold, irLedBrightness] with presets.  If passed, must be a valid value. \nThe only valid value for this is the integer 0 and -1 (which custom and will be ignored)",
+                    "type": "string"
+                  },
+                  "setting1": {
+                    "description": "type of setting 1",
+                    "type": "string"
+                  },
+                  "etc": {
+                    "description": "type of etc",
+                    "type": "string"
+                  }
                 }
               }
             }
@@ -7193,29 +7275,31 @@
         "description": "the pin returned might be different than the one requested if it was already used.",
         "requestBody": {
           "content": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "serialNumber": {
-                  "description": "serialNumber of the doorbell",
-                  "type": "string"
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "serialNumber": {
+                    "description": "serialNumber of the doorbell",
+                    "type": "string"
+                  },
+                  "name": {
+                    "description": "name of the doorbell",
+                    "type": "string"
+                  },
+                  "type": {
+                    "description": "string.  doorbell type",
+                    "type": "string"
+                  }
                 },
-                "name": {
-                  "description": "name of the doorbell",
-                  "type": "string"
-                },
-                "type": {
-                  "description": "string.  doorbell type",
-                  "type": "string"
-                }
+                "required": [
+                  "serialNumber",
+                  "name",
+                  "type"
+                ]
               }
             }
-          },
-          "required": [
-            "serialNumber",
-            "name",
-            "type"
-          ]
+          }
         },
         "responses": {
           "200": {
@@ -7251,24 +7335,26 @@
         "description": "Returns 404 if HLS video stream is unavailable",
         "requestBody": {
           "content": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "description": {
-                  "description": "string",
-                  "type": "string"
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "description": {
+                    "description": "string",
+                    "type": "string"
+                  },
+                  "dvrID": {
+                    "description": "string",
+                    "type": "string"
+                  }
                 },
-                "dvrID": {
-                  "description": "string",
-                  "type": "string"
-                }
+                "required": [
+                  "description",
+                  "dvrID"
+                ]
               }
             }
-          },
-          "required": [
-            "description",
-            "dvrID"
-          ]
+          }
         },
         "responses": {
           "200": {
@@ -7296,9 +7382,11 @@
         "description": "Valid actions are ['heartbeat' 'join', 'leave', 'status'].Only 1 user is allowed to respond to the doorbell press.  Otherwise a ConflictError (409) is sent back.When a user responds a pubnub message is sent to the other listeners to disable their response capability on the client.In the event that this API is not called with a hangup or heartbeat (client power or connection failure) the call will be ended when the key expiresWhen a call is hung up, an object called callStats is expected in the request body.videoAvailable flag is only present for 'respond'",
         "requestBody": {
           "content": {
-            "schema": {
-              "type": "object",
-              "properties": {}
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {}
+              }
             }
           }
         },
@@ -7597,7 +7685,9 @@
         "summary": "Writes to the logs",
         "description": "If the doorbell or other user doesn't exist return ResourceNotFound error.If calling user is not a user of the doorbell return NotAuthorizedError.Takes an array of log objects or a log object in the body of the request.",
         "requestBody": {
-          "content": {}
+          "content": {
+            "application/json": {}
+          }
         },
         "responses": {
           "200": {
@@ -7625,36 +7715,38 @@
         "description": "if the pin is already used this request will fail and return a 409",
         "requestBody": {
           "content": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "lockID": {
-                  "description": "the lock this user is associated with",
-                  "type": "string"
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "lockID": {
+                    "description": "the lock this user is associated with",
+                    "type": "string"
+                  },
+                  "pin": {
+                    "description": "the pin requested for this user",
+                    "type": "string"
+                  },
+                  "firstName": {
+                    "description": "first name",
+                    "type": "string"
+                  },
+                  "lastName": {
+                    "description": "last name",
+                    "type": "string"
+                  },
+                  "phone": {
+                    "description": "phone number (E.164 spec)",
+                    "type": "string"
+                  }
                 },
-                "pin": {
-                  "description": "the pin requested for this user",
-                  "type": "string"
-                },
-                "firstName": {
-                  "description": "first name",
-                  "type": "string"
-                },
-                "lastName": {
-                  "description": "last name",
-                  "type": "string"
-                },
-                "phone": {
-                  "description": "phone number (E.164 spec)",
-                  "type": "string"
-                }
+                "required": [
+                  "lockID",
+                  "pin"
+                ]
               }
             }
-          },
-          "required": [
-            "lockID",
-            "pin"
-          ]
+          }
         },
         "responses": {
           "200": {
@@ -7694,27 +7786,29 @@
         "summary": "Updates an unverified user associated with a lock",
         "requestBody": {
           "content": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "lockID": {
-                  "description": "the id of the lock associated with the unverified user",
-                  "type": "string"
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "lockID": {
+                    "description": "the id of the lock associated with the unverified user",
+                    "type": "string"
+                  },
+                  "firstName": {
+                    "description": "the first name of the unverified user to update",
+                    "type": "string"
+                  },
+                  "lastName": {
+                    "description": "the last name of the unverified user to update",
+                    "type": "string"
+                  }
                 },
-                "firstName": {
-                  "description": "the first name of the unverified user to update",
-                  "type": "string"
-                },
-                "lastName": {
-                  "description": "the last name of the unverified user to update",
-                  "type": "string"
-                }
+                "required": [
+                  "lockID"
+                ]
               }
             }
-          },
-          "required": [
-            "lockID"
-          ]
+          }
         },
         "responses": {
           "200": {
@@ -7796,54 +7890,56 @@
         "description": "created: means that the PIN should be loaded onto the lock, first step of associating a pin loaded: means that the PIN has been loaded to the lock, second and final step of associating a pin deleting: means that the PIN should be deleted, first step of removing a pin from a lock deleted: means that the PIN has been be deleted from the lock disabling: means the the PIN should be disabled disabled: means that the PIN has been marked as disabled on the lock enabling: means that the PIN should be enabled enabled: means that the PIN has been enabled, which means that it is back in the loaed group of PINs. The PIN is only necessary when creating it",
         "requestBody": {
           "content": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "pin": {
-                  "description": "the pin",
-                  "type": "string"
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "pin": {
+                    "description": "the pin",
+                    "type": "string"
+                  },
+                  "state": {
+                    "description": "the state of the pin, which can be 'created','loaded','deleted','disabling','disabled'",
+                    "type": "string"
+                  },
+                  "firstName": {
+                    "description": "the firstName of the user, optional",
+                    "type": "string"
+                  },
+                  "lastName": {
+                    "description": "the lastName of the user, optional",
+                    "type": "string"
+                  },
+                  "accessType": {
+                    "description": "string: the type of the pin: always, recurring, temporary, oneTime",
+                    "type": "string"
+                  },
+                  "accessTimes": {
+                    "description": "string: this field only required for access types recurring & temporary; for recurring access type possible values are \"STARTSEC=<sec from start of day>[;ENDSEC=<sec from start of day>]\"; if timezone of lock is known this is also valid: \"DTSTART=<ISO date in UTC>[;DTEND=<ISO date in UTC>]\" (end date optional, if not provided is set to 1 hour from start date). For temporary times must be ISO date in UTC. Not required when schedule is provided.",
+                    "type": "string"
+                  },
+                  "accessRecurrence": {
+                    "description": "string: only required for access type recurring. See recurrence rules under RFC2445, e.g.: \"FREQ=MONTHLY;BYMONTHDAY=10,15;COUNT=20\". Not required when schedule is provided.",
+                    "type": "string"
+                  },
+                  "schedule": {
+                    "description": "string: iCal data format following RFC5545 (https://tools.ietf.org/html/rfc5545) required for access types recurring & temporary; when accessTimes & accessRecurrence are provided, data of schedule overrides their values.",
+                    "type": "string"
+                  }
                 },
-                "state": {
-                  "description": "the state of the pin, which can be 'created','loaded','deleted','disabling','disabled'",
-                  "type": "string"
-                },
-                "firstName": {
-                  "description": "the firstName of the user, optional",
-                  "type": "string"
-                },
-                "lastName": {
-                  "description": "the lastName of the user, optional",
-                  "type": "string"
-                },
-                "accessType": {
-                  "description": "string: the type of the pin: always, recurring, temporary, oneTime",
-                  "type": "string"
-                },
-                "accessTimes": {
-                  "description": "string: this field only required for access types recurring & temporary; for recurring access type possible values are \"STARTSEC=<sec from start of day>[;ENDSEC=<sec from start of day>]\"; if timezone of lock is known this is also valid: \"DTSTART=<ISO date in UTC>[;DTEND=<ISO date in UTC>]\" (end date optional, if not provided is set to 1 hour from start date). For temporary times must be ISO date in UTC. Not required when schedule is provided.",
-                  "type": "string"
-                },
-                "accessRecurrence": {
-                  "description": "string: only required for access type recurring. See recurrence rules under RFC2445, e.g.: \"FREQ=MONTHLY;BYMONTHDAY=10,15;COUNT=20\". Not required when schedule is provided.",
-                  "type": "string"
-                },
-                "schedule": {
-                  "description": "string: iCal data format following RFC5545 (https://tools.ietf.org/html/rfc5545) required for access types recurring & temporary; when accessTimes & accessRecurrence are provided, data of schedule overrides their values.",
-                  "type": "string"
-                }
+                "required": [
+                  "pin",
+                  "state",
+                  "firstName",
+                  "lastName",
+                  "accessType",
+                  "accessTimes",
+                  "accessRecurrence",
+                  "schedule"
+                ]
               }
             }
-          },
-          "required": [
-            "pin",
-            "state",
-            "firstName",
-            "lastName",
-            "accessType",
-            "accessTimes",
-            "accessRecurrence",
-            "schedule"
-          ]
+          }
         },
         "responses": {
           "200": {
@@ -7877,62 +7973,64 @@
         "description": "created: means that the PIN should be loaded onto the lock, first step of associating a pin loaded: means that the PIN has been loaded to the lock, second and final step of associating a pin deleting: means that the PIN should be deleted, first step of removing a pin from a lock deleted: means that the PIN has been be deleted from the lock disabling: means the the PIN should be disabled disabled: means that the PIN has been marked as disabled on the lock enabling: means that the PIN should be enabled enabled: means that the PIN has been enabled, which means that it is back in the loaed group of PINs. The 'pin' is only necessary when type euqals pin & create it. this is going to replace 'PUT /locks/:lockID/users/:otherUserID/pin'",
         "requestBody": {
           "content": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "type": {
-                  "description": "string: pin, rf, finger",
-                  "type": "string"
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "description": "string: pin, rf, finger",
+                    "type": "string"
+                  },
+                  "pin": {
+                    "description": "the pin",
+                    "type": "string"
+                  },
+                  "action": {
+                    "description": "the action of operation, which can be 'intent', 'commit'",
+                    "type": "string"
+                  },
+                  "state": {
+                    "description": "the state of the pin/rf/finger, which can be 'load','enable','disable','delate','update'",
+                    "type": "string"
+                  },
+                  "slot": {
+                    "description": "the slot",
+                    "type": "string"
+                  },
+                  "firstName": {
+                    "description": "the firstName of the user",
+                    "type": "string"
+                  },
+                  "lastName": {
+                    "description": "the lastName of the user",
+                    "type": "string"
+                  },
+                  "accessType": {
+                    "description": "string: the type of the pin/rf/finger: 'always', 'recurring', 'temporary', 'oneTime', the default value is 'always'",
+                    "type": "string"
+                  },
+                  "accessTimes": {
+                    "description": "string: this field only required for access types recurring & temporary; for recurring access type possible values are \"STARTSEC=<sec from start of day>[;ENDSEC=<sec from start of day>]\"; if timezone of lock is known this is also valid: \"DTSTART=<ISO date in UTC>[;DTEND=<ISO date in UTC>]\" (end date optional, if not provided is set to 1 hour from start date). For temporary times must be ISO date in UTC. Not required when schedule is provided.",
+                    "type": "string"
+                  },
+                  "accessRecurrence": {
+                    "description": "string: only required for access type recurring. See recurrence rules under RFC2445, e.g.: \"FREQ=MONTHLY;BYMONTHDAY=10,15;COUNT=20\". Not required when schedule is provided.",
+                    "type": "string"
+                  },
+                  "schedule": {
+                    "description": "string: iCal data format following RFC5545 (https://tools.ietf.org/html/rfc5545) required for access types recurring & temporary; when accessTimes & accessRecurrence are provided, data of schedule overrides their values.",
+                    "type": "string"
+                  }
                 },
-                "pin": {
-                  "description": "the pin",
-                  "type": "string"
-                },
-                "action": {
-                  "description": "the action of operation, which can be 'intent', 'commit'",
-                  "type": "string"
-                },
-                "state": {
-                  "description": "the state of the pin/rf/finger, which can be 'load','enable','disable','delate','update'",
-                  "type": "string"
-                },
-                "slot": {
-                  "description": "the slot",
-                  "type": "string"
-                },
-                "firstName": {
-                  "description": "the firstName of the user",
-                  "type": "string"
-                },
-                "lastName": {
-                  "description": "the lastName of the user",
-                  "type": "string"
-                },
-                "accessType": {
-                  "description": "string: the type of the pin/rf/finger: 'always', 'recurring', 'temporary', 'oneTime', the default value is 'always'",
-                  "type": "string"
-                },
-                "accessTimes": {
-                  "description": "string: this field only required for access types recurring & temporary; for recurring access type possible values are \"STARTSEC=<sec from start of day>[;ENDSEC=<sec from start of day>]\"; if timezone of lock is known this is also valid: \"DTSTART=<ISO date in UTC>[;DTEND=<ISO date in UTC>]\" (end date optional, if not provided is set to 1 hour from start date). For temporary times must be ISO date in UTC. Not required when schedule is provided.",
-                  "type": "string"
-                },
-                "accessRecurrence": {
-                  "description": "string: only required for access type recurring. See recurrence rules under RFC2445, e.g.: \"FREQ=MONTHLY;BYMONTHDAY=10,15;COUNT=20\". Not required when schedule is provided.",
-                  "type": "string"
-                },
-                "schedule": {
-                  "description": "string: iCal data format following RFC5545 (https://tools.ietf.org/html/rfc5545) required for access types recurring & temporary; when accessTimes & accessRecurrence are provided, data of schedule overrides their values.",
-                  "type": "string"
-                }
+                "required": [
+                  "type",
+                  "pin",
+                  "action",
+                  "state"
+                ]
               }
             }
-          },
-          "required": [
-            "type",
-            "pin",
-            "action",
-            "state"
-          ]
+          }
         },
         "responses": {
           "200": {
@@ -8050,44 +8148,46 @@
         "description": "The camera ID in the response is the id to be used in all other August camera-related APIs. This is is NOT the Nest camera ID",
         "requestBody": {
           "content": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "description": "name field returned in response to GET /nest/cameras",
-                  "type": "string"
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "description": "name field returned in response to GET /nest/cameras",
+                    "type": "string"
+                  },
+                  "device_id": {
+                    "description": "device_id returned in response to GET /nest/cameras",
+                    "type": "string"
+                  },
+                  "structure_id": {
+                    "description": "structure_id returned in response to GET /nest/cameras",
+                    "type": "string"
+                  },
+                  "name_long": {
+                    "description": "name_long returned in response to GET /nest/cameras",
+                    "type": "string"
+                  },
+                  "web_url": {
+                    "description": "web_url returned in response to GET /nest/cameras",
+                    "type": "string"
+                  },
+                  "app_url": {
+                    "description": "app_url returned in response to GET /nest/cameras",
+                    "type": "string"
+                  }
                 },
-                "device_id": {
-                  "description": "device_id returned in response to GET /nest/cameras",
-                  "type": "string"
-                },
-                "structure_id": {
-                  "description": "structure_id returned in response to GET /nest/cameras",
-                  "type": "string"
-                },
-                "name_long": {
-                  "description": "name_long returned in response to GET /nest/cameras",
-                  "type": "string"
-                },
-                "web_url": {
-                  "description": "web_url returned in response to GET /nest/cameras",
-                  "type": "string"
-                },
-                "app_url": {
-                  "description": "app_url returned in response to GET /nest/cameras",
-                  "type": "string"
-                }
+                "required": [
+                  "name",
+                  "device_id",
+                  "structure_id",
+                  "name_long",
+                  "web_url",
+                  "app_url"
+                ]
               }
             }
-          },
-          "required": [
-            "name",
-            "device_id",
-            "structure_id",
-            "name_long",
-            "web_url",
-            "app_url"
-          ]
+          }
         },
         "responses": {
           "200": {
@@ -8270,16 +8370,18 @@
         "summary": "Returns the timezones hour offset from UTC",
         "requestBody": {
           "content": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "zone": {
-                  "description": "timezone string e.g. America/Los_Angeles",
-                  "type": "string"
-                },
-                "time": {
-                  "description": "optional parameter to manually set the time to convert",
-                  "type": "string"
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "zone": {
+                    "description": "timezone string e.g. America/Los_Angeles",
+                    "type": "string"
+                  },
+                  "time": {
+                    "description": "optional parameter to manually set the time to convert",
+                    "type": "string"
+                  }
                 }
               }
             }
@@ -8648,25 +8750,27 @@
         "summary": "Used to add a ruleset to nock",
         "requestBody": {
           "content": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "hostString": {
-                  "description": "A nock style host string, i.e., https://api.august.com",
-                  "type": "string"
-                },
-                "functions": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "name": {
-                        "description": "The name of the nock method to call",
-                        "type": "string"
-                      },
-                      "arguments": {
-                        "description": "An array of arguments to pass to the method",
-                        "type": "string"
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "hostString": {
+                    "description": "A nock style host string, i.e., https://api.august.com",
+                    "type": "string"
+                  },
+                  "functions": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "description": "The name of the nock method to call",
+                          "type": "string"
+                        },
+                        "arguments": {
+                          "description": "An array of arguments to pass to the method",
+                          "type": "string"
+                        }
                       }
                     }
                   }
@@ -8778,20 +8882,22 @@
         "summary": "Runs a HTTP request from the server which may or may not use nock",
         "requestBody": {
           "content": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "hostString": {
-                  "description": "The nock style host string",
-                  "type": "string"
-                },
-                "path": {
-                  "description": "The path to call",
-                  "type": "string"
-                },
-                "method": {
-                  "description": "The HTTP method to use, i.e., GET, POST, etc.",
-                  "type": "string"
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "hostString": {
+                    "description": "The nock style host string",
+                    "type": "string"
+                  },
+                  "path": {
+                    "description": "The path to call",
+                    "type": "string"
+                  },
+                  "method": {
+                    "description": "The HTTP method to use, i.e., GET, POST, etc.",
+                    "type": "string"
+                  }
                 }
               }
             }
@@ -8981,12 +9087,14 @@
         "description": "This will only approve home access legal docs like aaTos",
         "requestBody": {
           "content": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "approved": {
-                  "description": "boolean: true or false",
-                  "type": "boolean"
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "approved": {
+                    "description": "boolean: true or false",
+                    "type": "boolean"
+                  }
                 }
               }
             }
@@ -9010,12 +9118,14 @@
         "summary": "Allows one to set the delivery property of a lock",
         "requestBody": {
           "content": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "deliveryAllowed": {
-                  "description": "boolean: true or false",
-                  "type": "boolean"
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "deliveryAllowed": {
+                    "description": "boolean: true or false",
+                    "type": "boolean"
+                  }
                 }
               }
             }
@@ -9125,24 +9235,26 @@
         "summary": "Called by August Access seller partners with a lock ID to create a home-access-token for a shipping partner",
         "requestBody": {
           "content": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "orderID": {
-                  "description": "Order identifier from Retailer",
-                  "type": "string"
-                },
-                "trackingID": {
-                  "description": "Visit identifier from Access Grantee",
-                  "type": "string"
-                },
-                "accessGranteeID": {
-                  "description": "August-assigned identifier of Access Grantee",
-                  "type": "string"
-                },
-                "accessDateRange": {
-                  "description": "iCal format DTSTART; DTEND",
-                  "type": "string"
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "orderID": {
+                    "description": "Order identifier from Retailer",
+                    "type": "string"
+                  },
+                  "trackingID": {
+                    "description": "Visit identifier from Access Grantee",
+                    "type": "string"
+                  },
+                  "accessGranteeID": {
+                    "description": "August-assigned identifier of Access Grantee",
+                    "type": "string"
+                  },
+                  "accessDateRange": {
+                    "description": "iCal format DTSTART; DTEND",
+                    "type": "string"
+                  }
                 }
               }
             }
@@ -9194,9 +9306,11 @@
         "summary": "Called by August Access seller partners to list August Access delivery providers",
         "requestBody": {
           "content": {
-            "schema": {
-              "type": "object",
-              "properties": {}
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {}
+              }
             }
           }
         },
@@ -9396,16 +9510,18 @@
         "summary": "Called by an authenticated user to generate jwt for custom data",
         "requestBody": {
           "content": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "banana": {
-                  "description": "phone",
-                  "type": "string"
-                },
-                "blueberry": {
-                  "description": "spice head",
-                  "type": "string"
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "banana": {
+                    "description": "phone",
+                    "type": "string"
+                  },
+                  "blueberry": {
+                    "description": "spice head",
+                    "type": "string"
+                  }
                 }
               }
             }
@@ -10036,20 +10152,22 @@
         "summary": "Called by client apps when a user sets up a chime.",
         "requestBody": {
           "content": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "doorbellID": {
-                  "description": "ID of doorbell being associated with the chime.",
-                  "type": "string"
-                },
-                "serialNumber": {
-                  "description": "Serial number of the chime.",
-                  "type": "string"
-                },
-                "name": {
-                  "description": "Name of the chime",
-                  "type": "string"
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "doorbellID": {
+                    "description": "ID of doorbell being associated with the chime.",
+                    "type": "string"
+                  },
+                  "serialNumber": {
+                    "description": "Serial number of the chime.",
+                    "type": "string"
+                  },
+                  "name": {
+                    "description": "Name of the chime",
+                    "type": "string"
+                  }
                 }
               }
             }
@@ -10101,12 +10219,14 @@
         "description": "Return 404 not found if the doorbell is not setup.  Return 403 unauthorized if the calling user cannot manage the doorbell.  Return 404 not found if the chime is not setup.",
         "requestBody": {
           "content": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "description": "New name of the chime",
-                  "type": "string"
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "description": "New name of the chime",
+                    "type": "string"
+                  }
                 }
               }
             }
@@ -10232,16 +10352,18 @@
         "description": "Must put the whole settings object.  Cannot update individual fields.",
         "requestBody": {
           "content": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "setting1": {
-                  "description": "value of setting 1",
-                  "type": "string"
-                },
-                "setting2": {
-                  "description": "value of setting 2",
-                  "type": "string"
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "setting1": {
+                    "description": "value of setting 1",
+                    "type": "string"
+                  },
+                  "setting2": {
+                    "description": "value of setting 2",
+                    "type": "string"
+                  }
                 }
               }
             }
@@ -10324,20 +10446,22 @@
         "description": "Error Codes:\n403 NotAuthorized - user is not authorized to access doorbell\n404 ResourceNotFound - doorbellID not found\n408 RequestTimeoutError - Doorbell cannot wakeup || receives incorrectly formatted sdp offer || doorbell is not listening on the pubnub channel message was published to || doorbell is offline and has not yet been reported by server (15 minute window)\n409 ConflictError - doorbell has firmware that does not support webrtc || has not set the \"caps\" property with \"webrtc\"\n409 MissingParameter - missing body parameter \"offer\" or \"clientTransactionID\"\n422 UnprocessableEntityError - doorbell status is offline\n500 InternalServerError - other internal server error\n",
         "requestBody": {
           "content": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "timeoutMs": {
-                  "description": "milliseconds to wait for a pubnub response, 30000 max, 5000 default",
-                  "type": "string"
-                },
-                "offer": {
-                  "description": "sdp offer string with \"\r\n\" newline delimeters",
-                  "type": "string"
-                },
-                "clientTransactionID": {
-                  "description": "identifier sent by the client to trace transaction",
-                  "type": "string"
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "timeoutMs": {
+                    "description": "milliseconds to wait for a pubnub response, 30000 max, 5000 default",
+                    "type": "string"
+                  },
+                  "offer": {
+                    "description": "sdp offer string with \"\r\n\" newline delimeters",
+                    "type": "string"
+                  },
+                  "clientTransactionID": {
+                    "description": "identifier sent by the client to trace transaction",
+                    "type": "string"
+                  }
                 }
               }
             }
@@ -10522,16 +10646,18 @@
         "description": "Status Codes:\n400 BadRequestError - params and body do not match schema\n401 InvalidCredentialsError\n  - The userID does not match the one in the access token.\n  - The access token is invalid.\n  - The user is blacklisted.\n403 PreconditionFailedError - user does not owns access\n404 ResourceNotFoundError - access not found",
         "requestBody": {
           "content": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "granted": {
-                  "description": "boolean to respond to an access request",
-                  "type": "boolean"
-                },
-                "lockID": {
-                  "description": "lockID associated with the access request. Required if granted is true.",
-                  "type": "string"
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "granted": {
+                    "description": "boolean to respond to an access request",
+                    "type": "boolean"
+                  },
+                  "lockID": {
+                    "description": "lockID associated with the access request. Required if granted is true.",
+                    "type": "string"
+                  }
                 }
               }
             }
