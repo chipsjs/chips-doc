@@ -28,6 +28,7 @@
   "scripts": {
     "fake": "node ./entry/fake.js",
     "mock": "node ./entry/mock.js",
+    "convert": "node ./entry/convert.js",
     "test": "mocha",
     "coverage": "nyc npm run test"
   },

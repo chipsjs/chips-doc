@@ -1,5 +1,6 @@
 const { assert } = require('chai');
 const fs = require('fs');
+const _ = require('lodash');
 
 const Convert = require('../middleware/convert/spec_convert');
 
@@ -14,7 +15,7 @@ describe('convert spec to generate api doc', () => {
   describe('normal spec', () => {
     before('set source data', () => {
       specJson = {
-        'GET /test1': {
+        'GET /test': {
           name: 'check  whether an email or phone exists',
           summary: 'check email or phone for duplicates',
           method: 'get',
@@ -41,45 +42,50 @@ describe('convert spec to generate api doc', () => {
     });
 
     it('should generate correct api doc', () => {
-      const api_name = 'GET /test1';
+      const api_name = '/test';
+      assert.exists(specResult[api_name]);
+      assert.exists(specResult[api_name].get);
 
       const {
-        url,
-        method_type, summary: outputSummary,
-        request: { query: outputRequestQuery },
-        response: { success: outputResponseBody }
-      } = specResult[api_name];
+        description, summary: outputSummary,
+      } = specResult[api_name].get;
       const {
-        method,
         summary: inputSummary,
+        note,
         request: { query: inputQuery },
         response: { body: inputResponse }
-      } = specJson[api_name];
+      } = specJson['GET /test'];
 
-      assert.strictEqual(method_type, method);
       assert.strictEqual(outputSummary, inputSummary);
-      assert.strictEqual(url, '{base_url}/test1');
-      assert.exists(outputRequestQuery.type);
-      assert.nestedPropertyVal(outputRequestQuery, 'properties.email.description', inputQuery.email);
-      assert.nestedPropertyVal(outputRequestQuery, 'properties.email.type', 'string');
-      assert.nestedPropertyVal(outputRequestQuery, 'properties.phone.description', inputQuery.phone);
-      assert.nestedPropertyVal(outputRequestQuery, 'properties.phone.type', 'string');
-      assert.sameMembers(outputRequestQuery.required, ['phone']);
+      assert.strictEqual(description, note);
+      const outputResponseBody = _.get(specResult[api_name], ['get', 'responses', '200', 'content', 'application/json', 'schema']);
+      const outputParameters = _.get(specResult[api_name], ['get', 'parameters']);
+      assert.strictEqual(outputParameters.length, 2);
+      assert.strictEqual(outputParameters[0].name, 'email');
+      assert.strictEqual(outputParameters[0].in, 'query');
+      assert.strictEqual(outputParameters[0].required, false);
+      assert.nestedPropertyVal(outputParameters[0], 'schema.description', inputQuery.email);
+      assert.nestedPropertyVal(outputParameters[0], 'schema.type', 'string');
+      assert.strictEqual(outputParameters[1].name, 'phone');
+      assert.strictEqual(outputParameters[1].in, 'query');
+      assert.strictEqual(outputParameters[1].required, true);
+      assert.nestedPropertyVal(outputParameters[1], 'schema.description', inputQuery.phone);
+      assert.nestedPropertyVal(outputParameters[1], 'schema.type', 'string');
       assert.nestedPropertyVal(outputResponseBody, 'properties.exists.type', 'boolean');
       assert.nestedPropertyVal(outputResponseBody, 'properties.exists.description', inputResponse.exists);
       assert.nestedPropertyVal(outputResponseBody, 'properties.msg.type', 'string');
       assert.nestedPropertyVal(outputResponseBody, 'properties.msg.description', inputResponse.msg);
     });
 
-    after('clean file', () => {
-      fs.unlinkSync('test/temp/normal_api_doc.json');
-    })
+    // after('clean file', () => {
+    //   fs.unlinkSync('test/temp/normal_api_doc.json');
+    // })
   });
 
   describe('special spec | has required object', () => {
     before('set source data', () => {
       specJson = {
-        'GET /test2': {
+        'GET /test': {
           name: 'check  whether an email or phone exists',
           summary: 'check email or phone for duplicates',
           method: 'get',
@@ -108,30 +114,35 @@ describe('convert spec to generate api doc', () => {
     });
 
     it('should generate correct api doc', () => {
-      const api_name = 'GET /test2';
+      const api_name = '/test';
+      assert.exists(specResult[api_name]);
+      assert.exists(specResult[api_name].get);
 
       const {
-        url,
-        method_type, summary: outputSummary,
-        request: { query: outputRequestQuery },
-        response: { success: outputResponseBody }
-      } = specResult[api_name];
+        description, summary: outputSummary,
+      } = specResult[api_name].get;
       const {
-        method,
         summary: inputSummary,
-        request: { query: { required: inputQuery } },
+        note,
         response: { body: inputResponse }
-      } = specJson[api_name];
+      } = specJson['GET /test'];
 
-      assert.equal(method_type, method);
-      assert.equal(outputSummary, inputSummary);
-      assert.equal(url, '{base_url}/test2');
-      assert.exists(outputRequestQuery.type);
-      assert.nestedPropertyVal(outputRequestQuery, 'properties.email.description', inputQuery.email);
-      assert.nestedPropertyVal(outputRequestQuery, 'properties.email.type', 'string');
-      assert.nestedPropertyVal(outputRequestQuery, 'properties.phone.description', inputQuery.phone);
-      assert.nestedPropertyVal(outputRequestQuery, 'properties.phone.type', 'string');
-      assert.sameMembers(outputRequestQuery.required, ['email', 'phone']);
+      assert.strictEqual(outputSummary, inputSummary);
+      assert.strictEqual(description, note);
+      const outputParameters = _.get(specResult[api_name], ['get', 'parameters']);
+      const inputQuery = _.get(specJson, ['GET /test', 'request', 'query', 'required']);
+      assert.strictEqual(outputParameters.length, 2);
+      assert.strictEqual(outputParameters[0].name, 'email');
+      assert.strictEqual(outputParameters[0].in, 'query');
+      assert.strictEqual(outputParameters[0].required, true);
+      assert.nestedPropertyVal(outputParameters[0], 'schema.description', inputQuery.email);
+      assert.nestedPropertyVal(outputParameters[0], 'schema.type', 'string');
+      assert.strictEqual(outputParameters[1].name, 'phone');
+      assert.strictEqual(outputParameters[1].in, 'query');
+      assert.strictEqual(outputParameters[1].required, true);
+      assert.nestedPropertyVal(outputParameters[1], 'schema.description', inputQuery.phone);
+      assert.nestedPropertyVal(outputParameters[1], 'schema.type', 'string');
+      const outputResponseBody = _.get(specResult[api_name], ['get', 'responses', '200', 'content', 'application/json', 'schema']);
       assert.nestedPropertyVal(outputResponseBody, 'properties.exists.type', 'boolean');
       assert.nestedPropertyVal(outputResponseBody, 'properties.exists.description', inputResponse.exists);
       assert.nestedPropertyVal(outputResponseBody, 'properties.msg.type', 'string');
@@ -171,33 +182,39 @@ describe('convert spec to generate api doc', () => {
     });
 
     it('should generate correct api doc', () => {
-      const api_name = 'GET /test';
+      const api_name = '/test';
+      assert.exists(specResult[api_name]);
+      assert.exists(specResult[api_name].get);
 
       const {
-        url,
-        method_type, summary: outputSummary,
-        request: { query: outputRequestQuery },
-        response: { success: outputResponseBody }
-      } = specResult[api_name];
+        description, summary: outputSummary,
+      } = specResult[api_name].get;
       const {
         summary: inputSummary,
+        note,
         request: { query: inputQuery },
         response: { body: inputResponse }
-      } = specJson[api_name];
+      } = specJson['GET /test'];
 
-      assert.equal(method_type, 'get');
-      assert.equal(outputSummary, inputSummary);
-      assert.equal(url, '{base_url}/test');
-      assert.exists(outputRequestQuery.type);
-      assert.nestedPropertyVal(outputRequestQuery, 'properties.email.description', inputQuery.email);
-      assert.nestedPropertyVal(outputRequestQuery, 'properties.email.type', 'string');
-      assert.nestedPropertyVal(outputRequestQuery, 'properties.phone.description', inputQuery.phone);
-      assert.nestedPropertyVal(outputRequestQuery, 'properties.phone.type', 'string');
-      assert.sameMembers(outputRequestQuery.required, ['phone']);
+      assert.strictEqual(outputSummary, inputSummary);
+      assert.strictEqual(description, note);
+
+      const outputParameters = _.get(specResult[api_name], ['get', 'parameters']);
+      assert.strictEqual(outputParameters.length, 2);
+      assert.strictEqual(outputParameters[0].name, 'email');
+      assert.strictEqual(outputParameters[0].in, 'query');
+      assert.strictEqual(outputParameters[0].required, false);
+      assert.nestedPropertyVal(outputParameters[0], 'schema.description', inputQuery.email);
+      assert.nestedPropertyVal(outputParameters[0], 'schema.type', 'string');
+      assert.strictEqual(outputParameters[1].name, 'phone');
+      assert.strictEqual(outputParameters[1].in, 'query');
+      assert.strictEqual(outputParameters[1].required, true);
+      assert.nestedPropertyVal(outputParameters[1], 'schema.description', inputQuery.phone);
+      assert.nestedPropertyVal(outputParameters[1], 'schema.type', 'string');
+
+      const outputResponseBody = _.get(specResult[api_name], ['get', 'responses', '200', 'content', 'application/json', 'schema']);
       assert.nestedPropertyVal(outputResponseBody, 'properties.exists.type', 'boolean');
       assert.nestedPropertyVal(outputResponseBody, 'properties.exists.description', inputResponse.exists);
-      assert.nestedPropertyVal(outputResponseBody, 'properties.msg.type', 'string');
-      assert.nestedPropertyVal(outputResponseBody, 'properties.msg.description', inputResponse.msg);
     });
 
     after('clean file', () => {
@@ -208,8 +225,8 @@ describe('convert spec to generate api doc', () => {
   describe('special spec | has special type, such as int/Boolean instead of number/boolean', () => {
     before('set source data', () => {
       specJson = {
-        'GET /test': {
-          method_type: 'GET',
+        'POST /test': {
+          method_type: 'POST',
           request: {
             body: {
               year: 'int'
@@ -229,24 +246,21 @@ describe('convert spec to generate api doc', () => {
     });
 
     it('should generate correct api doc', () => {
-      const api_name = 'GET /test';
+      const api_name = '/test';
+      assert.exists(specResult[api_name]);
+      assert.exists(specResult[api_name].post);
 
       const {
-        url,
-        method_type,
-        request: { body: outputRequestQuery },
-        response: { success: outputResponseBody }
-      } = specResult[api_name];
-      const {
-        request: { body: inputQuery },
+        request: { body: inputBody },
         response: { body: inputResponse }
-      } = specJson[api_name];
+      } = specJson['POST /test'];
 
-      assert.equal(method_type, 'get');
-      assert.equal(url, '{base_url}/test');
-      assert.exists(outputRequestQuery.type);
-      assert.nestedPropertyVal(outputRequestQuery, 'properties.year.description', inputQuery.year);
-      assert.nestedPropertyVal(outputRequestQuery, 'properties.year.type', 'number');
+      const outputRequestBody = _.get(specResult, [api_name, 'post', 'requestBody', 'content', 'schema']);
+      assert.strictEqual(outputRequestBody.type, 'object');
+      assert.nestedPropertyVal(outputRequestBody, 'properties.year.type', 'integer');
+      assert.nestedPropertyVal(outputRequestBody, 'properties.year.description', inputBody.year);
+
+      const outputResponseBody = _.get(specResult, [api_name, 'post', 'responses', '200', 'content', 'application/json', 'schema']);
       assert.nestedPropertyVal(outputResponseBody, 'properties.exists.type', 'boolean');
       assert.nestedPropertyVal(outputResponseBody, 'properties.exists.description', inputResponse.exists);
     });
@@ -259,8 +273,8 @@ describe('convert spec to generate api doc', () => {
   describe('special spec | has special type, such as object prefix in description', () => {
     before('set source data', () => {
       specJson = {
-        'GET /test': {
-          method_type: 'GET',
+        'POST /test': {
+          method_type: 'Post',
           request: {
             body: {
               year: 'object start_year'
@@ -280,24 +294,21 @@ describe('convert spec to generate api doc', () => {
     });
 
     it('should generate correct api doc', () => {
-      const api_name = 'GET /test';
+      const api_name = '/test';
+      assert.exists(specResult[api_name]);
+      assert.exists(specResult[api_name].post);
 
       const {
-        url,
-        method_type,
-        request: { body: outputRequestQuery },
-        response: { success: outputResponseBody }
-      } = specResult[api_name];
-      const {
-        request: { body: inputQuery },
+        request: { body: inputBody },
         response: { body: inputResponse }
-      } = specJson[api_name];
+      } = specJson['POST /test'];
 
-      assert.equal(method_type, 'get');
-      assert.equal(url, '{base_url}/test');
-      assert.exists(outputRequestQuery.type);
-      assert.nestedPropertyVal(outputRequestQuery, 'properties.year.description', inputQuery.year);
-      assert.nestedPropertyVal(outputRequestQuery, 'properties.year.type', 'object');
+      const outputRequestBody = _.get(specResult, [api_name, 'post', 'requestBody', 'content', 'schema']);
+      assert.strictEqual(outputRequestBody.type, 'object');
+      assert.nestedPropertyVal(outputRequestBody, 'properties.year.type', 'object');
+      assert.nestedPropertyVal(outputRequestBody, 'properties.year.description', inputBody.year);
+
+      const outputResponseBody = _.get(specResult, [api_name, 'post', 'responses', '200', 'content', 'application/json', 'schema']);
       assert.nestedPropertyVal(outputResponseBody, 'properties.exists.type', 'boolean');
       assert.nestedPropertyVal(outputResponseBody, 'properties.exists.description', inputResponse.exists);
     });
@@ -310,8 +321,8 @@ describe('convert spec to generate api doc', () => {
   describe('special spec | has special type, such as array prefix in description', () => {
     before('set source data', () => {
       specJson = {
-        'GET /test': {
-          method_type: 'GET',
+        'POST /test': {
+          method_type: 'Post',
           request: {
             body: {
               year: 'array start_year'
@@ -331,24 +342,21 @@ describe('convert spec to generate api doc', () => {
     });
 
     it('should generate correct api doc', () => {
-      const api_name = 'GET /test';
+      const api_name = '/test';
+      assert.exists(specResult[api_name]);
+      assert.exists(specResult[api_name].post);
 
       const {
-        url,
-        method_type,
-        request: { body: outputRequestQuery },
-        response: { success: outputResponseBody }
-      } = specResult[api_name];
-      const {
-        request: { body: inputQuery },
+        request: { body: inputBody },
         response: { body: inputResponse }
-      } = specJson[api_name];
+      } = specJson['POST /test'];
 
-      assert.equal(method_type, 'get');
-      assert.equal(url, '{base_url}/test');
-      assert.exists(outputRequestQuery.type);
-      assert.nestedPropertyVal(outputRequestQuery, 'properties.year.description', inputQuery.year);
-      assert.nestedPropertyVal(outputRequestQuery, 'properties.year.type', 'array');
+      const outputRequestBody = _.get(specResult, [api_name, 'post', 'requestBody', 'content', 'schema']);
+      assert.strictEqual(outputRequestBody.type, 'object');
+      assert.nestedPropertyVal(outputRequestBody, 'properties.year.type', 'array');
+      assert.nestedPropertyVal(outputRequestBody, 'properties.year.description', inputBody.year);
+
+      const outputResponseBody = _.get(specResult, [api_name, 'post', 'responses', '200', 'content', 'application/json', 'schema']);
       assert.nestedPropertyVal(outputResponseBody, 'properties.exists.type', 'boolean');
       assert.nestedPropertyVal(outputResponseBody, 'properties.exists.description', inputResponse.exists);
     });
@@ -361,8 +369,8 @@ describe('convert spec to generate api doc', () => {
   describe('special spec | has object in object', () => {
     before('set source data', () => {
       specJson = {
-        'GET /test': {
-          method_type: 'GET',
+        'POST /test': {
+          method_type: 'POST',
           request: {
             body: {
               birth: {
@@ -384,24 +392,22 @@ describe('convert spec to generate api doc', () => {
     });
 
     it('should generate correct api doc', () => {
-      const api_name = 'GET /test';
+      const api_name = '/test';
+      assert.exists(specResult[api_name]);
+      assert.exists(specResult[api_name].post);
 
       const {
-        url,
-        method_type,
-        request: { body: outputRequestQuery },
-        response: { success: outputResponseBody }
-      } = specResult[api_name];
-      const {
+        request: { body: inputBody },
         response: { body: inputResponse }
-      } = specJson[api_name];
+      } = specJson['POST /test'];
 
-      assert.equal(method_type, 'get');
-      assert.equal(url, '{base_url}/test');
-      assert.exists(outputRequestQuery.type);
-      assert.nestedPropertyVal(outputRequestQuery, 'properties.birth.type', 'object');
-      assert.nestedPropertyVal(outputRequestQuery, 'properties.birth.properties.year.description', 'object birth_year');
-      assert.nestedPropertyVal(outputRequestQuery, 'properties.birth.properties.year.type', 'object');
+      const outputRequestBody = _.get(specResult, [api_name, 'post', 'requestBody', 'content', 'schema']);
+      assert.strictEqual(outputRequestBody.type, 'object');
+      assert.nestedPropertyVal(outputRequestBody, 'properties.birth.type', 'object');
+      assert.nestedPropertyVal(outputRequestBody, 'properties.birth.properties.year.type', 'object');
+      assert.nestedPropertyVal(outputRequestBody, 'properties.birth.properties.year.description', inputBody.birth.year);
+
+      const outputResponseBody = _.get(specResult, [api_name, 'post', 'responses', '200', 'content', 'application/json', 'schema']);
       assert.nestedPropertyVal(outputResponseBody, 'properties.exists.type', 'boolean');
       assert.nestedPropertyVal(outputResponseBody, 'properties.exists.description', inputResponse.exists);
     });
@@ -414,8 +420,8 @@ describe('convert spec to generate api doc', () => {
   describe('special spec | unknown type 1', () => {
     before('set source data', () => {
       specJson = {
-        'GET /test': {
-          method_type: 'Get',
+        'POST /test': {
+          method_type: 'post',
           request: {
             body: {
               year: 'birdary year'
@@ -432,22 +438,18 @@ describe('convert spec to generate api doc', () => {
     });
 
     it('should generate correct api doc', () => {
-      const api_name = 'GET /test';
+      const api_name = '/test';
+      assert.exists(specResult[api_name]);
+      assert.exists(specResult[api_name].post);
 
       const {
-        url,
-        method_type,
-        request: { body: outputRequestQuery }
-      } = specResult[api_name];
-      const {
-        request: { body: inputQuery }
-      } = specJson[api_name];
+        request: { body: inputBody },
+      } = specJson['POST /test'];
 
-      assert.equal(method_type, 'get');
-      assert.equal(url, '{base_url}/test');
-      assert.exists(outputRequestQuery.type);
-      assert.nestedPropertyVal(outputRequestQuery, 'properties.year.description', inputQuery.year);
-      assert.nestedPropertyVal(outputRequestQuery, 'properties.year.type', 'unknown');
+      const outputRequestBody = _.get(specResult, [api_name, 'post', 'requestBody', 'content', 'schema']);
+      assert.strictEqual(outputRequestBody.type, 'object');
+      assert.nestedPropertyVal(outputRequestBody, 'properties.year.type', 'unknown');
+      assert.nestedPropertyVal(outputRequestBody, 'properties.year.description', inputBody.year);
     });
 
     after('clean file', () => {
@@ -458,8 +460,8 @@ describe('convert spec to generate api doc', () => {
   describe('special spec | unknown type 2', () => {
     before('set source data', () => {
       specJson = {
-        'GET /test': {
-          method_type: 'Get',
+        'POST /test': {
+          method_type: 'post',
           request: {
             body: {
               year: []
@@ -476,19 +478,14 @@ describe('convert spec to generate api doc', () => {
     });
 
     it('should generate correct api doc', () => {
-      const api_name = 'GET /test';
+      const api_name = '/test';
+      assert.exists(specResult[api_name]);
+      assert.exists(specResult[api_name].post);
 
-      const {
-        url,
-        method_type,
-        request: { body: outputRequestQuery }
-      } = specResult[api_name];
-
-      assert.equal(method_type, 'get');
-      assert.equal(url, '{base_url}/test');
-      assert.exists(outputRequestQuery.type);
-      assert.nestedPropertyVal(outputRequestQuery, 'properties.year.description', 'unknown');
-      assert.nestedPropertyVal(outputRequestQuery, 'properties.year.type', 'unknown');
+      const outputRequestBody = _.get(specResult, [api_name, 'post', 'requestBody', 'content', 'schema']);
+      assert.strictEqual(outputRequestBody.type, 'object');
+      assert.nestedPropertyVal(outputRequestBody, 'properties.year.type', 'array');
+      assert.nestedPropertyVal(outputRequestBody, 'properties.year.items.type', 'unknown');
     });
 
     after('clean file', () => {
@@ -518,15 +515,9 @@ describe('convert spec to generate api doc', () => {
     });
 
     it('should generate correct api doc', () => {
-      const api_name = 'GET    /test';
-
-      const {
-        url,
-        method_type
-      } = specResult[api_name];
-
-      assert.strictEqual(method_type, 'get');
-      assert.strictEqual(url, '{base_url}/test');
+      const api_name = '/test';
+      assert.exists(specResult[api_name]);
+      assert.exists(specResult[api_name].get);
     });
 
     after('clean file', () => {
@@ -586,28 +577,37 @@ describe('convert spec to generate api doc', () => {
 
     it('should generate correct api doc', () => {
       {
+        const api_name = '/test1';
+        assert.exists(specResult[api_name]);
+        assert.exists(specResult[api_name].get);
+
         const {
-          url,
-          method_type, summary: outputSummary,
-          request: { query: outputRequestQuery },
-          response: { success: outputResponseBody }
-        } = specResult['GET /test1'];
+          description, summary: outputSummary,
+        } = specResult[api_name].get;
         const {
-          method,
           summary: inputSummary,
-          request: { query: { optional: inputQuery } },
+          note,
+          request: { query: inputQuery },
           response: { body: inputResponse }
         } = specJson['GET /test1'];
 
-        assert.equal(method_type, method);
-        assert.equal(outputSummary, inputSummary);
-        assert.equal(url, '{base_url}/test1');
-        assert.exists(outputRequestQuery.type);
-        assert.nestedPropertyVal(outputRequestQuery, 'properties.email.description', inputQuery.email);
-        assert.nestedPropertyVal(outputRequestQuery, 'properties.email.type', 'string');
-        assert.nestedPropertyVal(outputRequestQuery, 'properties.phone.description', inputQuery.phone);
-        assert.nestedPropertyVal(outputRequestQuery, 'properties.phone.type', 'string');
-        assert.strictEqual(outputRequestQuery.required.length, 0);
+        assert.strictEqual(outputSummary, inputSummary);
+        assert.strictEqual(description, note);
+
+        const outputParameters = _.get(specResult[api_name], ['get', 'parameters']);
+        assert.strictEqual(outputParameters.length, 2);
+        assert.strictEqual(outputParameters[0].name, 'email');
+        assert.strictEqual(outputParameters[0].in, 'query');
+        assert.strictEqual(outputParameters[0].required, false);
+        assert.nestedPropertyVal(outputParameters[0], 'schema.description', inputQuery.optional.email);
+        assert.nestedPropertyVal(outputParameters[0], 'schema.type', 'string');
+        assert.strictEqual(outputParameters[1].name, 'phone');
+        assert.strictEqual(outputParameters[1].in, 'query');
+        assert.strictEqual(outputParameters[1].required, false);
+        assert.nestedPropertyVal(outputParameters[1], 'schema.description', inputQuery.optional.phone);
+        assert.nestedPropertyVal(outputParameters[1], 'schema.type', 'string');
+
+        const outputResponseBody = _.get(specResult[api_name], ['get', 'responses', '200', 'content', 'application/json', 'schema']);
         assert.nestedPropertyVal(outputResponseBody, 'properties.exists.type', 'boolean');
         assert.nestedPropertyVal(outputResponseBody, 'properties.exists.description', inputResponse.exists);
         assert.nestedPropertyVal(outputResponseBody, 'properties.msg.type', 'string');
@@ -615,28 +615,37 @@ describe('convert spec to generate api doc', () => {
       }
 
       {
+        const api_name = '/test2';
+        assert.exists(specResult[api_name]);
+        assert.exists(specResult[api_name].get);
+
         const {
-          url,
-          method_type, summary: outputSummary,
-          request: { query: outputRequestQuery },
-          response: { success: outputResponseBody }
-        } = specResult['GET /test2'];
+          description, summary: outputSummary,
+        } = specResult[api_name].get;
         const {
-          method,
           summary: inputSummary,
-          request: { query: { required: inputQuery } },
+          note,
+          request: { query: inputQuery },
           response: { body: inputResponse }
         } = specJson['GET /test2'];
 
-        assert.equal(method_type, method);
-        assert.equal(url, '{base_url}/test2');
-        assert.equal(outputSummary, inputSummary);
-        assert.exists(outputRequestQuery.type);
-        assert.nestedPropertyVal(outputRequestQuery, 'properties.email.description', inputQuery.email);
-        assert.nestedPropertyVal(outputRequestQuery, 'properties.email.type', 'string');
-        assert.nestedPropertyVal(outputRequestQuery, 'properties.phone.description', inputQuery.phone);
-        assert.nestedPropertyVal(outputRequestQuery, 'properties.phone.type', 'string');
-        assert.sameMembers(outputRequestQuery.required, ['email', 'phone']);
+        assert.strictEqual(outputSummary, inputSummary);
+        assert.strictEqual(description, note);
+
+        const outputParameters = _.get(specResult[api_name], ['get', 'parameters']);
+        assert.strictEqual(outputParameters.length, 2);
+        assert.strictEqual(outputParameters[0].name, 'email');
+        assert.strictEqual(outputParameters[0].in, 'query');
+        assert.strictEqual(outputParameters[0].required, true);
+        assert.nestedPropertyVal(outputParameters[0], 'schema.description', inputQuery.required.email);
+        assert.nestedPropertyVal(outputParameters[0], 'schema.type', 'string');
+        assert.strictEqual(outputParameters[1].name, 'phone');
+        assert.strictEqual(outputParameters[1].in, 'query');
+        assert.strictEqual(outputParameters[1].required, true);
+        assert.nestedPropertyVal(outputParameters[1], 'schema.description', inputQuery.required.phone);
+        assert.nestedPropertyVal(outputParameters[1], 'schema.type', 'string');
+
+        const outputResponseBody = _.get(specResult[api_name], ['get', 'responses', '200', 'content', 'application/json', 'schema']);
         assert.nestedPropertyVal(outputResponseBody, 'properties.exists.type', 'boolean');
         assert.nestedPropertyVal(outputResponseBody, 'properties.exists.description', inputResponse.exists);
         assert.nestedPropertyVal(outputResponseBody, 'properties.msg.type', 'string');
@@ -680,5 +689,62 @@ describe('convert spec to generate api doc', () => {
     it('should generate correct api doc', () => {
       assert.strictEqual(specResult, 'SpecConvert::run: postTest fail!err_msg: api_name is not supported');
     });
+  });
+
+  describe('special spec | request && response undefined', () => {
+    before('set source data', () => {
+      specJson = {
+        'GET /test': {
+          method: 'get',
+        }
+      };
+    });
+
+    before('convert normal spec to api doc', () => {
+      specResult = Convert.getInstance().run(specJson, 'test/temp/special');
+    });
+
+    it('should generate correct api doc', () => {
+      const api_name = '/test';
+      assert.exists(specResult[api_name]);
+      assert.exists(specResult[api_name].get);
+      const description = _.get(specResult, [api_name, 'get', 'responses', '200', 'description']);
+      assert.strictEqual(description, 'unknown');
+      const schema = _.get(specResult, [api_name, 'get', 'responses', '200', 'content', 'application/json', 'schema']);
+      assert.exists(schema);
+    });
+
+    // TODO, need done
+    after('clean file', () => {
+      fs.unlinkSync('test/temp/special_api_doc.json');
+    })
+  });
+
+  describe('normal spec | path', () => {
+    before('set source data', () => {
+      specJson = {
+        'POST /test/:userID': {
+          method_type: 'Post',
+        }
+      };
+    });
+
+    before('convert normal spec to api doc', () => {
+      specResult = Convert.getInstance().run(specJson, 'test/temp/normal_path');
+    });
+
+    it('should generate correct api doc', () => {
+      const api_name = '/test/:userID';
+      assert.exists(specResult[api_name]);
+      assert.exists(specResult[api_name].post);
+      assert.nestedPropertyVal(specResult[api_name], 'parameters.length', 1);
+      assert.nestedPropertyVal(specResult[api_name], 'parameters[0].in', 'path');
+      assert.nestedPropertyVal(specResult[api_name], 'parameters[0].name', 'userID');
+      assert.nestedPropertyVal(specResult[api_name], 'parameters[0].required', true);
+    });
+
+    after('clean file', () => {
+      fs.unlinkSync('test/temp/normal_path_api_doc.json');
+    })
   });
 });

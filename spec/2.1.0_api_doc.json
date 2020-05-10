@@ -11,70 +11,73 @@
     "/partners": {
       "get": {
         "summary": "retrives a list of partners",
-        "description": "",
-        "request": {},
         "responses": {
-          "body": {
-            "type": "object",
-            "properties": {
-              "0": {
-                "type": "object",
-                "properties": {
-                  "_id": {
-                    "description": "ID of partner",
-                    "type": "unknown"
-                  },
-                  "name": {
-                    "description": "name of partner",
-                    "type": "unknown"
-                  },
-                  "heroImageURL": {
-                    "description": "URL to partner hero image",
-                    "type": "unknown"
-                  },
-                  "partnerURL": {
-                    "description": "URL to partner homepage",
-                    "type": "unknown"
-                  },
-                  "logoURL": {
-                    "description": "URL to partner logo",
-                    "type": "unknown"
-                  },
-                  "wordmarkURL": {
-                    "description": "URL to partner wordmark",
-                    "type": "unknown"
-                  },
-                  "partnerTagline": {
-                    "description": "partner tagline",
-                    "type": "unknown"
-                  },
-                  "jointTagline": {
-                    "description": "tagline tailored to August",
-                    "type": "unknown"
-                  },
-                  "partnerDescription": {
-                    "description": "company description",
-                    "type": "unknown"
-                  },
-                  "jointDescription": {
-                    "description": "service offering description",
-                    "type": "unknown"
-                  },
-                  "promotion": {
-                    "description": "available partnership promotions",
-                    "type": "unknown"
-                  },
-                  "locations": {
-                    "description": "where the service is provided",
-                    "type": "unknown"
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "_id": {
+                        "description": "ID of partner",
+                        "type": "string"
+                      },
+                      "name": {
+                        "description": "name of partner",
+                        "type": "string"
+                      },
+                      "heroImageURL": {
+                        "description": "URL to partner hero image",
+                        "type": "string"
+                      },
+                      "partnerURL": {
+                        "description": "URL to partner homepage",
+                        "type": "string"
+                      },
+                      "logoURL": {
+                        "description": "URL to partner logo",
+                        "type": "string"
+                      },
+                      "wordmarkURL": {
+                        "description": "URL to partner wordmark",
+                        "type": "string"
+                      },
+                      "partnerTagline": {
+                        "description": "partner tagline",
+                        "type": "string"
+                      },
+                      "jointTagline": {
+                        "description": "tagline tailored to August",
+                        "type": "string"
+                      },
+                      "partnerDescription": {
+                        "description": "company description",
+                        "type": "string"
+                      },
+                      "jointDescription": {
+                        "description": "service offering description",
+                        "type": "string"
+                      },
+                      "promotion": {
+                        "description": "available partnership promotions",
+                        "type": "string"
+                      },
+                      "locations": {
+                        "description": "where the service is provided",
+                        "type": "string"
+                      }
+                    }
                   }
                 }
               }
-            },
-            "required": []
+            }
           }
         }
-      }
+      },
+      "parameters": []
     }
   }
 }

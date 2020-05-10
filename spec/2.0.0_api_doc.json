@@ -12,402 +12,443 @@
       "get": {
         "summary": "Check existence of a user in the system",
         "description": "/! DEPRECATED: 410 GoneError",
-        "request": {},
-        "responses": {}
-      }
+        "responses": {
+          "200": {
+            "description": "unknown",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
     },
     "/doorbells/:doorbellID": {
       "get": {
         "summary": "Get information about an existing doorbell and format settings",
         "description": "Returns resource not found if doorbellID does not exist.",
-        "request": {},
         "responses": {
-          "body": {
-            "type": "object",
-            "properties": {
-              "HouseID": {
-                "description": "String",
-                "type": "string"
-              },
-              "HouseName": {
-                "description": "String",
-                "type": "string"
-              },
-              "LockID": {
-                "description": "String",
-                "type": "string"
-              },
-              "chimes": {
-                "description": "Array",
-                "type": "array"
-              },
-              "doorbellID": {
-                "description": "String",
-                "type": "string"
-              },
-              "firmwareVersion": {
-                "description": "String",
-                "type": "string"
-              },
-              "installUserID": {
-                "description": "String",
-                "type": "string"
-              },
-              "invitations": {
-                "description": "Array",
-                "type": "array"
-              },
-              "messagingProtocol": {
-                "description": "String",
-                "type": "string"
-              },
-              "name": {
-                "description": "String",
-                "type": "string"
-              },
-              "pubsubChannel": {
-                "description": "String",
-                "type": "string"
-              },
-              "recentImage": {
-                "description": "Object",
-                "type": "object"
-              },
-              "secChipCertSerial": {
-                "description": "String",
-                "type": "string"
-              },
-              "serialNumber": {
-                "description": "String",
-                "type": "string"
-              },
-              "settings": {
-                "type": "object",
-                "properties": {
-                  "buttonpush_notifications": {
-                    "description": "Boolean",
-                    "type": "boolean"
-                  },
-                  "buttonpush_notifications_partners": {
-                    "description": "Boolean",
-                    "type": "boolean"
-                  },
-                  "doorbellChime": {
-                    "description": "Boolean",
-                    "type": "boolean"
-                  },
-                  "flashBrightness": {
-                    "description": "String",
-                    "type": "string"
-                  },
-                  "indoorChimeEnabled": {
-                    "description": "Boolean",
-                    "type": "boolean"
-                  },
-                  "irConfiguration": {
-                    "description": "Number",
-                    "type": "number"
-                  },
-                  "motion_notifications": {
-                    "description": "Boolean",
-                    "type": "boolean"
-                  },
-                  "motionSensitivity": {
-                    "description": "Number",
-                    "type": "number"
-                  },
-                  "nightVision": {
-                    "description": "String",
-                    "type": "string"
-                  },
-                  "nightVisionBrightness": {
-                    "description": "String",
-                    "type": "string"
-                  },
-                  "notify_when_offline": {
-                    "description": "Boolean",
-                    "type": "boolean"
-                  },
-                  "pirEnabled": {
-                    "description": "Boolean",
-                    "type": "boolean"
-                  },
-                  "pirSensitivity": {
-                    "description": "Number",
-                    "type": "number"
-                  },
-                  "powerProfilePreset": {
-                    "description": "String",
-                    "type": "string"
-                  },
-                  "ringSoundEnabled": {
-                    "description": "Boolean",
-                    "type": "boolean"
-                  },
-                  "speakerVolume": {
-                    "description": "Number",
-                    "type": "number"
-                  },
-                  "videoResolution": {
-                    "description": "String",
-                    "type": "string"
-                  }
-                }
-              },
-              "status": {
-                "description": "String",
-                "type": "string"
-              },
-              "type": {
-                "description": "String",
-                "type": "string"
-              },
-              "users": {
-                "type": "object",
-                "properties": {
-                  "someUserID": {
-                    "type": "object",
-                    "properties": {
-                      "FirstName": {
-                        "description": "String",
-                        "type": "string"
-                      },
-                      "LastName": {
-                        "description": "String",
-                        "type": "string"
-                      },
-                      "UserType": {
-                        "description": "String",
-                        "type": "string"
-                      },
-                      "identifiers": {
-                        "description": "Array of Strings",
-                        "type": "array"
-                      },
-                      "imageInfo": {
-                        "description": "Object",
-                        "type": "object"
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "HouseID": {
+                      "description": "String",
+                      "type": "string"
+                    },
+                    "HouseName": {
+                      "description": "String",
+                      "type": "string"
+                    },
+                    "LockID": {
+                      "description": "String",
+                      "type": "string"
+                    },
+                    "chimes": {
+                      "description": "Array",
+                      "type": "array"
+                    },
+                    "doorbellID": {
+                      "description": "String",
+                      "type": "string"
+                    },
+                    "firmwareVersion": {
+                      "description": "String",
+                      "type": "string"
+                    },
+                    "installUserID": {
+                      "description": "String",
+                      "type": "string"
+                    },
+                    "invitations": {
+                      "description": "Array",
+                      "type": "array"
+                    },
+                    "messagingProtocol": {
+                      "description": "String",
+                      "type": "string"
+                    },
+                    "name": {
+                      "description": "String",
+                      "type": "string"
+                    },
+                    "pubsubChannel": {
+                      "description": "String",
+                      "type": "string"
+                    },
+                    "recentImage": {
+                      "description": "Object",
+                      "type": "object"
+                    },
+                    "secChipCertSerial": {
+                      "description": "String",
+                      "type": "string"
+                    },
+                    "serialNumber": {
+                      "description": "String",
+                      "type": "string"
+                    },
+                    "settings": {
+                      "type": "object",
+                      "properties": {
+                        "buttonpush_notifications": {
+                          "description": "Boolean",
+                          "type": "boolean"
+                        },
+                        "buttonpush_notifications_partners": {
+                          "description": "Boolean",
+                          "type": "boolean"
+                        },
+                        "doorbellChime": {
+                          "description": "Boolean",
+                          "type": "boolean"
+                        },
+                        "flashBrightness": {
+                          "description": "String",
+                          "type": "string"
+                        },
+                        "indoorChimeEnabled": {
+                          "description": "Boolean",
+                          "type": "boolean"
+                        },
+                        "irConfiguration": {
+                          "description": "Number",
+                          "type": "number"
+                        },
+                        "motion_notifications": {
+                          "description": "Boolean",
+                          "type": "boolean"
+                        },
+                        "motionSensitivity": {
+                          "description": "Number",
+                          "type": "number"
+                        },
+                        "nightVision": {
+                          "description": "String",
+                          "type": "string"
+                        },
+                        "nightVisionBrightness": {
+                          "description": "String",
+                          "type": "string"
+                        },
+                        "notify_when_offline": {
+                          "description": "Boolean",
+                          "type": "boolean"
+                        },
+                        "pirEnabled": {
+                          "description": "Boolean",
+                          "type": "boolean"
+                        },
+                        "pirSensitivity": {
+                          "description": "Number",
+                          "type": "number"
+                        },
+                        "powerProfilePreset": {
+                          "description": "String",
+                          "type": "string"
+                        },
+                        "ringSoundEnabled": {
+                          "description": "Boolean",
+                          "type": "boolean"
+                        },
+                        "speakerVolume": {
+                          "description": "Number",
+                          "type": "number"
+                        },
+                        "videoResolution": {
+                          "description": "String",
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "status": {
+                      "description": "String",
+                      "type": "string"
+                    },
+                    "type": {
+                      "description": "String",
+                      "type": "string"
+                    },
+                    "users": {
+                      "type": "object",
+                      "properties": {
+                        "someUserID": {
+                          "type": "object",
+                          "properties": {
+                            "FirstName": {
+                              "description": "String",
+                              "type": "string"
+                            },
+                            "LastName": {
+                              "description": "String",
+                              "type": "string"
+                            },
+                            "UserType": {
+                              "description": "String",
+                              "type": "string"
+                            },
+                            "identifiers": {
+                              "description": "Array of Strings",
+                              "type": "array"
+                            },
+                            "imageInfo": {
+                              "description": "Object",
+                              "type": "object"
+                            }
+                          }
+                        }
                       }
                     }
                   }
                 }
               }
-            },
-            "required": []
+            }
           }
         }
-      }
+      },
+      "parameters": [
+        {
+          "name": "doorbellID",
+          "in": "path",
+          "required": true,
+          "schema": {}
+        }
+      ]
     },
     "/doorbells/:doorbellID/settings/doorbell": {
       "put": {
         "summary": "Update doorbell settings that are translated/transformed from client doorbell settings to validated doorbell settings",
         "description": "Able to update individual fields\n",
-        "request": {},
-        "responses": {}
-      }
+        "responses": {
+          "200": {
+            "description": "unknown",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "name": "doorbellID",
+          "in": "path",
+          "required": true,
+          "schema": {}
+        }
+      ]
     },
     "/locks/:lockID": {
       "get": {
         "summary": "Get information about an existing lock",
         "description": "Returns `resource not found` if lockID does not exist and `not authorized` if the user is not a user of the lock.The major difference between this version of the endpoint and the 0.0.1 version is that the type of the`currentFirmwareVersion` field has changed from a string to an object in this version.",
-        "request": {},
         "responses": {
-          "body": {
-            "type": "object",
-            "properties": {
-              "LockName": {
-                "description": "Text string",
-                "type": "unknown"
-              },
-              "Type": {
-                "description": "lock type",
-                "type": "unknown"
-              },
-              "Updated": {
-                "description": "date",
-                "type": "unknown"
-              },
-              "Created": {
-                "description": "date",
-                "type": "unknown"
-              },
-              "LockID": {
-                "description": "unique ID of lock",
-                "type": "unknown"
-              },
-              "HouseID": {
-                "description": "id of house to which lock belongs",
-                "type": "unknown"
-              },
-              "currentFirmwareVersion": {
-                "description": "Object containing current firmware versions",
-                "type": "object"
-              },
-              "[users]": {
-                "type": "object",
-                "properties": {
-                  "userid": {
-                    "description": "user type",
-                    "type": "unknown"
-                  },
-                  "useridN": {
-                    "description": "user type",
-                    "type": "unknown"
-                  }
-                }
-              },
-              "[ruleHash]": {
-                "type": "object",
-                "properties": {
-                  "ruleID": {
-                    "type": "object",
-                    "properties": {
-                      "startTime": {
-                        "description": "start time in ISO 8601 format",
-                        "type": "unknown"
-                      },
-                      "duration": {
-                        "description": "duration",
-                        "type": "unknown"
-                      },
-                      "schedule": {
-                        "description": "Rule schedule in iCalendar data format (RFC 5545)",
-                        "type": "unknown"
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "LockName": {
+                      "description": "Text string",
+                      "type": "string"
+                    },
+                    "Type": {
+                      "description": "lock type",
+                      "type": "string"
+                    },
+                    "Updated": {
+                      "description": "date",
+                      "type": "string"
+                    },
+                    "Created": {
+                      "description": "date",
+                      "type": "string"
+                    },
+                    "LockID": {
+                      "description": "unique ID of lock",
+                      "type": "string"
+                    },
+                    "HouseID": {
+                      "description": "id of house to which lock belongs",
+                      "type": "string"
+                    },
+                    "currentFirmwareVersion": {
+                      "description": "Object containing current firmware versions",
+                      "type": "object"
+                    },
+                    "[users]": {
+                      "type": "object",
+                      "properties": {
+                        "userid": {
+                          "description": "user type",
+                          "type": "string"
+                        },
+                        "useridN": {
+                          "description": "user type",
+                          "type": "string"
+                        }
                       }
+                    },
+                    "[ruleHash]": {
+                      "type": "object",
+                      "properties": {
+                        "ruleID": {
+                          "type": "object",
+                          "properties": {
+                            "startTime": {
+                              "description": "start time in ISO 8601 format",
+                              "type": "string"
+                            },
+                            "duration": {
+                              "description": "duration",
+                              "type": "string"
+                            },
+                            "schedule": {
+                              "description": "Rule schedule in iCalendar data format (RFC 5545)",
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "homeKitUniqueIdentifier": {
+                      "description": "id of homeKit to which lock belongs to",
+                      "type": "string"
+                    },
+                    "[hostLockInfo]": {
+                      "description": "Information about the host lock",
+                      "type": "string"
+                    },
+                    "[hostID]": {
+                      "description": "Host lock's ID",
+                      "type": "string"
+                    },
+                    "[hostHardwareLockInfo]": {
+                      "description": "Information about the host hardware",
+                      "type": "string"
+                    },
+                    "[hostHardwareID]": {
+                      "description": "Host hardware's ID",
+                      "type": "string"
                     }
                   }
                 }
-              },
-              "homeKitUniqueIdentifier": {
-                "description": "id of homeKit to which lock belongs to",
-                "type": "unknown"
-              },
-              "[hostLockInfo]": {
-                "description": "Information about the host lock",
-                "type": "unknown"
-              },
-              "[hostID]": {
-                "description": "Host lock's ID",
-                "type": "unknown"
-              },
-              "[hostHardwareLockInfo]": {
-                "description": "Information about the host hardware",
-                "type": "unknown"
-              },
-              "[hostHardwareID]": {
-                "description": "Host hardware's ID",
-                "type": "unknown"
               }
-            },
-            "required": []
+            }
           }
         }
-      }
+      },
+      "parameters": [
+        {
+          "name": "lockID",
+          "in": "path",
+          "required": true,
+          "schema": {}
+        }
+      ]
     },
     "/smartalert/rules": {
       "post": {
         "summary": "Creates smart alert with optional schedule",
         "description": "The user to be notified by this alert is the calling user",
-        "request": {
-          "body": {
-            "type": "object",
-            "properties": {
-              "deviceID": {
-                "description": "Id of device associated with smart alert",
-                "type": "unknown"
-              },
-              "deviceType": {
-                "description": "Type of device to associate smart alert with",
-                "type": "unknown"
-              },
-              "otherUserID": {
-                "description": "User id or system user",
-                "type": "unknown"
-              },
-              "schedule": {
-                "description": "optional ICAL schedule",
-                "type": "unknown"
+        "requestBody": {
+          "content": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "deviceID": {
+                  "description": "Id of device associated with smart alert",
+                  "type": "string"
+                },
+                "deviceType": {
+                  "description": "Type of device to associate smart alert with",
+                  "type": "string"
+                },
+                "otherUserID": {
+                  "description": "User id or system user",
+                  "type": "string"
+                },
+                "schedule": {
+                  "description": "optional ICAL schedule",
+                  "type": "string"
+                }
               }
-            },
-            "required": []
+            }
           }
         },
         "responses": {
-          "body": {
-            "type": "object",
-            "properties": {
-              "ruleID": {
-                "description": "string",
-                "type": "string"
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ruleID": {
+                      "description": "string",
+                      "type": "string"
+                    }
+                  }
+                }
               }
-            },
-            "required": []
+            }
           }
         }
       },
+      "parameters": [],
       "get": {
         "summary": "Get smart alert rule per given query",
         "description": "When no query provided end point returns all smart alert rules associated with calling user",
-        "request": {
-          "query": {
-            "type": "object",
-            "properties": {
-              "deviceID": {
-                "description": "Id of device to return smart alert rules for",
-                "type": "unknown"
-              }
-            },
-            "required": []
+        "parameters": [
+          {
+            "name": "deviceID",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "description": "Id of device to return smart alert rules for",
+              "type": "string"
+            }
           }
-        },
+        ],
         "responses": {
-          "body": {
-            "type": "object",
-            "properties": {
-              "0": {
-                "type": "object",
-                "properties": {
-                  "ruleID": {
-                    "description": "Id of first rule",
-                    "type": "unknown"
-                  },
-                  "notifyUserID": {
-                    "description": "Id of user to be notified with smart alert",
-                    "type": "unknown"
-                  },
-                  "otherUserID": {
-                    "description": "User id or system user",
-                    "type": "unknown"
-                  },
-                  "schedule": {
-                    "description": "optional ICAL schedule; may be omitted if not given",
-                    "type": "unknown"
-                  }
-                }
-              },
-              "1": {
-                "type": "object",
-                "properties": {
-                  "ruleID": {
-                    "description": "Id of second rule",
-                    "type": "unknown"
-                  },
-                  "notifyUserID": {
-                    "description": "Id of user to be notified with smart alert",
-                    "type": "unknown"
-                  },
-                  "otherUserID": {
-                    "description": "User id or system user",
-                    "type": "unknown"
-                  },
-                  "schedule": {
-                    "description": "optional ICAL schedule; may be omitted if not given",
-                    "type": "unknown"
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "ruleID": {
+                        "description": "Id of first rule",
+                        "type": "string"
+                      },
+                      "notifyUserID": {
+                        "description": "Id of user to be notified with smart alert",
+                        "type": "string"
+                      },
+                      "otherUserID": {
+                        "description": "User id or system user",
+                        "type": "string"
+                      },
+                      "schedule": {
+                        "description": "optional ICAL schedule; may be omitted if not given",
+                        "type": "string"
+                      }
+                    }
                   }
                 }
               }
-            },
-            "required": []
+            }
           }
         }
       }
@@ -416,56 +457,82 @@
       "get": {
         "summary": "Returns smart alert rule per given rule id",
         "description": "notifyUserID is always calling user",
-        "request": {},
         "responses": {
-          "body": {
-            "type": "object",
-            "properties": {
-              "deviceID": {
-                "description": "Id of device associated with smart alert",
-                "type": "unknown"
-              },
-              "devceType": {
-                "description": "Type of device assocaited with smart alert",
-                "type": "unknown"
-              },
-              "notifyUserID": {
-                "description": "Id of user to be notified with smart alert",
-                "type": "unknown"
-              },
-              "otherUserID": {
-                "description": "User id or system user",
-                "type": "unknown"
-              },
-              "schedule": {
-                "description": "optional ICAL schedule; may be omitted if not given",
-                "type": "unknown"
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "deviceID": {
+                      "description": "Id of device associated with smart alert",
+                      "type": "string"
+                    },
+                    "devceType": {
+                      "description": "Type of device assocaited with smart alert",
+                      "type": "string"
+                    },
+                    "notifyUserID": {
+                      "description": "Id of user to be notified with smart alert",
+                      "type": "string"
+                    },
+                    "otherUserID": {
+                      "description": "User id or system user",
+                      "type": "string"
+                    },
+                    "schedule": {
+                      "description": "optional ICAL schedule; may be omitted if not given",
+                      "type": "string"
+                    }
+                  }
+                }
               }
-            },
-            "required": []
+            }
           }
         }
       },
+      "parameters": [
+        {
+          "name": "ruleID",
+          "in": "path",
+          "required": true,
+          "schema": {}
+        }
+      ],
       "delete": {
         "summary": "Deletes smart alert rule per given rule id",
         "description": "Marks rule as deleted; document is kept in db",
-        "request": {},
-        "responses": {}
+        "responses": {
+          "200": {
+            "description": "unknown",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
       },
       "put": {
         "summary": "Updates schedule of smart alert rule per given rule id",
         "description": "If schedule is not in body, schedule will be deleted in db",
-        "request": {},
         "responses": {
-          "body": {
-            "type": "object",
-            "properties": {
-              "schedule": {
-                "description": "optional ICAL schedule; may be omitted if not given",
-                "type": "unknown"
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "schedule": {
+                      "description": "optional ICAL schedule; may be omitted if not given",
+                      "type": "string"
+                    }
+                  }
+                }
               }
-            },
-            "required": []
+            }
           }
         }
       }
@@ -473,185 +540,201 @@
     "/partners": {
       "get": {
         "summary": "retrives a list of service offerings from partners that integrate with August",
-        "description": "",
-        "request": {},
         "responses": {
-          "body": {
-            "type": "object",
-            "properties": {
-              "0": {
-                "type": "object",
-                "properties": {
-                  "_id": {
-                    "description": "ID of partner",
-                    "type": "unknown"
-                  },
-                  "name": {
-                    "description": "name of partner",
-                    "type": "unknown"
-                  },
-                  "heroImageURL": {
-                    "description": "URL to partner hero image",
-                    "type": "unknown"
-                  },
-                  "partnerURL": {
-                    "description": "URL to partner homepage",
-                    "type": "unknown"
-                  },
-                  "logoURL": {
-                    "description": "URL to partner logo",
-                    "type": "unknown"
-                  },
-                  "wordmarkURL": {
-                    "description": "URL to partner wordmark",
-                    "type": "unknown"
-                  },
-                  "partnerTagline": {
-                    "description": "partner tagline",
-                    "type": "unknown"
-                  },
-                  "jointTagline": {
-                    "description": "tagline tailored to August",
-                    "type": "unknown"
-                  },
-                  "partnerDescription": {
-                    "description": "company description",
-                    "type": "unknown"
-                  },
-                  "jointDescription": {
-                    "description": "service offering description",
-                    "type": "unknown"
-                  },
-                  "promotion": {
-                    "description": "available partnership promotions",
-                    "type": "unknown"
-                  },
-                  "locations": {
-                    "description": "where the service is provided",
-                    "type": "unknown"
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "_id": {
+                        "description": "ID of partner",
+                        "type": "string"
+                      },
+                      "name": {
+                        "description": "name of partner",
+                        "type": "string"
+                      },
+                      "heroImageURL": {
+                        "description": "URL to partner hero image",
+                        "type": "string"
+                      },
+                      "partnerURL": {
+                        "description": "URL to partner homepage",
+                        "type": "string"
+                      },
+                      "logoURL": {
+                        "description": "URL to partner logo",
+                        "type": "string"
+                      },
+                      "wordmarkURL": {
+                        "description": "URL to partner wordmark",
+                        "type": "string"
+                      },
+                      "partnerTagline": {
+                        "description": "partner tagline",
+                        "type": "string"
+                      },
+                      "jointTagline": {
+                        "description": "tagline tailored to August",
+                        "type": "string"
+                      },
+                      "partnerDescription": {
+                        "description": "company description",
+                        "type": "string"
+                      },
+                      "jointDescription": {
+                        "description": "service offering description",
+                        "type": "string"
+                      },
+                      "promotion": {
+                        "description": "available partnership promotions",
+                        "type": "string"
+                      },
+                      "locations": {
+                        "description": "where the service is provided",
+                        "type": "string"
+                      }
+                    }
                   }
                 }
               }
-            },
-            "required": []
+            }
           }
         }
-      }
+      },
+      "parameters": []
     },
     "/locks": {
       "post": {
         "summary": "Adds a lock to a house.",
         "description": "Requestor must provide the serial number of the lock and a list of all afvertising locks.If LockID or Name are not present, a Bad Request error is returned.If the user is not a manager or superuser of the house, a Not Authorized error is returned.If the serial number does not match any of the advertising locks, a Not Authorized error is returned.If hostHardwareID is provided but does not exist, 404 ResourceNotFound",
-        "request": {
-          "body": {
-            "type": "object",
-            "properties": {
-              "houseID": {
-                "description": "house id of the house where we wants to add the lock",
-                "type": "unknown"
-              },
-              "serialNumber": {
-                "description": "serial number of lock [see notes]",
-                "type": "unknown"
-              },
-              "LockIDs": {
-                "description": "unique identifiers of advertising locks [see notes]",
-                "type": "unknown"
-              },
-              "LockName": {
-                "description": "name of lock",
-                "type": "unknown"
-              },
-              "hostHardwareID": {
-                "description": "Host hardware's ID",
-                "type": "unknown"
+        "requestBody": {
+          "content": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "houseID": {
+                  "description": "house id of the house where we wants to add the lock",
+                  "type": "string"
+                },
+                "serialNumber": {
+                  "description": "serial number of lock [see notes]",
+                  "type": "string"
+                },
+                "LockIDs": {
+                  "description": "unique identifiers of advertising locks [see notes]",
+                  "type": "string"
+                },
+                "LockName": {
+                  "description": "name of lock",
+                  "type": "string"
+                },
+                "hostHardwareID": {
+                  "description": "Host hardware's ID",
+                  "type": "string"
+                }
               }
-            },
-            "required": [
-              "houseID",
-              "serialNumber",
-              "LockIDs",
-              "LockName"
-            ]
-          }
+            }
+          },
+          "required": [
+            "houseID",
+            "serialNumber",
+            "LockIDs",
+            "LockName"
+          ]
         },
         "responses": {
-          "body": {
-            "type": "object",
-            "properties": {
-              "LockID": {
-                "description": "<unique ID of lock>",
-                "type": "unknown"
-              },
-              "LockName": {
-                "description": "<Text string>",
-                "type": "unknown"
-              },
-              "Type": {
-                "description": "Integer",
-                "type": "unknown"
-              },
-              "Updated": {
-                "description": "YYYY-MM-DDTHH:MM:SS.mmmZ",
-                "type": "unknown"
-              },
-              "Created": {
-                "description": "YYYY-MM-DDTHH:MM:SS.mmmZ",
-                "type": "unknown"
-              },
-              "HouseID": {
-                "description": "ID of house to which lock was added",
-                "type": "unknown"
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "LockID": {
+                      "description": "<unique ID of lock>",
+                      "type": "string"
+                    },
+                    "LockName": {
+                      "description": "<Text string>",
+                      "type": "string"
+                    },
+                    "Type": {
+                      "description": "Integer",
+                      "type": "string"
+                    },
+                    "Updated": {
+                      "description": "YYYY-MM-DDTHH:MM:SS.mmmZ",
+                      "type": "string"
+                    },
+                    "Created": {
+                      "description": "YYYY-MM-DDTHH:MM:SS.mmmZ",
+                      "type": "string"
+                    },
+                    "HouseID": {
+                      "description": "ID of house to which lock was added",
+                      "type": "string"
+                    }
+                  }
+                }
               }
-            },
-            "required": []
+            }
           }
         }
-      }
+      },
+      "parameters": []
     },
     "/subscriptions": {
       "get": {
         "summary": "Returns subscriptions the calling user has access to",
         "description": "Returns house-level subscription.",
-        "request": {},
         "responses": {
-          "body": {
-            "type": "object",
-            "properties": {
-              "0": {
-                "type": "object",
-                "properties": {
-                  "subscriptionID": {
-                    "description": "subscription ID",
-                    "type": "unknown"
-                  },
-                  "userID": {
-                    "description": "subscription manager user ID",
-                    "type": "unknown"
-                  },
-                  "type": {
-                    "description": "type of subscription",
-                    "type": "unknown"
-                  },
-                  "status": {
-                    "description": "trial/paid/invalid",
-                    "type": "unknown"
-                  },
-                  "deviceType": {
-                    "description": "device",
-                    "type": "unknown"
-                  },
-                  "deviceID": {
-                    "description": "device ID",
-                    "type": "unknown"
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "subscriptionID": {
+                        "description": "subscription ID",
+                        "type": "string"
+                      },
+                      "userID": {
+                        "description": "subscription manager user ID",
+                        "type": "string"
+                      },
+                      "type": {
+                        "description": "type of subscription",
+                        "type": "string"
+                      },
+                      "status": {
+                        "description": "trial/paid/invalid",
+                        "type": "string"
+                      },
+                      "deviceType": {
+                        "description": "device",
+                        "type": "string"
+                      },
+                      "deviceID": {
+                        "description": "device ID",
+                        "type": "string"
+                      }
+                    }
                   }
                 }
               }
-            },
-            "required": []
+            }
           }
         }
-      }
+      },
+      "parameters": []
     }
   }
 }

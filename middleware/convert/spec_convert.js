@@ -28,8 +28,12 @@ class SpecConvert extends Base.factory() {
       return 'string';
     }
 
-    if (prefix_type === 'number' || lower_case_description.indexOf('number:') !== -1 || lower_case_description === 'int') {
-      return 'number'
+    if (prefix_type === 'number' || lower_case_description.indexOf('number:') !== -1) {
+      return 'number';
+    }
+
+    if (lower_case_description === 'int') {
+      return 'integer';
     }
 
     if (prefix_type === 'object') {
@@ -37,14 +41,16 @@ class SpecConvert extends Base.factory() {
     }
 
     if (lower_case_description.substr(0, 5) === 'array') {
-      return 'array'
+      return 'array';
     }
 
-    if (lower_case_description.substr(0, 7) === 'boolean') {
+    // A tricky way for match boolean && <boolean> &&
+    // other cases when first ten characters have 'boolean'
+    if (lower_case_description.substr(0, 10).indexOf('boolean') !== -1) {
       return 'boolean'
     }
 
-    return 'unknown';
+    return 'string';// to temp
   }
 
   /**
@@ -69,21 +75,30 @@ class SpecConvert extends Base.factory() {
               description: schema[param_name],
               type: this._parseType(schema[param_name])
             };
-            if (!isRequired && schema[param_name].indexOf('[required]') !== -1) {
+            if (!isRequired && schema[param_name].indexOf('required') !== -1) {
               result.push(param_name);
             }
             break;
           case 'object':
             if (Array.isArray(schema[param_name])) {
               // default spec format is as the same as api_spec['3.0,0'].xxx.events
-              const convert_child_schema = this._parseDetailSchema(schema[param_name][0]);
-              convert_schema[param_name] = {
-                type: 'array',
-                items: {
-                  type: 'object',
-                  properties: convert_child_schema.convert_schema
+              if (schema[param_name].length === 0) {
+                convert_schema[param_name] = {
+                  type: 'array',
+                  items: {
+                    type: 'unknown'
+                  }
                 }
-              };
+              } else {
+                const convert_child_schema = this._parseDetailSchema(schema[param_name][0]);
+                convert_schema[param_name] = {
+                  type: 'array',
+                  items: {
+                    type: 'object',
+                    properties: convert_child_schema.convert_schema
+                  }
+                };
+              }
             } else {
               const convert_child_schema = this._parseDetailSchema(schema[param_name]);
               convert_schema[param_name] = {
@@ -121,20 +136,26 @@ class SpecConvert extends Base.factory() {
    * @param {object} spec_schema - old_format_doc[api_name].request.body
    * @return {object} convert_query - api_doc[api_name].request.body
    */
-  _parseBodySchema(spec_schema) {
+  _parseSpecSchema(spec_schema) {
     // filter spec_query is string
     if (typeof spec_schema !== 'object') return {};
     let required_param_arr = [];
 
     if (Array.isArray(spec_schema)) {
-      const { convert_schema: new_detail_schema } = this._parseDetailSchema(spec_schema[0]);
       const new_schema = {
         type: 'array',
-        items: {
+      };
+      if (spec_schema.length === 0) {
+        new_schema.items = {
+          type: 'unknown'
+        }
+      } else {
+        const { convert_schema: new_detail_schema } = this._parseDetailSchema(spec_schema[0]);
+        new_schema.items = {
           type: 'object',
           properties: new_detail_schema
-        }
-      };
+        };
+      }
 
       return { new_schema, required_param_arr };
     }
@@ -157,12 +178,12 @@ class SpecConvert extends Base.factory() {
     }
 
     if (spec_schema.headers) {
-      // do nothing
+      // TODO
     }
 
     const { convert_schema: new_detail_schema, param_arr } = this._parseDetailSchema(spec_schema);
     Object.assign(new_schema.properties, new_detail_schema);
-    required_param_arr.concat(param_arr)
+    required_param_arr = required_param_arr.concat(param_arr)
 
     return { new_schema, required_param_arr };
   }
@@ -175,7 +196,7 @@ class SpecConvert extends Base.factory() {
   parseRequestBodySchema(spec_schema) {
     if (!spec_schema) return null;
 
-    const { new_schema, required_param_arr } = this._parseBodySchema(spec_schema);
+    const { new_schema, required_param_arr } = this._parseSpecSchema(spec_schema);
     return Swagger.convertJsonSchema2Swagger(new_schema, 'body', { required_param_arr })
   }
 
@@ -187,7 +208,7 @@ class SpecConvert extends Base.factory() {
   parseQuerySchema(spec_schema) {
     if (!spec_schema) return null;
 
-    const { new_schema, required_param_arr } = this._parseBodySchema(spec_schema.body);
+    const { new_schema, required_param_arr } = this._parseSpecSchema(spec_schema);
     return Swagger.convertJsonSchema2Swagger(new_schema, 'query', { required_param_arr });
   }
 
@@ -199,8 +220,26 @@ class SpecConvert extends Base.factory() {
   parseResponseSchema(spec_schema) {
     if (!spec_schema) return null;
 
-    const { new_schema } = this._parseBodySchema(spec_schema.body);
+    const { new_schema } = this._parseSpecSchema(spec_schema);
     return Swagger.convertJsonSchema2Swagger(new_schema, 'response');
+  }
+
+  /**
+   * parse path
+   * @param {object} real_api_name - real_api_name
+   * @return {object} convert_schema -
+   */
+  parsePathSchema(real_api_name) {
+    if (!real_api_name) return null;
+
+    const path_items = real_api_name.split('/');
+    const new_schema = path_items.reduce((result, item) => {
+      if (_.get(item, ['0']) === ':') {
+        result.push(item.substr(1));
+      }
+      return result;
+    }, []);
+    return Swagger.convertJsonSchema2Swagger(new_schema, 'path');
   }
 
   /**
@@ -230,10 +269,13 @@ class SpecConvert extends Base.factory() {
         _.set(path_items, [real_api_name, method_type], Swagger.packagePathItem({
           summary: api.summary,
           description: api.note,
-          response: this.parseResponseSchema(api.response),
           body: this.parseRequestBodySchema(_.get(api, ['request', 'body'])),
-          query: this.parseQuerySchema(_.get(api, ['request', 'query']))
+          query: this.parseQuerySchema(_.get(api, ['request', 'query'])),
+          response: this.parseResponseSchema(_.get(api, ['response', 'body'])),
         }));
+
+        // to optimize
+        _.set(path_items, [real_api_name, 'parameters'], this.parsePathSchema(real_api_name));
       });
     } catch (err) {
       throw new TypeError(`SpecConvert::run: ${current_api_name} fail!err_msg: ${err.message}`);

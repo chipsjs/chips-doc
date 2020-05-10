@@ -11,29 +11,69 @@
     "/houses/:houseID/activities": {
       "get": {
         "summary": "This gets all the logs for a given house, allows to provide a `limit` query string",
-        "description": "",
-        "request": {},
         "responses": {
-          "body": {
-            "type": "object",
-            "properties": {
-              "events": {
-                "description": "unknown",
-                "type": "unknown"
-              },
-              "nextPage": {
-                "description": "unknown",
-                "type": "unknown"
-              },
-              "prevPage": {
-                "description": "unknown",
-                "type": "unknown"
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "events": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "timestamp": {
+                            "description": "",
+                            "type": "number"
+                          },
+                          "action": {
+                            "description": "",
+                            "type": "string"
+                          },
+                          "deviceID": {
+                            "description": "",
+                            "type": "string"
+                          },
+                          "deviceType": {
+                            "description": "",
+                            "type": "string"
+                          },
+                          "user": {
+                            "description": "",
+                            "type": "object"
+                          },
+                          "title": {
+                            "description": "",
+                            "type": "string"
+                          }
+                        }
+                      }
+                    },
+                    "nextPage": {
+                      "description": "",
+                      "type": "number"
+                    },
+                    "prevPage": {
+                      "description": "",
+                      "type": "number"
+                    }
+                  }
+                }
               }
-            },
-            "required": []
+            }
           }
         }
-      }
+      },
+      "parameters": [
+        {
+          "name": "houseID",
+          "in": "path",
+          "required": true,
+          "schema": {}
+        }
+      ]
     }
   }
 }
