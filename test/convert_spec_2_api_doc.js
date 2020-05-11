@@ -448,7 +448,7 @@ describe('convert spec to generate api doc', () => {
 
       const outputRequestBody = _.get(specResult, [api_name, 'post', 'requestBody', 'content', 'application/json', 'schema']);
       assert.strictEqual(outputRequestBody.type, 'object');
-      assert.nestedPropertyVal(outputRequestBody, 'properties.year.type', 'unknown');
+      assert.notNestedProperty(outputRequestBody, 'properties.year.type');
       assert.nestedPropertyVal(outputRequestBody, 'properties.year.description', inputBody.year);
     });
 
@@ -485,7 +485,7 @@ describe('convert spec to generate api doc', () => {
       const outputRequestBody = _.get(specResult, [api_name, 'post', 'requestBody', 'content', 'application/json', 'schema']);
       assert.strictEqual(outputRequestBody.type, 'object');
       assert.nestedPropertyVal(outputRequestBody, 'properties.year.type', 'array');
-      assert.nestedPropertyVal(outputRequestBody, 'properties.year.items.type', 'unknown');
+      assert.notNestedProperty(outputRequestBody, 'properties.year.items.type');
     });
 
     after('clean file', () => {
@@ -709,7 +709,7 @@ describe('convert spec to generate api doc', () => {
       assert.exists(specResult[api_name]);
       assert.exists(specResult[api_name].get);
       const description = _.get(specResult, [api_name, 'get', 'responses', '200', 'description']);
-      assert.strictEqual(description, 'unknown');
+      assert.strictEqual(description, '');
       const schema = _.get(specResult, [api_name, 'get', 'responses', '200', 'content', 'application/json', 'schema']);
       assert.exists(schema);
     });

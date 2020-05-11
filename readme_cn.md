@@ -100,10 +100,10 @@ test_case层 -> middleware层 -> service层
 - 对不熟悉模块的开发更友善，能更快熟务逻辑
 
 # todo
-- 前端 swagger ui (doing)
+- swagger (doing)
 - 单个mock
 - 编写快速开始的文档 (high)
-- 支持header的自定义 
+- 支持header的灵活定义 
 - api_flow和api_doc的前端界面
 - api_doc实际业务的编写
 - api某些固定的调用依赖可以定义
@@ -115,11 +115,7 @@ test_case层 -> middleware层 -> service层
 - flow前的多个flow需要指定context param
 - 复杂度: 1.就是写多个flow 2.自下而上 3.图 4.自上而下 (todo)
 
-# spec转换出来的几种需要人工fix的问题
-- 部分字段类型为unknown (200多个)
-- array缺少items字段或者array中的items字段类型未知
-- 部分书写错误导致的需要人工纠正,比如/users/me/legal不能有body
-
-- devices解析错误
+## spec转换出来的几种需要人工fix的问题
+- 部分书写错误导致的需要人工纠正,比如/users/me/legal不能有body (2个)
+- ifPresent的特殊写法导致的数组解析问题
 - anyOf oneOf
-- 

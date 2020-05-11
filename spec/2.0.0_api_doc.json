@@ -22,8 +22,7 @@
             }
           }
         }
-      },
-      "parameters": []
+      }
     },
     "/doorbells/:doorbellID": {
       "get": {
@@ -38,167 +37,175 @@
                   "type": "object",
                   "properties": {
                     "HouseID": {
-                      "description": "String",
-                      "type": "string"
+                      "type": "string",
+                      "description": "String"
                     },
                     "HouseName": {
-                      "description": "String",
-                      "type": "string"
+                      "type": "string",
+                      "description": "String"
                     },
                     "LockID": {
-                      "description": "String",
-                      "type": "string"
+                      "type": "string",
+                      "description": "String"
                     },
                     "chimes": {
+                      "type": "array",
                       "description": "Array",
-                      "type": "array"
+                      "items": {}
                     },
                     "doorbellID": {
-                      "description": "String",
-                      "type": "string"
+                      "type": "string",
+                      "description": "String"
                     },
                     "firmwareVersion": {
-                      "description": "String",
-                      "type": "string"
+                      "type": "string",
+                      "description": "String"
                     },
                     "installUserID": {
-                      "description": "String",
-                      "type": "string"
+                      "type": "string",
+                      "description": "String"
                     },
                     "invitations": {
+                      "type": "array",
                       "description": "Array",
-                      "type": "array"
+                      "items": {}
                     },
                     "messagingProtocol": {
-                      "description": "String",
-                      "type": "string"
+                      "type": "string",
+                      "description": "String"
                     },
                     "name": {
-                      "description": "String",
-                      "type": "string"
+                      "type": "string",
+                      "description": "String"
                     },
                     "pubsubChannel": {
-                      "description": "String",
-                      "type": "string"
+                      "type": "string",
+                      "description": "String"
                     },
                     "recentImage": {
+                      "type": "object",
                       "description": "Object",
-                      "type": "object"
+                      "properties": {}
                     },
                     "secChipCertSerial": {
-                      "description": "String",
-                      "type": "string"
+                      "type": "string",
+                      "description": "String"
                     },
                     "serialNumber": {
-                      "description": "String",
-                      "type": "string"
+                      "type": "string",
+                      "description": "String"
                     },
                     "settings": {
                       "type": "object",
+                      "description": "",
                       "properties": {
                         "buttonpush_notifications": {
-                          "description": "Boolean",
-                          "type": "boolean"
+                          "type": "boolean",
+                          "description": "Boolean"
                         },
                         "buttonpush_notifications_partners": {
-                          "description": "Boolean",
-                          "type": "boolean"
+                          "type": "boolean",
+                          "description": "Boolean"
                         },
                         "doorbellChime": {
-                          "description": "Boolean",
-                          "type": "boolean"
+                          "type": "boolean",
+                          "description": "Boolean"
                         },
                         "flashBrightness": {
-                          "description": "String",
-                          "type": "string"
+                          "type": "string",
+                          "description": "String"
                         },
                         "indoorChimeEnabled": {
-                          "description": "Boolean",
-                          "type": "boolean"
+                          "type": "boolean",
+                          "description": "Boolean"
                         },
                         "irConfiguration": {
-                          "description": "Number",
-                          "type": "number"
+                          "type": "number",
+                          "description": "Number"
                         },
                         "motion_notifications": {
-                          "description": "Boolean",
-                          "type": "boolean"
+                          "type": "boolean",
+                          "description": "Boolean"
                         },
                         "motionSensitivity": {
-                          "description": "Number",
-                          "type": "number"
+                          "type": "number",
+                          "description": "Number"
                         },
                         "nightVision": {
-                          "description": "String",
-                          "type": "string"
+                          "type": "string",
+                          "description": "String"
                         },
                         "nightVisionBrightness": {
-                          "description": "String",
-                          "type": "string"
+                          "type": "string",
+                          "description": "String"
                         },
                         "notify_when_offline": {
-                          "description": "Boolean",
-                          "type": "boolean"
+                          "type": "boolean",
+                          "description": "Boolean"
                         },
                         "pirEnabled": {
-                          "description": "Boolean",
-                          "type": "boolean"
+                          "type": "boolean",
+                          "description": "Boolean"
                         },
                         "pirSensitivity": {
-                          "description": "Number",
-                          "type": "number"
+                          "type": "number",
+                          "description": "Number"
                         },
                         "powerProfilePreset": {
-                          "description": "String",
-                          "type": "string"
+                          "type": "string",
+                          "description": "String"
                         },
                         "ringSoundEnabled": {
-                          "description": "Boolean",
-                          "type": "boolean"
+                          "type": "boolean",
+                          "description": "Boolean"
                         },
                         "speakerVolume": {
-                          "description": "Number",
-                          "type": "number"
+                          "type": "number",
+                          "description": "Number"
                         },
                         "videoResolution": {
-                          "description": "String",
-                          "type": "string"
+                          "type": "string",
+                          "description": "String"
                         }
                       }
                     },
                     "status": {
-                      "description": "String",
-                      "type": "string"
+                      "type": "string",
+                      "description": "String"
                     },
                     "type": {
-                      "description": "String",
-                      "type": "string"
+                      "type": "string",
+                      "description": "String"
                     },
                     "users": {
                       "type": "object",
+                      "description": "",
                       "properties": {
                         "someUserID": {
                           "type": "object",
+                          "description": "",
                           "properties": {
                             "FirstName": {
-                              "description": "String",
-                              "type": "string"
+                              "type": "string",
+                              "description": "String"
                             },
                             "LastName": {
-                              "description": "String",
-                              "type": "string"
+                              "type": "string",
+                              "description": "String"
                             },
                             "UserType": {
-                              "description": "String",
-                              "type": "string"
+                              "type": "string",
+                              "description": "String"
                             },
                             "identifiers": {
+                              "type": "array",
                               "description": "Array of Strings",
-                              "type": "array"
+                              "items": {}
                             },
                             "imageInfo": {
+                              "type": "object",
                               "description": "Object",
-                              "type": "object"
+                              "properties": {}
                             }
                           }
                         }
@@ -261,87 +268,75 @@
                   "type": "object",
                   "properties": {
                     "LockName": {
-                      "description": "Text string",
-                      "type": "string"
+                      "description": "Text string"
                     },
                     "Type": {
-                      "description": "lock type",
-                      "type": "string"
+                      "description": "lock type"
                     },
                     "Updated": {
-                      "description": "date",
-                      "type": "string"
+                      "description": "date"
                     },
                     "Created": {
-                      "description": "date",
-                      "type": "string"
+                      "description": "date"
                     },
                     "LockID": {
-                      "description": "unique ID of lock",
-                      "type": "string"
+                      "description": "unique ID of lock"
                     },
                     "HouseID": {
-                      "description": "id of house to which lock belongs",
-                      "type": "string"
+                      "description": "id of house to which lock belongs"
                     },
                     "currentFirmwareVersion": {
+                      "type": "object",
                       "description": "Object containing current firmware versions",
-                      "type": "object"
+                      "properties": {}
                     },
                     "[users]": {
                       "type": "object",
+                      "description": "",
                       "properties": {
                         "userid": {
-                          "description": "user type",
-                          "type": "string"
+                          "description": "user type"
                         },
                         "useridN": {
-                          "description": "user type",
-                          "type": "string"
+                          "description": "user type"
                         }
                       }
                     },
                     "[ruleHash]": {
                       "type": "object",
+                      "description": "",
                       "properties": {
                         "ruleID": {
                           "type": "object",
+                          "description": "",
                           "properties": {
                             "startTime": {
-                              "description": "start time in ISO 8601 format",
-                              "type": "string"
+                              "description": "start time in ISO 8601 format"
                             },
                             "duration": {
-                              "description": "duration",
-                              "type": "string"
+                              "description": "duration"
                             },
                             "schedule": {
-                              "description": "Rule schedule in iCalendar data format (RFC 5545)",
-                              "type": "string"
+                              "description": "Rule schedule in iCalendar data format (RFC 5545)"
                             }
                           }
                         }
                       }
                     },
                     "homeKitUniqueIdentifier": {
-                      "description": "id of homeKit to which lock belongs to",
-                      "type": "string"
+                      "description": "id of homeKit to which lock belongs to"
                     },
                     "[hostLockInfo]": {
-                      "description": "Information about the host lock",
-                      "type": "string"
+                      "description": "Information about the host lock"
                     },
                     "[hostID]": {
-                      "description": "Host lock's ID",
-                      "type": "string"
+                      "description": "Host lock's ID"
                     },
                     "[hostHardwareLockInfo]": {
-                      "description": "Information about the host hardware",
-                      "type": "string"
+                      "description": "Information about the host hardware"
                     },
                     "[hostHardwareID]": {
-                      "description": "Host hardware's ID",
-                      "type": "string"
+                      "description": "Host hardware's ID"
                     }
                   }
                 }
@@ -372,20 +367,16 @@
                 "type": "object",
                 "properties": {
                   "deviceID": {
-                    "description": "Id of device associated with smart alert",
-                    "type": "string"
+                    "description": "Id of device associated with smart alert"
                   },
                   "deviceType": {
-                    "description": "Type of device to associate smart alert with",
-                    "type": "string"
+                    "description": "Type of device to associate smart alert with"
                   },
                   "otherUserID": {
-                    "description": "User id or system user",
-                    "type": "string"
+                    "description": "User id or system user"
                   },
                   "schedule": {
-                    "description": "optional ICAL schedule",
-                    "type": "string"
+                    "description": "optional ICAL schedule"
                   }
                 }
               }
@@ -401,8 +392,8 @@
                   "type": "object",
                   "properties": {
                     "ruleID": {
-                      "description": "string",
-                      "type": "string"
+                      "type": "string",
+                      "description": "string"
                     }
                   }
                 }
@@ -411,7 +402,6 @@
           }
         }
       },
-      "parameters": [],
       "get": {
         "summary": "Get smart alert rule per given query",
         "description": "When no query provided end point returns all smart alert rules associated with calling user",
@@ -421,8 +411,7 @@
             "in": "query",
             "required": false,
             "schema": {
-              "description": "Id of device to return smart alert rules for",
-              "type": "string"
+              "description": "Id of device to return smart alert rules for"
             }
           }
         ],
@@ -437,20 +426,16 @@
                     "type": "object",
                     "properties": {
                       "ruleID": {
-                        "description": "Id of first rule",
-                        "type": "string"
+                        "description": "Id of first rule"
                       },
                       "notifyUserID": {
-                        "description": "Id of user to be notified with smart alert",
-                        "type": "string"
+                        "description": "Id of user to be notified with smart alert"
                       },
                       "otherUserID": {
-                        "description": "User id or system user",
-                        "type": "string"
+                        "description": "User id or system user"
                       },
                       "schedule": {
-                        "description": "optional ICAL schedule; may be omitted if not given",
-                        "type": "string"
+                        "description": "optional ICAL schedule; may be omitted if not given"
                       }
                     }
                   }
@@ -474,24 +459,19 @@
                   "type": "object",
                   "properties": {
                     "deviceID": {
-                      "description": "Id of device associated with smart alert",
-                      "type": "string"
+                      "description": "Id of device associated with smart alert"
                     },
                     "devceType": {
-                      "description": "Type of device assocaited with smart alert",
-                      "type": "string"
+                      "description": "Type of device assocaited with smart alert"
                     },
                     "notifyUserID": {
-                      "description": "Id of user to be notified with smart alert",
-                      "type": "string"
+                      "description": "Id of user to be notified with smart alert"
                     },
                     "otherUserID": {
-                      "description": "User id or system user",
-                      "type": "string"
+                      "description": "User id or system user"
                     },
                     "schedule": {
-                      "description": "optional ICAL schedule; may be omitted if not given",
-                      "type": "string"
+                      "description": "optional ICAL schedule; may be omitted if not given"
                     }
                   }
                 }
@@ -536,8 +516,7 @@
                   "type": "object",
                   "properties": {
                     "schedule": {
-                      "description": "optional ICAL schedule; may be omitted if not given",
-                      "type": "string"
+                      "description": "optional ICAL schedule; may be omitted if not given"
                     }
                   }
                 }
@@ -561,52 +540,40 @@
                     "type": "object",
                     "properties": {
                       "_id": {
-                        "description": "ID of partner",
-                        "type": "string"
+                        "description": "ID of partner"
                       },
                       "name": {
-                        "description": "name of partner",
-                        "type": "string"
+                        "description": "name of partner"
                       },
                       "heroImageURL": {
-                        "description": "URL to partner hero image",
-                        "type": "string"
+                        "description": "URL to partner hero image"
                       },
                       "partnerURL": {
-                        "description": "URL to partner homepage",
-                        "type": "string"
+                        "description": "URL to partner homepage"
                       },
                       "logoURL": {
-                        "description": "URL to partner logo",
-                        "type": "string"
+                        "description": "URL to partner logo"
                       },
                       "wordmarkURL": {
-                        "description": "URL to partner wordmark",
-                        "type": "string"
+                        "description": "URL to partner wordmark"
                       },
                       "partnerTagline": {
-                        "description": "partner tagline",
-                        "type": "string"
+                        "description": "partner tagline"
                       },
                       "jointTagline": {
-                        "description": "tagline tailored to August",
-                        "type": "string"
+                        "description": "tagline tailored to August"
                       },
                       "partnerDescription": {
-                        "description": "company description",
-                        "type": "string"
+                        "description": "company description"
                       },
                       "jointDescription": {
-                        "description": "service offering description",
-                        "type": "string"
+                        "description": "service offering description"
                       },
                       "promotion": {
-                        "description": "available partnership promotions",
-                        "type": "string"
+                        "description": "available partnership promotions"
                       },
                       "locations": {
-                        "description": "where the service is provided",
-                        "type": "string"
+                        "description": "where the service is provided"
                       }
                     }
                   }
@@ -615,8 +582,7 @@
             }
           }
         }
-      },
-      "parameters": []
+      }
     },
     "/locks": {
       "post": {
@@ -629,24 +595,19 @@
                 "type": "object",
                 "properties": {
                   "houseID": {
-                    "description": "house id of the house where we wants to add the lock",
-                    "type": "string"
+                    "description": "house id of the house where we wants to add the lock"
                   },
                   "serialNumber": {
-                    "description": "serial number of lock [see notes]",
-                    "type": "string"
+                    "description": "serial number of lock [see notes]"
                   },
                   "LockIDs": {
-                    "description": "unique identifiers of advertising locks [see notes]",
-                    "type": "string"
+                    "description": "unique identifiers of advertising locks [see notes]"
                   },
                   "LockName": {
-                    "description": "name of lock",
-                    "type": "string"
+                    "description": "name of lock"
                   },
                   "hostHardwareID": {
-                    "description": "Host hardware's ID",
-                    "type": "string"
+                    "description": "Host hardware's ID"
                   }
                 },
                 "required": [
@@ -668,28 +629,22 @@
                   "type": "object",
                   "properties": {
                     "LockID": {
-                      "description": "<unique ID of lock>",
-                      "type": "string"
+                      "description": "<unique ID of lock>"
                     },
                     "LockName": {
-                      "description": "<Text string>",
-                      "type": "string"
+                      "description": "<Text string>"
                     },
                     "Type": {
-                      "description": "Integer",
-                      "type": "string"
+                      "description": "Integer"
                     },
                     "Updated": {
-                      "description": "YYYY-MM-DDTHH:MM:SS.mmmZ",
-                      "type": "string"
+                      "description": "YYYY-MM-DDTHH:MM:SS.mmmZ"
                     },
                     "Created": {
-                      "description": "YYYY-MM-DDTHH:MM:SS.mmmZ",
-                      "type": "string"
+                      "description": "YYYY-MM-DDTHH:MM:SS.mmmZ"
                     },
                     "HouseID": {
-                      "description": "ID of house to which lock was added",
-                      "type": "string"
+                      "description": "ID of house to which lock was added"
                     }
                   }
                 }
@@ -697,8 +652,7 @@
             }
           }
         }
-      },
-      "parameters": []
+      }
     },
     "/subscriptions": {
       "get": {
@@ -715,28 +669,22 @@
                     "type": "object",
                     "properties": {
                       "subscriptionID": {
-                        "description": "subscription ID",
-                        "type": "string"
+                        "description": "subscription ID"
                       },
                       "userID": {
-                        "description": "subscription manager user ID",
-                        "type": "string"
+                        "description": "subscription manager user ID"
                       },
                       "type": {
-                        "description": "type of subscription",
-                        "type": "string"
+                        "description": "type of subscription"
                       },
                       "status": {
-                        "description": "trial/paid/invalid",
-                        "type": "string"
+                        "description": "trial/paid/invalid"
                       },
                       "deviceType": {
-                        "description": "device",
-                        "type": "string"
+                        "description": "device"
                       },
                       "deviceID": {
-                        "description": "device ID",
-                        "type": "string"
+                        "description": "device ID"
                       }
                     }
                   }
@@ -745,8 +693,7 @@
             }
           }
         }
-      },
-      "parameters": []
+      }
     }
   }
 }

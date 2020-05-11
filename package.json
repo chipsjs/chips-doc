@@ -1,6 +1,6 @@
 {
   "name": "cola-doc",
-  "version": "1.0.1-2",
+  "version": "0.3.0",
   "description": "",
   "main": "generate_case.js",
   "directories": {

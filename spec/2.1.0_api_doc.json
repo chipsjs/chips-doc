@@ -22,52 +22,40 @@
                     "type": "object",
                     "properties": {
                       "_id": {
-                        "description": "ID of partner",
-                        "type": "string"
+                        "description": "ID of partner"
                       },
                       "name": {
-                        "description": "name of partner",
-                        "type": "string"
+                        "description": "name of partner"
                       },
                       "heroImageURL": {
-                        "description": "URL to partner hero image",
-                        "type": "string"
+                        "description": "URL to partner hero image"
                       },
                       "partnerURL": {
-                        "description": "URL to partner homepage",
-                        "type": "string"
+                        "description": "URL to partner homepage"
                       },
                       "logoURL": {
-                        "description": "URL to partner logo",
-                        "type": "string"
+                        "description": "URL to partner logo"
                       },
                       "wordmarkURL": {
-                        "description": "URL to partner wordmark",
-                        "type": "string"
+                        "description": "URL to partner wordmark"
                       },
                       "partnerTagline": {
-                        "description": "partner tagline",
-                        "type": "string"
+                        "description": "partner tagline"
                       },
                       "jointTagline": {
-                        "description": "tagline tailored to August",
-                        "type": "string"
+                        "description": "tagline tailored to August"
                       },
                       "partnerDescription": {
-                        "description": "company description",
-                        "type": "string"
+                        "description": "company description"
                       },
                       "jointDescription": {
-                        "description": "service offering description",
-                        "type": "string"
+                        "description": "service offering description"
                       },
                       "promotion": {
-                        "description": "available partnership promotions",
-                        "type": "string"
+                        "description": "available partnership promotions"
                       },
                       "locations": {
-                        "description": "where the service is provided",
-                        "type": "string"
+                        "description": "where the service is provided"
                       }
                     }
                   }
@@ -76,8 +64,7 @@
             }
           }
         }
-      },
-      "parameters": []
+      }
     }
   }
 }

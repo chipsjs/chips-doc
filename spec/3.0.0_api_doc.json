@@ -21,43 +21,46 @@
                   "properties": {
                     "events": {
                       "type": "array",
+                      "description": "",
                       "items": {
                         "type": "object",
+                        "description": "",
                         "properties": {
                           "timestamp": {
-                            "description": "",
-                            "type": "number"
+                            "type": "number",
+                            "description": ""
                           },
                           "action": {
-                            "description": "",
-                            "type": "string"
+                            "type": "string",
+                            "description": ""
                           },
                           "deviceID": {
-                            "description": "",
-                            "type": "string"
+                            "type": "string",
+                            "description": ""
                           },
                           "deviceType": {
-                            "description": "",
-                            "type": "string"
+                            "type": "string",
+                            "description": ""
                           },
                           "user": {
+                            "type": "object",
                             "description": "",
-                            "type": "object"
+                            "properties": {}
                           },
                           "title": {
-                            "description": "",
-                            "type": "string"
+                            "type": "string",
+                            "description": ""
                           }
                         }
                       }
                     },
                     "nextPage": {
-                      "description": "",
-                      "type": "number"
+                      "type": "number",
+                      "description": ""
                     },
                     "prevPage": {
-                      "description": "",
-                      "type": "number"
+                      "type": "number",
+                      "description": ""
                     }
                   }
                 }
