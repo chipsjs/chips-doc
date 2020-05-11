@@ -119,3 +119,7 @@ test_case层 -> middleware层 -> service层
 - 部分字段类型为unknown (200多个)
 - array缺少items字段或者array中的items字段类型未知
 - 部分书写错误导致的需要人工纠正,比如/users/me/legal不能有body
+
+- devices解析错误
+- anyOf oneOf
+- 

@@ -28,7 +28,7 @@
         "description": "/! DEPRECATED: 410 GoneError",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -276,7 +276,9 @@
           "name": "otherUserID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -398,7 +400,9 @@
           "name": "houseID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ],
       "delete": {
@@ -406,7 +410,7 @@
         "description": "Returns 412 if the house still has locks",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -438,7 +442,7 @@
         },
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -617,8 +621,7 @@
                           "type": "string"
                         },
                         "operative": {
-                          "description": "unknown",
-                          "type": "unknown"
+                          "description": "unknown"
                         }
                       }
                     },
@@ -670,8 +673,7 @@
                           "type": "string"
                         },
                         "operative": {
-                          "description": "unknown",
-                          "type": "unknown"
+                          "description": "unknown"
                         }
                       }
                     }
@@ -800,7 +802,9 @@
           "name": "lockID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ],
       "put": {
@@ -858,7 +862,7 @@
         "description": "Removes lock from all associations in the system.\n###Responses:\nCode | Reason \n---- | ------\n 403 | callingUser is not authorized to use lock\n 404 | lock not found\n",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -889,7 +893,7 @@
         },
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -903,19 +907,25 @@
           "name": "lockID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "otherUserID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "type",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -968,13 +978,17 @@
           "name": "lockID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "command",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -984,7 +998,7 @@
         "description": "If the calling user is not authorized to use the lock a this time, it returns Unauthorized.",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -998,13 +1012,17 @@
           "name": "lockID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "txid",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -1040,7 +1058,9 @@
           "name": "lockID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -1050,7 +1070,7 @@
         "description": "This sets otherUser's user type to type for lock lockID. This can only be done if the calling user is a superuser of the lock. If other user is an invitee the invitation is updated. Returns Unauthorized if calling user is not the superuser of the lock. Returns Not Found if lockID or otherUserID do not exist or there is no corresponding invitation for other user. Returns Bad Request if type is not valid",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -1064,19 +1084,25 @@
           "name": "lockID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "otherUserID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "type",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -1086,7 +1112,7 @@
         "description": "Returns Unauthorized if the calling user is not able to manage the lock.  Returns Not Found if lock or otherUser do not exist.",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -1100,13 +1126,17 @@
           "name": "lockID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "otherUserID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -1116,7 +1146,7 @@
         "description": "/! DEPRECATED: 410 GoneError",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -1130,7 +1160,9 @@
           "name": "houseID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -1140,7 +1172,7 @@
         "description": "/! DEPRECATED: 410 GoneError",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -1154,7 +1186,9 @@
           "name": "houseID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -1164,7 +1198,7 @@
         "description": "/! DEPRECATED: 410 GoneError",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -1178,19 +1212,25 @@
           "name": "houseID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "count",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "start",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -1200,7 +1240,7 @@
         "description": "/! DEPRECATED: 410 GoneError",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -1214,7 +1254,9 @@
           "name": "entryID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -1265,19 +1307,25 @@
           "name": "lockID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "startDateTime",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "endDateTime",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -1454,13 +1502,17 @@
           "name": "startDateTime",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "endDateTime",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -1504,19 +1556,25 @@
           "name": "lockID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "dateTime",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "count",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -1560,19 +1618,25 @@
           "name": "lockID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "dateTime",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "count",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -1627,7 +1691,9 @@
           "name": "lockID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -1696,13 +1762,17 @@
           "name": "lockID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "otherUserID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -1712,7 +1782,7 @@
         "description": "Restricts user specified by otherUserID's access to to the lock specified in ruleID to the time specified in ruleID.  If user specified by otherUserID does not currently have access to the lock, access is granted for the time specified by ruleID.  If user specified by otherUserID currently has unrestricted access to the lock specified in ruleID, an error is returned. If the user currently has restricted access to to the lock specified by ruleID, his access is expanded to include the time specified by ruleID.  If the user specified by otherUserID is a manager or superuser of the lock, an error is returned.",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -1726,13 +1796,17 @@
           "name": "ruleID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "otherUserID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ],
       "delete": {
@@ -1740,7 +1814,7 @@
         "description": "returns an error if rule does not exist",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -1814,7 +1888,9 @@
           "name": "lockID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -1851,7 +1927,9 @@
           "name": "lockID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -1894,7 +1972,9 @@
           "name": "lockID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -1904,7 +1984,7 @@
         "description": "returns an error if rule does not exist",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -1918,7 +1998,9 @@
           "name": "ruleID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -1969,14 +2051,16 @@
           "name": "bridgeID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ],
       "delete": {
         "summary": "delete a bridge lock association",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -2045,7 +2129,9 @@
           "name": "lockID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -2055,7 +2141,7 @@
         "description": "Deletes the webhook connection between an external service and lockID/callingUserID",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -2069,13 +2155,17 @@
           "name": "lockID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "clientID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -2138,7 +2228,9 @@
           "name": "doorbellID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -2148,7 +2240,7 @@
         "description": "Deletes the doorbell webhook connection between an external service and doorbellID/callingUserID",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -2162,13 +2254,17 @@
           "name": "doorbellID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "clientID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -2234,7 +2330,7 @@
         "description": "Deletes the user webhook ",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -2248,7 +2344,9 @@
           "name": "clientID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -2292,7 +2390,9 @@
           "name": "lockID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -2332,7 +2432,9 @@
           "name": "keypadID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ],
       "delete": {
@@ -2340,7 +2442,7 @@
         "description": "Calling user must be a lock super user.",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -2392,33 +2494,23 @@
                     },
                     "loaded": {
                       "type": "array",
-                      "items": {
-                        "type": "unknown"
-                      }
+                      "items": {}
                     },
                     "deleting": {
                       "type": "array",
-                      "items": {
-                        "type": "unknown"
-                      }
+                      "items": {}
                     },
                     "disabling": {
                       "type": "array",
-                      "items": {
-                        "type": "unknown"
-                      }
+                      "items": {}
                     },
                     "disabled": {
                       "type": "array",
-                      "items": {
-                        "type": "unknown"
-                      }
+                      "items": {}
                     },
                     "enabling": {
                       "type": "array",
-                      "items": {
-                        "type": "unknown"
-                      }
+                      "items": {}
                     }
                   }
                 }
@@ -2432,7 +2524,9 @@
           "name": "lockID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ],
       "post": {
@@ -2503,7 +2597,7 @@
         },
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -2516,7 +2610,7 @@
         "summary": "This deletes all pins associated with a lock.",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -2667,7 +2761,9 @@
           "name": "doorbellID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ],
       "delete": {
@@ -2675,7 +2771,7 @@
         "description": "This will return a 404 if doorbellID does not exist and a NotAuthorizedError if user is not a user of the doorbell",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -2689,7 +2785,7 @@
         "description": "Currently, only the name field is whitelisted",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -2727,19 +2823,25 @@
           "name": "doorbellID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "endDateTime",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "count",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -2771,19 +2873,25 @@
           "name": "doorbellID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "startDateTime",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "count",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -2815,19 +2923,25 @@
           "name": "doorbellID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "endDateTime",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "startDateTime",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -2859,7 +2973,9 @@
           "name": "lockID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -2906,7 +3022,9 @@
           "name": "lockID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -2973,7 +3091,9 @@
           "name": "lockID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ],
       "delete": {
@@ -2992,7 +3112,7 @@
         ],
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -3070,13 +3190,17 @@
           "name": "houseID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "limit",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -3122,7 +3246,9 @@
           "name": "houseID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -3192,7 +3318,9 @@
           "name": "otherUserID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -3267,7 +3395,9 @@
           "name": "doorbellID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -3276,7 +3406,7 @@
         "summary": "Get all app devices, intended for app device picker",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -3330,7 +3460,7 @@
         ],
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -3346,7 +3476,7 @@
         "summary": "universalDeviceID matches the specific app device resource",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -3360,7 +3490,9 @@
           "name": "universalDeviceID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -3406,9 +3538,7 @@
                           },
                           "devices": {
                             "type": "array",
-                            "items": {
-                              "type": "unknown"
-                            }
+                            "items": {}
                           }
                         }
                       }
@@ -3442,7 +3572,7 @@
         "description": "POSTing to /users/:otherUserID will associate the image in the body with the other user when the calling user requests an image for the other user",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -3456,7 +3586,9 @@
           "name": "otherUserID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -3480,7 +3612,7 @@
         },
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -3515,7 +3647,7 @@
         },
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -3555,7 +3687,7 @@
         },
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -3572,7 +3704,7 @@
         "description": "Deletes all sessions for the calling user. All subesequent API calls will respond that a new session must be retrieved.  Use in the case of a lost phone, etc.  identifer can be Email, in the form \"email:<email>\", or Phone Number in form \"phone:+<country code><number with no spaces>\"",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -3586,7 +3718,9 @@
           "name": "identifier",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -3643,7 +3777,7 @@
         "description": "PUTing to /houses/:houseID/image will associate the image in the body with house and that image will be returned with house info",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -3657,7 +3791,9 @@
           "name": "houseID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -3688,7 +3824,9 @@
           "name": "houseID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -3727,7 +3865,9 @@
           "name": "houseID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -3737,7 +3877,7 @@
         "description": "valid values for status are home and away.",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -3751,13 +3891,17 @@
           "name": "houseID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "status",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -3766,7 +3910,7 @@
         "summary": "disassocites the specified Nest structure with the specified August house",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -3780,13 +3924,17 @@
           "name": "houseID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "structureID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -3796,7 +3944,7 @@
         "description": "Returns 200/OK if successful, 404 if lockID:houseID relationship is not found, and 403 if not authorized",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -3810,13 +3958,17 @@
           "name": "houseID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "lockID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -3825,7 +3977,7 @@
         "summary": "remove an identifier from a user",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -3839,7 +3991,9 @@
           "name": "identifier",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -3870,7 +4024,9 @@
           "name": "identifierType",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -3949,7 +4105,9 @@
           "name": "houseID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -3986,7 +4144,9 @@
           "name": "lockID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -4022,7 +4182,7 @@
         },
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -4036,7 +4196,9 @@
           "name": "lockID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -4094,13 +4256,17 @@
           "name": "lockID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "action",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -4110,7 +4276,7 @@
         "description": "When a mobile device detects the clock on the lock is out of sync, it sets the time and informs the server of the adjustment.  Returns authorization error if callingUser is not able to use lock.  Returns success otherwise.",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -4124,19 +4290,25 @@
           "name": "lockID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "realtime",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "locktime",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -4146,7 +4318,7 @@
         "description": "alias for PUT /locks/timeadjustment/:lockID/:realtime/:locktime (no j in timeadjustment)",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -4160,19 +4332,25 @@
           "name": "lockID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "realtime",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "locktime",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -4221,13 +4399,17 @@
           "name": "lockID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "otherUserID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -4237,7 +4419,7 @@
         "description": "sends push notification to callingUser (phone or dashboard) when otherUser uses lock.  Values for 'on':  lock - notifies on lock, unlock - notifies on unlock, both - notifies on both, neither disables notifications when otherUser uses lock",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -4251,19 +4433,25 @@
           "name": "lockID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "otherUserID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "on",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -4285,13 +4473,17 @@
           "name": "lockID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "otherUserID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -4329,7 +4521,7 @@
         },
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -4343,7 +4535,9 @@
           "name": "lockID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -4353,7 +4547,7 @@
         "description": "/! DEPRECATED: 410 GoneError",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -4367,7 +4561,9 @@
           "name": "lockID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -4377,7 +4573,7 @@
         "description": "/! DEPRECATED: 410 GoneError",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -4391,13 +4587,17 @@
           "name": "lockID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "status",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -4407,7 +4607,7 @@
         "description": "200 OK status is returned if all is well.  Returns invalid request if the action is not supported.  supported actions are:  'lock', 'unlock', 'lockcommand', and 'lockdata'.  Date format is YYYYMMDDHHMMSSmmm.  If action is lockdata or lockcommand, body must contain data from the lock",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -4421,13 +4621,17 @@
           "name": "lockID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "action",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -4455,7 +4659,7 @@
         },
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -4487,7 +4691,7 @@
         },
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -4501,7 +4705,9 @@
           "name": "otherUserID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -4511,7 +4717,7 @@
         "description": "/! DEPRECATED: 410 GoneError",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -4528,7 +4734,7 @@
         "description": "/! DEPRECATED: 410 GoneError",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -4542,7 +4748,9 @@
           "name": "messageID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -4601,7 +4809,9 @@
           "name": "lockID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -4641,7 +4851,9 @@
           "name": "lockID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -4692,7 +4904,9 @@
           "name": "lockID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -4768,7 +4982,9 @@
           "name": "idtype",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -4839,7 +5055,9 @@
           "name": "idtype",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -4879,7 +5097,7 @@
         },
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -4929,7 +5147,7 @@
         },
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -4943,13 +5161,17 @@
           "name": "bridgeID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "type",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ],
       "delete": {
@@ -4957,7 +5179,7 @@
         "description": "Disables notification of type specified for the bridge specified for the calling user.  The only current type supported is system",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -5002,7 +5224,9 @@
           "name": "bridgeID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -5012,7 +5236,7 @@
         "description": "creates the association if none exists, updates it if it does exist.",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -5026,7 +5250,9 @@
           "name": "token",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -5111,13 +5337,17 @@
           "name": "platform",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "version",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -5157,7 +5387,7 @@
         },
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -5171,7 +5401,9 @@
           "name": "lockID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -5193,13 +5425,17 @@
           "name": "lockID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "version",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -5243,13 +5479,17 @@
           "name": "lockID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "version",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -5270,19 +5510,25 @@
           "name": "lockID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "chip",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "version",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -5346,7 +5592,9 @@
           "name": "lockID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -5378,7 +5626,9 @@
           "name": "lockID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -5388,7 +5638,7 @@
         "description": "returns 404 if house not found, 403 if callingUser does not own house",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -5405,7 +5655,7 @@
         "description": "Returns 404 if house not found, 403 if callingUser is not superuser of house",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -5419,19 +5669,25 @@
           "name": "houseID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "otherUserID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "type",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -5441,7 +5697,7 @@
         "description": "type is either ['user', 'superuser'].  Returns a 404 if house not found.  Returns 403 if callingUser is not a superuser of the house.  Returns 412 if otherUser is not a user of the house",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -5455,19 +5711,25 @@
           "name": "houseID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "otherUserID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "type",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -5477,7 +5739,7 @@
         "description": " Possible values 'locked,' 'unlocked,' 'unknown,' 'not-advertising.' The end point also publishes status messages and hits web hooks when applicable.",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -5491,7 +5753,9 @@
           "name": "lockID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -5513,13 +5777,17 @@
           "name": "keypadID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "version",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -5555,13 +5823,17 @@
           "name": "keypadID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "version",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -5593,7 +5865,9 @@
           "name": "keypadID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ],
       "put": {
@@ -5606,8 +5880,7 @@
                 "type": "object",
                 "properties": {
                   "set": {
-                    "description": "unknown",
-                    "type": "unknown"
+                    "description": "unknown"
                   }
                 }
               }
@@ -5616,7 +5889,7 @@
         },
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -5666,13 +5939,17 @@
           "name": "keypadID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "lockID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -5724,7 +6001,7 @@
         },
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -5738,7 +6015,9 @@
           "name": "keypadID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -5944,7 +6223,7 @@
         },
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -6026,7 +6305,7 @@
         },
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -6286,7 +6565,7 @@
         "summary": "Adds a given email to a partner mailing list.",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -6300,7 +6579,9 @@
           "name": "partnerID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ],
       "get": {
@@ -6411,7 +6692,7 @@
         },
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -6425,20 +6706,24 @@
           "name": "listingID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "lockID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ],
       "delete": {
         "summary": "de-pairs a lock and listing based on given parameter ids",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -6481,7 +6766,7 @@
         },
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -6497,7 +6782,7 @@
         "summary": "Removes Airbnb credentials for calling user",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -6514,7 +6799,7 @@
         "description": "if callingUser is not associated with the app specified, no error is returned",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -6528,7 +6813,9 @@
           "name": "appID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -6537,7 +6824,7 @@
         "summary": "Delete token for a given app",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -6551,7 +6838,9 @@
           "name": "appID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ],
       "get": {
@@ -6559,7 +6848,7 @@
         "description": "Current use: The subscription management web UI needs to retrieve some subscriptions related data. We do not want to have that web app access REST API directly. august-subscription-server has been created to provide the required data. To authenticate against august-subscription-server a temporary (30min) token will be used by the web app. The mobile clients will provide that token to the web app after requesting it from REST API.",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -6574,7 +6863,7 @@
         "summary": "Checks whether the application needs an compulsary upgrade",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -6588,13 +6877,17 @@
           "name": "clientos",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "clientversion",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -6603,7 +6896,7 @@
         "summary": "Post client log data",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -6620,7 +6913,7 @@
         "description": "/! DEPRECATED: 410 GoneError",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -6636,7 +6929,7 @@
         "summary": "Updates the status of a lock in the locks collection. Possible values 'locked,' 'unlocked,' 'unknown.'",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -6650,14 +6943,16 @@
           "name": "lockID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ],
       "get": {
         "summary": "Gets status of lock",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -6673,7 +6968,7 @@
         "description": "/! DEPRECATED: 410 GoneError",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -6687,13 +6982,17 @@
           "name": "lockID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "action",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -6703,7 +7002,7 @@
         "description": "Returns Unauthorized if the calling user is not a user of the doorbell.Returns Not Found if doorbell or otherUserID do not exist.Returns PreconditionFailed if otherUserID is not a user of the doorbell",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -6717,13 +7016,17 @@
           "name": "doorbellID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "otherUserID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -6733,7 +7036,7 @@
         "description": "This will return a 404 if doorbellID does not exist and a NotAuthorizedError if user is not a user of the doorbell",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -6747,7 +7050,9 @@
           "name": "doorbellID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -6757,7 +7062,7 @@
         "description": "This will return a 404 if doorbellID/lockID does not exist and a NotAuthorizedError if user is not a user of the doorbell",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -6771,13 +7076,17 @@
           "name": "doorbellID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "lockID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ],
       "put": {
@@ -6785,7 +7094,7 @@
         "description": "This will return a 404 if doorbellID/lockID does not exist and a NotAuthorizedError if user is not a user of the doorbell",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -6828,7 +7137,7 @@
         },
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -6842,7 +7151,9 @@
           "name": "doorbellID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -6971,7 +7282,7 @@
         },
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -6985,7 +7296,9 @@
           "name": "doorbellID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -7018,7 +7331,7 @@
         },
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -7032,7 +7345,9 @@
           "name": "doorbellID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -7079,7 +7394,9 @@
           "name": "doorbellID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -7115,13 +7432,17 @@
           "name": "doorbellID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "eventID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -7161,7 +7482,9 @@
           "name": "doorbellID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -7204,13 +7527,17 @@
           "name": "doorbellID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "dvrID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -7242,13 +7569,17 @@
           "name": "doorbellID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "callID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -7258,7 +7589,7 @@
         "description": "does a redirect",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -7325,7 +7656,9 @@
           "name": "houseID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -7358,7 +7691,7 @@
         },
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -7372,7 +7705,9 @@
           "name": "doorbellID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -7562,13 +7897,17 @@
           "name": "doorbellID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "action",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -7578,7 +7917,7 @@
         "description": "THIS FUNCTION WAS MOVED TO THE MARS API SERVER.  POSTing to /doorbells/:doorbellID/event/:eventType will upload the image taken from the camera in the body and send the url of the image in the pubnub message image for the other user.  eventType is either 'presence' or 'buttonpush'.  doorbellID is also required in params",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -7592,13 +7931,17 @@
           "name": "doorbellID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "eventType",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -7608,7 +7951,7 @@
         "description": "If the doorbell or other user doesn't exist return ResourceNotFound error.  If calling user is not a user of the doorbell return NotAuthorizedError",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -7622,13 +7965,17 @@
           "name": "doorbellID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "otherUserID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -7638,7 +7985,7 @@
         "description": "If the doorbell or other user doesn't exist return ResourceNotFound error.  If calling user is not a user of the doorbell return NotAuthorizedError",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -7652,7 +7999,9 @@
           "name": "doorbellID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -7662,7 +8011,7 @@
         "description": "If the doorbell or other user doesn't exist return ResourceNotFound error.  If calling user is not a user of the doorbell return NotAuthorizedError",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -7676,7 +8025,9 @@
           "name": "doorbellID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -7691,7 +8042,7 @@
         },
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -7705,7 +8056,9 @@
           "name": "doorbellID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -7812,7 +8165,7 @@
         },
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -7826,7 +8179,9 @@
           "name": "unverifiedUserID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -7836,7 +8191,7 @@
         "description": "the call will be successful, if the pin had already been expired or doesn't exists",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -7850,13 +8205,17 @@
           "name": "lockID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "pin",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -7866,7 +8225,7 @@
         "description": "/! DEPRECATED: 410 GoneError",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -7880,7 +8239,9 @@
           "name": "lockID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -7943,7 +8304,7 @@
         },
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -7957,13 +8318,17 @@
           "name": "lockID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "otherUserID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -8080,13 +8445,17 @@
           "name": "lockID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "otherUserID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -8096,7 +8465,7 @@
         "description": "When a mobile device detects the clock on the lock is out of sync, it sets the time and informs the server of the adjustment.  Returns authorization error if callingUser is not able to use lock.  Returns success otherwise.",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -8110,19 +8479,25 @@
           "name": "lockID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "realtime",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "locktime",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -8131,7 +8506,7 @@
         "summary": "returns all nest cameras that can be associated with a lock",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -8216,7 +8591,7 @@
         "description": "A camera can be associated with multiple locks, but those locks must be in the same house",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -8230,13 +8605,17 @@
           "name": "lockID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "cameraID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ],
       "delete": {
@@ -8244,7 +8623,7 @@
         "description": "Does not disassociate the camera from the house",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -8260,7 +8639,7 @@
         "description": "A camera can be associated with multiple doorbells, but those doorbells must be in the same house",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -8274,13 +8653,17 @@
           "name": "doorbellID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "cameraID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ],
       "delete": {
@@ -8288,7 +8671,7 @@
         "description": "Does not disassociate the camera from the house",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -8304,7 +8687,7 @@
         "description": "A camera can be associated with multiple locks, but those locks must be in the same house",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -8318,13 +8701,17 @@
           "name": "lockID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "cameraID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ],
       "delete": {
@@ -8332,7 +8719,7 @@
         "description": "does not disassociate the camera from the house",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -8347,7 +8734,7 @@
         "summary": "deletes camera specified by cameraID and removes its association with house and locks",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -8361,7 +8748,9 @@
           "name": "cameraID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -8411,7 +8800,9 @@
           "name": "lockID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -8450,7 +8841,9 @@
           "name": "doorbellID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -8604,7 +8997,9 @@
           "name": "planID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -8703,7 +9098,9 @@
           "name": "subscriptionID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ],
       "delete": {
@@ -8711,7 +9108,7 @@
         "description": "Can be used with any type of subscription, trial or paid",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -8727,7 +9124,7 @@
         "description": "Can be used with any type of subscription, trial or paid. Subscription must exist already.",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -8741,7 +9138,9 @@
           "name": "subscriptionID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -8781,7 +9180,7 @@
         },
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -8795,7 +9194,9 @@
           "name": "scopeID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -8804,7 +9205,7 @@
         "summary": "Removes all nock rules",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -8842,7 +9243,9 @@
           "name": "scopeID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -8873,7 +9276,9 @@
           "name": "scopeID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -9102,7 +9507,7 @@
         },
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -9133,7 +9538,7 @@
         },
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -9147,7 +9552,9 @@
           "name": "lockID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -9220,13 +9627,17 @@
           "name": "houseId",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "deliveryId",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -9284,14 +9695,16 @@
           "name": "lockID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ],
       "delete": {
         "summary": "Allows a retailer/seller partner to revoke a Home-Access-Token",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -9356,7 +9769,7 @@
         "description": "command can be [lock|unlock]",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -9370,7 +9783,9 @@
           "name": "command",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -9379,7 +9794,7 @@
         "summary": "Called by August Access access partners with a Home-Access-Token to get its status",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -9477,7 +9892,9 @@
           "name": "window",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -10143,7 +10560,9 @@
           "name": "questionnaireID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -10209,7 +10628,9 @@
           "name": "doorbellID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -10234,7 +10655,7 @@
         },
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -10248,13 +10669,17 @@
           "name": "doorbellID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "chimeID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ],
       "get": {
@@ -10336,7 +10761,7 @@
         "description": "Return 403 unauthorized if the calling user cannot manage the doorbell.  Return 404 not found if the chime is not setup.",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -10371,7 +10796,7 @@
         },
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -10385,13 +10810,17 @@
           "name": "doorbellID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "chimeID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ],
       "get": {
@@ -10491,7 +10920,9 @@
           "name": "doorbellID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -10501,7 +10932,7 @@
         "description": "Status Codes:\n200 OK - Device already online\n202 Accepted - Doorbell was in standby mode and is being woken up\n404 ResourceNotFound - doorbellID not found\n412 Precondition Failed - device not connected to tcp keep alive server || device is offline ||\nDoorbell does not support tcp keep alive || wakeup token not set || invalid doorbell status\n500 InternalServerError - other internal server error\n",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -10515,7 +10946,9 @@
           "name": "doorbellID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -10525,7 +10958,7 @@
         "description": "Status Codes:\n401 InvalidCredentialsError\n  - The userID does not match the one in the access token.\n  - The access token is invalid.\n  - The user is blacklisted.",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -10539,7 +10972,9 @@
           "name": "userID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -10549,7 +10984,7 @@
         "description": "Status Codes:\n301 - Success/redirect to URL400 - Invalid brand404 - Link not found",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -10563,25 +10998,33 @@
           "name": "brand",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "country",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "language",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "urlID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -10591,7 +11034,7 @@
         "description": "Error Codes:\n412 PreconditionFailedError - user already linked to orchestra\n500 InternalServerError - other internal server error",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -10605,7 +11048,9 @@
           "name": "userID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ],
       "delete": {
@@ -10613,7 +11058,7 @@
         "description": "Status Codes:\n401 InvalidCredentialsError\n  - The userID does not match the one in the access token.\n  - The access token is invalid.\n  - The user is blacklisted.\n412 PreconditionFailedError - user not linked to orchestra",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -10629,7 +11074,7 @@
         "description": "Status Codes:\n401 InvalidCredentialsError\n  - The userID does not match the one in the access token.\n  - The access token is invalid.\n  - The user is blacklisted.\n412 PreconditionFailedError - user not linked to orchestra",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -10665,7 +11110,7 @@
         },
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -10679,7 +11124,9 @@
           "name": "accessID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ],
       "delete": {
@@ -10687,7 +11134,7 @@
         "description": "Status Codes:\n400 BadRequestError - params do not match schema\n401 InvalidCredentialsError\n  - The userID does not match the one in the access token.\n  - The access token is invalid.\n  - The user is blacklisted.\n403 PreconditionFailedError - user does not owns access\n404 ResourceNotFoundError - access not found",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -10703,7 +11150,7 @@
         "description": "Status Codes:\n400 BadRequestError - params do not match schema\n401 InvalidCredentialsError\n  - The userID does not match the one in the access token.\n  - The access token is invalid.\n  - The user is blacklisted.\n403 NotAuthorizedError\n  - user does not owns access\n  - credential does not belongs to the access\n404 ResourceNotFoundError\n  - access not found\n  - credential not found",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -10717,13 +11164,17 @@
           "name": "accessID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "credentialID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     }

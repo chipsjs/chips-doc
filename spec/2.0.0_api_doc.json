@@ -14,7 +14,7 @@
         "description": "/! DEPRECATED: 410 GoneError",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -216,7 +216,9 @@
           "name": "doorbellID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -226,7 +228,7 @@
         "description": "Able to update individual fields\n",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}
@@ -240,7 +242,9 @@
           "name": "doorbellID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -351,7 +355,9 @@
           "name": "lockID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -499,7 +505,9 @@
           "name": "ruleID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ],
       "delete": {
@@ -507,7 +515,7 @@
         "description": "Marks rule as deleted; document is kept in db",
         "responses": {
           "200": {
-            "description": "unknown",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {}

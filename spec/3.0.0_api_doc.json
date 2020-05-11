@@ -71,7 +71,9 @@
           "name": "houseID",
           "in": "path",
           "required": true,
-          "schema": {}
+          "schema": {
+            "type": "string"
+          }
         }
       ]
     }

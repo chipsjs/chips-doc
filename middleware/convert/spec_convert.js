@@ -86,7 +86,7 @@ class SpecConvert extends Base.factory() {
                 convert_schema[param_name] = {
                   type: 'array',
                   items: {
-                    type: 'unknown'
+                    // type: 'unknown'
                   }
                 }
               } else {
@@ -116,7 +116,7 @@ class SpecConvert extends Base.factory() {
           default:
             convert_schema[param_name] = {
               description: 'unknown',
-              type: 'unknown'
+              // type: 'unknown'
             };
             break;
         }
@@ -147,7 +147,7 @@ class SpecConvert extends Base.factory() {
       };
       if (spec_schema.length === 0) {
         new_schema.items = {
-          type: 'unknown'
+          // type: 'unknown'
         }
       } else {
         const { convert_schema: new_detail_schema } = this._parseDetailSchema(spec_schema[0]);
