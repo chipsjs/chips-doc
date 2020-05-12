@@ -25,6 +25,16 @@
       }
     },
     "/doorbells/:doorbellID": {
+      "parameters": [
+        {
+          "name": "doorbellID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "get": {
         "summary": "Get information about an existing doorbell and format settings",
         "description": "Returns resource not found if doorbellID does not exist.",
@@ -217,7 +227,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/doorbells/:doorbellID/settings/doorbell": {
       "parameters": [
         {
           "name": "doorbellID",
@@ -227,9 +239,7 @@
             "type": "string"
           }
         }
-      ]
-    },
-    "/doorbells/:doorbellID/settings/doorbell": {
+      ],
       "put": {
         "summary": "Update doorbell settings that are translated/transformed from client doorbell settings to validated doorbell settings",
         "description": "Able to update individual fields\n",
@@ -243,19 +253,19 @@
             }
           }
         }
-      },
+      }
+    },
+    "/locks/:lockID": {
       "parameters": [
         {
-          "name": "doorbellID",
+          "name": "lockID",
           "in": "path",
           "required": true,
           "schema": {
             "type": "string"
           }
         }
-      ]
-    },
-    "/locks/:lockID": {
+      ],
       "get": {
         "summary": "Get information about an existing lock",
         "description": "Returns `resource not found` if lockID does not exist and `not authorized` if the user is not a user of the lock.The major difference between this version of the endpoint and the 0.0.1 version is that the type of the`currentFirmwareVersion` field has changed from a string to an object in this version.",
@@ -344,17 +354,7 @@
             }
           }
         }
-      },
-      "parameters": [
-        {
-          "name": "lockID",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ]
+      }
     },
     "/smartalert/rules": {
       "post": {
@@ -447,6 +447,16 @@
       }
     },
     "/smartalert/rules/:ruleID": {
+      "parameters": [
+        {
+          "name": "ruleID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "get": {
         "summary": "Returns smart alert rule per given rule id",
         "description": "notifyUserID is always calling user",
@@ -480,16 +490,6 @@
           }
         }
       },
-      "parameters": [
-        {
-          "name": "ruleID",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ],
       "delete": {
         "summary": "Deletes smart alert rule per given rule id",
         "description": "Marks rule as deleted; document is kept in db",
@@ -635,6 +635,7 @@
                       "description": "<Text string>"
                     },
                     "Type": {
+                      "type": "integer",
                       "description": "Integer"
                     },
                     "Updated": {

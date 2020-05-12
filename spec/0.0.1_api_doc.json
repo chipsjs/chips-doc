@@ -105,20 +105,14 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "anyOf": {
-                    "type": "object",
-                    "description": "",
-                    "properties": {
-                      "password": {
-                        "description": "new password"
-                      },
-                      "FirstName": {
-                        "description": "first name"
-                      },
-                      "LastName": {
-                        "description": "last name"
-                      }
-                    }
+                  "password": {
+                    "description": "new password"
+                  },
+                  "FirstName": {
+                    "description": "first name"
+                  },
+                  "LastName": {
+                    "description": "last name"
                   }
                 }
               }
@@ -133,20 +127,14 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "anyOf": {
-                      "type": "object",
-                      "description": "",
-                      "properties": {
-                        "password": {
-                          "description": "new password"
-                        },
-                        "FirstName": {
-                          "description": "first name"
-                        },
-                        "LastName": {
-                          "description": "last name"
-                        }
-                      }
+                    "password": {
+                      "description": "new password"
+                    },
+                    "FirstName": {
+                      "description": "first name"
+                    },
+                    "LastName": {
+                      "description": "last name"
                     }
                   }
                 }
@@ -205,6 +193,16 @@
       }
     },
     "/users/:otherUserID": {
+      "parameters": [
+        {
+          "name": "otherUserID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "get": {
         "summary": "Get information on a user",
         "description": "`/users/me` will return information for calling (OAuth'd) user,whereas `/users/:userID` will return the information for the user specified by `:userID`.  Returns _Not Found_ if userID does not exist.\n\n* `locks` is a hash of `{lockID: \"User type (superuser|manager|user)\"}`\n* `houses` is a hash of `{houseID: \"User type (superuser|manager|user)}`\n\"",
@@ -242,6 +240,7 @@
                           "description": "<user type>"
                         },
                         "UpdateInterval": {
+                          "type": "integer",
                           "description": "integer"
                         }
                       }
@@ -252,17 +251,7 @@
             }
           }
         }
-      },
-      "parameters": [
-        {
-          "name": "otherUserID",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ]
+      }
     },
     "/users/houses/mine": {
       "get": {
@@ -297,6 +286,16 @@
       }
     },
     "/houses/:houseID": {
+      "parameters": [
+        {
+          "name": "houseID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "get": {
         "summary": "Get information about an existing house",
         "description": "users is a hash of {userID: usertype (superuser|manager|user)}",
@@ -367,16 +366,6 @@
           }
         }
       },
-      "parameters": [
-        {
-          "name": "houseID",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ],
       "delete": {
         "summary": "removes a house",
         "description": "Returns 412 if the house still has locks",
@@ -639,6 +628,16 @@
       }
     },
     "/locks/:lockID": {
+      "parameters": [
+        {
+          "name": "lockID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "get": {
         "summary": "Get information about an existing lock",
         "description": "Returns `resource not found` if lockID does not exist and `not authorized` if the user is not a user of the lock.",
@@ -735,16 +734,6 @@
           }
         }
       },
-      "parameters": [
-        {
-          "name": "lockID",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ],
       "put": {
         "summary": "Update a lock's information",
         "description": "Currently only Lock Name, their Calibration status, and their homeKit ID can be updated",
@@ -754,21 +743,15 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "anyOf": {
-                    "type": "object",
-                    "description": "",
-                    "properties": {
-                      "LockName": {
-                        "description": "name of lock"
-                      },
-                      "Calibrated": {
-                        "type": "boolean",
-                        "description": "boolean. set to true if it's calibrated"
-                      },
-                      "homeKitUniqueIdentifier": {
-                        "description": "id of homeKit that's specific to the lock"
-                      }
-                    }
+                  "LockName": {
+                    "description": "name of lock"
+                  },
+                  "Calibrated": {
+                    "type": "boolean",
+                    "description": "boolean. set to true if it's calibrated"
+                  },
+                  "homeKitUniqueIdentifier": {
+                    "description": "id of homeKit that's specific to the lock"
                   }
                 }
               }
@@ -809,6 +792,32 @@
       }
     },
     "/locks/adduser/:lockID/:otherUserID/:type": {
+      "parameters": [
+        {
+          "name": "lockID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "otherUserID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "type",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "put": {
         "summary": "Give a user access to a lock",
         "description": "The only response to this function is a status code.  Returns Bad Request if lock does not exist, otherUser does not exist, or type is invalid.  Valid typs are \"user\" and \"manager\".  Returns Unauthorized if calling user is not a manager or superuser of lock",
@@ -837,7 +846,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/remoteoperate/:lockID/:command": {
       "parameters": [
         {
           "name": "lockID",
@@ -848,24 +859,14 @@
           }
         },
         {
-          "name": "otherUserID",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "type",
+          "name": "command",
           "in": "path",
           "required": true,
           "schema": {
             "type": "string"
           }
         }
-      ]
-    },
-    "/remoteoperate/:lockID/:command": {
+      ],
       "put": {
         "summary": "operate a lock remotely through a bridge, if present",
         "description": "###Commands:\nValid commands are `lock`, `unlock`, `status`, `reboot`, `telemetry`, and `unlatch`.\n\nIf the calling user is not authorized to use the lock a this time, it returns Unauthorized.\n\n###Call Types:\nThis endpoint accepts a query string parameter \"type\". \nValid types are either \"sync\" or \"async\". If type is not provided the default is sync\nAn async request will return immediately and return the operation's result using a communications channel defined in the request's payload\n###Return values:\nStatus | message\n------ | -------\n 200 | resultObject\n 202 | accepted if the request asked for async processing\n 423 | \"lock in use\" if there is already a pending remote operation\n 500 | _errorMessage varies_ if there was an error communicating with the lock (check the message returned)\n 501 | \"not implemented\", if the command is not valid\n",
@@ -904,41 +905,9 @@
             }
           }
         }
-      },
-      "parameters": [
-        {
-          "name": "lockID",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "command",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ]
+      }
     },
     "/remoteoperate/:lockID/transactions/:txid": {
-      "delete": {
-        "summary": "cancel a previous remote operation of a lock through a bridge",
-        "description": "If the calling user is not authorized to use the lock a this time, it returns Unauthorized.",
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          }
-        }
-      },
       "parameters": [
         {
           "name": "lockID",
@@ -956,9 +925,33 @@
             "type": "string"
           }
         }
-      ]
+      ],
+      "delete": {
+        "summary": "cancel a previous remote operation of a lock through a bridge",
+        "description": "If the calling user is not authorized to use the lock a this time, it returns Unauthorized.",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
     },
     "/locks/:lockID/pins/sync": {
+      "parameters": [
+        {
+          "name": "lockID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "put": {
         "summary": "Allows a client to trigger remote sync process of PINs to a lock",
         "description": "return status codes: \n\nStatus | Meaning\n------ | -------\n 200 | Ok, but nothing to do. \n 202 | Synchronization will start soon. \n 409 | No bridge associated or the bridge is offline.",
@@ -984,33 +977,9 @@
             }
           }
         }
-      },
-      "parameters": [
-        {
-          "name": "lockID",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ]
+      }
     },
     "/locks/:lockID/:otherUserID/:type": {
-      "put": {
-        "summary": "Sets otherUsers's type on lock specified by lockID managed by calling user.",
-        "description": "This sets otherUser's user type to type for lock lockID. This can only be done if the calling user is a superuser of the lock. If other user is an invitee the invitation is updated. Returns Unauthorized if calling user is not the superuser of the lock. Returns Not Found if lockID or otherUserID do not exist or there is no corresponding invitation for other user. Returns Bad Request if type is not valid",
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          }
-        }
-      },
       "parameters": [
         {
           "name": "lockID",
@@ -1036,12 +1005,10 @@
             "type": "string"
           }
         }
-      ]
-    },
-    "/locks/:lockID/:otherUserID": {
-      "delete": {
-        "summary": "Deletes user specified by userID from lock specified by lockID",
-        "description": "Returns Unauthorized if the calling user is not able to manage the lock.  Returns Not Found if lock or otherUser do not exist.",
+      ],
+      "put": {
+        "summary": "Sets otherUsers's type on lock specified by lockID managed by calling user.",
+        "description": "This sets otherUser's user type to type for lock lockID. This can only be done if the calling user is a superuser of the lock. If other user is an invitee the invitation is updated. Returns Unauthorized if calling user is not the superuser of the lock. Returns Not Found if lockID or otherUserID do not exist or there is no corresponding invitation for other user. Returns Bad Request if type is not valid",
         "responses": {
           "200": {
             "description": "",
@@ -1052,7 +1019,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/locks/:lockID/:otherUserID": {
       "parameters": [
         {
           "name": "lockID",
@@ -1070,9 +1039,33 @@
             "type": "string"
           }
         }
-      ]
+      ],
+      "delete": {
+        "summary": "Deletes user specified by userID from lock specified by lockID",
+        "description": "Returns Unauthorized if the calling user is not able to manage the lock.  Returns Not Found if lock or otherUser do not exist.",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
     },
     "/houses/:houseID/guestbook": {
+      "parameters": [
+        {
+          "name": "houseID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "put": {
         "summary": "create a new guestbook entry",
         "description": "/! DEPRECATED: 410 GoneError",
@@ -1086,7 +1079,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/houses/:houseID/guestbookentries/count": {
       "parameters": [
         {
           "name": "houseID",
@@ -1096,9 +1091,7 @@
             "type": "string"
           }
         }
-      ]
-    },
-    "/houses/:houseID/guestbookentries/count": {
+      ],
       "get": {
         "summary": "determines the number of guestbook entries and returns it in the response body",
         "description": "/! DEPRECATED: 410 GoneError",
@@ -1112,33 +1105,9 @@
             }
           }
         }
-      },
-      "parameters": [
-        {
-          "name": "houseID",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ]
+      }
     },
     "/houses/:houseID/guestbookentries/:count/:start": {
-      "get": {
-        "summary": "Get summary of up to \"count\" guestbook entries starting with \"start\"",
-        "description": "/! DEPRECATED: 410 GoneError",
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          }
-        }
-      },
       "parameters": [
         {
           "name": "houseID",
@@ -1164,9 +1133,33 @@
             "type": "string"
           }
         }
-      ]
+      ],
+      "get": {
+        "summary": "Get summary of up to \"count\" guestbook entries starting with \"start\"",
+        "description": "/! DEPRECATED: 410 GoneError",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
     },
     "/houses/guestbookentry/:entryID": {
+      "parameters": [
+        {
+          "name": "entryID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "get": {
         "summary": "Deletes a guestbook entry from a house",
         "description": "/! DEPRECATED: 410 GoneError",
@@ -1180,19 +1173,35 @@
             }
           }
         }
-      },
+      }
+    },
+    "/locks/logs/:lockID/:startDateTime/:endDateTime": {
       "parameters": [
         {
-          "name": "entryID",
+          "name": "lockID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "startDateTime",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "endDateTime",
           "in": "path",
           "required": true,
           "schema": {
             "type": "string"
           }
         }
-      ]
-    },
-    "/locks/logs/:lockID/:startDateTime/:endDateTime": {
+      ],
       "get": {
         "summary": "retrieves logs for :lockID from :startDateTime to :endDateTime",
         "description": "returns 200 if date range and lockID can be satisfied.  404 otherwise.",
@@ -1228,16 +1237,10 @@
             }
           }
         }
-      },
+      }
+    },
+    "/activity/:startDateTime/:endDateTime": {
       "parameters": [
-        {
-          "name": "lockID",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        },
         {
           "name": "startDateTime",
           "in": "path",
@@ -1254,9 +1257,7 @@
             "type": "string"
           }
         }
-      ]
-    },
-    "/activity/:startDateTime/:endDateTime": {
+      ],
       "get": {
         "summary": "Gets 100 most recent activities across all lock I can use.",
         "description": "Limit of 100 entries returned. Returns activity on locks callingUser managers or superuses. Returns only callingUsers's activity on locks where he is a user.",
@@ -1410,10 +1411,12 @@
             }
           }
         }
-      },
+      }
+    },
+    "/locks/log/after/:lockID/:dateTime/:count": {
       "parameters": [
         {
-          "name": "startDateTime",
+          "name": "lockID",
           "in": "path",
           "required": true,
           "schema": {
@@ -1421,16 +1424,22 @@
           }
         },
         {
-          "name": "endDateTime",
+          "name": "dateTime",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "count",
           "in": "path",
           "required": true,
           "schema": {
             "type": "string"
           }
         }
-      ]
-    },
-    "/locks/log/after/:lockID/:dateTime/:count": {
+      ],
       "get": {
         "summary": "Gets last `:count` log entries for `:lockID` after `:dateTime` (ms since epoch)",
         "description": "dateTime is in ms since epoch, so unix time must be multiplied by 1000 to get the correct value",
@@ -1460,7 +1469,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/locks/log/before/:lockID/:dateTime/:count": {
       "parameters": [
         {
           "name": "lockID",
@@ -1486,9 +1497,7 @@
             "type": "string"
           }
         }
-      ]
-    },
-    "/locks/log/before/:lockID/:dateTime/:count": {
+      ],
       "get": {
         "summary": "Gets last :count log entries for :lockID before :dateTime (ms since epoch)",
         "description": "dateTime is in ms since epoch, so unix time must be multiplied by 1000 to get the correct value",
@@ -1518,7 +1527,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/rules/:lockID": {
       "parameters": [
         {
           "name": "lockID",
@@ -1527,26 +1538,8 @@
           "schema": {
             "type": "string"
           }
-        },
-        {
-          "name": "dateTime",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "count",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
         }
-      ]
-    },
-    "/rules/:lockID": {
+      ],
       "post": {
         "summary": "Create a usage rule for a lock, which can be applied to a user",
         "description": "This API creates a rule which, when applied to a user, allows the user to operate the lock in the specified time frame.  Recurrence is specified as an iCalendar RFC RRULE string.",
@@ -1587,7 +1580,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/rules/rulewithuser/:lockID/:otherUserID": {
       "parameters": [
         {
           "name": "lockID",
@@ -1596,10 +1591,16 @@
           "schema": {
             "type": "string"
           }
+        },
+        {
+          "name": "otherUserID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
         }
-      ]
-    },
-    "/rules/rulewithuser/:lockID/:otherUserID": {
+      ],
       "post": {
         "summary": "Create a usage rule for a lock, and apply it to the user specified by otherUserID",
         "description": "This API creates a rule which, when applied to a user, allows the user to operate the lock in the specified time frame.  Recurrence is specified as an iCalendar RFC RRULE string.",
@@ -1653,41 +1654,9 @@
             }
           }
         }
-      },
-      "parameters": [
-        {
-          "name": "lockID",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "otherUserID",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ]
+      }
     },
     "/rules/:ruleID/:otherUserID": {
-      "put": {
-        "summary": "Apply a rule to a user of a lock",
-        "description": "Restricts user specified by otherUserID's access to to the lock specified in ruleID to the time specified in ruleID.  If user specified by otherUserID does not currently have access to the lock, access is granted for the time specified by ruleID.  If user specified by otherUserID currently has unrestricted access to the lock specified in ruleID, an error is returned. If the user currently has restricted access to to the lock specified by ruleID, his access is expanded to include the time specified by ruleID.  If the user specified by otherUserID is a manager or superuser of the lock, an error is returned.",
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          }
-        }
-      },
       "parameters": [
         {
           "name": "ruleID",
@@ -1706,6 +1675,20 @@
           }
         }
       ],
+      "put": {
+        "summary": "Apply a rule to a user of a lock",
+        "description": "Restricts user specified by otherUserID's access to to the lock specified in ruleID to the time specified in ruleID.  If user specified by otherUserID does not currently have access to the lock, access is granted for the time specified by ruleID.  If user specified by otherUserID currently has unrestricted access to the lock specified in ruleID, an error is returned. If the user currently has restricted access to to the lock specified by ruleID, his access is expanded to include the time specified by ruleID.  If the user specified by otherUserID is a manager or superuser of the lock, an error is returned.",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      },
       "delete": {
         "summary": "Removes the user specified by otherUserID from rule specified by ruleID",
         "description": "returns an error if rule does not exist",
@@ -1722,6 +1705,16 @@
       }
     },
     "/locks/rules/:lockID": {
+      "parameters": [
+        {
+          "name": "lockID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "get": {
         "summary": "Get a list of rules for a lock",
         "description": "returns all relevant information about a lock rule",
@@ -1773,7 +1766,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/locks/:lockID/users/sounds": {
       "parameters": [
         {
           "name": "lockID",
@@ -1783,9 +1778,7 @@
             "type": "string"
           }
         }
-      ]
-    },
-    "/locks/:lockID/users/sounds": {
+      ],
       "get": {
         "summary": "Get a map of sounds by users",
         "description": "returns only the users who have a sound package id",
@@ -1812,7 +1805,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/locks/:lockID/sounds": {
       "parameters": [
         {
           "name": "lockID",
@@ -1822,9 +1817,7 @@
             "type": "string"
           }
         }
-      ]
-    },
-    "/locks/:lockID/sounds": {
+      ],
       "get": {
         "summary": "Returns list of sound packages available on lock for a known firmware version of the lock",
         "description": "Returns list of sound packages available on lock for a known firmware version of the lock",
@@ -1854,19 +1847,19 @@
             }
           }
         }
-      },
+      }
+    },
+    "/rules/:ruleID": {
       "parameters": [
         {
-          "name": "lockID",
+          "name": "ruleID",
           "in": "path",
           "required": true,
           "schema": {
             "type": "string"
           }
         }
-      ]
-    },
-    "/rules/:ruleID": {
+      ],
       "delete": {
         "summary": "removes rule specified by ruleID",
         "description": "returns an error if rule does not exist",
@@ -1880,19 +1873,19 @@
             }
           }
         }
-      },
+      }
+    },
+    "/bridges/:bridgeID": {
       "parameters": [
         {
-          "name": "ruleID",
+          "name": "bridgeID",
           "in": "path",
           "required": true,
           "schema": {
             "type": "string"
           }
         }
-      ]
-    },
-    "/bridges/:bridgeID": {
+      ],
       "get": {
         "summary": "return the data associated with a bridge, including the lockIds",
         "responses": {
@@ -1928,16 +1921,6 @@
           }
         }
       },
-      "parameters": [
-        {
-          "name": "bridgeID",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ],
       "delete": {
         "summary": "delete a bridge lock association",
         "responses": {
@@ -1953,6 +1936,16 @@
       }
     },
     "/webhook/:lockID": {
+      "parameters": [
+        {
+          "name": "lockID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "post": {
         "summary": "Sets up the notification hook for the lock specified by lockID.",
         "description": "###notificationTypes\nA JSON array containing one or more of: \n\nnotificationType | Meaning\n---------------- | -------\noperation | notification of lock usage\nsystemstatus | notification of change in connectivity of remote bridge to service\nbattery | notification of battery status requiring lock owner's attention\naccessmgmt | notification of change in access to the lock by any user\nconfiguration | notification of change in lock configuration including but not limited to lock name and addition/removal of bridge.\n\n###Responses:\nCode | Reason \n---- | ------\n 200 | body = {\"message\": \"OK\"} call succeeded\n 401 | authorization token is not valid.\n 403 | * the user represented by the authorization token is not an owner of the lock\n     | * the Client ID does not have permission to subscribe to notifications on behalf of the user\n     | * or the x-august-api-key header is not valid.\n 404 | the clientID is not known to the system.\n",
@@ -2001,33 +1994,9 @@
             }
           }
         }
-      },
-      "parameters": [
-        {
-          "name": "lockID",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ]
+      }
     },
     "/webhook/:lockID/:clientID": {
-      "delete": {
-        "summary": "Deletes a webhook for an external service",
-        "description": "Deletes the webhook connection between an external service and lockID/callingUserID",
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          }
-        }
-      },
       "parameters": [
         {
           "name": "lockID",
@@ -2045,9 +2014,33 @@
             "type": "string"
           }
         }
-      ]
+      ],
+      "delete": {
+        "summary": "Deletes a webhook for an external service",
+        "description": "Deletes the webhook connection between an external service and lockID/callingUserID",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
     },
     "/webhook/doorbell/:doorbellID": {
+      "parameters": [
+        {
+          "name": "doorbellID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "post": {
         "summary": "Sets up the notification hook for the doorbell specified by doorbellID.",
         "description": "###notificationTypes\nA JSON array containing one or more of: \n\nnotificationType | Meaning\n---------------- | -------\nmotiondetected   | notification of motion detected by doorbell\nvideoavailable   | notification of doorbell video available\nbuttonpush       | notification of doorbell button pushed\n\n###Responses:\nCode | Reason \n---- | ------\n 200 | body = {\"message\": \"OK\"} call succeeded\n 401 | authorization token is not valid.\n 403 | * the user represented by the authorization token is not an owner of the doorbell\n     | * the Client ID does not have permission to subscribe to notifications on behalf of the user\n     | * or the x-august-api-key header is not valid.\n 404 | the clientID is not known to the system.\n",
@@ -2096,33 +2089,9 @@
             }
           }
         }
-      },
-      "parameters": [
-        {
-          "name": "doorbellID",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ]
+      }
     },
     "/webhook/doorbell/:doorbellID/:clientID": {
-      "delete": {
-        "summary": "Deletes a doorbell webhook for an external service",
-        "description": "Deletes the doorbell webhook connection between an external service and doorbellID/callingUserID",
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          }
-        }
-      },
       "parameters": [
         {
           "name": "doorbellID",
@@ -2140,7 +2109,21 @@
             "type": "string"
           }
         }
-      ]
+      ],
+      "delete": {
+        "summary": "Deletes a doorbell webhook for an external service",
+        "description": "Deletes the doorbell webhook connection between an external service and doorbellID/callingUserID",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
     },
     "/webhook/user": {
       "post": {
@@ -2194,6 +2177,16 @@
       }
     },
     "/webhook/user/:clientID": {
+      "parameters": [
+        {
+          "name": "clientID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "delete": {
         "summary": "Deletes a user webhook for an external service",
         "description": "Deletes the user webhook ",
@@ -2207,19 +2200,19 @@
             }
           }
         }
-      },
+      }
+    },
+    "/locks/:lockID/status": {
       "parameters": [
         {
-          "name": "clientID",
+          "name": "lockID",
           "in": "path",
           "required": true,
           "schema": {
             "type": "string"
           }
         }
-      ]
-    },
-    "/locks/:lockID/status": {
+      ],
       "put": {
         "summary": "Returns the status of a lock from the locks collection.",
         "description": "Possible values 'locked,' 'unlocked,' 'unknown,' 'not-advertising.'",
@@ -2251,19 +2244,19 @@
             }
           }
         }
-      },
+      }
+    },
+    "/keypads/:keypadID": {
       "parameters": [
         {
-          "name": "lockID",
+          "name": "keypadID",
           "in": "path",
           "required": true,
           "schema": {
             "type": "string"
           }
         }
-      ]
-    },
-    "/keypads/:keypadID": {
+      ],
       "get": {
         "summary": "return the data associated with an associated keypad",
         "description": "Calling user must be a lock super user.",
@@ -2291,16 +2284,6 @@
           }
         }
       },
-      "parameters": [
-        {
-          "name": "keypadID",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ],
       "delete": {
         "summary": "deletes a keypad lock association and moves the its offline key to deleted",
         "description": "Calling user must be a lock super user.",
@@ -2317,6 +2300,16 @@
       }
     },
     "/locks/:lockID/pins": {
+      "parameters": [
+        {
+          "name": "lockID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "get": {
         "summary": "Get all pins for a given lock.",
         "description": "Created, loaded, deleting, disabling, disabled, and enabled can all contain pin like objects.",
@@ -2390,16 +2383,6 @@
           }
         }
       },
-      "parameters": [
-        {
-          "name": "lockID",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ],
       "post": {
         "summary": "Load, delete, disable and enable PINs for users on a lock. Newer locks can support schedules on PINs.",
         "description": "See [Remote PIN Management](https://partners.august.com/userguide/apiguide/remote-pin-management-for-the-august-keypad/)",
@@ -2517,6 +2500,16 @@
       }
     },
     "/doorbells/:doorbellID": {
+      "parameters": [
+        {
+          "name": "doorbellID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "get": {
         "summary": "Get information about an existing doorbell",
         "description": "Returns resource not found if doorbellID does not exist.",
@@ -2625,16 +2618,6 @@
           }
         }
       },
-      "parameters": [
-        {
-          "name": "doorbellID",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ],
       "delete": {
         "summary": "Deletes a doorbell",
         "description": "This will return a 404 if doorbellID does not exist and a NotAuthorizedError if user is not a user of the doorbell",
@@ -2665,6 +2648,32 @@
       }
     },
     "/doorbells/:doorbellID/logs/before/:endDateTime/:count": {
+      "parameters": [
+        {
+          "name": "doorbellID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "endDateTime",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "count",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "get": {
         "summary": "Gets doorbell logs before a specified time",
         "description": ":endDateTime should be a date object, a date string, or an integer like unix timestamp",
@@ -2685,7 +2694,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/doorbells/:doorbellID/logs/after/:startDateTime/:count": {
       "parameters": [
         {
           "name": "doorbellID",
@@ -2696,7 +2707,7 @@
           }
         },
         {
-          "name": "endDateTime",
+          "name": "startDateTime",
           "in": "path",
           "required": true,
           "schema": {
@@ -2711,9 +2722,7 @@
             "type": "string"
           }
         }
-      ]
-    },
-    "/doorbells/:doorbellID/logs/after/:startDateTime/:count": {
+      ],
       "get": {
         "summary": "Gets doorbell logs after a specified time",
         "description": ":startDateTime should be a date object, a date string, or an integer like unix timestamp",
@@ -2734,56 +2743,9 @@
             }
           }
         }
-      },
-      "parameters": [
-        {
-          "name": "doorbellID",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "startDateTime",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "count",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ]
+      }
     },
     "/doorbells/:doorbellID/logs/before/:endDateTime/after/:startDateTime": {
-      "get": {
-        "summary": "Gets doorbell logs before and after specified times",
-        "description": "startDateTime and :endDateTime should be a date object, a date string, or an integer like unix timestamp",
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "logs": {
-                      "description": "[Array of log objects]"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
       "parameters": [
         {
           "name": "doorbellID",
@@ -2809,9 +2771,40 @@
             "type": "string"
           }
         }
-      ]
+      ],
+      "get": {
+        "summary": "Gets doorbell logs before and after specified times",
+        "description": "startDateTime and :endDateTime should be a date object, a date string, or an integer like unix timestamp",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "logs": {
+                      "description": "[Array of log objects]"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     },
     "/locks/:lockID/pin": {
+      "parameters": [
+        {
+          "name": "lockID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "get": {
         "summary": "generates an available random pin and reserve it for an system specified time",
         "description": "if there is no pin slot left (208 at the last count) it will return 409 (ConflictError)",
@@ -2832,7 +2825,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/locks/:lockID/credential": {
       "parameters": [
         {
           "name": "lockID",
@@ -2842,9 +2837,7 @@
             "type": "string"
           }
         }
-      ]
-    },
-    "/locks/:lockID/credential": {
+      ],
       "get": {
         "summary": "generates an available random pin & slot number and reserve it for a system specified time",
         "description": "if there is no pin slot left (208 at the last count) it will return 409 (ConflictError)\nthis endpoint is going to replace 'GET /locks/:lockID/pin'\nthe three different type of lock credentials will not share the same slots'\ntype param is required in query",
@@ -2879,7 +2872,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/locks/:lockID/credentials": {
       "parameters": [
         {
           "name": "lockID",
@@ -2889,9 +2884,7 @@
             "type": "string"
           }
         }
-      ]
-    },
-    "/locks/:lockID/credentials": {
+      ],
       "get": {
         "summary": "query credentials in various states with a lock",
         "description": "created: means that the CREDENTIAL should be loaded onto the lock, first step of associating a CREDENTIAL loaded: means that the CREDENTIAL has been loaded to the lock, second and final step of associating a CREDENTIAL deleting: means that the CREDENTIAL should be deleted, first step of removing a CREDENTIAL from a lock deleted: means that the CREDENTIAL has been be deleted from the lock disabling: means the the CREDENTIAL should be disabled disabled: means that the CREDENTIAL has been marked as disabled on the lock enabling: means that the CREDENTIAL should be enabled enabled: means that the CREDENTIAL has been enabled, which means that it is back in the loaed group of CREDENTIALS. if 'type' is optional, the endpoint will query all credentials from the lock, otherwise it will return the unique type of lock credentialsif the callingUser is a lock manager, it will return all the credentials from the lock, otherwise it only return his locks' credentials",
@@ -2956,16 +2949,6 @@
           }
         }
       },
-      "parameters": [
-        {
-          "name": "lockID",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ],
       "delete": {
         "summary": "This deletes all pins/slots associated with a lock by type.",
         "description": "this is a replacement/update for 'DEL /locks/:lockID/pins'",
@@ -3009,6 +2992,24 @@
       }
     },
     "/houses/:houseID/activity/:limit": {
+      "parameters": [
+        {
+          "name": "houseID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "limit",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "get": {
         "summary": "This gets all the logs for a given house.",
         "parameters": [
@@ -3056,7 +3057,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/houses/:houseID/activities": {
       "parameters": [
         {
           "name": "houseID",
@@ -3065,18 +3068,8 @@
           "schema": {
             "type": "string"
           }
-        },
-        {
-          "name": "limit",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
         }
-      ]
-    },
-    "/houses/:houseID/activities": {
+      ],
       "get": {
         "summary": "This gets all the logs for a given house, allows to provide a `limit` query string",
         "responses": {
@@ -3114,19 +3107,19 @@
             }
           }
         }
-      },
+      }
+    },
+    "/users/:otherUserID/imageinfo": {
       "parameters": [
         {
-          "name": "houseID",
+          "name": "otherUserID",
           "in": "path",
           "required": true,
           "schema": {
             "type": "string"
           }
         }
-      ]
-    },
-    "/users/:otherUserID/imageinfo": {
+      ],
       "get": {
         "summary": "get information on images for otherUser that are specific to callingUser",
         "description": "Generally, applications should use the thumbnail.  Returns ressource not found if the calling user has not set an image for the other user.",
@@ -3180,19 +3173,19 @@
             }
           }
         }
-      },
+      }
+    },
+    "/doorbells/:doorbellID/diagnostics": {
       "parameters": [
         {
-          "name": "otherUserID",
+          "name": "doorbellID",
           "in": "path",
           "required": true,
           "schema": {
             "type": "string"
           }
         }
-      ]
-    },
-    "/doorbells/:doorbellID/diagnostics": {
+      ],
       "get": {
         "summary": "Get doorbell diagnostic information and wake doorbell",
         "description": "Status Codes:\n401 InvalidCredentialsError\n  - The access token is invalid.\n  - The user is blacklisted.\n404 doorbellID does not exist or a NotAuthorizedError if user is not a user of the doorbell\n",
@@ -3251,17 +3244,7 @@
             }
           }
         }
-      },
-      "parameters": [
-        {
-          "name": "doorbellID",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ]
+      }
     },
     "/appdevices": {
       "get": {
@@ -3328,6 +3311,16 @@
       }
     },
     "/appdevices/:universalDeviceID": {
+      "parameters": [
+        {
+          "name": "universalDeviceID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "get": {
         "summary": "universalDeviceID matches the specific app device resource",
         "responses": {
@@ -3340,17 +3333,7 @@
             }
           }
         }
-      },
-      "parameters": [
-        {
-          "name": "universalDeviceID",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ]
+      }
     },
     "/devicepicker": {
       "get": {
@@ -3424,6 +3407,16 @@
       }
     },
     "/users/:otherUserID/image": {
+      "parameters": [
+        {
+          "name": "otherUserID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "post": {
         "summary": "Set the image the calling user gets when retrieving information about the otherUser",
         "description": "POSTing to /users/:otherUserID will associate the image in the body with the other user when the calling user requests an image for the other user",
@@ -3437,17 +3430,7 @@
             }
           }
         }
-      },
-      "parameters": [
-        {
-          "name": "otherUserID",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ]
+      }
     },
     "/users/me/legal": {
       "get": {
@@ -3550,6 +3533,16 @@
       }
     },
     "/session/:identifier": {
+      "parameters": [
+        {
+          "name": "identifier",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "delete": {
         "summary": "Deletes all session keys for the calling user",
         "description": "Deletes all sessions for the calling user. All subesequent API calls will respond that a new session must be retrieved.  Use in the case of a lost phone, etc.  identifer can be Email, in the form \"email:<email>\", or Phone Number in form \"phone:+<country code><number with no spaces>\"",
@@ -3563,17 +3556,7 @@
             }
           }
         }
-      },
-      "parameters": [
-        {
-          "name": "identifier",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ]
+      }
     },
     "/houses": {
       "post": {
@@ -3619,6 +3602,16 @@
       }
     },
     "/houses/:houseID/image": {
+      "parameters": [
+        {
+          "name": "houseID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "post": {
         "summary": "Set the image the image for the house",
         "description": "PUTing to /houses/:houseID/image will associate the image in the body with house and that image will be returned with house info",
@@ -3632,7 +3625,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/houses/:houseID/nestawaystatus": {
       "parameters": [
         {
           "name": "houseID",
@@ -3642,9 +3637,7 @@
             "type": "string"
           }
         }
-      ]
-    },
-    "/houses/:houseID/nestawaystatus": {
+      ],
       "get": {
         "summary": "gets the Nest away status for a house that has been associated with a nest structure",
         "responses": {
@@ -3664,7 +3657,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/houses/:houseID/temperature": {
       "parameters": [
         {
           "name": "houseID",
@@ -3674,9 +3669,7 @@
             "type": "string"
           }
         }
-      ]
-    },
-    "/houses/:houseID/temperature": {
+      ],
       "get": {
         "summary": "returns the temperature for a house",
         "description": "size of body array will vary on number of sensors",
@@ -3703,33 +3696,9 @@
             }
           }
         }
-      },
-      "parameters": [
-        {
-          "name": "houseID",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ]
+      }
     },
     "/houses/:houseID/nestawaystatus/:status": {
-      "put": {
-        "summary": "sets the away status for the Nest structure associcated with the specified August house",
-        "description": "valid values for status are home and away.",
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          }
-        }
-      },
       "parameters": [
         {
           "name": "houseID",
@@ -3747,11 +3716,10 @@
             "type": "string"
           }
         }
-      ]
-    },
-    "/houses/:houseID/neststructure/:structureID": {
+      ],
       "put": {
-        "summary": "disassocites the specified Nest structure with the specified August house",
+        "summary": "sets the away status for the Nest structure associcated with the specified August house",
+        "description": "valid values for status are home and away.",
         "responses": {
           "200": {
             "description": "",
@@ -3762,7 +3730,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/houses/:houseID/neststructure/:structureID": {
       "parameters": [
         {
           "name": "houseID",
@@ -3780,12 +3750,9 @@
             "type": "string"
           }
         }
-      ]
-    },
-    "/houses/lock/:houseID/:lockID": {
-      "delete": {
-        "summary": "Remove lock lockID from house houseID",
-        "description": "Returns 200/OK if successful, 404 if lockID:houseID relationship is not found, and 403 if not authorized",
+      ],
+      "put": {
+        "summary": "disassocites the specified Nest structure with the specified August house",
         "responses": {
           "200": {
             "description": "",
@@ -3796,7 +3763,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/houses/lock/:houseID/:lockID": {
       "parameters": [
         {
           "name": "houseID",
@@ -3814,9 +3783,33 @@
             "type": "string"
           }
         }
-      ]
+      ],
+      "delete": {
+        "summary": "Remove lock lockID from house houseID",
+        "description": "Returns 200/OK if successful, 404 if lockID:houseID relationship is not found, and 403 if not authorized",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
     },
     "/users/identifier/:identifier": {
+      "parameters": [
+        {
+          "name": "identifier",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "delete": {
         "summary": "remove an identifier from a user",
         "responses": {
@@ -3829,19 +3822,19 @@
             }
           }
         }
-      },
+      }
+    },
+    "/users/identifier/:identifierType": {
       "parameters": [
         {
-          "name": "identifier",
+          "name": "identifierType",
           "in": "path",
           "required": true,
           "schema": {
             "type": "string"
           }
         }
-      ]
-    },
-    "/users/identifier/:identifierType": {
+      ],
       "get": {
         "summary": "Gets a user's identifier of a certain type. Some identifier types may be created if none exists yet",
         "responses": {
@@ -3861,19 +3854,19 @@
             }
           }
         }
-      },
+      }
+    },
+    "/locks/:houseID": {
       "parameters": [
         {
-          "name": "identifierType",
+          "name": "houseID",
           "in": "path",
           "required": true,
           "schema": {
             "type": "string"
           }
         }
-      ]
-    },
-    "/locks/:houseID": {
+      ],
       "post": {
         "summary": "Adds a lock to a house.",
         "description": "Requestor must provide UNIQUE ID of the lock.  If LockID or Name are not present, a Bad Request error is returned. If the user is not a manager or superuser of the house, a Not Authorized error is returned.",
@@ -3916,6 +3909,7 @@
                       "description": "<Text string>"
                     },
                     "Type": {
+                      "type": "integer",
                       "description": "Integer.  Curently the only lock type supported is 1"
                     },
                     "Updated": {
@@ -3933,19 +3927,19 @@
             }
           }
         }
-      },
+      }
+    },
+    "/locks/:lockID/resetkeys": {
       "parameters": [
         {
-          "name": "houseID",
+          "name": "lockID",
           "in": "path",
           "required": true,
           "schema": {
             "type": "string"
           }
         }
-      ]
-    },
-    "/locks/:lockID/resetkeys": {
+      ],
       "put": {
         "summary": "Move all keys to deleted",
         "description": "move all keys (except key index 0) to deleted",
@@ -3972,7 +3966,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/locks/acknowledgeparamupdate/:lockID": {
       "parameters": [
         {
           "name": "lockID",
@@ -3982,9 +3978,7 @@
             "type": "string"
           }
         }
-      ]
-    },
-    "/locks/acknowledgeparamupdate/:lockID": {
+      ],
       "put": {
         "summary": "acknowledge update of params client was instructed to set by server",
         "requestBody": {
@@ -4020,7 +4014,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/locks/:lockID/offlinekeys/:action": {
       "parameters": [
         {
           "name": "lockID",
@@ -4029,10 +4025,16 @@
           "schema": {
             "type": "string"
           }
+        },
+        {
+          "name": "action",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
         }
-      ]
-    },
-    "/locks/:lockID/offlinekeys/:action": {
+      ],
       "put": {
         "summary": "Acquire ownership of a known lock.",
         "requestBody": {
@@ -4076,7 +4078,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/locks/timeadjustment/:lockID/:realtime/:locktime": {
       "parameters": [
         {
           "name": "lockID",
@@ -4087,16 +4091,22 @@
           }
         },
         {
-          "name": "action",
+          "name": "realtime",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "locktime",
           "in": "path",
           "required": true,
           "schema": {
             "type": "string"
           }
         }
-      ]
-    },
-    "/locks/timeadjustment/:lockID/:realtime/:locktime": {
+      ],
       "put": {
         "summary": "Inform server of time adjustment for a lock",
         "description": "When a mobile device detects the clock on the lock is out of sync, it sets the time and informs the server of the adjustment.  Returns authorization error if callingUser is not able to use lock.  Returns success otherwise.",
@@ -4110,7 +4120,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/locks/timeadustment/:lockID/:realtime/:locktime": {
       "parameters": [
         {
           "name": "lockID",
@@ -4136,9 +4148,7 @@
             "type": "string"
           }
         }
-      ]
-    },
-    "/locks/timeadustment/:lockID/:realtime/:locktime": {
+      ],
       "put": {
         "summary": "Inform server of time adjustment for a lock",
         "description": "alias for PUT /locks/timeadjustment/:lockID/:realtime/:locktime (no j in timeadjustment)",
@@ -4152,7 +4162,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/locks/:lockID/users/:otherUserID/sound": {
       "parameters": [
         {
           "name": "lockID",
@@ -4163,24 +4175,14 @@
           }
         },
         {
-          "name": "realtime",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "locktime",
+          "name": "otherUserID",
           "in": "path",
           "required": true,
           "schema": {
             "type": "string"
           }
         }
-      ]
-    },
-    "/locks/:lockID/users/:otherUserID/sound": {
+      ],
       "put": {
         "summary": "Set sound package id of lock.",
         "requestBody": {
@@ -4217,41 +4219,9 @@
             }
           }
         }
-      },
-      "parameters": [
-        {
-          "name": "lockID",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "otherUserID",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ]
+      }
     },
     "/locks/setnotification/:lockID/:otherUserID/:on": {
-      "post": {
-        "summary": "sets notifications (lock, unlock, both, neither) when otherUser uses lock",
-        "description": "sends push notification to callingUser (phone or dashboard) when otherUser uses lock.  Values for 'on':  lock - notifies on lock, unlock - notifies on unlock, both - notifies on both, neither disables notifications when otherUser uses lock",
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          }
-        }
-      },
       "parameters": [
         {
           "name": "lockID",
@@ -4277,12 +4247,10 @@
             "type": "string"
           }
         }
-      ]
-    },
-    "/locks/notifications/:lockID/:otherUserID": {
-      "get": {
-        "summary": "returns notifications for specified user on specified lock",
-        "description": "returns all notifications calling user has for specified user on lock specified",
+      ],
+      "post": {
+        "summary": "sets notifications (lock, unlock, both, neither) when otherUser uses lock",
+        "description": "sends push notification to callingUser (phone or dashboard) when otherUser uses lock.  Values for 'on':  lock - notifies on lock, unlock - notifies on unlock, both - notifies on both, neither disables notifications when otherUser uses lock",
         "responses": {
           "200": {
             "description": "",
@@ -4293,7 +4261,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/locks/notifications/:lockID/:otherUserID": {
       "parameters": [
         {
           "name": "lockID",
@@ -4311,9 +4281,33 @@
             "type": "string"
           }
         }
-      ]
+      ],
+      "get": {
+        "summary": "returns notifications for specified user on specified lock",
+        "description": "returns all notifications calling user has for specified user on lock specified",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
     },
     "/locks/usage/:lockID": {
+      "parameters": [
+        {
+          "name": "lockID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "put": {
         "summary": "inform service of lock usage",
         "description": "Notifies service of lock operation.  If a key is \"in flight\", it closes the loop and finalizes the process.  Creates a log entry for the usage, and triggers notifications to all clients listening for updates on the lock",
@@ -4352,7 +4346,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/locks/:lockID/lockmessages": {
       "parameters": [
         {
           "name": "lockID",
@@ -4362,9 +4358,7 @@
             "type": "string"
           }
         }
-      ]
-    },
-    "/locks/:lockID/lockmessages": {
+      ],
       "get": {
         "summary": "get messages regarding a lock",
         "description": "/! DEPRECATED: 410 GoneError",
@@ -4378,33 +4372,9 @@
             }
           }
         }
-      },
-      "parameters": [
-        {
-          "name": "lockID",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ]
+      }
     },
     "/lockstatus/:lockID/:status": {
-      "put": {
-        "summary": "inform the service of the current status of the lock",
-        "description": "/! DEPRECATED: 410 GoneError",
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          }
-        }
-      },
       "parameters": [
         {
           "name": "lockID",
@@ -4422,12 +4392,10 @@
             "type": "string"
           }
         }
-      ]
-    },
-    "/locks/log/:lockID/:action": {
-      "post": {
-        "summary": "creates a log entry that :action was performed by callingUser at :dateTime",
-        "description": "200 OK status is returned if all is well.  Returns invalid request if the action is not supported.  supported actions are:  'lock', 'unlock', 'lockcommand', and 'lockdata'.  Date format is YYYYMMDDHHMMSSmmm.  If action is lockdata or lockcommand, body must contain data from the lock",
+      ],
+      "put": {
+        "summary": "inform the service of the current status of the lock",
+        "description": "/! DEPRECATED: 410 GoneError",
         "responses": {
           "200": {
             "description": "",
@@ -4438,7 +4406,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/locks/log/:lockID/:action": {
       "parameters": [
         {
           "name": "lockID",
@@ -4456,7 +4426,21 @@
             "type": "string"
           }
         }
-      ]
+      ],
+      "post": {
+        "summary": "creates a log entry that :action was performed by callingUser at :dateTime",
+        "description": "200 OK status is returned if all is well.  Returns invalid request if the action is not supported.  supported actions are:  'lock', 'unlock', 'lockcommand', and 'lockdata'.  Date format is YYYYMMDDHHMMSSmmm.  If action is lockdata or lockcommand, body must contain data from the lock",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
     },
     "/apns/devtoken": {
       "post": {
@@ -4491,6 +4475,16 @@
       }
     },
     "/apns/notifyuser/:otherUserID": {
+      "parameters": [
+        {
+          "name": "otherUserID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "put": {
         "summary": "sends an Apple Push Notification Service ot the user specified by otherUserID",
         "description": "If the user specified by otherUserID does not accept notifications, and error is returned",
@@ -4518,17 +4512,7 @@
             }
           }
         }
-      },
-      "parameters": [
-        {
-          "name": "otherUserID",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ]
+      }
     },
     "/messages": {
       "get": {
@@ -4547,6 +4531,16 @@
       }
     },
     "/messages/acknowledge/:messageID": {
+      "parameters": [
+        {
+          "name": "messageID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "put": {
         "summary": "acknowledge message so it is not delivered again by GET /messages/:userID",
         "description": "/! DEPRECATED: 410 GoneError",
@@ -4560,19 +4554,19 @@
             }
           }
         }
-      },
+      }
+    },
+    "/locks/initiatecomm/:lockID": {
       "parameters": [
         {
-          "name": "messageID",
+          "name": "lockID",
           "in": "path",
           "required": true,
           "schema": {
             "type": "string"
           }
         }
-      ]
-    },
-    "/locks/initiatecomm/:lockID": {
+      ],
       "put": {
         "summary": "takes two random numbers then returns a packet to be sent to the lock and a URL to PUT the response",
         "description": "The mobile device PUTs mRand1 and mRand2 to the endpoint and then sends the packet in the response to the lock. When the lock responds, the response is send to the url specified by URL using the method specified by method.  Returns an Invalid Argument error if checksum fails.",
@@ -4616,7 +4610,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/locks/m2lkeyexchangepacket/:lockID": {
       "parameters": [
         {
           "name": "lockID",
@@ -4626,9 +4622,7 @@
             "type": "string"
           }
         }
-      ]
-    },
-    "/locks/m2lkeyexchangepacket/:lockID": {
+      ],
       "put": {
         "summary": "Generates random numbers then returns a packet to be sent to the lock and a URL to PUT the response",
         "description": "The mobile device PUTs mRand1 and mRand2 to the endpoint and then sends the packet in the response to the lock. When the lock responds, the response is send to the url specified by URL using the method specified by method.  Returns an Invalid Argument error if checksum fails.",
@@ -4655,7 +4649,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/locks/getlockrands/:lockID": {
       "parameters": [
         {
           "name": "lockID",
@@ -4665,9 +4661,7 @@
             "type": "string"
           }
         }
-      ]
-    },
-    "/locks/getlockrands/:lockID": {
+      ],
       "put": {
         "summary": "takes the lock's response to the exchange key packet and returns lRand1 and lRand2",
         "description": "The mobile device PUTs the response from the exchange key command to this endpiont.  The service returns lRand1 and lRand2 for use in the session key",
@@ -4705,17 +4699,7 @@
             }
           }
         }
-      },
-      "parameters": [
-        {
-          "name": "lockID",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ]
+      }
     },
     "/updateurl": {
       "get": {
@@ -4741,6 +4725,16 @@
       }
     },
     "/validation/:idtype": {
+      "parameters": [
+        {
+          "name": "idtype",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "post": {
         "summary": "sends a verification code to an identifier, if no identifier is specified in the body a code will be sent to the last identifier of idtype on file ",
         "description": "sends an verification code to an identifier, if none is specified last identifier of type idtype will be used.  idtype can be either phone or email",
@@ -4778,7 +4772,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/validate/:idtype": {
       "parameters": [
         {
           "name": "idtype",
@@ -4788,9 +4784,7 @@
             "type": "string"
           }
         }
-      ]
-    },
-    "/validate/:idtype": {
+      ],
       "post": {
         "summary": "claims a verification code sent to an identifier, if no identifier is specified in the body a code will be sent to the last identifier of idtype on file ",
         "description": "if no identifier is specified in the body last identifier of type idtype will be used to claim the code.  idtype can be either phone or email",
@@ -4803,17 +4797,11 @@
                   "code": {
                     "description": "the verification code that was sent to the identifier"
                   },
-                  "oneof": {
-                    "type": "object",
-                    "description": "",
-                    "properties": {
-                      "email": {
-                        "description": "email address"
-                      },
-                      "phone": {
-                        "description": "telephone number"
-                      }
-                    }
+                  "email": {
+                    "description": "email address"
+                  },
+                  "phone": {
+                    "description": "telephone number"
                   }
                 },
                 "required": [
@@ -4846,17 +4834,7 @@
             }
           }
         }
-      },
-      "parameters": [
-        {
-          "name": "idtype",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ]
+      }
     },
     "/telemetry/logautounlockaction": {
       "post": {
@@ -4874,6 +4852,7 @@
                     "description": "optional description of the event"
                   },
                   "date": {
+                    "type": "integer",
                     "description": "integer milliseconds since epoch"
                   },
                   "LockID": {
@@ -4925,20 +4904,6 @@
       }
     },
     "/bridges/:bridgeID/notifications/:type": {
-      "post": {
-        "summary": "set up notification of type specified for bridge specified",
-        "description": "Sets up notifications of type specified for the bridge specified for the calling user.  The only type currently supported is system, and the only channel supported is push.  If no body is specified, the channel will be push.",
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          }
-        }
-      },
       "parameters": [
         {
           "name": "bridgeID",
@@ -4957,6 +4922,20 @@
           }
         }
       ],
+      "post": {
+        "summary": "set up notification of type specified for bridge specified",
+        "description": "Sets up notifications of type specified for the bridge specified for the calling user.  The only type currently supported is system, and the only channel supported is push.  If no body is specified, the channel will be push.",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      },
       "delete": {
         "summary": "disables bridge notification for type specified on specified bridge",
         "description": "Disables notification of type specified for the bridge specified for the calling user.  The only current type supported is system",
@@ -4973,6 +4952,16 @@
       }
     },
     "/bridges/:bridgeID/notifications": {
+      "parameters": [
+        {
+          "name": "bridgeID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "get": {
         "summary": "returns a list of notifications for the bridge",
         "description": "returns an array of all notifications on the bridge for the calling user.",
@@ -4999,19 +4988,19 @@
             }
           }
         }
-      },
+      }
+    },
+    "/nest/authtoken/:token": {
       "parameters": [
         {
-          "name": "bridgeID",
+          "name": "token",
           "in": "path",
           "required": true,
           "schema": {
             "type": "string"
           }
         }
-      ]
-    },
-    "/nest/authtoken/:token": {
+      ],
       "put": {
         "summary": "associates the specified Nest authorization token with the calling user",
         "description": "creates the association if none exists, updates it if it does exist.",
@@ -5025,17 +5014,7 @@
             }
           }
         }
-      },
-      "parameters": [
-        {
-          "name": "token",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ]
+      }
     },
     "/nest/structures": {
       "get": {
@@ -5079,6 +5058,24 @@
       }
     },
     "/appfeatures/:platform/:version": {
+      "parameters": [
+        {
+          "name": "platform",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "version",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "get": {
         "summary": "Get enabled optional features for platform/version/callingUserID",
         "responses": {
@@ -5106,27 +5103,19 @@
             }
           }
         }
-      },
+      }
+    },
+    "/locks/geofenceinfo/:lockID": {
       "parameters": [
         {
-          "name": "platform",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "version",
+          "name": "lockID",
           "in": "path",
           "required": true,
           "schema": {
             "type": "string"
           }
         }
-      ]
-    },
-    "/locks/geofenceinfo/:lockID": {
+      ],
       "put": {
         "summary": "Put information about the calling user's choices on setting geofence for automatic unlock foir the given lockID and platform (iOS or Android)",
         "requestBody": {
@@ -5169,33 +5158,9 @@
             }
           }
         }
-      },
-      "parameters": [
-        {
-          "name": "lockID",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ]
+      }
     },
     "/locks/firmware/:lockID/:version": {
-      "get": {
-        "summary": "Check if there are any ARM updates available and return a new firmware blob if there is a new version available",
-        "description": "As of August 2015, this endpoint is deprecated, since it does not support TI firmware updates. All new code should use the endpoint GET /locks/:lockID/firmware/:version",
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          }
-        }
-      },
       "parameters": [
         {
           "name": "lockID",
@@ -5213,9 +5178,41 @@
             "type": "string"
           }
         }
-      ]
+      ],
+      "get": {
+        "summary": "Check if there are any ARM updates available and return a new firmware blob if there is a new version available",
+        "description": "As of August 2015, this endpoint is deprecated, since it does not support TI firmware updates. All new code should use the endpoint GET /locks/:lockID/firmware/:version",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
     },
     "/locks/:lockID/firmware/:version": {
+      "parameters": [
+        {
+          "name": "lockID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "version",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "get": {
         "summary": "Check if any updates are needed for the ARM firwmare or the TI (Bluetooth) firmware.\nThe \"version\" string should be in the form of \"${ARM_GITHASH}-${ARM_VERSION}-${TI_VERSION}\".If the ARM_VERSION is not defined, then use the string \"undefined\" in its place.",
         "description": "Examples of firmware version numbers:\n  For the RC 4 firmware release, the version string would be \"1b5bfedc-undefined-0.4.2\"\n  For the RC 5.1 firmware release, the version string would be \"788113bb-undefined-0.4.2\"\n  For the RC 5.6 firmware release, the version string would be \"403286da-undefined-1.0.0\"\n  For the 1.0.55 firmware release, the version string would be \"d8df5ada-1.0.55-1.1.12\"\n  For the 1.0.75 firmware release, the version string would be \"f98c98f9-1.0.75-1.1.18\"",
@@ -5249,40 +5246,9 @@
             }
           }
         }
-      },
-      "parameters": [
-        {
-          "name": "lockID",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "version",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ]
+      }
     },
     "/locks/:lockID/firmware/:chip/:version": {
-      "get": {
-        "summary": "Gets the firmware update blob for the given chip. Individualizes this firmware update blob if necessary.\nThe \"chip\" string should be either \"arm\" or \"ti\".\nThe \"version\" string should be in the form of \"${ARM_GITHASH}-${ARM_VERSION}-${TI_VERSION}\".If the ARM_VERSION is not defined, then use the string \"undefined\" in its place.",
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          }
-        }
-      },
       "parameters": [
         {
           "name": "lockID",
@@ -5308,9 +5274,32 @@
             "type": "string"
           }
         }
-      ]
+      ],
+      "get": {
+        "summary": "Gets the firmware update blob for the given chip. Individualizes this firmware update blob if necessary.\nThe \"chip\" string should be either \"arm\" or \"ti\".\nThe \"version\" string should be in the form of \"${ARM_GITHASH}-${ARM_VERSION}-${TI_VERSION}\".If the ARM_VERSION is not defined, then use the string \"undefined\" in its place.",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
     },
     "/locks/:lockID/firmware": {
+      "parameters": [
+        {
+          "name": "lockID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "get": {
         "summary": "Check for firmware updates for a lock version and its chips, which are specified as query parameters",
         "description": "Status Codes:\n200 OK\n404 ResourceNotFound - lockID not found\n",
@@ -5362,7 +5351,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/locks/:lockID/firmware/keypadcheck": {
       "parameters": [
         {
           "name": "lockID",
@@ -5372,9 +5363,7 @@
             "type": "string"
           }
         }
-      ]
-    },
-    "/locks/:lockID/firmware/keypadcheck": {
+      ],
       "put": {
         "summary": "This tells the client the lock has firmware supporting the keypad.",
         "description": "Calling user must be a lock super user.",
@@ -5396,17 +5385,7 @@
             }
           }
         }
-      },
-      "parameters": [
-        {
-          "name": "lockID",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ]
+      }
     },
     "/houses/houseID": {
       "delete": {
@@ -5425,6 +5404,32 @@
       }
     },
     "/houses/adduser/:houseID/:otherUserID/:type": {
+      "parameters": [
+        {
+          "name": "houseID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "otherUserID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "type",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "put": {
         "summary": "Add a user with a type to a house",
         "description": "Returns 404 if house not found, 403 if callingUser is not superuser of house",
@@ -5438,7 +5443,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/houses/:houseID/users/:otherUserID/setusertype/:type": {
       "parameters": [
         {
           "name": "houseID",
@@ -5464,9 +5471,7 @@
             "type": "string"
           }
         }
-      ]
-    },
-    "/houses/:houseID/users/:otherUserID/setusertype/:type": {
+      ],
       "put": {
         "summary": "switch a user of a house between user and superuser",
         "description": "type is either ['user', 'superuser'].  Returns a 404 if house not found.  Returns 403 if callingUser is not a superuser of the house.  Returns 412 if otherUser is not a user of the house",
@@ -5480,35 +5485,19 @@
             }
           }
         }
-      },
+      }
+    },
+    "/locks/status/:lockID": {
       "parameters": [
         {
-          "name": "houseID",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "otherUserID",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "type",
+          "name": "lockID",
           "in": "path",
           "required": true,
           "schema": {
             "type": "string"
           }
         }
-      ]
-    },
-    "/locks/status/:lockID": {
+      ],
       "put": {
         "summary": "Updates the status of a lock in the locks collection.",
         "description": " Possible values 'locked,' 'unlocked,' 'unknown,' 'not-advertising.' The end point also publishes status messages and hits web hooks when applicable.",
@@ -5522,33 +5511,9 @@
             }
           }
         }
-      },
-      "parameters": [
-        {
-          "name": "lockID",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ]
+      }
     },
     "/keypads/firmware/:keypadID/:version": {
-      "get": {
-        "summary": "Check if there are any version updates available and return a new firmware blob if there is a new version available",
-        "description": "Returns 204 and no body if keypad has proper version.",
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          }
-        }
-      },
       "parameters": [
         {
           "name": "keypadID",
@@ -5566,9 +5531,41 @@
             "type": "string"
           }
         }
-      ]
+      ],
+      "get": {
+        "summary": "Check if there are any version updates available and return a new firmware blob if there is a new version available",
+        "description": "Returns 204 and no body if keypad has proper version.",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
     },
     "/keypads/:keypadID/firmware/:version": {
+      "parameters": [
+        {
+          "name": "keypadID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "version",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "get": {
         "summary": "Saves given version as current firmware version in db and returns new version if available.",
         "responses": {
@@ -5594,7 +5591,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/keypads/:keypadID/code": {
       "parameters": [
         {
           "name": "keypadID",
@@ -5603,18 +5602,8 @@
           "schema": {
             "type": "string"
           }
-        },
-        {
-          "name": "version",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
         }
-      ]
-    },
-    "/keypads/:keypadID/code": {
+      ],
       "get": {
         "summary": "Gets the reset code associate with that particular keypad.",
         "description": "returns a 404 if the keypad serial number is not found, 403 if it is associated with a lock the user is not a superuser of",
@@ -5636,16 +5625,6 @@
           }
         }
       },
-      "parameters": [
-        {
-          "name": "keypadID",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ],
       "put": {
         "summary": "Stores the resed code of the keypad, the reset code is retained accross lock disassociation",
         "description": "returns a 404 if the keypad SN is not found, 403 if there is a permission issue, 409 if the resetCode is not valid",
@@ -5676,6 +5655,24 @@
       }
     },
     "/keypads/:keypadID/:lockID/offlinekey": {
+      "parameters": [
+        {
+          "name": "keypadID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "lockID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "get": {
         "summary": "Creates a handshake key and adds it to given lock's offline keys,",
         "description": "Calling user must be a lock super user.",
@@ -5705,25 +5702,7 @@
             }
           }
         }
-      },
-      "parameters": [
-        {
-          "name": "keypadID",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "lockID",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ]
+      }
     },
     "/keypads": {
       "post": {
@@ -5748,6 +5727,16 @@
       }
     },
     "/keypads/:keypadID/handshakeKey": {
+      "parameters": [
+        {
+          "name": "keypadID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "put": {
         "summary": "This updates a keypad's currentHandshakeKey.",
         "description": "Calling user must be a lock super user.",
@@ -5778,17 +5767,7 @@
             }
           }
         }
-      },
-      "parameters": [
-        {
-          "name": "keypadID",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ]
+      }
     },
     "/apps/mine": {
       "get": {
@@ -6252,6 +6231,16 @@
       }
     },
     "/partners/:partnerID/mailinglist": {
+      "parameters": [
+        {
+          "name": "partnerID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "post": {
         "summary": "Adds a given email to a partner mailing list.",
         "responses": {
@@ -6265,16 +6254,6 @@
           }
         }
       },
-      "parameters": [
-        {
-          "name": "partnerID",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ],
       "get": {
         "summary": "Returns an array of emails of a partner mailing list.",
         "responses": {
@@ -6359,6 +6338,24 @@
       }
     },
     "/airbnb/listings/:listingID/locks/:lockID": {
+      "parameters": [
+        {
+          "name": "listingID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "lockID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "put": {
         "summary": "pairs a lock and listing based on given parameter ids",
         "requestBody": {
@@ -6389,24 +6386,6 @@
           }
         }
       },
-      "parameters": [
-        {
-          "name": "listingID",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "lockID",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ],
       "delete": {
         "summary": "de-pairs a lock and listing based on given parameter ids",
         "responses": {
@@ -6476,6 +6455,16 @@
       }
     },
     "/apps/:appID": {
+      "parameters": [
+        {
+          "name": "appID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "delete": {
         "summary": "disconnects August App from app specified by appID for callingUser",
         "description": "if callingUser is not associated with the app specified, no error is returned",
@@ -6489,7 +6478,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/users/tokens/:appID": {
       "parameters": [
         {
           "name": "appID",
@@ -6499,9 +6490,7 @@
             "type": "string"
           }
         }
-      ]
-    },
-    "/users/tokens/:appID": {
+      ],
       "delete": {
         "summary": "Delete token for a given app",
         "responses": {
@@ -6515,16 +6504,6 @@
           }
         }
       },
-      "parameters": [
-        {
-          "name": "appID",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ],
       "get": {
         "summary": "Get or generate a token for a given app",
         "description": "Current use: The subscription management web UI needs to retrieve some subscriptions related data. We do not want to have that web app access REST API directly. august-subscription-server has been created to provide the required data. To authenticate against august-subscription-server a temporary (30min) token will be used by the web app. The mobile clients will provide that token to the web app after requesting it from REST API.",
@@ -6541,19 +6520,6 @@
       }
     },
     "/augustappversionok/:clientos/:clientversion": {
-      "get": {
-        "summary": "Checks whether the application needs an compulsary upgrade",
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          }
-        }
-      },
       "parameters": [
         {
           "name": "clientos",
@@ -6571,7 +6537,20 @@
             "type": "string"
           }
         }
-      ]
+      ],
+      "get": {
+        "summary": "Checks whether the application needs an compulsary upgrade",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
     },
     "/clientlogdata": {
       "post": {
@@ -6605,6 +6584,16 @@
       }
     },
     "/private/locks/status/:lockID": {
+      "parameters": [
+        {
+          "name": "lockID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "put": {
         "summary": "Updates the status of a lock in the locks collection. Possible values 'locked,' 'unlocked,' 'unknown.'",
         "responses": {
@@ -6618,16 +6607,6 @@
           }
         }
       },
-      "parameters": [
-        {
-          "name": "lockID",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ],
       "get": {
         "summary": "Gets status of lock",
         "responses": {
@@ -6643,20 +6622,6 @@
       }
     },
     "/private/locks/log/:lockID/:action": {
-      "post": {
-        "summary": "Creates a log entry per given post data; special handling for manual operation. Notifies listeners and issues push notifications to applicable parties.",
-        "description": "/! DEPRECATED: 410 GoneError",
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          }
-        }
-      },
       "parameters": [
         {
           "name": "lockID",
@@ -6674,12 +6639,10 @@
             "type": "string"
           }
         }
-      ]
-    },
-    "/doorbells/:doorbellID/:otherUserID": {
-      "delete": {
-        "summary": "Deletes user specified by otherUserID from doorbell specified by doorbellID",
-        "description": "Returns Unauthorized if the calling user is not a user of the doorbell.Returns Not Found if doorbell or otherUserID do not exist.Returns PreconditionFailed if otherUserID is not a user of the doorbell",
+      ],
+      "post": {
+        "summary": "Creates a log entry per given post data; special handling for manual operation. Notifies listeners and issues push notifications to applicable parties.",
+        "description": "/! DEPRECATED: 410 GoneError",
         "responses": {
           "200": {
             "description": "",
@@ -6690,7 +6653,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/doorbells/:doorbellID/:otherUserID": {
       "parameters": [
         {
           "name": "doorbellID",
@@ -6708,9 +6673,33 @@
             "type": "string"
           }
         }
-      ]
+      ],
+      "delete": {
+        "summary": "Deletes user specified by otherUserID from doorbell specified by doorbellID",
+        "description": "Returns Unauthorized if the calling user is not a user of the doorbell.Returns Not Found if doorbell or otherUserID do not exist.Returns PreconditionFailed if otherUserID is not a user of the doorbell",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
     },
     "/doorbells/:doorbellID/images": {
+      "parameters": [
+        {
+          "name": "doorbellID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "delete": {
         "summary": "Remove all Doorbell Images",
         "description": "This will return a 404 if doorbellID does not exist and a NotAuthorizedError if user is not a user of the doorbell",
@@ -6724,33 +6713,9 @@
             }
           }
         }
-      },
-      "parameters": [
-        {
-          "name": "doorbellID",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ]
+      }
     },
     "/doorbells/:doorbellID/lock/:lockID": {
-      "delete": {
-        "summary": "Deletes a connection between a doorbell and a lock",
-        "description": "This will return a 404 if doorbellID/lockID does not exist and a NotAuthorizedError if user is not a user of the doorbell",
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          }
-        }
-      },
       "parameters": [
         {
           "name": "doorbellID",
@@ -6769,6 +6734,20 @@
           }
         }
       ],
+      "delete": {
+        "summary": "Deletes a connection between a doorbell and a lock",
+        "description": "This will return a 404 if doorbellID/lockID does not exist and a NotAuthorizedError if user is not a user of the doorbell",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      },
       "put": {
         "summary": "Creates a connection between a doorbell and a lock",
         "description": "This will return a 404 if doorbellID/lockID does not exist and a NotAuthorizedError if user is not a user of the doorbell",
@@ -6785,6 +6764,16 @@
       }
     },
     "/doorbells/:doorbellID/settings/user": {
+      "parameters": [
+        {
+          "name": "doorbellID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "put": {
         "summary": "Update Doorbell/User Settings",
         "description": "Must put the whole settings object.  Cannot update individual field",
@@ -6824,7 +6813,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/doorbells/:doorbellID/users": {
       "parameters": [
         {
           "name": "doorbellID",
@@ -6834,9 +6825,7 @@
             "type": "string"
           }
         }
-      ]
-    },
-    "/doorbells/:doorbellID/users": {
+      ],
       "put": {
         "summary": "Add doorbell users",
         "description": "Returns 404 if doorbell is not found.  Returns Not Authorized if calling user is not a user of the doorbell",
@@ -6946,7 +6935,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/doorbells/:doorbellID/settings/doorbell": {
       "parameters": [
         {
           "name": "doorbellID",
@@ -6956,9 +6947,7 @@
             "type": "string"
           }
         }
-      ]
-    },
-    "/doorbells/:doorbellID/settings/doorbell": {
+      ],
       "put": {
         "summary": "Update Doorbell Settings using presets or custom body with settings",
         "description": "Can update individual field \nstatus code 409 if powerProfilePreset is an invalid preset",
@@ -6992,7 +6981,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/doorbells/:doorbellID/videoevent": {
       "parameters": [
         {
           "name": "doorbellID",
@@ -7002,9 +6993,7 @@
             "type": "string"
           }
         }
-      ]
-    },
-    "/doorbells/:doorbellID/videoevent": {
+      ],
       "get": {
         "summary": "Gets a temporary viewable URL for archived video",
         "description": "returns UnauthorizedError if the user is not of that doorbell.  Returns 404 if m3u file is not found.  Returns 401 if no DVR subscription is found.  Returns 404 if video is unavailable in activity log",
@@ -7041,7 +7030,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/doorbells/:doorbellID/videoevent/:eventID": {
       "parameters": [
         {
           "name": "doorbellID",
@@ -7050,10 +7041,16 @@
           "schema": {
             "type": "string"
           }
+        },
+        {
+          "name": "eventID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
         }
-      ]
-    },
-    "/doorbells/:doorbellID/videoevent/:eventID": {
+      ],
       "get": {
         "summary": "Gets a temporary viewable URL for archived video",
         "description": " This endpoint is the same (has the same middleware) as GET /doorbells/:doorbellID/videoevent except it uses activitylog Object ID instead of dvrID when querying the database.",
@@ -7079,7 +7076,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/doorbells/:doorbellID/rtsp_url": {
       "parameters": [
         {
           "name": "doorbellID",
@@ -7088,18 +7087,8 @@
           "schema": {
             "type": "string"
           }
-        },
-        {
-          "name": "eventID",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
         }
-      ]
-    },
-    "/doorbells/:doorbellID/rtsp_url": {
+      ],
       "get": {
         "summary": "Gets proxy information for Alexa to view a stream",
         "description": "returns UnauthorizedError if the user is not of that doorbell.  Endpoint responds in 5 seconds or times out",
@@ -7129,7 +7118,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/doorbells/:doorbellID/video/:dvrID": {
       "parameters": [
         {
           "name": "doorbellID",
@@ -7138,10 +7129,16 @@
           "schema": {
             "type": "string"
           }
+        },
+        {
+          "name": "dvrID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
         }
-      ]
-    },
-    "/doorbells/:doorbellID/video/:dvrID": {
+      ],
       "get": {
         "summary": "Gets a temporary viewable URL for a downloadable video",
         "description": "Returns a 202 if no errors are thrown.  Returns UnauthorizedError if the user is not of that doorbell or if the doorbell does not have a DVR subscription.  Returns 404 if the doorbellID or dvrID do not exist.",
@@ -7174,7 +7171,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/doorbells/:doorbellID/calls/:callID/image": {
       "parameters": [
         {
           "name": "doorbellID",
@@ -7185,16 +7184,14 @@
           }
         },
         {
-          "name": "dvrID",
+          "name": "callID",
           "in": "path",
           "required": true,
           "schema": {
             "type": "string"
           }
         }
-      ]
-    },
-    "/doorbells/:doorbellID/calls/:callID/image": {
+      ],
       "get": {
         "summary": "Returns the snapshot associated with a doorbell call",
         "description": "returns UnauthorizedError if the video does not belong to that doorbell or if the user is not of that doorbell",
@@ -7216,25 +7213,7 @@
             }
           }
         }
-      },
-      "parameters": [
-        {
-          "name": "doorbellID",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "callID",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ]
+      }
     },
     "/ivservers": {
       "get": {
@@ -7253,6 +7232,16 @@
       }
     },
     "/doorbells/:houseID": {
+      "parameters": [
+        {
+          "name": "houseID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "post": {
         "summary": "Adds a doorbell to a house.",
         "description": "the pin returned might be different than the one requested if it was already used.",
@@ -7299,19 +7288,19 @@
             }
           }
         }
-      },
+      }
+    },
+    "/doorbells/:doorbellID/videoevent/share": {
       "parameters": [
         {
-          "name": "houseID",
+          "name": "doorbellID",
           "in": "path",
           "required": true,
           "schema": {
             "type": "string"
           }
         }
-      ]
-    },
-    "/doorbells/:doorbellID/videoevent/share": {
+      ],
       "post": {
         "summary": "Shares a DVR Video With August Marketing",
         "description": "Returns 404 if HLS video stream is unavailable",
@@ -7348,7 +7337,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/doorbells/:doorbellID/avsession/:action": {
       "parameters": [
         {
           "name": "doorbellID",
@@ -7357,10 +7348,16 @@
           "schema": {
             "type": "string"
           }
+        },
+        {
+          "name": "action",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
         }
-      ]
-    },
-    "/doorbells/:doorbellID/avsession/:action": {
+      ],
       "post": {
         "summary": "Application hits this endpoint when they want to join, leave, or heartbeat for an AV Session related to a doorbell press or IR sensor.",
         "description": "Valid actions are ['heartbeat' 'join', 'leave', 'status'].Only 1 user is allowed to respond to the doorbell press.  Otherwise a ConflictError (409) is sent back.When a user responds a pubnub message is sent to the other listeners to disable their response capability on the client.In the event that this API is not called with a hangup or heartbeat (client power or connection failure) the call will be ended when the key expiresWhen a call is hung up, an object called callStats is expected in the request body.videoAvailable flag is only present for 'respond'",
@@ -7552,41 +7549,9 @@
             }
           }
         }
-      },
-      "parameters": [
-        {
-          "name": "doorbellID",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "action",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ]
+      }
     },
     "/doorbells/:doorbellID/event/:eventType": {
-      "post": {
-        "summary": "Generates a pubnub message when a doorbell is pressed or motion is detected.  An image is taken from the camera and sent in another pubnub message to the doorbell user",
-        "description": "THIS FUNCTION WAS MOVED TO THE MARS API SERVER.  POSTing to /doorbells/:doorbellID/event/:eventType will upload the image taken from the camera in the body and send the url of the image in the pubnub message image for the other user.  eventType is either 'presence' or 'buttonpush'.  doorbellID is also required in params",
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          }
-        }
-      },
       "parameters": [
         {
           "name": "doorbellID",
@@ -7604,12 +7569,10 @@
             "type": "string"
           }
         }
-      ]
-    },
-    "/doorbells/:doorbellID/adduser/:otherUserID": {
-      "put": {
-        "summary": "adds a user to a doorbell",
-        "description": "If the doorbell or other user doesn't exist return ResourceNotFound error.  If calling user is not a user of the doorbell return NotAuthorizedError",
+      ],
+      "post": {
+        "summary": "Generates a pubnub message when a doorbell is pressed or motion is detected.  An image is taken from the camera and sent in another pubnub message to the doorbell user",
+        "description": "THIS FUNCTION WAS MOVED TO THE MARS API SERVER.  POSTing to /doorbells/:doorbellID/event/:eventType will upload the image taken from the camera in the body and send the url of the image in the pubnub message image for the other user.  eventType is either 'presence' or 'buttonpush'.  doorbellID is also required in params",
         "responses": {
           "200": {
             "description": "",
@@ -7620,7 +7583,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/doorbells/:doorbellID/adduser/:otherUserID": {
       "parameters": [
         {
           "name": "doorbellID",
@@ -7638,9 +7603,33 @@
             "type": "string"
           }
         }
-      ]
+      ],
+      "put": {
+        "summary": "adds a user to a doorbell",
+        "description": "If the doorbell or other user doesn't exist return ResourceNotFound error.  If calling user is not a user of the doorbell return NotAuthorizedError",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
     },
     "/doorbells/:doorbellID/reboot": {
+      "parameters": [
+        {
+          "name": "doorbellID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "put": {
         "summary": "Publishes a message so the doorbell knows to reboot",
         "description": "If the doorbell or other user doesn't exist return ResourceNotFound error.  If calling user is not a user of the doorbell return NotAuthorizedError",
@@ -7654,7 +7643,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/doorbells/:doorbellID/wakeup": {
       "parameters": [
         {
           "name": "doorbellID",
@@ -7664,9 +7655,7 @@
             "type": "string"
           }
         }
-      ]
-    },
-    "/doorbells/:doorbellID/wakeup": {
+      ],
       "put": {
         "summary": "Publishes a message so the doorbell knows to wakeup",
         "description": "If the doorbell or other user doesn't exist return ResourceNotFound error.  If calling user is not a user of the doorbell return NotAuthorizedError",
@@ -7680,7 +7669,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/doorbells/:doorbellID/log": {
       "parameters": [
         {
           "name": "doorbellID",
@@ -7690,9 +7681,7 @@
             "type": "string"
           }
         }
-      ]
-    },
-    "/doorbells/:doorbellID/log": {
+      ],
       "post": {
         "summary": "Writes to the logs",
         "description": "If the doorbell or other user doesn't exist return ResourceNotFound error.If calling user is not a user of the doorbell return NotAuthorizedError.Takes an array of log objects or a log object in the body of the request.",
@@ -7706,17 +7695,7 @@
             }
           }
         }
-      },
-      "parameters": [
-        {
-          "name": "doorbellID",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ]
+      }
     },
     "/unverifiedusers": {
       "post": {
@@ -7781,6 +7760,16 @@
       }
     },
     "/unverifiedusers/:unverifiedUserID": {
+      "parameters": [
+        {
+          "name": "unverifiedUserID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "put": {
         "summary": "Updates an unverified user associated with a lock",
         "requestBody": {
@@ -7816,33 +7805,9 @@
             }
           }
         }
-      },
-      "parameters": [
-        {
-          "name": "unverifiedUserID",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ]
+      }
     },
     "/locks/:lockID/pin/:pin": {
-      "delete": {
-        "summary": "deletes a reserved pin",
-        "description": "the call will be successful, if the pin had already been expired or doesn't exists",
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          }
-        }
-      },
       "parameters": [
         {
           "name": "lockID",
@@ -7860,9 +7825,33 @@
             "type": "string"
           }
         }
-      ]
+      ],
+      "delete": {
+        "summary": "deletes a reserved pin",
+        "description": "the call will be successful, if the pin had already been expired or doesn't exists",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
     },
     "/locks/:lockID/homekitkey": {
+      "parameters": [
+        {
+          "name": "lockID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "get": {
         "summary": "Returns homekit key for given lock and calling user.",
         "description": "/! DEPRECATED: 410 GoneError",
@@ -7876,7 +7865,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/locks/:lockID/users/:otherUserID/pin": {
       "parameters": [
         {
           "name": "lockID",
@@ -7885,10 +7876,16 @@
           "schema": {
             "type": "string"
           }
+        },
+        {
+          "name": "otherUserID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
         }
-      ]
-    },
-    "/locks/:lockID/users/:otherUserID/pin": {
+      ],
       "put": {
         "summary": "Creates or change the pin on the specified lock for the specified user",
         "description": "created: means that the PIN should be loaded onto the lock, first step of associating a pin loaded: means that the PIN has been loaded to the lock, second and final step of associating a pin deleting: means that the PIN should be deleted, first step of removing a pin from a lock deleted: means that the PIN has been be deleted from the lock disabling: means the the PIN should be disabled disabled: means that the PIN has been marked as disabled on the lock enabling: means that the PIN should be enabled enabled: means that the PIN has been enabled, which means that it is back in the loaed group of PINs. The PIN is only necessary when creating it",
@@ -7951,7 +7948,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/locks/:lockID/users/:otherUserID/credentials": {
       "parameters": [
         {
           "name": "lockID",
@@ -7969,9 +7968,7 @@
             "type": "string"
           }
         }
-      ]
-    },
-    "/locks/:lockID/users/:otherUserID/credentials": {
+      ],
       "put": {
         "summary": "Creates or change the pin/rf/finger on the specified lock for the specified user",
         "description": "created: means that the PIN should be loaded onto the lock, first step of associating a pin loaded: means that the PIN has been loaded to the lock, second and final step of associating a pin deleting: means that the PIN should be deleted, first step of removing a pin from a lock deleted: means that the PIN has been be deleted from the lock disabling: means the the PIN should be disabled disabled: means that the PIN has been marked as disabled on the lock enabling: means that the PIN should be enabled enabled: means that the PIN has been enabled, which means that it is back in the loaed group of PINs. The 'pin' is only necessary when type euqals pin & create it. this is going to replace 'PUT /locks/:lockID/users/:otherUserID/pin'",
@@ -8079,41 +8076,9 @@
             }
           }
         }
-      },
-      "parameters": [
-        {
-          "name": "lockID",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "otherUserID",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ]
+      }
     },
     "/private/locks/timeadjustment/:lockID/:realtime/:locktime": {
-      "put": {
-        "summary": "Inform server of time adjustment for a lock",
-        "description": "When a mobile device detects the clock on the lock is out of sync, it sets the time and informs the server of the adjustment.  Returns authorization error if callingUser is not able to use lock.  Returns success otherwise.",
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          }
-        }
-      },
       "parameters": [
         {
           "name": "lockID",
@@ -8139,7 +8104,21 @@
             "type": "string"
           }
         }
-      ]
+      ],
+      "put": {
+        "summary": "Inform server of time adjustment for a lock",
+        "description": "When a mobile device detects the clock on the lock is out of sync, it sets the time and informs the server of the adjustment.  Returns authorization error if callingUser is not able to use lock.  Returns success otherwise.",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
     },
     "/nest/cameras": {
       "get": {
@@ -8217,20 +8196,6 @@
       }
     },
     "/locks/:lockID/cameras/:cameraID": {
-      "put": {
-        "summary": "Associates camera specified by cameraID with lock specified by lockID.",
-        "description": "A camera can be associated with multiple locks, but those locks must be in the same house",
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          }
-        }
-      },
       "parameters": [
         {
           "name": "lockID",
@@ -8249,6 +8214,20 @@
           }
         }
       ],
+      "put": {
+        "summary": "Associates camera specified by cameraID with lock specified by lockID.",
+        "description": "A camera can be associated with multiple locks, but those locks must be in the same house",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      },
       "delete": {
         "summary": "Disassociates camera specified by cameraID from lock specified by lockID",
         "description": "Does not disassociate the camera from the house",
@@ -8265,20 +8244,6 @@
       }
     },
     "/doorbells/:doorbellID/cameras/:cameraID": {
-      "put": {
-        "summary": "Associates camera specified by cameraID with doorbell specified by doorbellID.",
-        "description": "A camera can be associated with multiple doorbells, but those doorbells must be in the same house",
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          }
-        }
-      },
       "parameters": [
         {
           "name": "doorbellID",
@@ -8297,6 +8262,20 @@
           }
         }
       ],
+      "put": {
+        "summary": "Associates camera specified by cameraID with doorbell specified by doorbellID.",
+        "description": "A camera can be associated with multiple doorbells, but those doorbells must be in the same house",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      },
       "delete": {
         "summary": "Disassociates camera specified by cameraID from doorbell specified by doorbellID",
         "description": "Does not disassociate the camera from the house",
@@ -8313,20 +8292,6 @@
       }
     },
     "/locks/cameras/:lockID/:cameraID": {
-      "post": {
-        "summary": "Associates camera specified by cameraID with a lock specified by lockID",
-        "description": "A camera can be associated with multiple locks, but those locks must be in the same house",
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          }
-        }
-      },
       "parameters": [
         {
           "name": "lockID",
@@ -8345,6 +8310,20 @@
           }
         }
       ],
+      "post": {
+        "summary": "Associates camera specified by cameraID with a lock specified by lockID",
+        "description": "A camera can be associated with multiple locks, but those locks must be in the same house",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      },
       "delete": {
         "summary": "Disassociates camera specified by cameraID from lock specified by lockID",
         "description": "does not disassociate the camera from the house",
@@ -8361,6 +8340,16 @@
       }
     },
     "/cameras/:cameraID": {
+      "parameters": [
+        {
+          "name": "cameraID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "delete": {
         "summary": "deletes camera specified by cameraID and removes its association with house and locks",
         "responses": {
@@ -8373,19 +8362,19 @@
             }
           }
         }
-      },
+      }
+    },
+    "/locks/:lockID/timezone": {
       "parameters": [
         {
-          "name": "cameraID",
+          "name": "lockID",
           "in": "path",
           "required": true,
           "schema": {
             "type": "string"
           }
         }
-      ]
-    },
-    "/locks/:lockID/timezone": {
+      ],
       "put": {
         "summary": "Returns the timezones hour offset from UTC",
         "requestBody": {
@@ -8422,19 +8411,19 @@
             }
           }
         }
-      },
+      }
+    },
+    "/doorbells/:doorbellID/avsession/token": {
       "parameters": [
         {
-          "name": "lockID",
+          "name": "doorbellID",
           "in": "path",
           "required": true,
           "schema": {
             "type": "string"
           }
         }
-      ]
-    },
-    "/doorbells/:doorbellID/avsession/token": {
+      ],
       "get": {
         "summary": "Returns token information given a doorbell id",
         "responses": {
@@ -8460,17 +8449,7 @@
             }
           }
         }
-      },
-      "parameters": [
-        {
-          "name": "doorbellID",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ]
+      }
     },
     "/subscriptions/plans": {
       "get": {
@@ -8539,6 +8518,16 @@
       }
     },
     "/subscriptions/plans/:planID": {
+      "parameters": [
+        {
+          "name": "planID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "get": {
         "summary": "Returns subscription plan details for a single plan",
         "responses": {
@@ -8599,17 +8588,7 @@
             }
           }
         }
-      },
-      "parameters": [
-        {
-          "name": "planID",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ]
+      }
     },
     "/subscriptions": {
       "get": {
@@ -8653,6 +8632,16 @@
       }
     },
     "/subscriptions/:subscriptionID": {
+      "parameters": [
+        {
+          "name": "subscriptionID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "get": {
         "summary": "Return a subscription object",
         "responses": {
@@ -8688,16 +8677,6 @@
           }
         }
       },
-      "parameters": [
-        {
-          "name": "subscriptionID",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ],
       "delete": {
         "summary": "Cancels a subscription",
         "description": "Can be used with any type of subscription, trial or paid",
@@ -8714,6 +8693,16 @@
       }
     },
     "/subscriptions/:subscriptionID/enable": {
+      "parameters": [
+        {
+          "name": "subscriptionID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "put": {
         "summary": "Allows to re-enable a subscription",
         "description": "Can be used with any type of subscription, trial or paid. Subscription must exist already.",
@@ -8727,19 +8716,19 @@
             }
           }
         }
-      },
+      }
+    },
+    "/nock/add/:scopeID": {
       "parameters": [
         {
-          "name": "subscriptionID",
+          "name": "scopeID",
           "in": "path",
           "required": true,
           "schema": {
             "type": "string"
           }
         }
-      ]
-    },
-    "/nock/add/:scopeID": {
+      ],
       "put": {
         "summary": "Used to add a ruleset to nock",
         "requestBody": {
@@ -8782,17 +8771,7 @@
             }
           }
         }
-      },
-      "parameters": [
-        {
-          "name": "scopeID",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ]
+      }
     },
     "/nock/cleanAll": {
       "get": {
@@ -8810,6 +8789,16 @@
       }
     },
     "/nock/pendingMocks/:scopeID": {
+      "parameters": [
+        {
+          "name": "scopeID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "get": {
         "summary": "Returns any mocks that have not been used",
         "responses": {
@@ -8829,7 +8818,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/nock/isDone/:scopeID": {
       "parameters": [
         {
           "name": "scopeID",
@@ -8839,9 +8830,7 @@
             "type": "string"
           }
         }
-      ]
-    },
-    "/nock/isDone/:scopeID": {
+      ],
       "get": {
         "summary": "Returns a boolean indicating whether all of the mocks have been used",
         "responses": {
@@ -8862,17 +8851,7 @@
             }
           }
         }
-      },
-      "parameters": [
-        {
-          "name": "scopeID",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ]
+      }
     },
     "/nock/simulate": {
       "post": {
@@ -9093,6 +9072,16 @@
       }
     },
     "/homeaccess/lock/:lockID": {
+      "parameters": [
+        {
+          "name": "lockID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "put": {
         "summary": "Allows one to set the delivery property of a lock",
         "requestBody": {
@@ -9120,19 +9109,27 @@
             }
           }
         }
-      },
+      }
+    },
+    "/homeaccess/delivery/:houseId/:deliveryId": {
       "parameters": [
         {
-          "name": "lockID",
+          "name": "houseId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "deliveryId",
           "in": "path",
           "required": true,
           "schema": {
             "type": "string"
           }
         }
-      ]
-    },
-    "/homeaccess/delivery/:houseId/:deliveryId": {
+      ],
       "get": {
         "summary": "Gets a single delivery using a provided deliveryId for a house",
         "responses": {
@@ -9188,27 +9185,19 @@
             }
           }
         }
-      },
+      }
+    },
+    "/homeaccess/token/:lockID": {
       "parameters": [
         {
-          "name": "houseId",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "deliveryId",
+          "name": "lockID",
           "in": "path",
           "required": true,
           "schema": {
             "type": "string"
           }
         }
-      ]
-    },
-    "/homeaccess/token/:lockID": {
+      ],
       "post": {
         "summary": "Called by August Access seller partners with a lock ID to create a home-access-token for a shipping partner",
         "requestBody": {
@@ -9252,16 +9241,6 @@
           }
         }
       },
-      "parameters": [
-        {
-          "name": "lockID",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ],
       "delete": {
         "summary": "Allows a retailer/seller partner to revoke a Home-Access-Token",
         "responses": {
@@ -9321,6 +9300,16 @@
       }
     },
     "/homeaccess/access/:command": {
+      "parameters": [
+        {
+          "name": "command",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "put": {
         "summary": "Called by August Access access partners with a Home-Access-Token to unlock/lock a lock",
         "description": "command can be [lock|unlock]",
@@ -9334,17 +9323,7 @@
             }
           }
         }
-      },
-      "parameters": [
-        {
-          "name": "command",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ]
+      }
     },
     "/homeaccess/access/status": {
       "get": {
@@ -9362,6 +9341,16 @@
       }
     },
     "/homeaccess/deliveries/:window": {
+      "parameters": [
+        {
+          "name": "window",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "get": {
         "summary": "Called by the mobile app to list upcoming or past deliveries for an August Access user",
         "description": "window can be [current|past] to list current/upcoming or past deliveries, respectively",
@@ -9427,17 +9416,7 @@
             }
           }
         }
-      },
-      "parameters": [
-        {
-          "name": "window",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ]
+      }
     },
     "/partners/ujet/auth": {
       "post": {
@@ -9932,6 +9911,16 @@
       }
     },
     "/devices/questionnaire/:questionnaireID": {
+      "parameters": [
+        {
+          "name": "questionnaireID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "get": {
         "summary": "Get the questionnaire for a device version",
         "description": "Once we get to the final question/answer, instead of destination, there will be a type and value",
@@ -10020,19 +10009,19 @@
             }
           }
         }
-      },
+      }
+    },
+    "/doorbells/:doorbellID/chimes": {
       "parameters": [
         {
-          "name": "questionnaireID",
+          "name": "doorbellID",
           "in": "path",
           "required": true,
           "schema": {
             "type": "string"
           }
         }
-      ]
-    },
-    "/doorbells/:doorbellID/chimes": {
+      ],
       "post": {
         "summary": "Called by client apps when a user sets up a chime.",
         "requestBody": {
@@ -10081,7 +10070,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/doorbells/:doorbellID/chimes/:chimeID": {
       "parameters": [
         {
           "name": "doorbellID",
@@ -10090,10 +10081,16 @@
           "schema": {
             "type": "string"
           }
+        },
+        {
+          "name": "chimeID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
         }
-      ]
-    },
-    "/doorbells/:doorbellID/chimes/:chimeID": {
+      ],
       "put": {
         "summary": "Called by client apps when a user renames a chime.",
         "description": "Return 404 not found if the doorbell is not setup.  Return 403 unauthorized if the calling user cannot manage the doorbell.  Return 404 not found if the chime is not setup.",
@@ -10122,24 +10119,6 @@
           }
         }
       },
-      "parameters": [
-        {
-          "name": "doorbellID",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "chimeID",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ],
       "get": {
         "summary": "Get information about a chime.",
         "responses": {
@@ -10220,6 +10199,24 @@
       }
     },
     "/doorbells/:doorbellID/chimes/:chimeID/settings": {
+      "parameters": [
+        {
+          "name": "doorbellID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "chimeID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "put": {
         "summary": "Update Chime Settings",
         "description": "Must put the whole settings object.  Cannot update individual fields.",
@@ -10251,24 +10248,6 @@
           }
         }
       },
-      "parameters": [
-        {
-          "name": "doorbellID",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "chimeID",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ],
       "get": {
         "summary": "Get Chime Settings",
         "responses": {
@@ -10311,6 +10290,16 @@
       }
     },
     "/doorbells/:doorbellID/webrtcsignal": {
+      "parameters": [
+        {
+          "name": "doorbellID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "post": {
         "summary": "Sends sdp offer by proxying pubnub messages to the doorbell and awaits an sdp answer on that pubnub channel.  That sdp answer is returned to the caller.",
         "description": "Error Codes:\n403 NotAuthorized - user is not authorized to access doorbell\n404 ResourceNotFound - doorbellID not found\n408 RequestTimeoutError - Doorbell cannot wakeup || receives incorrectly formatted sdp offer || doorbell is not listening on the pubnub channel message was published to || doorbell is offline and has not yet been reported by server (15 minute window)\n409 ConflictError - doorbell has firmware that does not support webrtc || has not set the \"caps\" property with \"webrtc\"\n409 MissingParameter - missing body parameter \"offer\" or \"clientTransactionID\"\n422 UnprocessableEntityError - doorbell status is offline\n500 InternalServerError - other internal server error\n",
@@ -10351,7 +10340,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/doorbells/:doorbellID/tcpwakeup": {
       "parameters": [
         {
           "name": "doorbellID",
@@ -10361,9 +10352,7 @@
             "type": "string"
           }
         }
-      ]
-    },
-    "/doorbells/:doorbellID/tcpwakeup": {
+      ],
       "put": {
         "summary": "Wake a tcp connected device",
         "description": "Status Codes:\n200 OK - Device already online\n202 Accepted - Doorbell was in standby mode and is being woken up\n404 ResourceNotFound - doorbellID not found\n412 Precondition Failed - device not connected to tcp keep alive server || device is offline ||\nDoorbell does not support tcp keep alive || wakeup token not set || invalid doorbell status\n500 InternalServerError - other internal server error\n",
@@ -10377,19 +10366,19 @@
             }
           }
         }
-      },
+      }
+    },
+    "/users/:userID": {
       "parameters": [
         {
-          "name": "doorbellID",
+          "name": "userID",
           "in": "path",
           "required": true,
           "schema": {
             "type": "string"
           }
         }
-      ]
-    },
-    "/users/:userID": {
+      ],
       "delete": {
         "summary": "Delete a user account.  The userID must match the one in the access token.",
         "description": "Status Codes:\n401 InvalidCredentialsError\n  - The userID does not match the one in the access token.\n  - The access token is invalid.\n  - The user is blacklisted.",
@@ -10403,33 +10392,9 @@
             }
           }
         }
-      },
-      "parameters": [
-        {
-          "name": "userID",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ]
+      }
     },
     "/brands/urls/:brand/:country/:language/:urlID": {
-      "get": {
-        "summary": "Get brand and locale specific URLs",
-        "description": "Status Codes:\n301 - Success/redirect to URL400 - Invalid brand404 - Link not found",
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          }
-        }
-      },
       "parameters": [
         {
           "name": "brand",
@@ -10463,9 +10428,33 @@
             "type": "string"
           }
         }
-      ]
+      ],
+      "get": {
+        "summary": "Get brand and locale specific URLs",
+        "description": "Status Codes:\n301 - Success/redirect to URL400 - Invalid brand404 - Link not found",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
     },
     "/users/:userID/orchestra-accesses": {
+      "parameters": [
+        {
+          "name": "userID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "post": {
         "summary": "Add user to orchestra. The user is then linked and has a new property `orchestraCustomerId`",
         "description": "Error Codes:\n412 PreconditionFailedError - user already linked to orchestra\n500 InternalServerError - other internal server error",
@@ -10480,16 +10469,6 @@
           }
         }
       },
-      "parameters": [
-        {
-          "name": "userID",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ],
       "delete": {
         "summary": "Remove user to orchestra.  The userID must match the one in the access token.",
         "description": "Status Codes:\n401 InvalidCredentialsError\n  - The userID does not match the one in the access token.\n  - The access token is invalid.\n  - The user is blacklisted.\n412 PreconditionFailedError - user not linked to orchestra",
@@ -10522,6 +10501,16 @@
       }
     },
     "/orchestra-accesses/:accessID": {
+      "parameters": [
+        {
+          "name": "accessID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "put": {
         "summary": "Update access to orchestra",
         "description": "Status Codes:\n400 BadRequestError - params and body do not match schema\n401 InvalidCredentialsError\n  - The userID does not match the one in the access token.\n  - The access token is invalid.\n  - The user is blacklisted.\n403 PreconditionFailedError - user does not owns access\n404 ResourceNotFoundError - access not found",
@@ -10554,16 +10543,6 @@
           }
         }
       },
-      "parameters": [
-        {
-          "name": "accessID",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ],
       "delete": {
         "summary": "Delete access to orchestra with it's credentials",
         "description": "Status Codes:\n400 BadRequestError - params do not match schema\n401 InvalidCredentialsError\n  - The userID does not match the one in the access token.\n  - The access token is invalid.\n  - The user is blacklisted.\n403 PreconditionFailedError - user does not owns access\n404 ResourceNotFoundError - access not found",
@@ -10580,20 +10559,6 @@
       }
     },
     "/orchestra-accesses/:accessID/credentials/:credentialID": {
-      "delete": {
-        "summary": "Delete credential to orchestra",
-        "description": "Status Codes:\n400 BadRequestError - params do not match schema\n401 InvalidCredentialsError\n  - The userID does not match the one in the access token.\n  - The access token is invalid.\n  - The user is blacklisted.\n403 NotAuthorizedError\n  - user does not owns access\n  - credential does not belongs to the access\n404 ResourceNotFoundError\n  - access not found\n  - credential not found",
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          }
-        }
-      },
       "parameters": [
         {
           "name": "accessID",
@@ -10611,7 +10576,21 @@
             "type": "string"
           }
         }
-      ]
+      ],
+      "delete": {
+        "summary": "Delete credential to orchestra",
+        "description": "Status Codes:\n400 BadRequestError - params do not match schema\n401 InvalidCredentialsError\n  - The userID does not match the one in the access token.\n  - The access token is invalid.\n  - The user is blacklisted.\n403 NotAuthorizedError\n  - user does not owns access\n  - credential does not belongs to the access\n404 ResourceNotFoundError\n  - access not found\n  - credential not found",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

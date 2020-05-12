@@ -9,6 +9,16 @@
   "servers": [],
   "paths": {
     "/houses/:houseID/activities": {
+      "parameters": [
+        {
+          "name": "houseID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "get": {
         "summary": "This gets all the logs for a given house, allows to provide a `limit` query string",
         "responses": {
@@ -68,17 +78,7 @@
             }
           }
         }
-      },
-      "parameters": [
-        {
-          "name": "houseID",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ]
+      }
     }
   }
 }
