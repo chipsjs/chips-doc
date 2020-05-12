@@ -269,14 +269,20 @@ class SpecConvert extends Base.factory() {
       Object.keys(old_format_doc).forEach((api_name) => {
         current_api_name = api_name;
         let real_api_name = api_name;
+        const api = old_format_doc[api_name];
+        const method_type = (api.method || api.method_type).toLowerCase();
+        let real_method_type = method_type;
         const index = api_name.lastIndexOf(' ');
         if (index !== -1) {
           // api_name is 'GET /test/:id/' and real_api_name is '/test/:id/'
           real_api_name = api_name.substring(index + 1);
+          const start_index = api_name.indexOf(' ');
+          real_method_type = api_name.substring(0, start_index).toLowerCase();
         }
 
-        const api = old_format_doc[api_name];
-        const method_type = (api.method || api.method_type).toLowerCase();
+        if (method_type !== real_method_type) {
+          this.logger().error(`SpecConvert:: ${current_api_name} spec error! method type is ${method_type}, real method type is ${real_method_type}`);
+        }
 
         if (!_.get(path_items, [real_api_name, 'parameters'])) {
           const parameters = this.parsePathSchema(real_api_name);
@@ -284,7 +290,7 @@ class SpecConvert extends Base.factory() {
             _.set(path_items, [real_api_name, 'parameters'], parameters);
           }
         }
-        _.set(path_items, [real_api_name, method_type], Swagger.packagePathItem({
+        _.set(path_items, [real_api_name, real_method_type], Swagger.packagePathItem({
           summary: api.summary,
           description: api.note,
           body: this.parseRequestBodySchema(_.get(api, ['request', 'body'])),

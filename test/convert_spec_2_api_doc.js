@@ -77,9 +77,9 @@ describe('convert spec to generate api doc', () => {
       assert.nestedPropertyVal(outputResponseBody, 'properties.msg.description', inputResponse.msg);
     });
 
-    // after('clean file', () => {
-    //   fs.unlinkSync('test/temp/normal_api_doc.json');
-    // })
+    after('clean file', () => {
+      fs.unlinkSync('test/temp/normal_api_doc.json');
+    })
   });
 
   describe('special spec | has required object in query', () => {
@@ -588,7 +588,7 @@ describe('convert spec to generate api doc', () => {
     })
   });
 
-  describe('multi spec', () => {
+  describe('multi spec | different api name', () => {
     before('set source data', () => {
       specJson = {
         'GET /test1': {
@@ -956,6 +956,112 @@ describe('convert spec to generate api doc', () => {
 
     after('clean file', () => {
       fs.unlinkSync('test/temp/special_api_doc.json');
+    });
+  })
+
+  describe('multi spec | same api name and different method type', () => {
+    before('set source data', () => {
+      specJson = {
+        'GET /test': {
+          method: 'get',
+          request: {
+            query: {
+              id: 'string: id 1',
+            }
+          },
+          response: {
+            body: {
+              exists: 'boolean 1',
+            },
+          },
+        },
+        'POST /test': {
+          method: 'post',
+          request: {
+            body: {
+              id: 'string: id 2',
+            }
+          },
+          response: {
+            body: {
+              exists: 'boolean 2',
+            },
+          },
+        }
+      };
+    });
+
+    before('convert multi spec to api doc', () => {
+      specResult = Convert.getInstance().run(specJson, 'test/temp/multi');
+    });
+
+    it('should generate correct api doc', () => {
+      const api_name = '/test';
+      assert.exists(specResult[api_name]);
+      assert.exists(specResult[api_name].get);
+      assert.exists(specResult[api_name].post);
+
+      const {
+        request: { query: inputQuery1 },
+        response: { body: inputResponse1 }
+      } = specJson['GET /test'];
+
+      const {
+        request: { body: inputBody },
+        response: { body: inputResponse2 }
+      } = specJson['POST /test'];
+
+      const outputParameters1 = _.get(specResult[api_name], ['get', 'parameters']);
+      assert.strictEqual(outputParameters1.length, 1);
+      assert.strictEqual(outputParameters1[0].name, 'id');
+      assert.strictEqual(outputParameters1[0].in, 'query');
+      assert.strictEqual(outputParameters1[0].required, false);
+      assert.nestedPropertyVal(outputParameters1[0], 'schema.description', inputQuery1.id);
+      assert.nestedPropertyVal(outputParameters1[0], 'schema.type', 'string');
+      const outputResponseBody1 = _.get(specResult[api_name], ['get', 'responses', '200', 'content', 'application/json', 'schema']);
+      assert.nestedPropertyVal(outputResponseBody1, 'properties.exists.type', 'boolean');
+      assert.nestedPropertyVal(outputResponseBody1, 'properties.exists.description', inputResponse1.exists);
+
+      const outputRequestBody = _.get(specResult[api_name], ['post', 'requestBody', 'content', 'application/json', 'schema']);
+      assert.nestedPropertyVal(outputRequestBody, 'properties.id.type', 'string');
+      assert.nestedPropertyVal(outputRequestBody, 'properties.id.description', inputBody.id);
+
+      const outputResponseBody2 = _.get(specResult[api_name], ['post', 'responses', '200', 'content', 'application/json', 'schema']);
+      assert.nestedPropertyVal(outputResponseBody2, 'properties.exists.type', 'boolean');
+      assert.nestedPropertyVal(outputResponseBody2, 'properties.exists.description', inputResponse2.exists);
+    });
+
+    after('clean file', () => {
+      fs.unlinkSync('test/temp/multi_api_doc.json');
+    })
+  });
+
+  describe('error spec | method type dose not match real method type', () => {
+    before('set source data', () => {
+      specJson = {
+        'Get /test': {
+          method: 'post',
+          response: {
+            body: {
+            }
+          }
+        }
+      }
+    });
+
+    before('convert normal spec to api doc', () => {
+      specResult = Convert.getInstance().run(specJson, 'test/temp/error');
+    });
+
+    it('should generate correct api doc', () => {
+      const api_name = '/test';
+      assert.exists(specResult[api_name]);
+      assert.exists(specResult[api_name].get);
+      assert.notExists(specResult[api_name].post);
+    });
+
+    after('clean file', () => {
+      fs.unlinkSync('test/temp/error_api_doc.json');
     });
   })
 });

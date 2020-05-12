@@ -996,7 +996,7 @@
           }
         }
       ],
-      "put": {
+      "post": {
         "summary": "create a new guestbook entry",
         "description": "/! DEPRECATED: 410 GoneError",
         "responses": {
@@ -1091,6 +1091,20 @@
         }
       ],
       "get": {
+        "summary": "returns the guestbook entry specified by entryID",
+        "description": "/! DEPRECATED: 410 GoneError",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      },
+      "delete": {
         "summary": "Deletes a guestbook entry from a house",
         "description": "/! DEPRECATED: 410 GoneError",
         "responses": {
@@ -2143,7 +2157,7 @@
           }
         }
       ],
-      "put": {
+      "get": {
         "summary": "Returns the status of a lock from the locks collection.",
         "description": "Possible values 'locked,' 'unlocked,' 'unknown,' 'not-advertising.'",
         "responses": {
@@ -3364,6 +3378,30 @@
     },
     "/users/me/legal": {
       "get": {
+        "summary": "returns the latest legal status of the user",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "approved": {
+                      "type": "boolean",
+                      "description": "boolean true or false"
+                    },
+                    "documents": {
+                      "description": "an array listing the names of documents that have not been approved. Current legal values: tos, eula, privacy"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
         "summary": "sets the legal status of the user vs. eula, tos, privacy",
         "requestBody": {
           "content": {
@@ -3542,7 +3580,7 @@
           }
         }
       ],
-      "post": {
+      "put": {
         "summary": "Set the image the image for the house",
         "description": "PUTing to /houses/:houseID/image will associate the image in the body with house and that image will be returned with house info",
         "responses": {
@@ -3682,6 +3720,33 @@
         }
       ],
       "put": {
+        "summary": "assocites the specified Nest structure with the specified August house",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "StructureName": {
+                    "description": "name of nest structure"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      },
+      "delete": {
         "summary": "disassocites the specified Nest structure with the specified August house",
         "responses": {
           "200": {
@@ -4553,7 +4618,7 @@
           }
         }
       ],
-      "put": {
+      "get": {
         "summary": "Generates random numbers then returns a packet to be sent to the lock and a URL to PUT the response",
         "description": "The mobile device PUTs mRand1 and mRand2 to the endpoint and then sends the packet in the response to the lock. When the lock responds, the response is send to the url specified by URL using the method specified by method.  Returns an Invalid Argument error if checksum fails.",
         "responses": {

@@ -115,9 +115,8 @@ test_case层 -> middleware层 -> service层
 - 复杂度: 1.就是写多个flow 2.自下而上 3.图 4.自上而下 (todo)
 
 ## spec转换出来的几种需要人工fix的问题
-### get不能有body
-- /users/me/legal不能有body 
-- /homeaccess/partners/access
+### api_spec的编写错误
+- npm run convert -> you will find some errors
 
 ### responses key不确定,有n种只需要有一种
 - GET /users/bridges/mine,
