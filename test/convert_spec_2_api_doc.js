@@ -588,7 +588,7 @@ describe('convert spec to generate api doc', () => {
     })
   });
 
-  describe('multi spec ', () => {
+  describe('multi spec', () => {
     before('set source data', () => {
       specJson = {
         'GET /test1': {
@@ -721,39 +721,6 @@ describe('convert spec to generate api doc', () => {
     })
   });
 
-  describe('error spec | api name is error', () => {
-    before('set source data', () => {
-      specJson = {
-        postTest: {
-          name: 'check  whether an email or phone exists',
-          method: 'get',
-          request: {
-            query: {
-              email: '[optional] string: user email'
-            }
-          },
-          response: {
-            body: {
-              exists: 'boolean',
-            },
-          },
-        }
-      };
-    });
-
-    before('convert spec to api doc', () => {
-      try {
-        Convert.getInstance().run(specJson, 'test/temp/error');
-      } catch (err) {
-        specResult = err.message;
-      }
-    });
-
-    it('should generate correct api doc', () => {
-      assert.strictEqual(specResult, 'SpecConvert::run: postTest fail!err_msg: api_name is not supported');
-    });
-  });
-
   describe('special spec | request && response undefined', () => {
     before('set source data', () => {
       specJson = {
@@ -809,5 +776,103 @@ describe('convert spec to generate api doc', () => {
     after('clean file', () => {
       fs.unlinkSync('test/temp/normal_path_api_doc.json');
     })
+  });
+
+  describe('special spec | api name no exist method type', () => {
+    before('set source data', () => {
+      specJson = {
+        '/test': {
+          method: 'post',
+          request: {
+          }
+        }
+      }
+    });
+
+    before('convert normal spec to api doc', () => {
+      specResult = Convert.getInstance().run(specJson, 'test/temp/special');
+    });
+
+    it('should generate correct api doc', () => {
+      const api_name = '/test';
+      assert.exists(specResult[api_name]);
+      assert.exists(specResult[api_name].post);
+    });
+
+    after('clean file', () => {
+      fs.unlinkSync('test/temp/special_api_doc.json');
+    });
+  });
+
+  describe('special spec | anyOf', () => {
+    before('set source data', () => {
+      specJson = {
+        '/test': {
+          method: 'get',
+          response: {
+            body: {
+              anyOf: {
+                A: '111',
+                B: '222',
+              }
+            }
+          }
+        }
+      }
+    });
+
+    before('convert normal spec to api doc', () => {
+      specResult = Convert.getInstance().run(specJson, 'test/temp/special');
+    });
+
+    it('should generate correct api doc', () => {
+      const api_name = '/test';
+      assert.exists(specResult[api_name]);
+      assert.exists(specResult[api_name].get);
+      const schema = _.get(specResult, [api_name, 'get', 'responses', '200', 'content', 'application/json', 'schema']);
+      const { A, B } = _.get(specJson, [api_name, 'response', 'body', 'anyOf']);
+      assert.nestedPropertyVal(schema, 'properties.A.description', A);
+      assert.nestedPropertyVal(schema, 'properties.B.description', B);
+    });
+
+    after('clean file', () => {
+      fs.unlinkSync('test/temp/special_api_doc.json');
+    });
+  });
+
+  describe('special spec | oneof', () => {
+    before('set source data', () => {
+      specJson = {
+        '/test': {
+          method: 'get',
+          response: {
+            body: {
+              oneof: {
+                A: '111',
+                B: '222',
+              }
+            }
+          }
+        }
+      }
+    });
+
+    before('convert normal spec to api doc', () => {
+      specResult = Convert.getInstance().run(specJson, 'test/temp/special');
+    });
+
+    it('should generate correct api doc', () => {
+      const api_name = '/test';
+      assert.exists(specResult[api_name]);
+      assert.exists(specResult[api_name].get);
+      const schema = _.get(specResult, [api_name, 'get', 'responses', '200', 'content', 'application/json', 'schema']);
+      const { A, B } = _.get(specJson, [api_name, 'response', 'body', 'oneof']);
+      assert.nestedPropertyVal(schema, 'properties.A.description', A);
+      assert.nestedPropertyVal(schema, 'properties.B.description', B);
+    });
+
+    after('clean file', () => {
+      fs.unlinkSync('test/temp/special_api_doc.json');
+    });
   });
 });

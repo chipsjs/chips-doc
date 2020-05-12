@@ -116,7 +116,11 @@ test_case层 -> middleware层 -> service层
 - 复杂度: 1.就是写多个flow 2.自下而上 3.图 4.自上而下 (todo)
 
 ## spec转换出来的几种需要人工fix的问题
-- 部分书写错误导致的需要人工纠正,比如/users/me/legal不能有body (2个)
+### 部分书写错误导致的需要人工纠正
+- /users/me/legal不能有body (2个)
+
+### responses key不确定的值
+- GET /users/bridges/mine, /users/doorbells/mine,GET locks/:lockID
+
+### todo
 - ifPresent的特殊写法导致的数组解析问题
-- anyOf 
-- GET /users/bridges/mine 等

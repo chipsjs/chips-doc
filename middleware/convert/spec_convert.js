@@ -2,7 +2,7 @@ const fs = require('fs');
 const _ = require('lodash');
 
 const Base = require('../../lib/base_class');
-const { Swagger, InfoObject, SwaggerDataType } = require('../../lib/swagger_convert');
+const { Swagger, SwaggerDataType } = require('../../lib/swagger_convert');
 
 class SpecConvert extends Base.factory() {
   static initialize({ log_module }) {
@@ -32,7 +32,9 @@ class SpecConvert extends Base.factory() {
       return SwaggerDataType.number;
     }
 
-    if (lower_case_description === 'int') {
+    // A tricky way for match integer && <integer> &&
+    // other cases when first ten characters have 'integer'
+    if (lower_case_description === 'int' || lower_case_description.substr(0, 10).indexOf('integer') !== -1) {
       return SwaggerDataType.integer;
     }
 
@@ -65,7 +67,7 @@ class SpecConvert extends Base.factory() {
    * @return {array} value.required_param_arr -  ['pin', 'slot']
    */
   _parseDetailSchema(schema, isRequired = false) {
-    const convert_schema = {};
+    let convert_schema = {};
     const param_arr = Object.keys(schema).reduce((result, param_name) => {
       if (param_name === 'required' || param_name === 'optional' || param_name === 'header') return result;
       if (schema[param_name]) {
@@ -77,6 +79,11 @@ class SpecConvert extends Base.factory() {
             }
             break;
           case 'object':
+            if (Swagger.isCombiningSchemas(param_name)) {
+              convert_schema = this._parseDetailSchema(schema[param_name]).convert_schema;
+              break;
+            }
+
             if (Array.isArray(schema[param_name])) {
               // default spec format is as the same as api_spec['3.0,0'].xxx.events
               if (schema[param_name].length === 0) {
@@ -236,22 +243,15 @@ class SpecConvert extends Base.factory() {
     try {
       Object.keys(old_format_doc).forEach((api_name) => {
         current_api_name = api_name;
+        let real_api_name = api_name;
         const index = api_name.lastIndexOf(' ');
-        if (index === -1) {
-          throw new TypeError('api_name is not supported');
+        if (index !== -1) {
+          // api_name is 'GET /test/:id/' and real_api_name is '/test/:id/'
+          real_api_name = api_name.substring(index + 1);
         }
-        // api_name is 'GET /test/:id/' and real_api_name is '/test/:id/'
-        const real_api_name = api_name.substring(index + 1);
+
         const api = old_format_doc[api_name];
         const method_type = (api.method || api.method_type).toLowerCase();
-
-        _.set(path_items, [real_api_name, method_type], Swagger.packagePathItem({
-          summary: api.summary,
-          description: api.note,
-          body: this.parseRequestBodySchema(_.get(api, ['request', 'body'])),
-          query: this.parseQuerySchema(_.get(api, ['request', 'query'])),
-          response: this.parseResponseSchema(_.get(api, ['response', 'body'])),
-        }));
 
         if (!_.get(path_items, [real_api_name, 'parameters'])) {
           const parameters = this.parsePathSchema(real_api_name);
@@ -259,6 +259,13 @@ class SpecConvert extends Base.factory() {
             _.set(path_items, [real_api_name, 'parameters'], parameters);
           }
         }
+        _.set(path_items, [real_api_name, method_type], Swagger.packagePathItem({
+          summary: api.summary,
+          description: api.note,
+          body: this.parseRequestBodySchema(_.get(api, ['request', 'body'])),
+          query: this.parseQuerySchema(_.get(api, ['request', 'query'])),
+          response: this.parseResponseSchema(_.get(api, ['response', 'body'])),
+        }));
       });
     } catch (err) {
       throw new TypeError(`SpecConvert::run: ${current_api_name} fail!err_msg: ${err.message}`);

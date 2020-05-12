@@ -30,7 +30,11 @@
     "mock": "node ./entry/mock.js",
     "convert": "node ./entry/convert.js",
     "test": "mocha",
-    "coverage": "nyc npm run test"
+    "test-convert": "mocha ./test/convert_spec_2_api_doc.js",
+    "test-fake": "mocha ./test/fake_api_doc_2_test_case.js",
+    "coverage": "nyc npm run test",
+    "coverage-convert": "nyc npm run test-convert",
+    "coverage-fake": "nyc npm run test-fake"
   },
   "repository": {
     "type": "git",
