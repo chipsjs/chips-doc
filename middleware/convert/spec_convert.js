@@ -84,6 +84,31 @@ class SpecConvert extends Base.factory() {
               break;
             }
 
+            // because many differents formats in ifPresent, we only can deal it specially
+            if (param_name === 'ifPresent') {
+              const used_key = Object.entries(schema[param_name]).reduce((temp_used_key, [key, value]) => {
+                if (typeof value !== 'object') return temp_used_key;
+
+                if (Array.isArray(value)) {
+                  convert_schema[key] = Swagger.generateSchemaByType('array', value[0])
+                  temp_used_key.push(key)
+                  return temp_used_key;
+                }
+
+                const cases = Object.keys(value);
+                if (cases.length >= 2 && cases[1].indexOf(cases[0]) !== -1) {
+                  convert_schema[key] = Swagger.generateSchemaByType('object', `key is ${cases[0]}, ${value[cases[0]]}`)
+                  temp_used_key.push(key)
+                }
+
+                return temp_used_key;
+              }, []);
+              const unused_child = _.omit(schema[param_name], used_key);
+              const other_child_schema = this._parseDetailSchema(unused_child).convert_schema;
+              Object.assign(convert_schema, other_child_schema);
+              break;
+            }
+
             if (Array.isArray(schema[param_name])) {
               // default spec format is as the same as api_spec['3.0,0'].xxx.events
               if (schema[param_name].length === 0) {

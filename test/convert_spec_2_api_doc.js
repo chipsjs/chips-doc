@@ -744,7 +744,6 @@ describe('convert spec to generate api doc', () => {
       assert.exists(schema);
     });
 
-    // TODO, need done
     after('clean file', () => {
       fs.unlinkSync('test/temp/special_api_doc.json');
     })
@@ -875,4 +874,88 @@ describe('convert spec to generate api doc', () => {
       fs.unlinkSync('test/temp/special_api_doc.json');
     });
   });
+
+  describe('ifPresent spec | normal case', () => {
+    before('set source data', () => {
+      specJson = {
+        '/test': {
+          method: 'get',
+          response: {
+            body: {
+              ifPresent: {
+                A: '111',
+                B: '222',
+              }
+            }
+          }
+        }
+      }
+    });
+
+    before('convert normal spec to api doc', () => {
+      specResult = Convert.getInstance().run(specJson, 'test/temp/special');
+    });
+
+    it('should generate correct api doc', () => {
+      const api_name = '/test';
+      assert.exists(specResult[api_name]);
+      assert.exists(specResult[api_name].get);
+      const schema = _.get(specResult, [api_name, 'get', 'responses', '200', 'content', 'application/json', 'schema']);
+      const { A, B } = _.get(specJson, [api_name, 'response', 'body', 'ifPresent']);
+      assert.nestedPropertyVal(schema, 'properties.A.description', A);
+      assert.nestedPropertyVal(schema, 'properties.B.description', B);
+    });
+
+    after('clean file', () => {
+      fs.unlinkSync('test/temp/special_api_doc.json');
+    });
+  })
+
+  describe('ifPresent spec | special case', () => {
+    before('set source data', () => {
+      specJson = {
+        '/test': {
+          method: 'get',
+          response: {
+            body: {
+              ifPresent: {
+                special1: ['u1', 'u2'],
+                special2: {
+                  a: 'type of a1',
+                  a2: 'type of a:2',
+                  '...': '...',
+                  aN: 'type of a'
+                },
+                normal: {
+                  email: 'string: type of email'
+                }
+              }
+            }
+          }
+        }
+      }
+    });
+
+    before('convert normal spec to api doc', () => {
+      specResult = Convert.getInstance().run(specJson, 'test/temp/special');
+    });
+
+    it('should generate correct api doc', () => {
+      const api_name = '/test';
+      assert.exists(specResult[api_name]);
+      assert.exists(specResult[api_name].get);
+      const schema = _.get(specResult, [api_name, 'get', 'responses', '200', 'content', 'application/json', 'schema']);
+      assert.nestedPropertyVal(schema, 'properties.special1.type', 'array');
+      assert.nestedPropertyVal(schema, 'properties.special1.description', 'u1');
+      assert.nestedPropertyVal(schema, 'properties.special2.type', 'object');
+      assert.nestedPropertyVal(schema, 'properties.special2.description', 'key is a, type of a1');
+      assert.nestedPropertyVal(schema, 'properties.normal.type', 'object');
+      assert.nestedPropertyVal(schema, 'properties.normal.properties.email.type', 'string');
+      assert.nestedPropertyVal(schema, 'properties.normal.properties.email.description', 'string: type of email');
+    });
+
+    after('clean file', () => {
+      fs.unlinkSync('test/temp/special_api_doc.json');
+    });
+  })
 });

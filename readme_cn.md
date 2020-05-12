@@ -104,7 +104,6 @@ test_case层 -> middleware层 -> service层
 - 单个mock
 - 编写快速开始的文档 (high)
 - 支持header的灵活定义 
-- api_flow和api_doc的前端界面
 - api_doc实际业务的编写
 - api某些固定的调用依赖可以定义
 - special_case等改成文件夹，自动加载
@@ -116,11 +115,11 @@ test_case层 -> middleware层 -> service层
 - 复杂度: 1.就是写多个flow 2.自下而上 3.图 4.自上而下 (todo)
 
 ## spec转换出来的几种需要人工fix的问题
-### 部分书写错误导致的需要人工纠正
-- /users/me/legal不能有body (2个)
+### get不能有body
+- /users/me/legal不能有body 
+- /homeaccess/partners/access
 
-### responses key不确定的值
-- GET /users/bridges/mine, /users/doorbells/mine,GET locks/:lockID
-
-### todo
-- ifPresent的特殊写法导致的数组解析问题
+### responses key不确定,有n种只需要有一种
+- GET /users/bridges/mine,
+- /users/doorbells/mine
+- GET locks/:lockID

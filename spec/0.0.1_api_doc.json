@@ -74,20 +74,14 @@
                     "UserID": {
                       "description": "unique identifier describing user"
                     },
-                    "ifPresent": {
-                      "type": "object",
-                      "description": "",
-                      "properties": {
-                        "UserName": {
-                          "description": "username for use with login"
-                        },
-                        "Email": {
-                          "description": "email address"
-                        },
-                        "PhoneNo": {
-                          "description": "phone number"
-                        }
-                      }
+                    "UserName": {
+                      "description": "username for use with login"
+                    },
+                    "Email": {
+                      "description": "email address"
+                    },
+                    "PhoneNo": {
+                      "description": "phone number"
                     }
                   }
                 }
@@ -217,33 +211,27 @@
                     "UserID": {
                       "description": "<server-generated unique user ID>"
                     },
-                    "ifPresent": {
-                      "type": "object",
-                      "description": "",
-                      "properties": {
-                        "UserName": {
-                          "description": "<user name to log in to web page, etc.>"
-                        },
-                        "Email": {
-                          "description": "<email address>"
-                        },
-                        "FirstName": {
-                          "description": "<first name>"
-                        },
-                        "LastName": {
-                          "description": "<last name>"
-                        },
-                        "PhoneNo": {
-                          "description": "<phone number>"
-                        },
-                        "Type": {
-                          "description": "<user type>"
-                        },
-                        "UpdateInterval": {
-                          "type": "integer",
-                          "description": "integer"
-                        }
-                      }
+                    "UserName": {
+                      "description": "<user name to log in to web page, etc.>"
+                    },
+                    "Email": {
+                      "description": "<email address>"
+                    },
+                    "FirstName": {
+                      "description": "<first name>"
+                    },
+                    "LastName": {
+                      "description": "<last name>"
+                    },
+                    "PhoneNo": {
+                      "description": "<phone number>"
+                    },
+                    "Type": {
+                      "description": "<user type>"
+                    },
+                    "UpdateInterval": {
+                      "type": "integer",
+                      "description": "integer"
                     }
                   }
                 }
@@ -310,54 +298,15 @@
                     "HouseName": {
                       "description": "<Name of house>"
                     },
-                    "ifPresent": {
+                    "users": {
                       "type": "object",
-                      "description": "",
-                      "properties": {
-                        "users": {
-                          "type": "object",
-                          "description": "",
-                          "properties": {
-                            "userid": {
-                              "description": "type - type of user"
-                            },
-                            "userid2": {
-                              "description": "type - type of user"
-                            }
-                          }
-                        },
-                        "locks": {
-                          "type": "array",
-                          "description": "",
-                          "items": {
-                            "type": "object",
-                            "description": "",
-                            "properties": {
-                              "0": {
-                                "description": "l"
-                              },
-                              "1": {
-                                "description": "o"
-                              },
-                              "2": {
-                                "description": "c"
-                              },
-                              "3": {
-                                "description": "k"
-                              },
-                              "4": {
-                                "description": "i"
-                              },
-                              "5": {
-                                "description": "d"
-                              },
-                              "6": {
-                                "description": "1"
-                              }
-                            }
-                          }
-                        }
-                      }
+                      "description": "key is userid, type - type of user",
+                      "properties": {}
+                    },
+                    "locks": {
+                      "type": "array",
+                      "description": "lockid1",
+                      "items": {}
                     }
                   }
                 }
@@ -667,46 +616,27 @@
                     "HouseID": {
                       "description": "id of house to which lock belongs"
                     },
-                    "ifPresent": {
+                    "users": {
+                      "type": "object",
+                      "description": "key is userid, user type",
+                      "properties": {}
+                    },
+                    "ruleHash": {
                       "type": "object",
                       "description": "",
                       "properties": {
-                        "users": {
+                        "ruleID": {
                           "type": "object",
                           "description": "",
                           "properties": {
-                            "userid": {
-                              "description": "user type"
+                            "startTime": {
+                              "description": "start time in ISO 8601 format"
                             },
-                            "userid2": {
-                              "description": "user type"
+                            "duration": {
+                              "description": "duration"
                             },
-                            "...": {
-                              "description": "..."
-                            },
-                            "useridN": {
-                              "description": "user type"
-                            }
-                          }
-                        },
-                        "ruleHash": {
-                          "type": "object",
-                          "description": "",
-                          "properties": {
-                            "ruleID": {
-                              "type": "object",
-                              "description": "",
-                              "properties": {
-                                "startTime": {
-                                  "description": "start time in ISO 8601 format"
-                                },
-                                "duration": {
-                                  "description": "duration"
-                                },
-                                "schedule": {
-                                  "description": "Rule schedule in iCalendar data format (RFC 5545)"
-                                }
-                              }
+                            "schedule": {
+                              "description": "Rule schedule in iCalendar data format (RFC 5545)"
                             }
                           }
                         }
