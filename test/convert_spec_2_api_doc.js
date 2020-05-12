@@ -82,7 +82,7 @@ describe('convert spec to generate api doc', () => {
     // })
   });
 
-  describe('special spec | has required object', () => {
+  describe('special spec | has required object in query', () => {
     before('set source data', () => {
       specJson = {
         'GET /test': {
@@ -147,6 +147,69 @@ describe('convert spec to generate api doc', () => {
       assert.nestedPropertyVal(outputResponseBody, 'properties.exists.description', inputResponse.exists);
       assert.nestedPropertyVal(outputResponseBody, 'properties.msg.type', 'string');
       assert.nestedPropertyVal(outputResponseBody, 'properties.msg.description', inputResponse.msg);
+    });
+
+    after('clean file', () => {
+      fs.unlinkSync('test/temp/special_api_doc.json');
+    })
+  });
+
+  describe('special spec | has required object in body', () => {
+    before('set source data', () => {
+      specJson = {
+        'POST /test': {
+          name: 'check  whether an email or phone exists',
+          summary: 'check email or phone for duplicates',
+          method: 'post',
+          request: {
+            body: {
+              required: {
+                email: 'string: user email',
+              }
+            }
+          },
+          response: {
+            body: {
+              exists: 'boolean',
+            },
+          },
+          note: 'it will return true or false to check if user is register and return detail msg after exists == false. request query are optional '
+              + 'between email and phone, but will return 4xx err_code if query body is not one of these'
+        }
+      };
+    });
+
+    before('convert special spec to api doc', () => {
+      specResult = Convert.getInstance().run(specJson, 'test/temp/special');
+    });
+
+    it('should generate correct api doc', () => {
+      const api_name = '/test';
+      assert.exists(specResult[api_name]);
+      assert.exists(specResult[api_name].post);
+
+      const {
+        description, summary: outputSummary,
+      } = specResult[api_name].post;
+      const {
+        summary: inputSummary,
+        note,
+        response: { body: inputResponse }
+      } = specJson['POST /test'];
+
+      assert.strictEqual(outputSummary, inputSummary);
+      assert.strictEqual(description, note);
+
+      const outputRequestBody = _.get(specResult, [api_name, 'post', 'requestBody', 'content', 'application/json', 'schema']);
+      assert.strictEqual(outputRequestBody.type, 'object');
+      assert.nestedPropertyVal(outputRequestBody, 'properties.email.type', 'string');
+      assert.deepEqual(outputRequestBody.required, ['email']);
+      const inputBody = _.get(specJson, ['POST /test', 'request', 'body', 'required']);
+      assert.nestedPropertyVal(outputRequestBody, 'properties.email.description', inputBody.email);
+
+      const outputResponseBody = _.get(specResult[api_name], ['post', 'responses', '200', 'content', 'application/json', 'schema']);
+      assert.nestedPropertyVal(outputResponseBody, 'properties.exists.type', 'boolean');
+      assert.nestedPropertyVal(outputResponseBody, 'properties.exists.description', inputResponse.exists);
     });
 
     after('clean file', () => {
@@ -748,5 +811,3 @@ describe('convert spec to generate api doc', () => {
     })
   });
 });
-
-// TODO, body required
