@@ -118,4 +118,5 @@ test_case层 -> middleware层 -> service层
 ## spec转换出来的几种需要人工fix的问题
 - 部分书写错误导致的需要人工纠正,比如/users/me/legal不能有body (2个)
 - ifPresent的特殊写法导致的数组解析问题
-- anyOf oneOf
+- anyOf 
+- GET /users/bridges/mine 等

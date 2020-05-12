@@ -253,20 +253,20 @@ class SpecConvert extends Base.factory() {
           response: this.parseResponseSchema(_.get(api, ['response', 'body'])),
         }));
 
-        // to optimize
-        const parameters = this.parsePathSchema(real_api_name);
-        if (parameters.length !== 0) {
-          _.set(path_items, [real_api_name, 'parameters'], parameters);
+        if (!_.get(path_items, [real_api_name, 'parameters'])) {
+          const parameters = this.parsePathSchema(real_api_name);
+          if (parameters.length !== 0) {
+            _.set(path_items, [real_api_name, 'parameters'], parameters);
+          }
         }
       });
     } catch (err) {
       throw new TypeError(`SpecConvert::run: ${current_api_name} fail!err_msg: ${err.message}`);
     }
 
-    const info_obj = new InfoObject('august-rest-api', 'august api server for mobile', '{base_url}', '8.8.0');
-    const openapi_obj = Swagger.packageItems(info_obj, path_items);
-    const output_path = `${spec_output_path}_api_doc.json`;
-    fs.writeFileSync(output_path, JSON.stringify(openapi_obj, null, 2));
+    const info_obj = Swagger.generateInfoObject('august-rest-api', 'august api server for mobile', '{base_url}', '8.8.0');
+    const openapi_obj = Swagger.generateOpenApiObject(info_obj, path_items);
+    fs.writeFileSync(`${spec_output_path}_api_doc.json`, JSON.stringify(openapi_obj, null, 2));
 
     return path_items;
   }
