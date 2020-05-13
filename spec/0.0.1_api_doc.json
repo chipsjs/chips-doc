@@ -138,54 +138,6 @@
         }
       }
     },
-    "/users/checkExist": {
-      "get": {
-        "summary": "check email or phone for duplicates",
-        "description": "it will return true or false to check if user is register and return detail msg after exists == false. request query are optional between email and phone, but will return 4xx err_code if query body is not one of these",
-        "parameters": [
-          {
-            "name": "email",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "description": "[optional] string: user email"
-            }
-          },
-          {
-            "name": "phone",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "description": "[optional] string: user phone number,standard format is E164"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "exists": {
-                      "type": "boolean",
-                      "description": "boolean"
-                    },
-                    "msg": {
-                      "type": "string",
-                      "description": "string: detail message"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/users/:otherUserID": {
       "parameters": [
         {
@@ -543,7 +495,7 @@
       ],
       "get": {
         "summary": "Get information about an existing lock",
-        "description": "Returns `resource not found` if lockID does not exist and `not authorized` if the user is not a user of the lock.",
+        "description": "Returns `resource not found` if lockID does not exist and `not authorized` if the user is not a user of the lock.For the key pins:created: means that the PIN should be loaded onto the lock, first step of associating a pin loaded: means that the PIN has been loaded to the lock, second and final step of associating a pin deleting: means that the PIN should be deleted, first step of removing a pin from a lock deleted: means that the PIN has been be deleted from the lock disabling: means the the PIN should be disabled disabled: means that the PIN has been marked as disabled on the lock enabling: means that the PIN should be enabled enabled: means that the PIN has been enabled, which means that it is back in the loaed group of PINs. ",
         "responses": {
           "200": {
             "description": "",
@@ -610,6 +562,47 @@
                     },
                     "[hostHardwareID]": {
                       "description": "Host hardware's ID"
+                    },
+                    "[pins]": {
+                      "type": "object",
+                      "description": "",
+                      "properties": {
+                        "created": {
+                          "type": "array",
+                          "description": "array of the unique lock & user which state is created",
+                          "items": {}
+                        },
+                        "loaded": {
+                          "type": "array",
+                          "description": "array of the unique lock & user which state is loaded",
+                          "items": {}
+                        },
+                        "disabled": {
+                          "type": "array",
+                          "description": "array of the unique lock & user which state is disabled",
+                          "items": {}
+                        },
+                        "disabling": {
+                          "type": "array",
+                          "description": "array of the unique lock & user which state is disabling",
+                          "items": {}
+                        },
+                        "enabling": {
+                          "type": "array",
+                          "description": "array of the unique lock & user which state is enabling",
+                          "items": {}
+                        },
+                        "deleting": {
+                          "type": "array",
+                          "description": "array of the unique lock & user which state is deleting",
+                          "items": {}
+                        },
+                        "updating": {
+                          "type": "array",
+                          "description": "array of the unique lock & user which state is updating",
+                          "items": {}
+                        }
+                      }
                     }
                   }
                 }
@@ -2725,10 +2718,18 @@
         }
       }
     },
-    "/locks/:lockID/credential": {
+    "/locks/:lockID/users/:otherUserID/credential": {
       "parameters": [
         {
           "name": "lockID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "otherUserID",
           "in": "path",
           "required": true,
           "schema": {
@@ -2738,7 +2739,7 @@
       ],
       "get": {
         "summary": "generates an available random pin & slot number and reserve it for a system specified time",
-        "description": "if there is no pin slot left (208 at the last count) it will return 409 (ConflictError)\nthis endpoint is going to replace 'GET /locks/:lockID/pin'\nthe three different type of lock credentials will not share the same slots'\ntype param is required in query",
+        "description": "if there is no pin slot left (208 at the last count) it will return 409 (ConflictError)\nthis endpoint is going to replace 'GET /locks/:lockID/pin'\na slot only map to a unique user'\nthe three different type of lock credentials will share the same slot for a user'\ntype param is required in query",
         "parameters": [
           {
             "name": "type",
@@ -2766,6 +2767,31 @@
                     }
                   }
                 }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "This deletes a pin/slot reserved for a lock by otherUserID, type.",
+        "description": "If there is no type, the end point will release the cache about all credential types for the user.The cache for the specified type will be deleted if there is a type for the user",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "string: pin, rf, finger"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {}
               }
             }
           }
@@ -2867,6 +2893,236 @@
             "content": {
               "application/json": {
                 "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/locks/:lockID/users/:otherUserID/settings": {
+      "parameters": [
+        {
+          "name": "lockID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "otherUserID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "get": {
+        "summary": "query user settings with a lock",
+        "description": "accessTimes only included in response when accessType in [\"recurring\", \"temporary\"]accessRecurrence only included in response when accessType is recurringaccessStartTime only included in response when accessType is temporaryaccessEndTime only included in response when accessType is temporaryloadedDate only included in response when state is loaded",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "lockID": {
+                      "description": "specific ID of lock"
+                    },
+                    "userID": {
+                      "description": "specific ID of user"
+                    },
+                    "accessType": {
+                      "description": "the access type of the lock credential: always, recurring, temporary, oneTime"
+                    },
+                    "accessTimes": {
+                      "description": "specifies during what timeframe access is valid"
+                    },
+                    "accessRecurrence": {
+                      "description": "specifies recurrency rule of access"
+                    },
+                    "accessStartTime": {
+                      "description": "start time of credential schedule"
+                    },
+                    "accessEndTime": {
+                      "description": "end time of credential schedule"
+                    },
+                    "state": {
+                      "description": "state of user credential schedule"
+                    },
+                    "loadedDate": {
+                      "description": "date when the state of user credential schedule change to loaded"
+                    },
+                    "createdAt": {
+                      "description": "date when the credential schedule created"
+                    },
+                    "updatedAt": {
+                      "description": "date when the credential schedule updated"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "set/update user settings for a lock",
+        "description": "accessTimes only included in response when accessType in [\"recurring\", \"temporary\"]accessRecurrence only included in response when accessType is recurringaccessStartTime only included in response when accessType is temporaryaccessEndTime only included in response when accessType is temporaryloadedDate only included in response when state is loaded",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "state": {
+                    "type": "string",
+                    "description": "string: the state of the lock credential schedule, which can be \"load\",\"delete\",\"update\",\"enable\",\"disable\""
+                  },
+                  "action": {
+                    "type": "string",
+                    "description": "string: the action of schedule operation, which can be \"intent\", \"commit\""
+                  },
+                  "accessType": {
+                    "type": "string",
+                    "description": "string: the type of the pin: always, recurring, temporary, oneTime"
+                  },
+                  "accessTimes": {
+                    "type": "string",
+                    "description": "string: this field only required for access types recurring & temporary; for recurring access type possible values are \"STARTSEC=<sec from start of day>[;ENDSEC=<sec from start of day>]\"; if timezone of lock is known this is also valid: \"DTSTART=<ISO date in UTC>[;DTEND=<ISO date in UTC>]\" (end date optional, if not provided is set to 1 hour from start date). For temporary times must be ISO date in UTC. Not required when schedule is provided."
+                  },
+                  "accessRecurrence": {
+                    "type": "string",
+                    "description": "string: only required for access type recurring. See recurrence rules under RFC2445, e.g.: \"FREQ=MONTHLY;BYMONTHDAY=10,15;COUNT=20\". Not required when schedule is provided."
+                  },
+                  "schedule": {
+                    "type": "string",
+                    "description": "string: iCal data format following RFC5545 (https://tools.ietf.org/html/rfc5545) required for access types recurring & temporary; when accessTimes & accessRecurrence are provided, data of schedule overrides their values."
+                  }
+                },
+                "required": [
+                  "state",
+                  "action",
+                  "accessType",
+                  "accessTimes",
+                  "accessRecurrence",
+                  "schedule"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "lockID": {
+                      "description": "specific ID of lock"
+                    },
+                    "userID": {
+                      "description": "specific ID of user"
+                    },
+                    "accessType": {
+                      "description": "the access type of the lock credential: always, recurring, temporary, oneTime"
+                    },
+                    "accessTimes": {
+                      "description": "specifies during what timeframe access is valid"
+                    },
+                    "accessRecurrence": {
+                      "description": "specifies recurrency rule of access"
+                    },
+                    "accessStartTime": {
+                      "description": "start time of credential schedule"
+                    },
+                    "accessEndTime": {
+                      "description": "end time of credential schedule"
+                    },
+                    "state": {
+                      "description": "state of user credential schedule"
+                    },
+                    "loadedDate": {
+                      "description": "date when the state of user credential schedule change to loaded"
+                    },
+                    "createdAt": {
+                      "description": "date when the credential schedule created"
+                    },
+                    "updatedAt": {
+                      "description": "date when the credential schedule updated"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/locks/:lockID/users/settings": {
+      "parameters": [
+        {
+          "name": "lockID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "get": {
+        "summary": "query all of the users settings with a lock",
+        "description": "created: means that the schedule should be loaded onto the lock, first step of associating a schedule loaded: means that the schedule has been loaded to the lock, second and final step of associating a schedule deleting: means that the schedule should be deleted, first step of removing a schedule from a lock deleted: means that the schedule has been be deleted from the lock disabling: means the the schedule should be disabled disabled: means that the schedule has been marked as disabled on the lock enabling: means that the schedule should be enabled enabled: means that the schedule has been enabled, which means that it is back in the loaded group of schedules.\nslot are included in array since mobile need to know the slot when set/update schedule.\n if the callingUser is a lock manager, it will return all the schedules from the lock",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "created": {
+                      "type": "array",
+                      "description": "array of the unique lock users settings which state is created",
+                      "items": {}
+                    },
+                    "loaded": {
+                      "type": "array",
+                      "description": "array of the unique lock users settings which state is loaded",
+                      "items": {}
+                    },
+                    "disabled": {
+                      "type": "array",
+                      "description": "array of the unique lock users settings which state is disabled",
+                      "items": {}
+                    },
+                    "disabling": {
+                      "type": "array",
+                      "description": "array of the unique lock users settings which state is disabling",
+                      "items": {}
+                    },
+                    "enabling": {
+                      "type": "array",
+                      "description": "array of the unique lock users settings which state is enabling",
+                      "items": {}
+                    },
+                    "deleting": {
+                      "type": "array",
+                      "description": "array of the unique lock users settings which state is deleting",
+                      "items": {}
+                    },
+                    "updating": {
+                      "type": "array",
+                      "description": "array of the unique lock users settings which state is updating",
+                      "items": {}
+                    }
+                  }
+                }
               }
             }
           }
@@ -3227,6 +3483,77 @@
             "content": {
               "application/json": {
                 "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/locks/:lockID/settings": {
+      "parameters": [
+        {
+          "name": "lockID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "put": {
+        "summary": "The request body will contain the setting keys with their values to change in the collection, \"locks\"",
+        "description": "Every key is optional, but there should always be at least one key, value pair.Returns 403 if user is not a superuser of lock",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "secureRemoteAccess": {
+                    "type": "boolean",
+                    "description": "boolean"
+                  },
+                  "hideEntryCodes": {
+                    "type": "boolean",
+                    "description": "boolean"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Retrieves a list of settings from collection, \"locks\"",
+        "description": "body will return {} if settings object does not exist for specific lockID.",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "secureRemoteAccess": {
+                      "type": "boolean",
+                      "description": "boolean"
+                    },
+                    "hideEntryCodes": {
+                      "type": "boolean",
+                      "description": "boolean"
+                    }
+                  }
+                }
               }
             }
           }
@@ -7420,8 +7747,8 @@
     },
     "/unverifiedusers": {
       "post": {
-        "summary": "Creates an unverified user for a given pin and lock",
-        "description": "if the pin is already used this request will fail and return a 409",
+        "summary": "Creates an unverified user with lock and credential types",
+        "description": "If the credentialType is null we can treat it as pin.Only the credentialType is pin/null, the response.body will contain pin.",
         "requestBody": {
           "content": {
             "application/json": {
@@ -7431,9 +7758,6 @@
                   "lockID": {
                     "description": "the lock this user is associated with"
                   },
-                  "pin": {
-                    "description": "the pin requested for this user"
-                  },
                   "firstName": {
                     "description": "first name"
                   },
@@ -7442,11 +7766,14 @@
                   },
                   "phone": {
                     "description": "phone number (E.164 spec)"
+                  },
+                  "credentialType": {
+                    "type": "string",
+                    "description": "the credential type (string: pin, rf, finger)"
                   }
                 },
                 "required": [
-                  "lockID",
-                  "pin"
+                  "lockID"
                 ]
               }
             }
@@ -7468,6 +7795,9 @@
                     },
                     "lastName": {
                       "description": "the lastName passed as params"
+                    },
+                    "slot": {
+                      "description": "slot is only returned for specific lock types"
                     },
                     "pin": {
                       "description": "the pin for this user"

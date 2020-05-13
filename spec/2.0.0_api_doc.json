@@ -268,7 +268,7 @@
       ],
       "get": {
         "summary": "Get information about an existing lock",
-        "description": "Returns `resource not found` if lockID does not exist and `not authorized` if the user is not a user of the lock.The major difference between this version of the endpoint and the 0.0.1 version is that the type of the`currentFirmwareVersion` field has changed from a string to an object in this version.",
+        "description": "Returns `resource not found` if lockID does not exist and `not authorized` if the user is not a user of the lock.The differences between this version of the endpoint and the 0.0.1 version are these:1. The type of the `currentFirmwareVersion` field has changed from a string to an object in this version.2. The key `pins` removed from response in this version",
         "responses": {
           "200": {
             "description": "",

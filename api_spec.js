@@ -28,37 +28,6 @@ const imageResponseHeaders = _.extend({}, commonResponseHeaders);
 imageResponseHeaders['content-type'] = imageContentTypes;
 
 var publicPaths = {
-  'test': {
-    "GET /users/doorbells/mine": {
-      "method_type": "get",
-      "name": "Get Doorbells",
-      "summary": "Get list of calling user's doorbells",
-      "request": {
-        "body": {
-          "doorbellID1": {
-            "serialNumber": "",
-            "bridgeID": null,
-            "appID": "",
-            "installUserID": "",
-            "name": "",
-            "type": "",
-            "operative": false,
-            "installDate": "",
-            "osVersionHistory": {},
-            "bridgeAppVersionHistory": {},
-            "doorbellAppVersionHistory": {},
-            "currentOSVersion": "",
-            "currentBridgeAppVersion": "",
-            "currentDoorbellAppVersion": "",
-            "pubsubChannel": "",
-            "HouseID": ""
-          }
-        }
-
-      },
-      "note": "Returns an empty body if the calling user has no locks"
-    },
-  },
   '0.0.1': {
     'GET /apidesc': {
       name: 'Documentation',
@@ -84,26 +53,6 @@ var publicPaths = {
       },
       // eslint-disable-next-line no-useless-escape
       note: '/!\ DEPRECATED: 410 GoneError'
-    },
-    'GET /users/checkExist': {
-      name: 'check  whether an email or phone exists',
-      summary: 'check email or phone for duplicates',
-      method: 'get',
-      request: {
-        query: {
-          email: '[optional] string: user email',
-          phone: '[optional] string: user phone number,standard format is E164'
-        }
-      },
-      response: {
-        headers: standardResponseHeaders,
-        body: {
-          exists: 'boolean',
-          msg: 'string: detail message'
-        },
-      },
-      note: 'it will return true or false to check if user is register and return detail msg after exists == false. request query are optional ' +
-          'between email and phone, but will return 4xx err_code if query body is not one of these'
     },
     'GET /users/:otherUserID': { // path
       name: 'Get User Information',
@@ -306,10 +255,28 @@ var publicPaths = {
           '[hostID]': 'Host lock\'s ID',
           '[hostHardwareLockInfo]': 'Information about the host hardware',
           '[hostHardwareID]': 'Host hardware\'s ID',
+          '[pins]': {
+            created: 'array of the unique lock & user which state is created',
+            loaded: 'array of the unique lock & user which state is loaded',
+            disabled: 'array of the unique lock & user which state is disabled',
+            disabling: 'array of the unique lock & user which state is disabling',
+            enabling: 'array of the unique lock & user which state is enabling',
+            deleting: 'array of the unique lock & user which state is deleting',
+            updating: 'array of the unique lock & user which state is updating',
+          },
         },
       },
       note: 'Returns `resource not found` if lockID does not exist ' +
-        'and `not authorized` if the user is not a user of the lock.'
+        'and `not authorized` if the user is not a user of the lock.' +
+        'For the key pins:' +
+        'created: means that the PIN should be loaded onto the lock, first step of associating a pin ' +
+        'loaded: means that the PIN has been loaded to the lock, second and final step of associating a pin ' +
+        'deleting: means that the PIN should be deleted, first step of removing a pin from a lock ' +
+        'deleted: means that the PIN has been be deleted from the lock ' +
+        'disabling: means the the PIN should be disabled ' +
+        'disabled: means that the PIN has been marked as disabled on the lock ' +
+        'enabling: means that the PIN should be enabled ' +
+        'enabled: means that the PIN has been enabled, which means that it is back in the loaed group of PINs. '
     },
     'PUT /locks/adduser/:lockID/:otherUserID/:type': { // path
       name: 'Add otherUser to lockID managed by calling user',
@@ -434,7 +401,7 @@ var publicPaths = {
     'POST /houses/:houseID/guestbook': {
       name: 'Add a guestbook entry',
       summary: 'create a new guestbook entry',
-      method: 'PUT',
+      method: 'POST',
       request: {},
       response: {
         status: 410,
@@ -478,7 +445,7 @@ var publicPaths = {
     'DELETE /houses/guestbookentry/:entryID': {
       name: 'delete guest book entry',
       summary: 'Deletes a guestbook entry from a house',
-      method: 'GET',
+      method: 'DELETE',
       request: {},
       response: {
         status: 410,
@@ -933,7 +900,7 @@ var publicPaths = {
     'GET /locks/:lockID/status': {
       name: 'Get lock status',
       summary: 'Returns the status of a lock from the locks collection.',
-      method: 'PUT',
+      method: 'GET',
       request: {
         headers: standardRequestHeaders
       },
@@ -1149,8 +1116,8 @@ var publicPaths = {
       },
       note: 'if there is no pin slot left (208 at the last count) it will return 409 (ConflictError)'
     },
-    'GET /locks/:lockID/credential' : {
-      name: 'generate available pin/slot by lock type',
+    'GET /locks/:lockID/users/:otherUserID/credential' : {
+      name: 'generate available pin/slot for a user with a type of lock credential',
       summary: 'generates an available random pin & slot number and reserve it for a system specified time',
       method: 'GET',
       request: {
@@ -1165,14 +1132,15 @@ var publicPaths = {
         headers: standardResponseHeaders,
         body: {
           required: {
-            pin: 'the pin for this user', // the pin of response will included only if 'type' equals 'pin'
+            pin: 'the pin for this user',
             slot: 'the slot for user',
           }
         }
       },
       note: 'if there is no pin slot left (208 at the last count) it will return 409 (ConflictError)\n' +
       'this endpoint is going to replace \'GET /locks/:lockID/pin\'\n' +
-      'the three different type of lock credentials will not share the same slots\'\n' +
+      'a slot only map to a unique user\'\n' +
+      'the three different type of lock credentials will share the same slot for a user\'\n' +
       'type param is required in query'
     },
     'GET /locks/:lockID/credentials' : {
@@ -1209,6 +1177,104 @@ var publicPaths = {
         'enabled: means that the CREDENTIAL has been enabled, which means that it is back in the loaed group of CREDENTIALS. ' +
         'if \'type\' is optional, the endpoint will query all credentials from the lock, otherwise it will return the unique type of lock credentials' +
         'if the callingUser is a lock manager, it will return all the credentials from the lock, otherwise it only return his locks\' credentials'
+    },
+    'GET /locks/:lockID/users/:otherUserID/settings' : {
+      name: 'query user settings with a lock',
+      summary: 'query user settings with a lock',
+      method: 'GET',
+      request: {
+        headers: standardRequestHeaders,
+      },
+      response: {
+        headers: standardResponseHeaders,
+        body: {
+          lockID: 'specific ID of lock',
+          userID: 'specific ID of user',
+          accessType: 'the access type of the lock credential: always, recurring, temporary, oneTime',
+          accessTimes: 'specifies during what timeframe access is valid',
+          accessRecurrence: 'specifies recurrency rule of access',
+          accessStartTime: 'start time of credential schedule',
+          accessEndTime: 'end time of credential schedule',
+          state: 'state of user credential schedule',
+          loadedDate: 'date when the state of user credential schedule change to loaded',
+          createdAt: 'date when the credential schedule created',
+          updatedAt: 'date when the credential schedule updated',
+        }
+      },
+      note: 'accessTimes only included in response when accessType in ["recurring", "temporary"]' +
+        'accessRecurrence only included in response when accessType is recurring' +
+        'accessStartTime only included in response when accessType is temporary' +
+        'accessEndTime only included in response when accessType is temporary' +
+        'loadedDate only included in response when state is loaded'
+    },
+    'PUT /locks/:lockID/users/:otherUserID/settings' : {
+      name: 'set/update user settings for a lock',
+      summary: 'set/update user settings for a lock',
+      method: 'PUT',
+      request: {
+        headers: standardRequestHeaders,
+        body: {
+          required: {
+            state: 'string: the state of the lock credential schedule, which can be "load","delete","update","enable","disable"',
+            action: 'string: the action of schedule operation, which can be "intent", "commit"',
+            accessType: 'string: the type of the pin: always, recurring, temporary, oneTime',
+            accessTimes: 'string: this field only required for access types recurring & temporary; for recurring access type possible values are "STARTSEC=<sec from start of day>[;ENDSEC=<sec from start of day>]"; if timezone of lock is known this is also valid: "DTSTART=<ISO date in UTC>[;DTEND=<ISO date in UTC>]" (end date optional, if not provided is set to 1 hour from start date). For temporary times must be ISO date in UTC. Not required when schedule is provided.',
+            accessRecurrence: 'string: only required for access type recurring. See recurrence rules under RFC2445, e.g.: "FREQ=MONTHLY;BYMONTHDAY=10,15;COUNT=20". Not required when schedule is provided.',
+            schedule: 'string: iCal data format following RFC5545 (https://tools.ietf.org/html/rfc5545) required for access types recurring & temporary; when accessTimes & accessRecurrence are provided, data of schedule overrides their values.'
+          }
+        }
+      },
+      response: {
+        headers: standardResponseHeaders,
+        body: {
+          lockID: 'specific ID of lock',
+          userID: 'specific ID of user',
+          accessType: 'the access type of the lock credential: always, recurring, temporary, oneTime',
+          accessTimes: 'specifies during what timeframe access is valid',
+          accessRecurrence: 'specifies recurrency rule of access',
+          accessStartTime: 'start time of credential schedule',
+          accessEndTime: 'end time of credential schedule',
+          state: 'state of user credential schedule',
+          loadedDate: 'date when the state of user credential schedule change to loaded',
+          createdAt: 'date when the credential schedule created',
+          updatedAt: 'date when the credential schedule updated',
+        }
+      },
+      note: 'accessTimes only included in response when accessType in ["recurring", "temporary"]' +
+        'accessRecurrence only included in response when accessType is recurring' +
+        'accessStartTime only included in response when accessType is temporary' +
+        'accessEndTime only included in response when accessType is temporary' +
+        'loadedDate only included in response when state is loaded'
+    },
+    'GET /locks/:lockID/users/settings' : {
+      name: 'query all of the users settings with a lock',
+      summary: 'query all of the users settings with a lock',
+      method: 'GET',
+      request: {
+        headers: standardRequestHeaders,
+      },
+      response: {
+        headers: standardResponseHeaders,
+        body: {
+          created: 'array of the unique lock users settings which state is created',
+          loaded: 'array of the unique lock users settings which state is loaded',
+          disabled: 'array of the unique lock users settings which state is disabled',
+          disabling: 'array of the unique lock users settings which state is disabling',
+          enabling: 'array of the unique lock users settings which state is enabling',
+          deleting: 'array of the unique lock users settings which state is deleting',
+          updating: 'array of the unique lock users settings which state is updating',
+        }
+      },
+      note: 'created: means that the schedule should be loaded onto the lock, first step of associating a schedule ' +
+        'loaded: means that the schedule has been loaded to the lock, second and final step of associating a schedule ' +
+        'deleting: means that the schedule should be deleted, first step of removing a schedule from a lock ' +
+        'deleted: means that the schedule has been be deleted from the lock ' +
+        'disabling: means the the schedule should be disabled ' +
+        'disabled: means that the schedule has been marked as disabled on the lock ' +
+        'enabling: means that the schedule should be enabled ' +
+        'enabled: means that the schedule has been enabled, which means that it is back in the loaded group of schedules.\n' +
+        'slot are included in array since mobile need to know the slot when set/update schedule.\n ' +
+        'if the callingUser is a lock manager, it will return all the schedules from the lock'
     },
     'GET /users/cameras/mine' : {
       name: 'get cameras',
@@ -1357,6 +1423,39 @@ var publicPaths = {
         headers: standardResponseHeaders,
       },
       note: '',
+    },
+    'PUT /locks/:lockID/settings': {
+      name: 'Insert/update setting for specific lockID',
+      summary: 'The request body will contain the setting keys with their values to change in the collection, "locks"',
+      method: 'PUT',
+      request: {
+        headers: standardRequestHeaders,
+        body: {
+          secureRemoteAccess: 'boolean',
+          hideEntryCodes: 'boolean'
+        }
+      },
+      response: {
+        headers: standardResponseHeaders,
+      },
+      note: 'Every key is optional, but there should always be at least one key, value pair.' +
+          'Returns 403 if user is not a superuser of lock'
+    },
+    'GET /locks/:lockID/settings': {
+      name: 'Get settings for a specific lockID',
+      summary: 'Retrieves a list of settings from collection, "locks"',
+      method: 'GET',
+      request: {
+        headers: standardRequestHeaders
+      },
+      response: {
+        headers: standardResponseHeaders,
+        body: {
+          secureRemoteAccess: 'boolean',
+          hideEntryCodes: 'boolean',
+        }
+      },
+      note: 'body will return {} if settings object does not exist for specific lockID.'
     },
     'GET /devicepicker': {
       name: 'Device Picker',
@@ -1576,8 +1675,9 @@ var publicPaths = {
       },
       note: 'Returns `resource not found` if lockID does not exist ' +
       'and `not authorized` if the user is not a user of the lock.' +
-      'The major difference between this version of the endpoint and the 0.0.1 version is that the type of the' +
-      '`currentFirmwareVersion` field has changed from a string to an object in this version.'
+      'The differences between this version of the endpoint and the 0.0.1 version are these:' +
+      '1. The type of the `currentFirmwareVersion` field has changed from a string to an object in this version.' +
+      '2. The key `pins` removed from response in this version'
     },
   },
   '2.1.0': {
@@ -1631,7 +1731,34 @@ var publicPaths = {
           prevPage: Number,
         }
       }
-    }
+    },
+    'GET /partners': {
+      name: 'get August partners enabled for display',
+      summary: 'retrieves a list of partners',
+      method: 'GET',
+      request: {
+        headers: standardRequestHeaders
+      },
+      response: {
+        headers: standardResponseHeaders,
+        body: [{
+          _id: 'ID of partner',
+          name: 'name of partner',
+          heroImageURL: 'URL to partner hero image',
+          partnerURL: 'URL to partner homepage',
+          logoURL: 'URL to partner logo',
+          wordmarkURL: 'URL to partner wordmark',
+          partnerTagline: 'partner tagline',
+          jointTagline: 'tagline tailored to August',
+          partnerDescription: 'company description',
+          jointDescription: 'service offering description',
+          promotion: 'available partnership promotions',
+          locations: 'where the service is provided',
+          stateCode: 'indicate the state of the partner',
+        }]
+      },
+      note: ''
+    },
   }
 };
 
@@ -1751,7 +1878,7 @@ var privatePaths = {
     'PUT /users/me/legal': {
       name: 'set the legal status',
       summary: 'sets the legal status of the user vs. eula, tos, privacy',
-      method: 'GET',
+      method: 'PUT',
       request: {
         headers: standardRequestHeaders,
         body: {
@@ -1833,7 +1960,7 @@ var privatePaths = {
     'PUT /houses/:houseID/image': {
       name: 'set house image',
       summary: 'Set the image the image for the house',
-      method: 'POST',
+      method: 'PUT',
       request: {
         headers: imageRequestHeaders
       },
@@ -1916,7 +2043,7 @@ var privatePaths = {
     'DELETE /houses/:houseID/neststructure/:structureID': {
       name: 'disassociate Nest structure',
       summary: 'disassocites the specified Nest structure with the specified August house',
-      method: 'PUT',
+      method: 'DELETE',
       request: {
         headers: standardRequestHeaders
       },
@@ -2281,7 +2408,7 @@ var privatePaths = {
     'GET /locks/m2lkeyexchangepacket/:lockID': {
       name: 'Get a key mobile to lock key exchange packet',
       summary: 'Generates random numbers then returns a packet to be sent to the lock and a URL to PUT the response',
-      method: 'PUT',
+      method: 'GET',
       request: {
         headers: standardRequestHeaders
       },
@@ -3634,21 +3761,21 @@ var privatePaths = {
     },
     'POST /unverifiedusers': {
       name: 'Creates unverified users',
-      summary: 'Creates an unverified user for a given pin and lock',
+      summary: 'Creates an unverified user with lock and credential types',
       method: 'POST',
       request: {
         headers: standardRequestHeaders,
         body: {
           required: {
             lockID: 'the lock this user is associated with',
-            pin: 'the pin requested for this user',
           },
           optional: {
             firstName: 'first name',
             lastName: 'last name',
-            phone: 'phone number (E.164 spec)'
+            phone: 'phone number (E.164 spec)',
+            credentialType: 'the credential type (string: pin, rf, finger)'
           }
-        }
+        },
       },
       response: {
         headers: standardResponseHeaders,
@@ -3656,10 +3783,12 @@ var privatePaths = {
           id: 'the id of the unverified user',
           firstName: 'the firstName passed as a param',
           lastName: 'the lastName passed as params',
+          slot: 'slot is only returned for specific lock types',
           pin: 'the pin for this user'
         }
       },
-      note: 'if the pin is already used this request will fail and return a 409'
+      note: 'If the credentialType is null we can treat it as pin.' +
+      'Only the credentialType is pin/null, the response.body will contain pin.'
     },
     'PUT /unverifiedusers/:unverifiedUserID': {
       name: 'Update unverified users',
@@ -3726,6 +3855,26 @@ var privatePaths = {
       },
       note: 'this is a replacement/update for \'DEL /locks/:lockID/pins\''
     },
+
+    'DELETE /locks/:lockID/users/:otherUserID/credential': {
+      name: 'delete pin/slot reserved for a lock by otherUserID, type',
+      summary: 'This deletes a pin/slot reserved for a lock by otherUserID, type.',
+      method: 'DELETE',
+      request: {
+        headers: standardRequestHeaders,
+        query: {
+          optional: {
+            type: 'string: pin, rf, finger',
+          }
+        }
+      },
+      response: {
+        headers: standardResponseHeaders
+      },
+      note: 'If there is no type, the end point will release the cache about all credential types for the user.' +
+      'The cache for the specified type will be deleted if there is a type for the user'
+    },
+
     'GET /locks/:lockID/homekitkey': {
       name: 'Returns homekit key',
       summary: 'Returns homekit key for given lock and calling user.',
