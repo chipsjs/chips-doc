@@ -875,6 +875,35 @@ describe('convert spec to generate api doc', () => {
     });
   });
 
+  describe('special spec | request body is empty object', () => {
+    before('set source data', () => {
+      specJson = {
+        '/test': {
+          method: 'post',
+          request: {
+            body: {
+            }
+          }
+        }
+      }
+    });
+
+    before('convert normal spec to api doc', () => {
+      specResult = Convert.getInstance().run(specJson, 'test/temp/special');
+    });
+
+    it('should generate correct api doc', () => {
+      const api_name = '/test';
+      assert.exists(specResult[api_name]);
+      assert.exists(specResult[api_name].post);
+      assert.notNestedProperty(specResult[api_name], 'post.requestBody');
+    });
+
+    after('clean file', () => {
+      fs.unlinkSync('test/temp/special_api_doc.json');
+    });
+  });
+
   describe('ifPresent spec | normal case', () => {
     before('set source data', () => {
       specJson = {
@@ -1064,4 +1093,76 @@ describe('convert spec to generate api doc', () => {
       fs.unlinkSync('test/temp/error_api_doc.json');
     });
   })
+
+  describe('array spec | object array', () => {
+    before('set source data', () => {
+      specJson = {
+        'POST /test': {
+          method: 'post',
+          request: {
+            body: {
+              users: [{
+                userid: '123',
+                status: '1'
+              }]
+            }
+          }
+        }
+      }
+    });
+
+    before('convert normal spec to api doc', () => {
+      specResult = Convert.getInstance().run(specJson, 'test/temp/array');
+    });
+
+    it('should generate correct api doc', () => {
+      const api_name = '/test';
+      assert.exists(specResult[api_name]);
+      assert.exists(specResult[api_name].post);
+
+      const users = _.get(specResult, [api_name, 'post', 'requestBody', 'content', 'application/json', 'schema', 'properties', 'users']);
+      assert.strictEqual(users.type, 'array');
+      assert.nestedPropertyVal(users, 'items.type', 'object');
+      assert.nestedPropertyVal(users, 'items.properties.status.description', '1');
+      assert.nestedPropertyVal(users, 'items.properties.userid.description', '123');
+    });
+
+    after('clean file', () => {
+      fs.unlinkSync('test/temp/array_api_doc.json');
+    });
+  });
+
+  describe('array spec | string array', () => {
+    before('set source data', () => {
+      specJson = {
+        'POST /test': {
+          method: 'post',
+          request: {
+            body: {
+              users: ['userid', 'userid1']
+            }
+          }
+        }
+      }
+    });
+
+    before('convert normal spec to api doc', () => {
+      specResult = Convert.getInstance().run(specJson, 'test/temp/array');
+    });
+
+    it('should generate correct api doc', () => {
+      const api_name = '/test';
+      assert.exists(specResult[api_name]);
+      assert.exists(specResult[api_name].post);
+
+      const users = _.get(specResult, [api_name, 'post', 'requestBody', 'content', 'application/json', 'schema', 'properties', 'users']);
+      assert.strictEqual(users.type, 'array');
+      assert.nestedProperty(users, 'items');
+      assert.nestedPropertyVal(users, 'description', 'userid');
+    });
+
+    after('clean file', () => {
+      fs.unlinkSync('test/temp/array_api_doc.json');
+    });
+  });
 });

@@ -482,31 +482,8 @@
                       "properties": {
                         "locks": {
                           "type": "array",
-                          "description": "",
-                          "items": {
-                            "type": "object",
-                            "description": "",
-                            "properties": {
-                              "0": {
-                                "description": "l"
-                              },
-                              "1": {
-                                "description": "o"
-                              },
-                              "2": {
-                                "description": "c"
-                              },
-                              "3": {
-                                "description": "k"
-                              },
-                              "4": {
-                                "description": "I"
-                              },
-                              "5": {
-                                "description": "D"
-                              }
-                            }
-                          }
+                          "description": "lockID",
+                          "items": {}
                         },
                         "appID": {
                           "description": "august-iphone"
@@ -528,31 +505,8 @@
                       "properties": {
                         "locks": {
                           "type": "array",
-                          "description": "",
-                          "items": {
-                            "type": "object",
-                            "description": "",
-                            "properties": {
-                              "0": {
-                                "description": "l"
-                              },
-                              "1": {
-                                "description": "o"
-                              },
-                              "2": {
-                                "description": "c"
-                              },
-                              "3": {
-                                "description": "k"
-                              },
-                              "4": {
-                                "description": "I"
-                              },
-                              "5": {
-                                "description": "D"
-                              }
-                            }
-                          }
+                          "description": "lockID",
+                          "items": {}
                         },
                         "appID": {
                           "description": "august-iphone"
@@ -3938,16 +3892,6 @@
       "put": {
         "summary": "Move all keys to deleted",
         "description": "move all keys (except key index 0) to deleted",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {}
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
             "description": "",
@@ -6041,136 +5985,8 @@
                       },
                       "appItems": {
                         "type": "array",
-                        "description": "",
-                        "items": {
-                          "type": "object",
-                          "description": "",
-                          "properties": {
-                            "0": {
-                              "description": "I"
-                            },
-                            "1": {
-                              "description": "D"
-                            },
-                            "2": {
-                              "description": " "
-                            },
-                            "3": {
-                              "description": "o"
-                            },
-                            "4": {
-                              "description": "f"
-                            },
-                            "5": {
-                              "description": " "
-                            },
-                            "6": {
-                              "description": "f"
-                            },
-                            "7": {
-                              "description": "i"
-                            },
-                            "8": {
-                              "description": "r"
-                            },
-                            "9": {
-                              "description": "s"
-                            },
-                            "10": {
-                              "description": "t"
-                            },
-                            "11": {
-                              "description": " "
-                            },
-                            "12": {
-                              "description": "p"
-                            },
-                            "13": {
-                              "description": "a"
-                            },
-                            "14": {
-                              "description": "r"
-                            },
-                            "15": {
-                              "description": "t"
-                            },
-                            "16": {
-                              "description": "n"
-                            },
-                            "17": {
-                              "description": "e"
-                            },
-                            "18": {
-                              "description": "r"
-                            },
-                            "19": {
-                              "description": " "
-                            },
-                            "20": {
-                              "description": "p"
-                            },
-                            "21": {
-                              "description": "a"
-                            },
-                            "22": {
-                              "description": "r"
-                            },
-                            "23": {
-                              "description": "t"
-                            },
-                            "24": {
-                              "description": "n"
-                            },
-                            "25": {
-                              "description": "e"
-                            },
-                            "26": {
-                              "description": "r"
-                            },
-                            "27": {
-                              "description": " "
-                            },
-                            "28": {
-                              "description": "w"
-                            },
-                            "29": {
-                              "description": "i"
-                            },
-                            "30": {
-                              "description": "t"
-                            },
-                            "31": {
-                              "description": "h"
-                            },
-                            "32": {
-                              "description": " "
-                            },
-                            "33": {
-                              "description": "t"
-                            },
-                            "34": {
-                              "description": "h"
-                            },
-                            "35": {
-                              "description": "i"
-                            },
-                            "36": {
-                              "description": "s"
-                            },
-                            "37": {
-                              "description": " "
-                            },
-                            "38": {
-                              "description": "t"
-                            },
-                            "39": {
-                              "description": "a"
-                            },
-                            "40": {
-                              "description": "g"
-                            }
-                          }
-                        }
+                        "description": "ID of first partner partner with this tag",
+                        "items": {}
                       }
                     }
                   }
@@ -6832,88 +6648,8 @@
                 "properties": {
                   "users": {
                     "type": "array",
-                    "description": "",
-                    "items": {
-                      "type": "object",
-                      "description": "",
-                      "properties": {
-                        "0": {
-                          "description": "A"
-                        },
-                        "1": {
-                          "description": "r"
-                        },
-                        "2": {
-                          "description": "r"
-                        },
-                        "3": {
-                          "description": "a"
-                        },
-                        "4": {
-                          "description": "y"
-                        },
-                        "5": {
-                          "description": " "
-                        },
-                        "6": {
-                          "description": "o"
-                        },
-                        "7": {
-                          "description": "f"
-                        },
-                        "8": {
-                          "description": " "
-                        },
-                        "9": {
-                          "description": "u"
-                        },
-                        "10": {
-                          "description": "s"
-                        },
-                        "11": {
-                          "description": "e"
-                        },
-                        "12": {
-                          "description": "r"
-                        },
-                        "13": {
-                          "description": " "
-                        },
-                        "14": {
-                          "description": "i"
-                        },
-                        "15": {
-                          "description": "d"
-                        },
-                        "16": {
-                          "description": "e"
-                        },
-                        "17": {
-                          "description": "n"
-                        },
-                        "18": {
-                          "description": "t"
-                        },
-                        "19": {
-                          "description": "i"
-                        },
-                        "20": {
-                          "description": "f"
-                        },
-                        "21": {
-                          "description": "i"
-                        },
-                        "22": {
-                          "description": "e"
-                        },
-                        "23": {
-                          "description": "r"
-                        },
-                        "24": {
-                          "description": "s"
-                        }
-                      }
-                    }
+                    "description": "Array of user identifiers",
+                    "items": {}
                   }
                 }
               }
@@ -7356,16 +7092,6 @@
       "post": {
         "summary": "Application hits this endpoint when they want to join, leave, or heartbeat for an AV Session related to a doorbell press or IR sensor.",
         "description": "Valid actions are ['heartbeat' 'join', 'leave', 'status'].Only 1 user is allowed to respond to the doorbell press.  Otherwise a ConflictError (409) is sent back.When a user responds a pubnub message is sent to the other listeners to disable their response capability on the client.In the event that this API is not called with a hangup or heartbeat (client power or connection failure) the call will be ended when the key expiresWhen a call is hung up, an object called callStats is expected in the request body.videoAvailable flag is only present for 'respond'",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {}
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
             "description": "",
@@ -8942,65 +8668,13 @@
                       "properties": {
                         "granteeID1": {
                           "type": "array",
-                          "description": "",
-                          "items": {
-                            "type": "object",
-                            "description": "",
-                            "properties": {
-                              "0": {
-                                "description": "l"
-                              },
-                              "1": {
-                                "description": "o"
-                              },
-                              "2": {
-                                "description": "c"
-                              },
-                              "3": {
-                                "description": "k"
-                              },
-                              "4": {
-                                "description": "I"
-                              },
-                              "5": {
-                                "description": "D"
-                              },
-                              "6": {
-                                "description": "1"
-                              }
-                            }
-                          }
+                          "description": "lockID1",
+                          "items": {}
                         },
                         "granteeID2": {
                           "type": "array",
-                          "description": "",
-                          "items": {
-                            "type": "object",
-                            "description": "",
-                            "properties": {
-                              "0": {
-                                "description": "l"
-                              },
-                              "1": {
-                                "description": "o"
-                              },
-                              "2": {
-                                "description": "c"
-                              },
-                              "3": {
-                                "description": "k"
-                              },
-                              "4": {
-                                "description": "I"
-                              },
-                              "5": {
-                                "description": "D"
-                              },
-                              "6": {
-                                "description": "1"
-                              }
-                            }
-                          }
+                          "description": "lockID1",
+                          "items": {}
                         }
                       }
                     },
@@ -9253,16 +8927,6 @@
     "/homeaccess/partners/access": {
       "get": {
         "summary": "Called by August Access seller partners to list August Access delivery providers",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {}
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
             "description": "",
@@ -9499,89 +9163,13 @@
                         },
                         "stunServers": {
                           "type": "array",
-                          "description": "",
-                          "items": {
-                            "type": "object",
-                            "description": "",
-                            "properties": {
-                              "0": {
-                                "description": "h"
-                              },
-                              "1": {
-                                "description": "o"
-                              },
-                              "2": {
-                                "description": "s"
-                              },
-                              "3": {
-                                "description": "t"
-                              },
-                              "4": {
-                                "description": "0"
-                              },
-                              "5": {
-                                "description": ":"
-                              },
-                              "6": {
-                                "description": "p"
-                              },
-                              "7": {
-                                "description": "o"
-                              },
-                              "8": {
-                                "description": "r"
-                              },
-                              "9": {
-                                "description": "t"
-                              },
-                              "10": {
-                                "description": "0"
-                              }
-                            }
-                          }
+                          "description": "host0:port0",
+                          "items": {}
                         },
                         "turnServers": {
                           "type": "array",
-                          "description": "",
-                          "items": {
-                            "type": "object",
-                            "description": "",
-                            "properties": {
-                              "0": {
-                                "description": "h"
-                              },
-                              "1": {
-                                "description": "o"
-                              },
-                              "2": {
-                                "description": "s"
-                              },
-                              "3": {
-                                "description": "t"
-                              },
-                              "4": {
-                                "description": "0"
-                              },
-                              "5": {
-                                "description": ":"
-                              },
-                              "6": {
-                                "description": "p"
-                              },
-                              "7": {
-                                "description": "o"
-                              },
-                              "8": {
-                                "description": "r"
-                              },
-                              "9": {
-                                "description": "t"
-                              },
-                              "10": {
-                                "description": "0"
-                              }
-                            }
-                          }
+                          "description": "host0:port0",
+                          "items": {}
                         }
                       }
                     },
@@ -9610,215 +9198,28 @@
                   "properties": {
                     "locks": {
                       "type": "array",
-                      "description": "",
-                      "items": {
-                        "type": "object",
-                        "description": "",
-                        "properties": {
-                          "0": {
-                            "description": "<"
-                          },
-                          "1": {
-                            "description": "l"
-                          },
-                          "2": {
-                            "description": "o"
-                          },
-                          "3": {
-                            "description": "c"
-                          },
-                          "4": {
-                            "description": "k"
-                          },
-                          "5": {
-                            "description": "I"
-                          },
-                          "6": {
-                            "description": "D"
-                          },
-                          "7": {
-                            "description": "s"
-                          },
-                          "8": {
-                            "description": ">"
-                          }
-                        }
-                      }
+                      "description": "<lockIDs>",
+                      "items": {}
                     },
                     "doorbells": {
                       "type": "array",
-                      "description": "",
-                      "items": {
-                        "type": "object",
-                        "description": "",
-                        "properties": {
-                          "0": {
-                            "description": "<"
-                          },
-                          "1": {
-                            "description": "d"
-                          },
-                          "2": {
-                            "description": "o"
-                          },
-                          "3": {
-                            "description": "o"
-                          },
-                          "4": {
-                            "description": "r"
-                          },
-                          "5": {
-                            "description": "b"
-                          },
-                          "6": {
-                            "description": "e"
-                          },
-                          "7": {
-                            "description": "l"
-                          },
-                          "8": {
-                            "description": "l"
-                          },
-                          "9": {
-                            "description": "I"
-                          },
-                          "10": {
-                            "description": "D"
-                          },
-                          "11": {
-                            "description": "s"
-                          },
-                          "12": {
-                            "description": ">"
-                          }
-                        }
-                      }
+                      "description": "<doorbellIDs>",
+                      "items": {}
                     },
                     "keypads": {
                       "type": "array",
-                      "description": "",
-                      "items": {
-                        "type": "object",
-                        "description": "",
-                        "properties": {
-                          "0": {
-                            "description": "<"
-                          },
-                          "1": {
-                            "description": "k"
-                          },
-                          "2": {
-                            "description": "e"
-                          },
-                          "3": {
-                            "description": "y"
-                          },
-                          "4": {
-                            "description": "p"
-                          },
-                          "5": {
-                            "description": "a"
-                          },
-                          "6": {
-                            "description": "d"
-                          },
-                          "7": {
-                            "description": "I"
-                          },
-                          "8": {
-                            "description": "D"
-                          },
-                          "9": {
-                            "description": "s"
-                          },
-                          "10": {
-                            "description": ">"
-                          }
-                        }
-                      }
+                      "description": "<keypadIDs>",
+                      "items": {}
                     },
                     "bridges": {
                       "type": "array",
-                      "description": "",
-                      "items": {
-                        "type": "object",
-                        "description": "",
-                        "properties": {
-                          "0": {
-                            "description": "<"
-                          },
-                          "1": {
-                            "description": "b"
-                          },
-                          "2": {
-                            "description": "r"
-                          },
-                          "3": {
-                            "description": "i"
-                          },
-                          "4": {
-                            "description": "d"
-                          },
-                          "5": {
-                            "description": "g"
-                          },
-                          "6": {
-                            "description": "e"
-                          },
-                          "7": {
-                            "description": "I"
-                          },
-                          "8": {
-                            "description": "D"
-                          },
-                          "9": {
-                            "description": "s"
-                          },
-                          "10": {
-                            "description": ">"
-                          }
-                        }
-                      }
+                      "description": "<bridgeIDs>",
+                      "items": {}
                     },
                     "chimes": {
                       "type": "array",
-                      "description": "",
-                      "items": {
-                        "type": "object",
-                        "description": "",
-                        "properties": {
-                          "0": {
-                            "description": "<"
-                          },
-                          "1": {
-                            "description": "c"
-                          },
-                          "2": {
-                            "description": "h"
-                          },
-                          "3": {
-                            "description": "i"
-                          },
-                          "4": {
-                            "description": "m"
-                          },
-                          "5": {
-                            "description": "e"
-                          },
-                          "6": {
-                            "description": "I"
-                          },
-                          "7": {
-                            "description": "D"
-                          },
-                          "8": {
-                            "description": "s"
-                          },
-                          "9": {
-                            "description": ">"
-                          }
-                        }
-                      }
+                      "description": "<chimeIDs>",
+                      "items": {}
                     }
                   }
                 }

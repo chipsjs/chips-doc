@@ -114,11 +114,18 @@ class SpecConvert extends Base.factory() {
               if (schema[param_name].length === 0) {
                 convert_schema[param_name] = Swagger.generateSchemaByType(SwaggerDataType.array);
               } else {
-                const convert_child_schema = this._parseDetailSchema(schema[param_name][0]);
-                const items = Swagger.generateSchemaByType(SwaggerDataType.object, '', {
-                  properties: convert_child_schema.convert_schema
-                });
-                convert_schema[param_name] = Swagger.generateSchemaByType(SwaggerDataType.array, '', { items });
+                const temp_type = typeof schema[param_name][0];
+                if (temp_type === 'object') {
+                  // default spec format is as the same as api_spec['3.0,0'].xxx.events
+                  const convert_child_schema = this._parseDetailSchema(schema[param_name][0]);
+                  const items = Swagger.generateSchemaByType(SwaggerDataType.object, '', {
+                    properties: convert_child_schema.convert_schema
+                  });
+                  convert_schema[param_name] = Swagger.generateSchemaByType(SwaggerDataType.array, '', { items });
+                } else if (temp_type === 'string') {
+                  // such as locks: ['lockid1', 'lockid2']
+                  convert_schema[param_name] = Swagger.generateSchemaByType('array', schema[param_name][0])
+                }
               }
             } else {
               const convert_child_schema = this._parseDetailSchema(schema[param_name]);
@@ -205,7 +212,7 @@ class SpecConvert extends Base.factory() {
    * @return {object} convert_request - api_doc[api_name].request
    */
   parseRequestBodySchema(spec_schema) {
-    if (!spec_schema) return null;
+    if (typeof spec_schema !== 'object' || Object.keys(spec_schema).length === 0) return null;
 
     const { new_schema, required_param_arr } = this._parseSpecSchema(spec_schema);
     return Swagger.convertJsonSchema2Swagger(new_schema, 'body', { required_param_arr })

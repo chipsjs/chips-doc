@@ -116,9 +116,7 @@ test_case层 -> middleware层 -> service层
 
 ## spec转换出来的几种需要人工fix的问题
 ### api_spec的编写错误
-- npm run convert -> you will find some errors
+- npm run convert -> you will find some spec error
 
 ### responses key不确定,有n种只需要有一种
-- GET /users/bridges/mine,
 - /users/doorbells/mine
-- GET locks/:lockID
