@@ -940,7 +940,7 @@ describe('convert spec to generate api doc', () => {
     });
   })
 
-  describe('ifPresent spec | special case', () => {
+  describe('special spec | properties are id1, id2, id3, id4', () => {
     before('set source data', () => {
       specJson = {
         '/test': {
@@ -948,13 +948,13 @@ describe('convert spec to generate api doc', () => {
           response: {
             body: {
               ifPresent: {
-                special1: ['u1', 'u2'],
                 special2: {
                   a: 'type of a1',
                   a2: 'type of a:2',
                   '...': '...',
                   aN: 'type of a'
                 },
+                special1: ['u1', 'u2'],
                 normal: {
                   email: 'string: type of email'
                 }
@@ -977,7 +977,7 @@ describe('convert spec to generate api doc', () => {
       assert.nestedPropertyVal(schema, 'properties.special1.type', 'array');
       assert.nestedPropertyVal(schema, 'properties.special1.description', 'u1');
       assert.nestedPropertyVal(schema, 'properties.special2.type', 'object');
-      assert.nestedPropertyVal(schema, 'properties.special2.description', 'key is a, type of a1');
+      assert.nestedPropertyVal(schema, 'properties.special2.properties.a.description', 'type of a1');
       assert.nestedPropertyVal(schema, 'properties.normal.type', 'object');
       assert.nestedPropertyVal(schema, 'properties.normal.properties.email.type', 'string');
       assert.nestedPropertyVal(schema, 'properties.normal.properties.email.description', 'string: type of email');

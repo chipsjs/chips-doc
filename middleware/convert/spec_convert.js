@@ -1,5 +1,6 @@
 const fs = require('fs');
 const _ = require('lodash');
+const config = require('config');
 
 const Base = require('../../lib/base_class');
 const { Swagger, SwaggerDataType } = require('../../lib/swagger_convert');
@@ -68,87 +69,84 @@ class SpecConvert extends Base.factory() {
    */
   _parseDetailSchema(schema, isRequired = false) {
     let convert_schema = {};
-    const param_arr = Object.keys(schema).reduce((result, param_name) => {
-      if (param_name === 'required' || param_name === 'optional' || param_name === 'header') return result;
-      if (schema[param_name]) {
-        switch (typeof schema[param_name]) {
-          case 'string':
-            convert_schema[param_name] = Swagger.generateSchemaByType(this._parseType(schema[param_name]), schema[param_name]);
-            if (!isRequired && schema[param_name].indexOf('required') !== -1) {
-              result.push(param_name);
-            }
-            break;
-          case 'object':
-            if (Swagger.isCombiningSchemas(param_name)) {
-              convert_schema = this._parseDetailSchema(schema[param_name]).convert_schema;
-              break;
-            }
+    let prev_param_name = 'abcdefghijklmn'; // a tricky way to be used the first
+    const required_param_set = Object.keys(schema).reduce((result, param_name) => {
+      if (param_name === '...') return result;
 
-            // because many differents formats in ifPresent, we only can deal it specially
-            if (param_name === 'ifPresent') {
-              const used_key = Object.entries(schema[param_name]).reduce((temp_used_key, [key, value]) => {
-                if (typeof value !== 'object') return temp_used_key;
-
-                if (Array.isArray(value)) {
-                  convert_schema[key] = Swagger.generateSchemaByType('array', value[0])
-                  temp_used_key.push(key)
-                  return temp_used_key;
-                }
-
-                const cases = Object.keys(value);
-                if (cases.length >= 2 && cases[1].indexOf(cases[0]) !== -1) {
-                  convert_schema[key] = Swagger.generateSchemaByType('object', `key is ${cases[0]}, ${value[cases[0]]}`)
-                  temp_used_key.push(key)
-                }
-
-                return temp_used_key;
-              }, []);
-              const unused_child = _.omit(schema[param_name], used_key);
-              const other_child_schema = this._parseDetailSchema(unused_child).convert_schema;
-              Object.assign(convert_schema, other_child_schema);
-              break;
-            }
-
-            if (Array.isArray(schema[param_name])) {
-              // default spec format is as the same as api_spec['3.0,0'].xxx.events
-              if (schema[param_name].length === 0) {
-                convert_schema[param_name] = Swagger.generateSchemaByType(SwaggerDataType.array);
-              } else {
-                const temp_type = typeof schema[param_name][0];
-                if (temp_type === 'object') {
-                  // default spec format is as the same as api_spec['3.0,0'].xxx.events
-                  const convert_child_schema = this._parseDetailSchema(schema[param_name][0]);
-                  const items = Swagger.generateSchemaByType(SwaggerDataType.object, '', {
-                    properties: convert_child_schema.convert_schema
-                  });
-                  convert_schema[param_name] = Swagger.generateSchemaByType(SwaggerDataType.array, '', { items });
-                } else if (temp_type === 'string') {
-                  // such as locks: ['lockid1', 'lockid2']
-                  convert_schema[param_name] = Swagger.generateSchemaByType('array', schema[param_name][0])
-                }
-              }
-            } else {
-              const convert_child_schema = this._parseDetailSchema(schema[param_name]);
-              convert_schema[param_name] = Swagger.generateSchemaByType(SwaggerDataType.object, '', {
-                properties: convert_child_schema.convert_schema
-              });
-            }
-            break;
-          case 'function': // super special schema, like spec[3.0.0].xxx.nextPage
-            convert_schema[param_name] = Swagger.generateSchemaByType(this._parseType(schema[param_name].name, ''));
-            break;
-          default:
-            convert_schema[param_name] = Swagger.generateSchemaByType(SwaggerDataType.unknown, '');
-            break;
+      // param_name is userid2, prev_param_name is userid, param name will ignore
+      if (param_name.indexOf(prev_param_name) === 0) {
+        const different_string_part = param_name.substring(prev_param_name.length)
+        const different_number_part = Number.parseInt(different_string_part, 10);
+        if (!Number.isNaN(different_number_part) || different_string_part === 'N') {
+          return result;
         }
       }
 
-      if (isRequired) {
-        result.push(param_name);
-      }
-      return result;
-    }, []);
+      const parameter_object = schema[param_name];
+      switch (typeof parameter_object) {
+        case 'string':
+          convert_schema[param_name] = Swagger.generateSchemaByType(this._parseType(parameter_object), parameter_object);
+          if (!isRequired && parameter_object.indexOf('required') !== -1) {
+            result.add(param_name);
+          }
+          break;
+        case 'object':
+          if (Swagger.isCombiningSchemas(param_name) || param_name === 'ifPresent' || param_name === 'optional' || param_name === 'header') {
+            const child_convert_schema = this._parseDetailSchema(parameter_object, false);
+            convert_schema = child_convert_schema.convert_schema;
+            child_convert_schema.param_arr.forEach((item) => result.add(item));
+            break;
+          }
 
+          if (param_name === 'required') {
+            const child_convert_schema = this._parseDetailSchema(parameter_object, true);
+            convert_schema = child_convert_schema.convert_schema;
+            child_convert_schema.param_arr.forEach((item) => result.add(item));
+            break;
+          }
+
+          if (Array.isArray(parameter_object)) {
+            // default spec format is as the same as api_spec['3.0,0'].xxx.events
+            if (parameter_object.length === 0) {
+              convert_schema[param_name] = Swagger.generateSchemaByType(SwaggerDataType.array);
+            } else {
+              const temp_type = typeof parameter_object[0];
+              if (temp_type === 'object') {
+                // default spec format is as the same as api_spec['3.0,0'].xxx.events
+                const convert_child_schema = this._parseDetailSchema(parameter_object[0]);
+                const items = Swagger.generateSchemaByType(SwaggerDataType.object, '', {
+                  properties: convert_child_schema.convert_schema
+                });
+                convert_schema[param_name] = Swagger.generateSchemaByType(SwaggerDataType.array, '', { items });
+              } else if (temp_type === 'string') {
+                // such as locks: ['lockid1', 'lockid2']
+                convert_schema[param_name] = Swagger.generateSchemaByType('array', parameter_object[0])
+              }
+            }
+          } else {
+            const convert_child_schema = this._parseDetailSchema(parameter_object);
+            convert_schema[param_name] = Swagger.generateSchemaByType(SwaggerDataType.object, '', {
+              properties: convert_child_schema.convert_schema
+            });
+          }
+          break;
+        case 'function': // super special schema, like spec[3.0.0].xxx.nextPage
+          convert_schema[param_name] = Swagger.generateSchemaByType(this._parseType(schema[param_name].name, ''));
+          break;
+        default:
+          convert_schema[param_name] = Swagger.generateSchemaByType(SwaggerDataType.unknown, '');
+          break;
+      }
+
+      if (isRequired) {
+        result.add(param_name);
+      }
+      prev_param_name = param_name;
+
+      return result;
+    }, new Set());
+
+    const param_arr = Array.from(required_param_set);
     return { convert_schema, param_arr }
   }
 
@@ -168,10 +166,9 @@ class SpecConvert extends Base.factory() {
         items: {}
       };
       if (spec_schema.length !== 0) {
-        const { convert_schema: new_detail_schema } = this._parseDetailSchema(spec_schema[0]);
         new_schema.items = {
           type: 'object',
-          properties: new_detail_schema
+          properties: this._parseDetailSchema(spec_schema[0]).convert_schema || {}
         };
       }
 
@@ -182,22 +179,6 @@ class SpecConvert extends Base.factory() {
       type: 'object',
       properties: {}
     };
-
-    // there are two different schema in api_spec, such as query.required.pin or query.pin
-    if (spec_schema.required) {
-      const { convert_schema: new_detail_schema, param_arr } = this._parseDetailSchema(spec_schema.required, true);
-      Object.assign(new_schema.properties, new_detail_schema);
-      required_param_arr = param_arr;
-    }
-
-    if (spec_schema.optional) {
-      const { convert_schema: new_detail_schema } = this._parseDetailSchema(spec_schema.optional);
-      Object.assign(new_schema.properties, new_detail_schema);
-    }
-
-    if (spec_schema.headers) {
-      // TODO
-    }
 
     const { convert_schema: new_detail_schema, param_arr } = this._parseDetailSchema(spec_schema);
     Object.assign(new_schema.properties, new_detail_schema);
@@ -309,12 +290,16 @@ class SpecConvert extends Base.factory() {
       throw new TypeError(`SpecConvert::run: ${current_api_name} fail!err_msg: ${err.message}`);
     }
 
-    const info_obj = Swagger.generateInfoObject('august-rest-api', 'august api server for mobile', '{base_url}', '8.8.0');
+    const info_obj = Swagger.generateInfoObject('august-rest-api', 'If you want to refresh swagger, click terms of service and refersh the browser', config.get('terms_of_service'), '8.8.0');
     const openapi_obj = Swagger.generateOpenApiObject(info_obj, path_items);
     fs.writeFileSync(`${spec_output_path}_api_doc.json`, JSON.stringify(openapi_obj, null, 2));
 
     return path_items;
   }
+
+  // parseApi(old_format_doc, spec_output_path) {
+
+  // }
 }
 
 module.exports = SpecConvert;
