@@ -13,7 +13,7 @@
 |   +-- base 一些必须跑的测试用例（手写，会增加到temp_test_case中）
 +-- store 临时文件
 |   +-- log_store 日志文件
-|   +-- swagger_store jsonschema转为swagger的输出（todo）
+|   +-- swagger_store jsonschema转为swagger的输出
 +-- middleware  中间件
 |   +-- setting.js  配置中心
 |   +-- assist_macro.js 辅助宏
@@ -100,7 +100,6 @@ test_case层 -> middleware层 -> service层
 - 对不熟悉模块的开发更友善，能更快熟务逻辑
 
 # todo
-- swagger (doing)
 - 单个mock
 - 编写快速开始的文档 (high)
 - 支持header的灵活定义 
@@ -114,9 +113,6 @@ test_case层 -> middleware层 -> service层
 - flow前的多个flow需要指定context param
 - 复杂度: 1.就是写多个flow 2.自下而上 3.图 4.自上而下 (todo)
 
-## spec转换出来的几种需要人工fix的问题
-### api_spec的编写错误
-- npm run convert -> you will find some spec error
-
+## spec转换出来需要人工fix的问题
 ### responses key不确定,有n种只需要有一种
 - /users/doorbells/mine

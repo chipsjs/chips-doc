@@ -2,5 +2,6 @@
   "log_level": "info",
   "temp_test_case_path": "test_case/temp.json",
   "report_path": "report",
-  "openapi_version": "3.0.0"
+  "openapi_version": "3.0.0",
+  "terms_of_service": "127.0.0.1:3030"
 }
