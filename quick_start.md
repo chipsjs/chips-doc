@@ -87,6 +87,30 @@ body | [Spec Object](#specObject) | http response body
   }
 ```
 
+### object
+
+- if keys are related(the next key is ${prev_key}N), it will ignore
+
+```json
+  body: {
+    users: {
+      userid: 'xx',
+      userid1: 'xxx',
+      userid2: 'xxx',
+      useridN: 'xxx'
+    },
+  }
+```
+
+- value supports array, number, object, string, function(such as the following eg, but not recommended)
+
+```json
+  body: {
+      id: Number,
+      msg: String
+  }
+```
+
 ### array
 
 - [] means array
