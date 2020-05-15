@@ -18,6 +18,17 @@ method/method_type | `string` | 1. case insensitive 2. is lower priority than ke
 request | Request Object | optional, if undefined, Swagger.request won't exist
 response | Response Object | optional, if undefined, Swagger.response exist and match swagger 3.0.0 stardard format
 
+### Data Type
+
+Field Name | SupportedType
+---|:---
+string | string/ have 'string:' in description
+number | number/ have 'number:' in description
+integer | int/integer/<integer>
+array | [] / array
+object | object
+boolean | boolean/<boolean>
+
 ### Request Object
 
 Field Name | Type | Description
@@ -43,8 +54,6 @@ body | [Spec Object](#specObject) | http response body
     }
   }
 ```
-
-#### data type
 
 #### required/optional
 
