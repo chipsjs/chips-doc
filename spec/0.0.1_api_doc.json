@@ -2,8 +2,8 @@
   "openapi": "3.0.0",
   "info": {
     "title": "august-rest-api",
-    "description": "august api server for mobile",
-    "termsOfService": "{base_url}",
+    "description": "If you want to refresh swagger, click terms of service and refersh the browser",
+    "termsOfService": "127.0.0.1:3030",
     "version": "8.8.0"
   },
   "servers": [],
@@ -46,9 +46,6 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "password": {
-                    "description": "password for authentication"
-                  },
                   "FirstName": {
                     "description": "first name"
                   },
@@ -71,9 +68,6 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "UserID": {
-                      "description": "unique identifier describing user"
-                    },
                     "UserName": {
                       "description": "username for use with login"
                     },
@@ -160,9 +154,6 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "UserID": {
-                      "description": "<server-generated unique user ID>"
-                    },
                     "UserName": {
                       "description": "<user name to log in to web page, etc.>"
                     },
@@ -247,13 +238,14 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "HouseName": {
-                      "description": "<Name of house>"
-                    },
                     "users": {
                       "type": "object",
-                      "description": "key is userid, type - type of user",
-                      "properties": {}
+                      "description": "",
+                      "properties": {
+                        "userid": {
+                          "description": "type - type of user"
+                        }
+                      }
                     },
                     "locks": {
                       "type": "array",
@@ -375,47 +367,6 @@
         }
       }
     },
-    "/users/doorbells/mine": {
-      "get": {
-        "summary": "Get list of calling user's doorbells",
-        "description": "Returns an empty body if the calling user has no locks",
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "doorbellID1": {
-                      "type": "object",
-                      "description": "",
-                      "properties": {
-                        "osVersionHistory": {
-                          "type": "object",
-                          "description": "",
-                          "properties": {}
-                        },
-                        "bridgeAppVersionHistory": {
-                          "type": "object",
-                          "description": "",
-                          "properties": {}
-                        },
-                        "doorbellAppVersionHistory": {
-                          "type": "object",
-                          "description": "",
-                          "properties": {}
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/users/bridges/mine": {
       "get": {
         "summary": "Get list of calling user's bridges",
@@ -504,28 +455,14 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "LockName": {
-                      "description": "Text string"
-                    },
-                    "Type": {
-                      "description": "lock type"
-                    },
-                    "Updated": {
-                      "description": "date"
-                    },
-                    "Created": {
-                      "description": "date"
-                    },
-                    "LockID": {
-                      "description": "unique ID of lock"
-                    },
-                    "HouseID": {
-                      "description": "id of house to which lock belongs"
-                    },
                     "users": {
                       "type": "object",
-                      "description": "key is userid, user type",
-                      "properties": {}
+                      "description": "",
+                      "properties": {
+                        "userid": {
+                          "description": "user type"
+                        }
+                      }
                     },
                     "ruleHash": {
                       "type": "object",
@@ -1501,18 +1438,6 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "startTime": {
-                    "description": "First time when usage window opens  (ISO 8601 format)"
-                  },
-                  "endTime": {
-                    "description": "First time when usage window closes  (ISO 8601 format)"
-                  },
-                  "recurrence": {
-                    "description": "expression of rule's recurrence (see notes)"
-                  },
-                  "schedule": {
-                    "description": "Rule schedule in iCalender data format (RFC 5545)"
-                  },
                   "Name": {
                     "type": "string",
                     "description": "string containing name of person to be granted access to lock"
@@ -1855,6 +1780,9 @@
                   "token": {
                     "description": "Token August access control system will present for authentication"
                   },
+                  "header": {
+                    "description": "Header in which authentication token will be provided"
+                  },
                   "clientID": {
                     "description": "Client ID of third-party service provided by August"
                   },
@@ -1950,6 +1878,9 @@
                   "token": {
                     "description": "Token August access control system will present for authentication"
                   },
+                  "header": {
+                    "description": "Header in which authentication token will be provided"
+                  },
                   "clientID": {
                     "description": "Client ID of third-party service provided by August"
                   },
@@ -2034,6 +1965,9 @@
                   },
                   "token": {
                     "description": "Token August access control system will present for authentication"
+                  },
+                  "header": {
+                    "description": "Header in which authentication token will be provided"
                   },
                   "clientID": {
                     "description": "Client ID of third-party service provided by August"
@@ -4152,12 +4086,6 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "LockID": {
-                    "description": "unique identifier of lock [see notes]"
-                  },
-                  "LockName": {
-                    "description": "name of lock"
-                  },
                   "hostHardwareID": {
                     "description": "Host hardware's ID"
                   }
@@ -4259,9 +4187,6 @@
                   "<parameter2 namee": {
                     "description": "<parameter 2 value>"
                   },
-                  "...": {
-                    "description": "<parameter value>"
-                  },
                   "<parameter n name>": {
                     "description": "<parameter n value>"
                   }
@@ -4309,12 +4234,6 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "UserID": {
-                    "description": "id of the user whom the offline key is assigned to"
-                  },
-                  "slot": {
-                    "description": "slot to write the key"
-                  },
                   "key": {
                     "description": "key to write in the slot"
                   }
@@ -5060,9 +4979,6 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "code": {
-                    "description": "the verification code that was sent to the identifier"
-                  },
                   "email": {
                     "description": "email address"
                   },
@@ -5359,9 +5275,6 @@
                     "other feature name": {
                       "type": "boolean",
                       "description": "boolean"
-                    },
-                    "...": {
-                      "description": "..."
                     }
                   }
                 }
@@ -7755,9 +7668,6 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "lockID": {
-                    "description": "the lock this user is associated with"
-                  },
                   "firstName": {
                     "description": "first name"
                   },
@@ -7829,9 +7739,6 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "lockID": {
-                    "description": "the id of the lock associated with the unverified user"
-                  },
                   "firstName": {
                     "description": "the first name of the unverified user to update"
                   },
@@ -8029,19 +7936,6 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "type": {
-                    "type": "string",
-                    "description": "string: pin, rf, finger"
-                  },
-                  "pin": {
-                    "description": "the pin"
-                  },
-                  "action": {
-                    "description": "the action of operation, which can be 'intent', 'commit'"
-                  },
-                  "state": {
-                    "description": "the state of the pin/rf/finger, which can be 'load','enable','disable','delate','update'"
-                  },
                   "slot": {
                     "description": "the slot"
                   },
@@ -8072,7 +7966,10 @@
                   "type",
                   "pin",
                   "action",
-                  "state"
+                  "state",
+                  "accessTimes",
+                  "accessRecurrence",
+                  "schedule"
                 ]
               }
             }
@@ -10037,12 +9934,6 @@
                 "properties": {
                   "timeoutMs": {
                     "description": "milliseconds to wait for a pubnub response, 30000 max, 5000 default"
-                  },
-                  "offer": {
-                    "description": "sdp offer string with \"\r\n\" newline delimeters"
-                  },
-                  "clientTransactionID": {
-                    "description": "identifier sent by the client to trace transaction"
                   }
                 }
               }

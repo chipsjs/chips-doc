@@ -110,9 +110,26 @@ test_case层 -> middleware层 -> service层
 
 # important!!!
 ## flow的flow - farmework
+
 - flow前的多个flow需要指定context param
 - 复杂度: 1.就是写多个flow 2.自下而上 3.图 4.自上而下 (todo)
 
 ## spec转换出来需要人工fix的问题
-### responses key不确定,有n种只需要有一种
+
 - /users/doorbells/mine
+
+## todo
+
+### convert
+
+- tag 1
+- the security of cola-doc  1
+- sync the api_spec and swagger
+- swagger updated when api spec is updated/created
+
+### fake and mock
+
+- convert swagger to json-schema 2
+- code, can't work because  backward two big version  2
+- support flow of flow
+- test case 2

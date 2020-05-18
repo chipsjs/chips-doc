@@ -69,7 +69,7 @@ class SpecConvert extends Base.factory() {
    */
   _parseDetailSchema(schema, isRequired = false) {
     let convert_schema = {};
-    let prev_param_name = 'abcdefghijklmn'; // a tricky way to be used the first
+    let prev_param_name;
     const required_param_set = Object.keys(schema).reduce((result, param_name) => {
       if (param_name === '...') return result;
 
@@ -83,59 +83,67 @@ class SpecConvert extends Base.factory() {
       }
 
       const parameter_object = schema[param_name];
-      switch (typeof parameter_object) {
-        case 'string':
-          convert_schema[param_name] = Swagger.generateSchemaByType(this._parseType(parameter_object), parameter_object);
-          if (!isRequired && parameter_object.indexOf('required') !== -1) {
-            result.add(param_name);
-          }
-          break;
-        case 'object':
-          if (Swagger.isCombiningSchemas(param_name) || param_name === 'ifPresent' || param_name === 'optional' || param_name === 'header') {
-            const child_convert_schema = this._parseDetailSchema(parameter_object, false);
-            convert_schema = child_convert_schema.convert_schema;
-            child_convert_schema.param_arr.forEach((item) => result.add(item));
+      if (!parameter_object) {
+        convert_schema[param_name] = Swagger.generateSchemaByType(SwaggerDataType.unknown);
+      } else {
+        switch (typeof parameter_object) {
+          case 'string':
+            convert_schema[param_name] = Swagger.generateSchemaByType(this._parseType(parameter_object), parameter_object);
+            if (!isRequired && parameter_object.indexOf('required') !== -1) {
+              result.add(param_name);
+            }
             break;
-          }
+          case 'object':
+            if (Swagger.isCombiningSchemas(param_name) || param_name === 'ifPresent' || param_name === 'optional' || param_name === 'header') {
+              const child_convert_schema = this._parseDetailSchema(parameter_object, false);
+              convert_schema = child_convert_schema.convert_schema;
+              child_convert_schema.param_arr.forEach((item) => result.add(item));
+              break;
+            }
 
-          if (param_name === 'required') {
-            const child_convert_schema = this._parseDetailSchema(parameter_object, true);
-            convert_schema = child_convert_schema.convert_schema;
-            child_convert_schema.param_arr.forEach((item) => result.add(item));
-            break;
-          }
+            if (param_name === 'required') {
+              const child_convert_schema = this._parseDetailSchema(parameter_object, true);
+              convert_schema = child_convert_schema.convert_schema;
+              child_convert_schema.param_arr.forEach((item) => result.add(item));
+              break;
+            }
 
-          if (Array.isArray(parameter_object)) {
-            // default spec format is as the same as api_spec['3.0,0'].xxx.events
-            if (parameter_object.length === 0) {
-              convert_schema[param_name] = Swagger.generateSchemaByType(SwaggerDataType.array);
+            if (Array.isArray(parameter_object)) {
+              // default spec format is as the same as api_spec['3.0,0'].xxx.events
+              if (parameter_object.length === 0) {
+                convert_schema[param_name] = Swagger.generateSchemaByType(SwaggerDataType.array);
+              } else {
+                const temp_type = typeof parameter_object[0];
+                if (temp_type === 'object') {
+                  // default spec format is as the same as api_spec['3.0,0'].xxx.events
+                  const convert_child_schema = this._parseDetailSchema(parameter_object[0]);
+                  const items = Swagger.generateSchemaByType(SwaggerDataType.object, '', {
+                    properties: convert_child_schema.convert_schema
+                  });
+                  convert_schema[param_name] = Swagger.generateSchemaByType(SwaggerDataType.array, '', { items });
+                } else if (temp_type === 'string') {
+                  // such as locks: ['lockid1', 'lockid2']
+                  convert_schema[param_name] = Swagger.generateSchemaByType('array', parameter_object[0])
+                }
+              }
             } else {
-              const temp_type = typeof parameter_object[0];
-              if (temp_type === 'object') {
-                // default spec format is as the same as api_spec['3.0,0'].xxx.events
-                const convert_child_schema = this._parseDetailSchema(parameter_object[0]);
-                const items = Swagger.generateSchemaByType(SwaggerDataType.object, '', {
+              const convert_child_schema = this._parseDetailSchema(parameter_object);
+              if (Object.keys(convert_child_schema) === 0) {
+                convert_schema[param_name] = Swagger.generateSchemaByType(SwaggerDataType.object, '');
+              } else {
+                convert_schema[param_name] = Swagger.generateSchemaByType(SwaggerDataType.object, '', {
                   properties: convert_child_schema.convert_schema
                 });
-                convert_schema[param_name] = Swagger.generateSchemaByType(SwaggerDataType.array, '', { items });
-              } else if (temp_type === 'string') {
-                // such as locks: ['lockid1', 'lockid2']
-                convert_schema[param_name] = Swagger.generateSchemaByType('array', parameter_object[0])
               }
             }
-          } else {
-            const convert_child_schema = this._parseDetailSchema(parameter_object);
-            convert_schema[param_name] = Swagger.generateSchemaByType(SwaggerDataType.object, '', {
-              properties: convert_child_schema.convert_schema
-            });
-          }
-          break;
-        case 'function': // super special schema, like spec[3.0.0].xxx.nextPage
-          convert_schema[param_name] = Swagger.generateSchemaByType(this._parseType(schema[param_name].name, ''));
-          break;
-        default:
-          convert_schema[param_name] = Swagger.generateSchemaByType(SwaggerDataType.unknown, '');
-          break;
+            break;
+          case 'function': // super special schema, like spec[3.0.0].xxx.nextPage
+            convert_schema[param_name] = Swagger.generateSchemaByType(this._parseType(schema[param_name].name, ''));
+            break;
+          default:
+            convert_schema[param_name] = Swagger.generateSchemaByType(SwaggerDataType.unknown, '');
+            break;
+        }
       }
 
       if (isRequired) {

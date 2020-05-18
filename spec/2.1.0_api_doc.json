@@ -2,8 +2,8 @@
   "openapi": "3.0.0",
   "info": {
     "title": "august-rest-api",
-    "description": "august api server for mobile",
-    "termsOfService": "{base_url}",
+    "description": "If you want to refresh swagger, click terms of service and refersh the browser",
+    "termsOfService": "127.0.0.1:3030",
     "version": "8.8.0"
   },
   "servers": [],

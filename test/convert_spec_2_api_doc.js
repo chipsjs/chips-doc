@@ -1165,4 +1165,45 @@ describe('convert spec to generate api doc', () => {
       fs.unlinkSync('test/temp/array_api_doc.json');
     });
   });
+
+  describe('special spec | value is null, "" or {}', () => {
+    before('set source data', () => {
+      specJson = {
+        'GET /test': { // path
+          method: 'get',
+          response: {
+            body: {
+              a: '',
+              b: null,
+              c: {},
+            },
+          },
+        },
+      }
+    });
+
+    before('convert normal spec to api doc', () => {
+      specResult = Convert.getInstance().run(specJson, 'test/temp/array');
+    });
+
+    it('should generate correct api doc', () => {
+      const api_name = '/test';
+      assert.exists(specResult[api_name]);
+      assert.exists(specResult[api_name].get);
+
+      const schema = _.get(specResult, [api_name, 'get', 'responses', '200', 'content', 'application/json', 'schema']);
+      assert.notNestedProperty(schema, 'properties.a.type');
+      assert.nestedPropertyVal(schema, 'properties.a.description', '');
+      assert.notNestedProperty(schema, 'properties.b.type');
+      assert.nestedPropertyVal(schema, 'properties.b.description', '');
+      assert.nestedPropertyVal(schema, 'properties.c.type', 'object');
+      assert.nestedPropertyVal(schema, 'properties.c.description', '');
+      const c_properties = _.get(schema, ['properties', 'c', 'properties']);
+      assert.strictEqual(Object.keys(c_properties).length, 0);
+    });
+
+    after('clean file', () => {
+      fs.unlinkSync('test/temp/array_api_doc.json');
+    });
+  });
 });
