@@ -1169,7 +1169,7 @@ describe('convert spec to generate api doc', () => {
   describe('special spec | value is null, "" or {}', () => {
     before('set source data', () => {
       specJson = {
-        'GET /test': { // path
+        'GET /test': {
           method: 'get',
           response: {
             body: {
