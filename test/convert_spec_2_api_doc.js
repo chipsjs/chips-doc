@@ -82,7 +82,7 @@ describe('convert spec to generate api doc', () => {
     })
   });
 
-  describe('special spec | has required object in query', () => {
+  describe('object spec | has required object in query', () => {
     before('set source data', () => {
       specJson = {
         'GET /test': {
@@ -154,7 +154,7 @@ describe('convert spec to generate api doc', () => {
     })
   });
 
-  describe('special spec | has required object in body', () => {
+  describe('object spec | has required object in body', () => {
     before('set source data', () => {
       specJson = {
         'POST /test': {
@@ -940,7 +940,7 @@ describe('convert spec to generate api doc', () => {
     });
   })
 
-  describe('special spec | properties are id1, id2, id3, id4', () => {
+  describe('object spec | properties are id1, id2, id3, id4', () => {
     before('set source data', () => {
       specJson = {
         '/test': {

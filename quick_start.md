@@ -14,7 +14,7 @@ Field Name | Type | Description
 ---|:---:|---
 summary | `string` | api summary, it is correspond with Swagger.summary
 note | `string` | note detail, it is correspond with Swagger.description
-method/method_type | `string` | 1. case insensitive 2. is lower priority than key.method_type
+method/method_type | `string` | 1. case insensitive 2. it is lower priority than key.method_type
 request | Request Object | optional, if undefined, Swagger.request won't exist
 response | Response Object | optional, if undefined, Swagger.response exist and match swagger 3.0.0 stardard format
 
