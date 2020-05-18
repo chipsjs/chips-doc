@@ -367,6 +367,86 @@
         }
       }
     },
+    "/users/doorbells/mine": {
+      "get": {
+        "summary": "Get list of calling user's doorbells",
+        "description": "Returns an empty body if the calling user has no locks",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "doorbellID1": {
+                      "type": "object",
+                      "description": "",
+                      "properties": {
+                        "serialNumber": {
+                          "description": ""
+                        },
+                        "bridgeID": {
+                          "description": ""
+                        },
+                        "appID": {
+                          "description": ""
+                        },
+                        "installUserID": {
+                          "description": ""
+                        },
+                        "name": {
+                          "description": ""
+                        },
+                        "type": {
+                          "description": ""
+                        },
+                        "operative": {
+                          "description": ""
+                        },
+                        "installDate": {
+                          "description": ""
+                        },
+                        "osVersionHistory": {
+                          "type": "object",
+                          "description": "",
+                          "properties": {}
+                        },
+                        "bridgeAppVersionHistory": {
+                          "type": "object",
+                          "description": "",
+                          "properties": {}
+                        },
+                        "doorbellAppVersionHistory": {
+                          "type": "object",
+                          "description": "",
+                          "properties": {}
+                        },
+                        "currentOSVersion": {
+                          "description": ""
+                        },
+                        "currentBridgeAppVersion": {
+                          "description": ""
+                        },
+                        "currentDoorbellAppVersion": {
+                          "description": ""
+                        },
+                        "pubsubChannel": {
+                          "description": ""
+                        },
+                        "HouseID": {
+                          "description": ""
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/users/bridges/mine": {
       "get": {
         "summary": "Get list of calling user's bridges",
