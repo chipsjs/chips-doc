@@ -78,7 +78,7 @@ describe('convert spec to generate api doc', () => {
     });
 
     after('clean file', () => {
-      fs.unlinkSync('test/temp/normal_api_doc.json');
+      fs.unlinkSync('test/temp/normal.json');
     })
   });
 
@@ -150,7 +150,7 @@ describe('convert spec to generate api doc', () => {
     });
 
     after('clean file', () => {
-      fs.unlinkSync('test/temp/special_api_doc.json');
+      fs.unlinkSync('test/temp/special.json');
     })
   });
 
@@ -213,7 +213,7 @@ describe('convert spec to generate api doc', () => {
     });
 
     after('clean file', () => {
-      fs.unlinkSync('test/temp/special_api_doc.json');
+      fs.unlinkSync('test/temp/special.json');
     })
   });
 
@@ -281,7 +281,7 @@ describe('convert spec to generate api doc', () => {
     });
 
     after('clean file', () => {
-      fs.unlinkSync('test/temp/special_api_doc.json');
+      fs.unlinkSync('test/temp/special.json');
     })
   });
 
@@ -329,7 +329,7 @@ describe('convert spec to generate api doc', () => {
     });
 
     after('clean file', () => {
-      fs.unlinkSync('test/temp/special_api_doc.json');
+      fs.unlinkSync('test/temp/special.json');
     })
   });
 
@@ -377,7 +377,7 @@ describe('convert spec to generate api doc', () => {
     });
 
     after('clean file', () => {
-      fs.unlinkSync('test/temp/special_api_doc.json');
+      fs.unlinkSync('test/temp/special.json');
     })
   });
 
@@ -425,7 +425,7 @@ describe('convert spec to generate api doc', () => {
     });
 
     after('clean file', () => {
-      fs.unlinkSync('test/temp/special_api_doc.json');
+      fs.unlinkSync('test/temp/special.json');
     })
   });
 
@@ -476,7 +476,7 @@ describe('convert spec to generate api doc', () => {
     });
 
     after('clean file', () => {
-      fs.unlinkSync('test/temp/special_api_doc.json');
+      fs.unlinkSync('test/temp/special.json');
     })
   });
 
@@ -516,7 +516,7 @@ describe('convert spec to generate api doc', () => {
     });
 
     after('clean file', () => {
-      fs.unlinkSync('test/temp/special_api_doc.json');
+      fs.unlinkSync('test/temp/special.json');
     })
   });
 
@@ -552,7 +552,7 @@ describe('convert spec to generate api doc', () => {
     });
 
     after('clean file', () => {
-      fs.unlinkSync('test/temp/special_api_doc.json');
+      fs.unlinkSync('test/temp/special.json');
     })
   });
 
@@ -584,7 +584,7 @@ describe('convert spec to generate api doc', () => {
     });
 
     after('clean file', () => {
-      fs.unlinkSync('test/temp/special_api_doc.json');
+      fs.unlinkSync('test/temp/special.json');
     })
   });
 
@@ -717,7 +717,7 @@ describe('convert spec to generate api doc', () => {
     });
 
     after('clean file', () => {
-      fs.unlinkSync('test/temp/multi_api_doc.json');
+      fs.unlinkSync('test/temp/multi.json');
     })
   });
 
@@ -745,7 +745,7 @@ describe('convert spec to generate api doc', () => {
     });
 
     after('clean file', () => {
-      fs.unlinkSync('test/temp/special_api_doc.json');
+      fs.unlinkSync('test/temp/special.json');
     })
   });
 
@@ -773,7 +773,7 @@ describe('convert spec to generate api doc', () => {
     });
 
     after('clean file', () => {
-      fs.unlinkSync('test/temp/normal_path_api_doc.json');
+      fs.unlinkSync('test/temp/normal_path.json');
     })
   });
 
@@ -799,7 +799,7 @@ describe('convert spec to generate api doc', () => {
     });
 
     after('clean file', () => {
-      fs.unlinkSync('test/temp/special_api_doc.json');
+      fs.unlinkSync('test/temp/special.json');
     });
   });
 
@@ -835,7 +835,7 @@ describe('convert spec to generate api doc', () => {
     });
 
     after('clean file', () => {
-      fs.unlinkSync('test/temp/special_api_doc.json');
+      fs.unlinkSync('test/temp/special.json');
     });
   });
 
@@ -871,7 +871,7 @@ describe('convert spec to generate api doc', () => {
     });
 
     after('clean file', () => {
-      fs.unlinkSync('test/temp/special_api_doc.json');
+      fs.unlinkSync('test/temp/special.json');
     });
   });
 
@@ -900,7 +900,7 @@ describe('convert spec to generate api doc', () => {
     });
 
     after('clean file', () => {
-      fs.unlinkSync('test/temp/special_api_doc.json');
+      fs.unlinkSync('test/temp/special.json');
     });
   });
 
@@ -936,7 +936,7 @@ describe('convert spec to generate api doc', () => {
     });
 
     after('clean file', () => {
-      fs.unlinkSync('test/temp/special_api_doc.json');
+      fs.unlinkSync('test/temp/special.json');
     });
   })
 
@@ -984,7 +984,7 @@ describe('convert spec to generate api doc', () => {
     });
 
     after('clean file', () => {
-      fs.unlinkSync('test/temp/special_api_doc.json');
+      fs.unlinkSync('test/temp/special.json');
     });
   })
 
@@ -1061,7 +1061,7 @@ describe('convert spec to generate api doc', () => {
     });
 
     after('clean file', () => {
-      fs.unlinkSync('test/temp/multi_api_doc.json');
+      fs.unlinkSync('test/temp/multi.json');
     })
   });
 
@@ -1090,7 +1090,7 @@ describe('convert spec to generate api doc', () => {
     });
 
     after('clean file', () => {
-      fs.unlinkSync('test/temp/error_api_doc.json');
+      fs.unlinkSync('test/temp/error.json');
     });
   })
 
@@ -1128,7 +1128,7 @@ describe('convert spec to generate api doc', () => {
     });
 
     after('clean file', () => {
-      fs.unlinkSync('test/temp/array_api_doc.json');
+      fs.unlinkSync('test/temp/array.json');
     });
   });
 
@@ -1162,7 +1162,7 @@ describe('convert spec to generate api doc', () => {
     });
 
     after('clean file', () => {
-      fs.unlinkSync('test/temp/array_api_doc.json');
+      fs.unlinkSync('test/temp/array.json');
     });
   });
 
@@ -1203,7 +1203,7 @@ describe('convert spec to generate api doc', () => {
     });
 
     after('clean file', () => {
-      fs.unlinkSync('test/temp/array_api_doc.json');
+      fs.unlinkSync('test/temp/array.json');
     });
   });
 });
