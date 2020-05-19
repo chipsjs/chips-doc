@@ -300,9 +300,13 @@ class SpecConvert extends Base.factory() {
 
     const info_obj = Swagger.generateInfoObject('august-rest-api', 'If you want to refresh swagger, click terms of service and refersh the browser', config.get('terms_of_service'), '8.8.0');
     const openapi_obj = Swagger.generateOpenApiObject(info_obj, path_items);
-    fs.writeFileSync(`${spec_output_path}_api_doc.json`, JSON.stringify(openapi_obj, null, 2));
+    fs.writeFileSync(`${spec_output_path}.json`, JSON.stringify(openapi_obj, null, 2));
 
     return path_items;
+  }
+
+  readSwaggerJson(spec_output_path) {
+    return fs.readFileSync(`${spec_output_path}.json`, 'utf8');
   }
 
   // parseApi(old_format_doc, spec_output_path) {
