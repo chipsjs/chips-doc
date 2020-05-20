@@ -1206,4 +1206,33 @@ describe('convert spec to generate api doc', () => {
       fs.unlinkSync('test/temp/array.json');
     });
   });
+
+  describe('tag spec | parse api name to tag', () => {
+    before('set source data', () => {
+      specJson = {
+        'Get /test/a': {
+          method: 'post',
+          response: {
+            body: {
+            }
+          }
+        }
+      }
+    });
+
+    before('convert normal spec to api doc', () => {
+      specResult = Convert.getInstance().run(specJson, 'test/temp/tag');
+    });
+
+    it('should generate correct api doc', () => {
+      const api_name = '/test/a';
+      assert.exists(specResult[api_name]);
+      assert.exists(specResult[api_name].get);
+      assert.nestedPropertyVal(specResult[api_name], 'get.tags', 'test');
+    });
+
+    after('clean file', () => {
+      fs.unlinkSync('test/temp/tag.json');
+    });
+  });
 });

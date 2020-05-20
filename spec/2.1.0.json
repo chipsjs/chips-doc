@@ -3,7 +3,7 @@
   "info": {
     "title": "august-rest-api",
     "description": "If you want to refresh swagger, click terms of service and refersh the browser",
-    "termsOfService": "127.0.0.1:3030",
+    "termsOfService": "https://api-rlcn-dev-stdl.aaecosys.com",
     "version": "8.8.0"
   },
   "servers": [],
