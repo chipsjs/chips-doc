@@ -121,9 +121,7 @@ test_case层 -> middleware层 -> service层
 ## todo
 
 ### convert
-
 - the security of cola-doc  1
-- swagger updated  and push to repo when api spec is updated/created
 
 ### fake and mock
 
