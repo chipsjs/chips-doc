@@ -1207,7 +1207,7 @@ describe('convert spec to generate api doc', () => {
     });
   });
 
-  describe('tag spec | parse api name to tag', () => {
+  describe('tag spec | api name has multi path', () => {
     before('set source data', () => {
       specJson = {
         'Get /test/a': {
@@ -1228,7 +1228,36 @@ describe('convert spec to generate api doc', () => {
       const api_name = '/test/a';
       assert.exists(specResult[api_name]);
       assert.exists(specResult[api_name].get);
-      assert.nestedPropertyVal(specResult[api_name], 'get.tags', 'test');
+      assert.nestedPropertyVal(specResult[api_name], 'get.tags[0]', 'test');
+    });
+
+    after('clean file', () => {
+      fs.unlinkSync('test/temp/tag.json');
+    });
+  });
+
+  describe('tag spec | api name only has one path', () => {
+    before('set source data', () => {
+      specJson = {
+        'Get /test': {
+          method: 'post',
+          response: {
+            body: {
+            }
+          }
+        }
+      }
+    });
+
+    before('convert normal spec to api doc', () => {
+      specResult = Convert.getInstance().run(specJson, 'test/temp/tag');
+    });
+
+    it('should generate correct api doc', () => {
+      const api_name = '/test';
+      assert.exists(specResult[api_name]);
+      assert.exists(specResult[api_name].get);
+      assert.nestedPropertyVal(specResult[api_name], 'get.tags[0]', 'test');
     });
 
     after('clean file', () => {
