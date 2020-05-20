@@ -1264,4 +1264,116 @@ describe('convert spec to generate api doc', () => {
       fs.unlinkSync('test/temp/tag.json');
     });
   });
+
+  describe('sync spec | when api spec was updated, we need to merge it to old version swagger', () => {
+    let oldVersionSpec;
+    let newVersionSpec;
+    let result;
+
+    before('set source data', () => {
+      oldVersionSpec = {
+        'POST /test': {
+          method: 'post',
+          request: {
+            body: {
+              users: ['userid', 'userid1'],
+              birth: '2000'
+            }
+          }
+        }
+      };
+      newVersionSpec = {
+        'POST /test': {
+          method: 'post',
+          request: {
+            body: {
+              users: 'string: user',
+              id: 'int'
+            }
+          }
+        }
+      }
+    });
+
+    before('run convert module', () => {
+      Convert.getInstance().run(oldVersionSpec, 'test/temp/sync', '1.0.0');
+      result = Convert.getInstance().syncSwaggerJson(newVersionSpec, 'test/temp/sync', '1.0.1');
+    });
+
+    it('should have correct property', () => {
+      assert.nestedPropertyVal(result, 'info.version', '1.0.1');
+
+      const api_result = _.get(result, ['paths', '/test', 'post']);
+      assert.exists(api_result);
+      const body_result = _.get(api_result, ['requestBody', 'content', 'application/json', 'schema', 'properties']);
+      assert.nestedPropertyVal(body_result, 'users.type', 'string');
+      assert.nestedProperty(body_result, 'birth');
+      assert.nestedProperty(body_result, 'id');
+    })
+
+    after('clean file', () => {
+      fs.unlinkSync('test/temp/sync.json');
+    });
+  })
+
+  describe('sync spec | when api spec was added api', () => {
+    let oldVersionSpec;
+    let newVersionSpec;
+    let result;
+
+    before('set source data', () => {
+      oldVersionSpec = {
+        'POST /test': {
+          method: 'post',
+          request: {
+            body: {
+              users: ['userid', 'userid1'],
+            }
+          }
+        }
+      };
+      newVersionSpec = {
+        'Get /test': {
+          method: 'post',
+          response: {
+            body: {
+              id: 'int'
+            }
+          }
+        },
+        'Post /test2': {
+          method: 'post',
+          request: {
+            body: {
+              id: 'int'
+            }
+          }
+        }
+      }
+    });
+
+    before('run convert module', () => {
+      Convert.getInstance().run(oldVersionSpec, 'test/temp/sync', '1.0.0');
+      result = Convert.getInstance().syncSwaggerJson(newVersionSpec, 'test/temp/sync', '1.0.1');
+    });
+
+    it('should have correct property', () => {
+      assert.nestedPropertyVal(result, 'info.version', '1.0.1');
+
+      const api_result1 = _.get(result, ['paths', '/test']);
+      assert.nestedProperty(api_result1, 'post');
+      assert.nestedProperty(api_result1, 'get');
+      const body_result1 = _.get(api_result1, ['post', 'requestBody', 'content', 'application/json', 'schema', 'properties']);
+      assert.nestedPropertyVal(body_result1, 'users.type', 'array');
+      const body_result2 = _.get(api_result1, ['get', 'responses', '200', 'content', 'application/json', 'schema', 'properties']);
+      assert.nestedPropertyVal(body_result2, 'id.type', 'integer');
+      
+      const api_result2 = _.get(result, ['paths', '/test2']);
+      assert.nestedProperty(api_result2, 'post');
+    })
+
+    after('clean file', () => {
+      fs.unlinkSync('test/temp/sync.json');
+    });
+  })
 });

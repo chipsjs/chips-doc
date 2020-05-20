@@ -3,8 +3,7 @@
   "info": {
     "title": "august-rest-api",
     "description": "If you want to refresh swagger, click terms of service and refersh the browser",
-    "termsOfService": "https://api-rlcn-dev-stdl.aaecosys.com",
-    "version": "8.8.0"
+    "termsOfService": "https://api-rlcn-dev-stdl.aaecosys.com"
   },
   "servers": [],
   "paths": {
@@ -12,6 +11,9 @@
       "get": {
         "summary": "Check existence of a user in the system",
         "description": "/! DEPRECATED: 410 GoneError",
+        "tags": [
+          "users"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -38,6 +40,9 @@
       "get": {
         "summary": "Get information about an existing doorbell and format settings",
         "description": "Returns resource not found if doorbellID does not exist.",
+        "tags": [
+          "doorbells"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -243,6 +248,9 @@
       "put": {
         "summary": "Update doorbell settings that are translated/transformed from client doorbell settings to validated doorbell settings",
         "description": "Able to update individual fields\n",
+        "tags": [
+          "doorbells"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -269,6 +277,9 @@
       "get": {
         "summary": "Get information about an existing lock",
         "description": "Returns `resource not found` if lockID does not exist and `not authorized` if the user is not a user of the lock.The differences between this version of the endpoint and the 0.0.1 version are these:1. The type of the `currentFirmwareVersion` field has changed from a string to an object in this version.2. The key `pins` removed from response in this version",
+        "tags": [
+          "locks"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -357,6 +368,9 @@
       "post": {
         "summary": "Creates smart alert with optional schedule",
         "description": "The user to be notified by this alert is the calling user",
+        "tags": [
+          "smartalert"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -402,6 +416,9 @@
       "get": {
         "summary": "Get smart alert rule per given query",
         "description": "When no query provided end point returns all smart alert rules associated with calling user",
+        "tags": [
+          "smartalert"
+        ],
         "parameters": [
           {
             "name": "deviceID",
@@ -457,6 +474,9 @@
       "get": {
         "summary": "Returns smart alert rule per given rule id",
         "description": "notifyUserID is always calling user",
+        "tags": [
+          "smartalert"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -490,6 +510,9 @@
       "delete": {
         "summary": "Deletes smart alert rule per given rule id",
         "description": "Marks rule as deleted; document is kept in db",
+        "tags": [
+          "smartalert"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -504,6 +527,9 @@
       "put": {
         "summary": "Updates schedule of smart alert rule per given rule id",
         "description": "If schedule is not in body, schedule will be deleted in db",
+        "tags": [
+          "smartalert"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -526,6 +552,9 @@
     "/partners": {
       "get": {
         "summary": "retrives a list of service offerings from partners that integrate with August",
+        "tags": [
+          "partners"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -585,6 +614,9 @@
       "post": {
         "summary": "Adds a lock to a house.",
         "description": "Requestor must provide the serial number of the lock and a list of all afvertising locks.If LockID or Name are not present, a Bad Request error is returned.If the user is not a manager or superuser of the house, a Not Authorized error is returned.If the serial number does not match any of the advertising locks, a Not Authorized error is returned.If hostHardwareID is provided but does not exist, 404 ResourceNotFound",
+        "tags": [
+          "locks"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -644,6 +676,9 @@
       "get": {
         "summary": "Returns subscriptions the calling user has access to",
         "description": "Returns house-level subscription.",
+        "tags": [
+          "subscriptions"
+        ],
         "responses": {
           "200": {
             "description": "",

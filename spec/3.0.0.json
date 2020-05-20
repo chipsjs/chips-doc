@@ -3,8 +3,7 @@
   "info": {
     "title": "august-rest-api",
     "description": "If you want to refresh swagger, click terms of service and refersh the browser",
-    "termsOfService": "https://api-rlcn-dev-stdl.aaecosys.com",
-    "version": "8.8.0"
+    "termsOfService": "https://api-rlcn-dev-stdl.aaecosys.com"
   },
   "servers": [],
   "paths": {
@@ -21,6 +20,9 @@
       ],
       "get": {
         "summary": "This gets all the logs for a given house, allows to provide a `limit` query string",
+        "tags": [
+          "houses"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -83,6 +85,9 @@
     "/partners": {
       "get": {
         "summary": "retrieves a list of partners",
+        "tags": [
+          "partners"
+        ],
         "responses": {
           "200": {
             "description": "",

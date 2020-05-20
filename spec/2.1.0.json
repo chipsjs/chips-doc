@@ -3,14 +3,16 @@
   "info": {
     "title": "august-rest-api",
     "description": "If you want to refresh swagger, click terms of service and refersh the browser",
-    "termsOfService": "https://api-rlcn-dev-stdl.aaecosys.com",
-    "version": "8.8.0"
+    "termsOfService": "https://api-rlcn-dev-stdl.aaecosys.com"
   },
   "servers": [],
   "paths": {
     "/partners": {
       "get": {
         "summary": "retrives a list of partners",
+        "tags": [
+          "partners"
+        ],
         "responses": {
           "200": {
             "description": "",

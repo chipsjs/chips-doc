@@ -3,14 +3,16 @@
   "info": {
     "title": "august-rest-api",
     "description": "If you want to refresh swagger, click terms of service and refersh the browser",
-    "termsOfService": "https://api-rlcn-dev-stdl.aaecosys.com",
-    "version": "8.8.0"
+    "termsOfService": "https://api-rlcn-dev-stdl.aaecosys.com"
   },
   "servers": [],
   "paths": {
     "/apidesc": {
       "get": {
-        "summary": "Get this Document",
+        "summary": "Get treadhis Document",
+        "tags": [
+          "apidesc"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -27,6 +29,9 @@
       "get": {
         "summary": "Check existence of a user in the system",
         "description": "/! DEPRECATED: 410 GoneError",
+        "tags": [
+          "users"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -40,6 +45,9 @@
       },
       "post": {
         "summary": "Creates a user account.",
+        "tags": [
+          "users"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -87,6 +95,9 @@
       "put": {
         "summary": "Updates user information",
         "description": "Updates the information for callingUser with the information provided.  Can be used to update password, phone number, email address, first name, last name, or username.  If username, email, or phone number already exist in the system, an error will be returned.  Returns an authorization error if no session key is provided or if session has expired.",
+        "tags": [
+          "users"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -146,6 +157,9 @@
       "get": {
         "summary": "Get information on a user",
         "description": "`/users/me` will return information for calling (OAuth'd) user,whereas `/users/:userID` will return the information for the user specified by `:userID`.  Returns _Not Found_ if userID does not exist.\n\n* `locks` is a hash of `{lockID: \"User type (superuser|manager|user)\"}`\n* `houses` is a hash of `{houseID: \"User type (superuser|manager|user)}`\n\"",
+        "tags": [
+          "users"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -188,6 +202,9 @@
       "get": {
         "summary": "Get a list of calling user's houses.",
         "description": "At least a house name is required.  The only error from this function is Bad Request when no house name is provided.",
+        "tags": [
+          "users"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -230,6 +247,9 @@
       "get": {
         "summary": "Get information about an existing house",
         "description": "users is a hash of {userID: usertype (superuser|manager|user)}",
+        "tags": [
+          "houses"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -262,6 +282,9 @@
       "delete": {
         "summary": "removes a house",
         "description": "Returns 412 if the house still has locks",
+        "tags": [
+          "houses"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -276,6 +299,9 @@
       "put": {
         "summary": "update a house",
         "description": "returns 404 if house not found, 403 if callingUser is not owner of house",
+        "tags": [
+          "houses"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -309,6 +335,9 @@
       "get": {
         "summary": "Get list of calling user's locks",
         "description": "Returns an empty body if the calling user has no locks",
+        "tags": [
+          "users"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -371,6 +400,9 @@
       "get": {
         "summary": "Get list of calling user's doorbells",
         "description": "Returns an empty body if the calling user has no locks",
+        "tags": [
+          "users"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -451,6 +483,9 @@
       "get": {
         "summary": "Get list of calling user's bridges",
         "description": "Returns an empty body if the calling user has no bridges",
+        "tags": [
+          "users"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -527,6 +562,9 @@
       "get": {
         "summary": "Get information about an existing lock",
         "description": "Returns `resource not found` if lockID does not exist and `not authorized` if the user is not a user of the lock.For the key pins:created: means that the PIN should be loaded onto the lock, first step of associating a pin loaded: means that the PIN has been loaded to the lock, second and final step of associating a pin deleting: means that the PIN should be deleted, first step of removing a pin from a lock deleted: means that the PIN has been be deleted from the lock disabling: means the the PIN should be disabled disabled: means that the PIN has been marked as disabled on the lock enabling: means that the PIN should be enabled enabled: means that the PIN has been enabled, which means that it is back in the loaed group of PINs. ",
+        "tags": [
+          "locks"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -631,6 +669,9 @@
       "put": {
         "summary": "Update a lock's information",
         "description": "Currently only Lock Name, their Calibration status, and their homeKit ID can be updated",
+        "tags": [
+          "locks"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -673,6 +714,9 @@
       "delete": {
         "summary": "deletes a lock from the system (factory reset)",
         "description": "Removes lock from all associations in the system.\n###Responses:\nCode | Reason \n---- | ------\n 403 | callingUser is not authorized to use lock\n 404 | lock not found\n",
+        "tags": [
+          "locks"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -715,6 +759,9 @@
       "put": {
         "summary": "Give a user access to a lock",
         "description": "The only response to this function is a status code.  Returns Bad Request if lock does not exist, otherUser does not exist, or type is invalid.  Valid typs are \"user\" and \"manager\".  Returns Unauthorized if calling user is not a manager or superuser of lock",
+        "tags": [
+          "locks"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -764,6 +811,9 @@
       "put": {
         "summary": "operate a lock remotely through a bridge, if present",
         "description": "###Commands:\nValid commands are `lock`, `unlock`, `status`, `reboot`, `telemetry`, and `unlatch`.\n\nIf the calling user is not authorized to use the lock a this time, it returns Unauthorized.\n\n###Call Types:\nThis endpoint accepts a query string parameter \"type\". \nValid types are either \"sync\" or \"async\". If type is not provided the default is sync\nAn async request will return immediately and return the operation's result using a communications channel defined in the request's payload\n###Return values:\nStatus | message\n------ | -------\n 200 | resultObject\n 202 | accepted if the request asked for async processing\n 423 | \"lock in use\" if there is already a pending remote operation\n 500 | _errorMessage varies_ if there was an error communicating with the lock (check the message returned)\n 501 | \"not implemented\", if the command is not valid\n",
+        "tags": [
+          "remoteoperate"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -823,6 +873,9 @@
       "delete": {
         "summary": "cancel a previous remote operation of a lock through a bridge",
         "description": "If the calling user is not authorized to use the lock a this time, it returns Unauthorized.",
+        "tags": [
+          "remoteoperate"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -849,6 +902,9 @@
       "put": {
         "summary": "Allows a client to trigger remote sync process of PINs to a lock",
         "description": "return status codes: \n\nStatus | Meaning\n------ | -------\n 200 | Ok, but nothing to do. \n 202 | Synchronization will start soon. \n 409 | No bridge associated or the bridge is offline.",
+        "tags": [
+          "locks"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -903,6 +959,9 @@
       "put": {
         "summary": "Sets otherUsers's type on lock specified by lockID managed by calling user.",
         "description": "This sets otherUser's user type to type for lock lockID. This can only be done if the calling user is a superuser of the lock. If other user is an invitee the invitation is updated. Returns Unauthorized if calling user is not the superuser of the lock. Returns Not Found if lockID or otherUserID do not exist or there is no corresponding invitation for other user. Returns Bad Request if type is not valid",
+        "tags": [
+          "locks"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -937,6 +996,9 @@
       "delete": {
         "summary": "Deletes user specified by userID from lock specified by lockID",
         "description": "Returns Unauthorized if the calling user is not able to manage the lock.  Returns Not Found if lock or otherUser do not exist.",
+        "tags": [
+          "locks"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -963,6 +1025,9 @@
       "post": {
         "summary": "create a new guestbook entry",
         "description": "/! DEPRECATED: 410 GoneError",
+        "tags": [
+          "houses"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -989,6 +1054,9 @@
       "get": {
         "summary": "determines the number of guestbook entries and returns it in the response body",
         "description": "/! DEPRECATED: 410 GoneError",
+        "tags": [
+          "houses"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -1031,6 +1099,9 @@
       "get": {
         "summary": "Get summary of up to \"count\" guestbook entries starting with \"start\"",
         "description": "/! DEPRECATED: 410 GoneError",
+        "tags": [
+          "houses"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -1057,6 +1128,9 @@
       "get": {
         "summary": "returns the guestbook entry specified by entryID",
         "description": "/! DEPRECATED: 410 GoneError",
+        "tags": [
+          "houses"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -1071,6 +1145,9 @@
       "delete": {
         "summary": "Deletes a guestbook entry from a house",
         "description": "/! DEPRECATED: 410 GoneError",
+        "tags": [
+          "houses"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -1113,6 +1190,9 @@
       "get": {
         "summary": "retrieves logs for :lockID from :startDateTime to :endDateTime",
         "description": "returns 200 if date range and lockID can be satisfied.  404 otherwise.",
+        "tags": [
+          "locks"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -1169,6 +1249,9 @@
       "get": {
         "summary": "Gets 100 most recent activities across all lock I can use.",
         "description": "Limit of 100 entries returned. Returns activity on locks callingUser managers or superuses. Returns only callingUsers's activity on locks where he is a user.",
+        "tags": [
+          "activity"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -1351,6 +1434,9 @@
       "get": {
         "summary": "Gets last `:count` log entries for `:lockID` after `:dateTime` (ms since epoch)",
         "description": "dateTime is in ms since epoch, so unix time must be multiplied by 1000 to get the correct value",
+        "tags": [
+          "locks"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -1409,6 +1495,9 @@
       "get": {
         "summary": "Gets last :count log entries for :lockID before :dateTime (ms since epoch)",
         "description": "dateTime is in ms since epoch, so unix time must be multiplied by 1000 to get the correct value",
+        "tags": [
+          "locks"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -1451,6 +1540,9 @@
       "post": {
         "summary": "Create a usage rule for a lock, which can be applied to a user",
         "description": "This API creates a rule which, when applied to a user, allows the user to operate the lock in the specified time frame.  Recurrence is specified as an iCalendar RFC RRULE string.",
+        "tags": [
+          "rules"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -1512,6 +1604,9 @@
       "post": {
         "summary": "Create a usage rule for a lock, and apply it to the user specified by otherUserID",
         "description": "This API creates a rule which, when applied to a user, allows the user to operate the lock in the specified time frame.  Recurrence is specified as an iCalendar RFC RRULE string.",
+        "tags": [
+          "rules"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -1574,6 +1669,9 @@
       "put": {
         "summary": "Apply a rule to a user of a lock",
         "description": "Restricts user specified by otherUserID's access to to the lock specified in ruleID to the time specified in ruleID.  If user specified by otherUserID does not currently have access to the lock, access is granted for the time specified by ruleID.  If user specified by otherUserID currently has unrestricted access to the lock specified in ruleID, an error is returned. If the user currently has restricted access to to the lock specified by ruleID, his access is expanded to include the time specified by ruleID.  If the user specified by otherUserID is a manager or superuser of the lock, an error is returned.",
+        "tags": [
+          "rules"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -1588,6 +1686,9 @@
       "delete": {
         "summary": "Removes the user specified by otherUserID from rule specified by ruleID",
         "description": "returns an error if rule does not exist",
+        "tags": [
+          "rules"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -1614,6 +1715,9 @@
       "get": {
         "summary": "Get a list of rules for a lock",
         "description": "returns all relevant information about a lock rule",
+        "tags": [
+          "locks"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -1678,6 +1782,9 @@
       "get": {
         "summary": "Get a map of sounds by users",
         "description": "returns only the users who have a sound package id",
+        "tags": [
+          "locks"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -1717,6 +1824,9 @@
       "get": {
         "summary": "Returns list of sound packages available on lock for a known firmware version of the lock",
         "description": "Returns list of sound packages available on lock for a known firmware version of the lock",
+        "tags": [
+          "locks"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -1759,6 +1869,9 @@
       "delete": {
         "summary": "removes rule specified by ruleID",
         "description": "returns an error if rule does not exist",
+        "tags": [
+          "rules"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -1784,6 +1897,9 @@
       ],
       "get": {
         "summary": "return the data associated with a bridge, including the lockIds",
+        "tags": [
+          "bridges"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -1819,6 +1935,9 @@
       },
       "delete": {
         "summary": "delete a bridge lock association",
+        "tags": [
+          "bridges"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -1845,6 +1964,9 @@
       "post": {
         "summary": "Sets up the notification hook for the lock specified by lockID.",
         "description": "###notificationTypes\nA JSON array containing one or more of: \n\nnotificationType | Meaning\n---------------- | -------\noperation | notification of lock usage\nsystemstatus | notification of change in connectivity of remote bridge to service\nbattery | notification of battery status requiring lock owner's attention\naccessmgmt | notification of change in access to the lock by any user\nconfiguration | notification of change in lock configuration including but not limited to lock name and addition/removal of bridge.\n\n###Responses:\nCode | Reason \n---- | ------\n 200 | body = {\"message\": \"OK\"} call succeeded\n 401 | authorization token is not valid.\n 403 | * the user represented by the authorization token is not an owner of the lock\n     | * the Client ID does not have permission to subscribe to notifications on behalf of the user\n     | * or the x-august-api-key header is not valid.\n 404 | the clientID is not known to the system.\n",
+        "tags": [
+          "webhook"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -1917,6 +2039,9 @@
       "delete": {
         "summary": "Deletes a webhook for an external service",
         "description": "Deletes the webhook connection between an external service and lockID/callingUserID",
+        "tags": [
+          "webhook"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -1943,6 +2068,9 @@
       "post": {
         "summary": "Sets up the notification hook for the doorbell specified by doorbellID.",
         "description": "###notificationTypes\nA JSON array containing one or more of: \n\nnotificationType | Meaning\n---------------- | -------\nmotiondetected   | notification of motion detected by doorbell\nvideoavailable   | notification of doorbell video available\nbuttonpush       | notification of doorbell button pushed\n\n###Responses:\nCode | Reason \n---- | ------\n 200 | body = {\"message\": \"OK\"} call succeeded\n 401 | authorization token is not valid.\n 403 | * the user represented by the authorization token is not an owner of the doorbell\n     | * the Client ID does not have permission to subscribe to notifications on behalf of the user\n     | * or the x-august-api-key header is not valid.\n 404 | the clientID is not known to the system.\n",
+        "tags": [
+          "webhook"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -2015,6 +2143,9 @@
       "delete": {
         "summary": "Deletes a doorbell webhook for an external service",
         "description": "Deletes the doorbell webhook connection between an external service and doorbellID/callingUserID",
+        "tags": [
+          "webhook"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -2031,6 +2162,9 @@
       "post": {
         "summary": "Sets up the notification hook for the user specified by otherUserID.",
         "description": "###notificationTypes\nA JSON array containing one or more of: \n\nnotificationType | Meaning\n---------------- | -------\nlockmembership | changes to a user/lock relationship\n\n###Responses:\nCode | Reason \n---- | ------\n 200 | body = {\"message\": \"OK\"} call succeeded\n 401 | authorization token is not valid.\n 403 | * the user represented by the authorization token is not an owner of the doorbell\n     | * the Client ID does not have permission to subscribe to notifications on behalf of the user\n     | * or the x-august-api-key header is not valid.\n 404 | the clientID is not known to the system.\n",
+        "tags": [
+          "webhook"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -2095,6 +2229,9 @@
       "delete": {
         "summary": "Deletes a user webhook for an external service",
         "description": "Deletes the user webhook ",
+        "tags": [
+          "webhook"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -2121,6 +2258,9 @@
       "get": {
         "summary": "Returns the status of a lock from the locks collection.",
         "description": "Possible values 'locked,' 'unlocked,' 'unknown,' 'not-advertising.'",
+        "tags": [
+          "locks"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -2165,6 +2305,9 @@
       "get": {
         "summary": "return the data associated with an associated keypad",
         "description": "Calling user must be a lock super user.",
+        "tags": [
+          "keypads"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -2192,6 +2335,9 @@
       "delete": {
         "summary": "deletes a keypad lock association and moves the its offline key to deleted",
         "description": "Calling user must be a lock super user.",
+        "tags": [
+          "keypads"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -2218,6 +2364,9 @@
       "get": {
         "summary": "Get all pins for a given lock.",
         "description": "Created, loaded, deleting, disabling, disabled, and enabled can all contain pin like objects.",
+        "tags": [
+          "locks"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -2291,6 +2440,9 @@
       "post": {
         "summary": "Load, delete, disable and enable PINs for users on a lock. Newer locks can support schedules on PINs.",
         "description": "See [Remote PIN Management](https://partners.august.com/userguide/apiguide/remote-pin-management-for-the-august-keypad/)",
+        "tags": [
+          "locks"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -2367,6 +2519,9 @@
       },
       "delete": {
         "summary": "This deletes all pins associated with a lock.",
+        "tags": [
+          "locks"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -2382,6 +2537,9 @@
     "/revision": {
       "get": {
         "summary": "Get information about the revision the server is running.",
+        "tags": [
+          "revision"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -2418,6 +2576,9 @@
       "get": {
         "summary": "Get information about an existing doorbell",
         "description": "Returns resource not found if doorbellID does not exist.",
+        "tags": [
+          "doorbells"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -2526,6 +2687,9 @@
       "delete": {
         "summary": "Deletes a doorbell",
         "description": "This will return a 404 if doorbellID does not exist and a NotAuthorizedError if user is not a user of the doorbell",
+        "tags": [
+          "doorbells"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -2540,6 +2704,9 @@
       "put": {
         "summary": "Updates doorbell fields that are whitelisted",
         "description": "Currently, only the name field is whitelisted",
+        "tags": [
+          "doorbells"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -2582,6 +2749,9 @@
       "get": {
         "summary": "Gets doorbell logs before a specified time",
         "description": ":endDateTime should be a date object, a date string, or an integer like unix timestamp",
+        "tags": [
+          "doorbells"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -2631,6 +2801,9 @@
       "get": {
         "summary": "Gets doorbell logs after a specified time",
         "description": ":startDateTime should be a date object, a date string, or an integer like unix timestamp",
+        "tags": [
+          "doorbells"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -2680,6 +2853,9 @@
       "get": {
         "summary": "Gets doorbell logs before and after specified times",
         "description": "startDateTime and :endDateTime should be a date object, a date string, or an integer like unix timestamp",
+        "tags": [
+          "doorbells"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -2713,6 +2889,9 @@
       "get": {
         "summary": "generates an available random pin and reserve it for an system specified time",
         "description": "if there is no pin slot left (208 at the last count) it will return 409 (ConflictError)",
+        "tags": [
+          "locks"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -2754,6 +2933,9 @@
       "get": {
         "summary": "generates an available random pin & slot number and reserve it for a system specified time",
         "description": "if there is no pin slot left (208 at the last count) it will return 409 (ConflictError)\nthis endpoint is going to replace 'GET /locks/:lockID/pin'\na slot only map to a unique user'\nthe three different type of lock credentials will share the same slot for a user'\ntype param is required in query",
+        "tags": [
+          "locks"
+        ],
         "parameters": [
           {
             "name": "type",
@@ -2789,6 +2971,9 @@
       "delete": {
         "summary": "This deletes a pin/slot reserved for a lock by otherUserID, type.",
         "description": "If there is no type, the end point will release the cache about all credential types for the user.The cache for the specified type will be deleted if there is a type for the user",
+        "tags": [
+          "locks"
+        ],
         "parameters": [
           {
             "name": "type",
@@ -2826,6 +3011,9 @@
       "get": {
         "summary": "query credentials in various states with a lock",
         "description": "created: means that the CREDENTIAL should be loaded onto the lock, first step of associating a CREDENTIAL loaded: means that the CREDENTIAL has been loaded to the lock, second and final step of associating a CREDENTIAL deleting: means that the CREDENTIAL should be deleted, first step of removing a CREDENTIAL from a lock deleted: means that the CREDENTIAL has been be deleted from the lock disabling: means the the CREDENTIAL should be disabled disabled: means that the CREDENTIAL has been marked as disabled on the lock enabling: means that the CREDENTIAL should be enabled enabled: means that the CREDENTIAL has been enabled, which means that it is back in the loaed group of CREDENTIALS. if 'type' is optional, the endpoint will query all credentials from the lock, otherwise it will return the unique type of lock credentialsif the callingUser is a lock manager, it will return all the credentials from the lock, otherwise it only return his locks' credentials",
+        "tags": [
+          "locks"
+        ],
         "parameters": [
           {
             "name": "type",
@@ -2890,6 +3078,9 @@
       "delete": {
         "summary": "This deletes all pins/slots associated with a lock by type.",
         "description": "this is a replacement/update for 'DEL /locks/:lockID/pins'",
+        "tags": [
+          "locks"
+        ],
         "parameters": [
           {
             "name": "type",
@@ -2935,6 +3126,9 @@
       "get": {
         "summary": "query user settings with a lock",
         "description": "accessTimes only included in response when accessType in [\"recurring\", \"temporary\"]accessRecurrence only included in response when accessType is recurringaccessStartTime only included in response when accessType is temporaryaccessEndTime only included in response when accessType is temporaryloadedDate only included in response when state is loaded",
+        "tags": [
+          "locks"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -2986,6 +3180,9 @@
       "put": {
         "summary": "set/update user settings for a lock",
         "description": "accessTimes only included in response when accessType in [\"recurring\", \"temporary\"]accessRecurrence only included in response when accessType is recurringaccessStartTime only included in response when accessType is temporaryaccessEndTime only included in response when accessType is temporaryloadedDate only included in response when state is loaded",
+        "tags": [
+          "locks"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -3092,6 +3289,9 @@
       "get": {
         "summary": "query all of the users settings with a lock",
         "description": "created: means that the schedule should be loaded onto the lock, first step of associating a schedule loaded: means that the schedule has been loaded to the lock, second and final step of associating a schedule deleting: means that the schedule should be deleted, first step of removing a schedule from a lock deleted: means that the schedule has been be deleted from the lock disabling: means the the schedule should be disabled disabled: means that the schedule has been marked as disabled on the lock enabling: means that the schedule should be enabled enabled: means that the schedule has been enabled, which means that it is back in the loaded group of schedules.\nslot are included in array since mobile need to know the slot when set/update schedule.\n if the callingUser is a lock manager, it will return all the schedules from the lock",
+        "tags": [
+          "locks"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -3147,6 +3347,9 @@
       "get": {
         "summary": "returns an array of cameras for the calling user",
         "description": "camera data includes manufacturer's information if camera is not from August",
+        "tags": [
+          "users"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -3180,6 +3383,9 @@
       ],
       "get": {
         "summary": "This gets all the logs for a given house.",
+        "tags": [
+          "houses"
+        ],
         "parameters": [
           {
             "name": "endDate",
@@ -3240,6 +3446,9 @@
       ],
       "get": {
         "summary": "This gets all the logs for a given house, allows to provide a `limit` query string",
+        "tags": [
+          "houses"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -3291,6 +3500,9 @@
       "get": {
         "summary": "get information on images for otherUser that are specific to callingUser",
         "description": "Generally, applications should use the thumbnail.  Returns ressource not found if the calling user has not set an image for the other user.",
+        "tags": [
+          "users"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -3357,6 +3569,9 @@
       "get": {
         "summary": "Get doorbell diagnostic information and wake doorbell",
         "description": "Status Codes:\n401 InvalidCredentialsError\n  - The access token is invalid.\n  - The user is blacklisted.\n404 doorbellID does not exist or a NotAuthorizedError if user is not a user of the doorbell\n",
+        "tags": [
+          "doorbells"
+        ],
         "parameters": [
           {
             "name": "wakeup",
@@ -3417,6 +3632,9 @@
     "/appdevices": {
       "get": {
         "summary": "Get all app devices, intended for app device picker",
+        "tags": [
+          "appdevices"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -3432,6 +3650,9 @@
     "/appdevices/resources": {
       "get": {
         "summary": "Device serial number is used to match app device record",
+        "tags": [
+          "appdevices"
+        ],
         "parameters": [
           {
             "name": "[serialNumber]",
@@ -3491,6 +3712,9 @@
       ],
       "get": {
         "summary": "universalDeviceID matches the specific app device resource",
+        "tags": [
+          "appdevices"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -3517,6 +3741,9 @@
       "put": {
         "summary": "The request body will contain the setting keys with their values to change in the collection, \"locks\"",
         "description": "Every key is optional, but there should always be at least one key, value pair.Returns 403 if user is not a superuser of lock",
+        "tags": [
+          "locks"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -3550,6 +3777,9 @@
       "get": {
         "summary": "Retrieves a list of settings from collection, \"locks\"",
         "description": "body will return {} if settings object does not exist for specific lockID.",
+        "tags": [
+          "locks"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -3577,6 +3807,9 @@
     "/devicepicker": {
       "get": {
         "summary": "This returns a device picker compatible for the requesting client",
+        "tags": [
+          "devicepicker"
+        ],
         "parameters": [
           {
             "name": "version",
@@ -3633,6 +3866,9 @@
     "/health": {
       "get": {
         "summary": "Get service health information",
+        "tags": [
+          "health"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -3659,6 +3895,9 @@
       "post": {
         "summary": "Set the image the calling user gets when retrieving information about the otherUser",
         "description": "POSTing to /users/:otherUserID will associate the image in the body with the other user when the calling user requests an image for the other user",
+        "tags": [
+          "users"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -3674,6 +3913,9 @@
     "/users/me/legal": {
       "get": {
         "summary": "returns the latest legal status of the user",
+        "tags": [
+          "users"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -3698,6 +3940,9 @@
       },
       "put": {
         "summary": "sets the legal status of the user vs. eula, tos, privacy",
+        "tags": [
+          "users"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -3728,6 +3973,9 @@
     "/users/me/locale": {
       "put": {
         "summary": "sets the user's language and locale",
+        "tags": [
+          "users"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -3763,6 +4011,9 @@
       "post": {
         "summary": "verifies different identifers for a user and responds with an access token",
         "description": "returns an error if trying to delete the last of an identifier type",
+        "tags": [
+          "session"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -3809,6 +4060,9 @@
       "delete": {
         "summary": "Deletes all session keys for the calling user",
         "description": "Deletes all sessions for the calling user. All subesequent API calls will respond that a new session must be retrieved.  Use in the case of a lost phone, etc.  identifer can be Email, in the form \"email:<email>\", or Phone Number in form \"phone:+<country code><number with no spaces>\"",
+        "tags": [
+          "session"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -3825,6 +4079,9 @@
       "post": {
         "summary": "Creates a new house for calling user and makes the user the superuser of the house",
         "description": "At least a house name is required.  The only error from this function is Bad Request when no house name is provided.",
+        "tags": [
+          "houses"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -3878,6 +4135,9 @@
       "put": {
         "summary": "Set the image the image for the house",
         "description": "PUTing to /houses/:houseID/image will associate the image in the body with house and that image will be returned with house info",
+        "tags": [
+          "houses"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -3903,6 +4163,9 @@
       ],
       "get": {
         "summary": "gets the Nest away status for a house that has been associated with a nest structure",
+        "tags": [
+          "houses"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -3936,6 +4199,9 @@
       "get": {
         "summary": "returns the temperature for a house",
         "description": "size of body array will vary on number of sensors",
+        "tags": [
+          "houses"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -3983,6 +4249,9 @@
       "put": {
         "summary": "sets the away status for the Nest structure associcated with the specified August house",
         "description": "valid values for status are home and away.",
+        "tags": [
+          "houses"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -4016,6 +4285,9 @@
       ],
       "put": {
         "summary": "assocites the specified Nest structure with the specified August house",
+        "tags": [
+          "houses"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -4043,6 +4315,9 @@
       },
       "delete": {
         "summary": "disassocites the specified Nest structure with the specified August house",
+        "tags": [
+          "houses"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -4077,6 +4352,9 @@
       "delete": {
         "summary": "Remove lock lockID from house houseID",
         "description": "Returns 200/OK if successful, 404 if lockID:houseID relationship is not found, and 403 if not authorized",
+        "tags": [
+          "houses"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -4102,6 +4380,9 @@
       ],
       "delete": {
         "summary": "remove an identifier from a user",
+        "tags": [
+          "users"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -4127,6 +4408,9 @@
       ],
       "get": {
         "summary": "Gets a user's identifier of a certain type. Some identifier types may be created if none exists yet",
+        "tags": [
+          "users"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -4160,6 +4444,9 @@
       "post": {
         "summary": "Adds a lock to a house.",
         "description": "Requestor must provide UNIQUE ID of the lock.  If LockID or Name are not present, a Bad Request error is returned. If the user is not a manager or superuser of the house, a Not Authorized error is returned.",
+        "tags": [
+          "locks"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -4227,6 +4514,9 @@
       "put": {
         "summary": "Move all keys to deleted",
         "description": "move all keys (except key index 0) to deleted",
+        "tags": [
+          "locks"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -4255,6 +4545,9 @@
       ],
       "put": {
         "summary": "acknowledge update of params client was instructed to set by server",
+        "tags": [
+          "locks"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -4308,6 +4601,9 @@
       ],
       "put": {
         "summary": "Acquire ownership of a known lock.",
+        "tags": [
+          "locks"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -4375,6 +4671,9 @@
       "put": {
         "summary": "Inform server of time adjustment for a lock",
         "description": "When a mobile device detects the clock on the lock is out of sync, it sets the time and informs the server of the adjustment.  Returns authorization error if callingUser is not able to use lock.  Returns success otherwise.",
+        "tags": [
+          "locks"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -4417,6 +4716,9 @@
       "put": {
         "summary": "Inform server of time adjustment for a lock",
         "description": "alias for PUT /locks/timeadjustment/:lockID/:realtime/:locktime (no j in timeadjustment)",
+        "tags": [
+          "locks"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -4450,6 +4752,9 @@
       ],
       "put": {
         "summary": "Set sound package id of lock.",
+        "tags": [
+          "locks"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -4516,6 +4821,9 @@
       "post": {
         "summary": "sets notifications (lock, unlock, both, neither) when otherUser uses lock",
         "description": "sends push notification to callingUser (phone or dashboard) when otherUser uses lock.  Values for 'on':  lock - notifies on lock, unlock - notifies on unlock, both - notifies on both, neither disables notifications when otherUser uses lock",
+        "tags": [
+          "locks"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -4550,6 +4858,9 @@
       "get": {
         "summary": "returns notifications for specified user on specified lock",
         "description": "returns all notifications calling user has for specified user on lock specified",
+        "tags": [
+          "locks"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -4576,6 +4887,9 @@
       "put": {
         "summary": "inform service of lock usage",
         "description": "Notifies service of lock operation.  If a key is \"in flight\", it closes the loop and finalizes the process.  Creates a log entry for the usage, and triggers notifications to all clients listening for updates on the lock",
+        "tags": [
+          "locks"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -4627,6 +4941,9 @@
       "get": {
         "summary": "get messages regarding a lock",
         "description": "/! DEPRECATED: 410 GoneError",
+        "tags": [
+          "locks"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -4661,6 +4978,9 @@
       "put": {
         "summary": "inform the service of the current status of the lock",
         "description": "/! DEPRECATED: 410 GoneError",
+        "tags": [
+          "lockstatus"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -4695,6 +5015,9 @@
       "post": {
         "summary": "creates a log entry that :action was performed by callingUser at :dateTime",
         "description": "200 OK status is returned if all is well.  Returns invalid request if the action is not supported.  supported actions are:  'lock', 'unlock', 'lockcommand', and 'lockdata'.  Date format is YYYYMMDDHHMMSSmmm.  If action is lockdata or lockcommand, body must contain data from the lock",
+        "tags": [
+          "locks"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -4710,6 +5033,9 @@
     "/apns/devtoken": {
       "post": {
         "summary": "adds an APNS device token associated with the callingUser",
+        "tags": [
+          "apns"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -4753,6 +5079,9 @@
       "put": {
         "summary": "sends an Apple Push Notification Service ot the user specified by otherUserID",
         "description": "If the user specified by otherUserID does not accept notifications, and error is returned",
+        "tags": [
+          "apns"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -4783,6 +5112,9 @@
       "get": {
         "summary": "get all unacknowledged system notifications for callingUser",
         "description": "/! DEPRECATED: 410 GoneError",
+        "tags": [
+          "messages"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -4809,6 +5141,9 @@
       "put": {
         "summary": "acknowledge message so it is not delivered again by GET /messages/:userID",
         "description": "/! DEPRECATED: 410 GoneError",
+        "tags": [
+          "messages"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -4835,6 +5170,9 @@
       "put": {
         "summary": "takes two random numbers then returns a packet to be sent to the lock and a URL to PUT the response",
         "description": "The mobile device PUTs mRand1 and mRand2 to the endpoint and then sends the packet in the response to the lock. When the lock responds, the response is send to the url specified by URL using the method specified by method.  Returns an Invalid Argument error if checksum fails.",
+        "tags": [
+          "locks"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -4891,6 +5229,9 @@
       "get": {
         "summary": "Generates random numbers then returns a packet to be sent to the lock and a URL to PUT the response",
         "description": "The mobile device PUTs mRand1 and mRand2 to the endpoint and then sends the packet in the response to the lock. When the lock responds, the response is send to the url specified by URL using the method specified by method.  Returns an Invalid Argument error if checksum fails.",
+        "tags": [
+          "locks"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -4930,6 +5271,9 @@
       "put": {
         "summary": "takes the lock's response to the exchange key packet and returns lRand1 and lRand2",
         "description": "The mobile device PUTs the response from the exchange key command to this endpiont.  The service returns lRand1 and lRand2 for use in the session key",
+        "tags": [
+          "locks"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -4970,6 +5314,9 @@
       "get": {
         "summary": "returns the URL to which to connect for real-time updates",
         "description": "The real-time update protocol is documented elsewhere (Use the Source, Luke)",
+        "tags": [
+          "updateurl"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -5003,6 +5350,9 @@
       "post": {
         "summary": "sends a verification code to an identifier, if no identifier is specified in the body a code will be sent to the last identifier of idtype on file ",
         "description": "sends an verification code to an identifier, if none is specified last identifier of type idtype will be used.  idtype can be either phone or email",
+        "tags": [
+          "validation"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -5053,6 +5403,9 @@
       "post": {
         "summary": "claims a verification code sent to an identifier, if no identifier is specified in the body a code will be sent to the last identifier of idtype on file ",
         "description": "if no identifier is specified in the body last identifier of type idtype will be used to claim the code.  idtype can be either phone or email",
+        "tags": [
+          "validate"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -5101,6 +5454,9 @@
     "/telemetry/logautounlockaction": {
       "post": {
         "summary": "logs auto unlock actions for debugging use",
+        "tags": [
+          "telemetry"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -5143,6 +5499,9 @@
     "/bridges": {
       "post": {
         "summary": "associate bridge and lock and returns a token to be used by the bridge",
+        "tags": [
+          "bridges"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -5187,6 +5546,9 @@
       "post": {
         "summary": "set up notification of type specified for bridge specified",
         "description": "Sets up notifications of type specified for the bridge specified for the calling user.  The only type currently supported is system, and the only channel supported is push.  If no body is specified, the channel will be push.",
+        "tags": [
+          "bridges"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -5201,6 +5563,9 @@
       "delete": {
         "summary": "disables bridge notification for type specified on specified bridge",
         "description": "Disables notification of type specified for the bridge specified for the calling user.  The only current type supported is system",
+        "tags": [
+          "bridges"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -5227,6 +5592,9 @@
       "get": {
         "summary": "returns a list of notifications for the bridge",
         "description": "returns an array of all notifications on the bridge for the calling user.",
+        "tags": [
+          "bridges"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -5266,6 +5634,9 @@
       "put": {
         "summary": "associates the specified Nest authorization token with the calling user",
         "description": "creates the association if none exists, updates it if it does exist.",
+        "tags": [
+          "nest"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -5282,6 +5653,9 @@
       "get": {
         "summary": "returns the Nest structures for the user if they have associated their August ID with their Nest ID",
         "description": "There can be more than one structure ID in the response object (which is an Object, not an Array).",
+        "tags": [
+          "nest"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -5340,6 +5714,9 @@
       ],
       "get": {
         "summary": "Get enabled optional features for platform/version/callingUserID",
+        "tags": [
+          "appfeatures"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -5377,6 +5754,9 @@
       ],
       "put": {
         "summary": "Put information about the calling user's choices on setting geofence for automatic unlock foir the given lockID and platform (iOS or Android)",
+        "tags": [
+          "locks"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -5441,6 +5821,9 @@
       "get": {
         "summary": "Check if there are any ARM updates available and return a new firmware blob if there is a new version available",
         "description": "As of August 2015, this endpoint is deprecated, since it does not support TI firmware updates. All new code should use the endpoint GET /locks/:lockID/firmware/:version",
+        "tags": [
+          "locks"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -5475,6 +5858,9 @@
       "get": {
         "summary": "Check if any updates are needed for the ARM firwmare or the TI (Bluetooth) firmware.\nThe \"version\" string should be in the form of \"${ARM_GITHASH}-${ARM_VERSION}-${TI_VERSION}\".If the ARM_VERSION is not defined, then use the string \"undefined\" in its place.",
         "description": "Examples of firmware version numbers:\n  For the RC 4 firmware release, the version string would be \"1b5bfedc-undefined-0.4.2\"\n  For the RC 5.1 firmware release, the version string would be \"788113bb-undefined-0.4.2\"\n  For the RC 5.6 firmware release, the version string would be \"403286da-undefined-1.0.0\"\n  For the 1.0.55 firmware release, the version string would be \"d8df5ada-1.0.55-1.1.12\"\n  For the 1.0.75 firmware release, the version string would be \"f98c98f9-1.0.75-1.1.18\"",
+        "tags": [
+          "locks"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -5536,6 +5922,9 @@
       ],
       "get": {
         "summary": "Gets the firmware update blob for the given chip. Individualizes this firmware update blob if necessary.\nThe \"chip\" string should be either \"arm\" or \"ti\".\nThe \"version\" string should be in the form of \"${ARM_GITHASH}-${ARM_VERSION}-${TI_VERSION}\".If the ARM_VERSION is not defined, then use the string \"undefined\" in its place.",
+        "tags": [
+          "locks"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -5562,6 +5951,9 @@
       "get": {
         "summary": "Check for firmware updates for a lock version and its chips, which are specified as query parameters",
         "description": "Status Codes:\n200 OK\n404 ResourceNotFound - lockID not found\n",
+        "tags": [
+          "locks"
+        ],
         "parameters": [
           {
             "name": "chip",
@@ -5626,6 +6018,9 @@
       "put": {
         "summary": "This tells the client the lock has firmware supporting the keypad.",
         "description": "Calling user must be a lock super user.",
+        "tags": [
+          "locks"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -5650,6 +6045,9 @@
       "delete": {
         "summary": "deletes a house from the system and removes all assocications of that house",
         "description": "returns 404 if house not found, 403 if callingUser does not own house",
+        "tags": [
+          "houses"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -5692,6 +6090,9 @@
       "put": {
         "summary": "Add a user with a type to a house",
         "description": "Returns 404 if house not found, 403 if callingUser is not superuser of house",
+        "tags": [
+          "houses"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -5734,6 +6135,9 @@
       "put": {
         "summary": "switch a user of a house between user and superuser",
         "description": "type is either ['user', 'superuser'].  Returns a 404 if house not found.  Returns 403 if callingUser is not a superuser of the house.  Returns 412 if otherUser is not a user of the house",
+        "tags": [
+          "houses"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -5760,6 +6164,9 @@
       "put": {
         "summary": "Updates the status of a lock in the locks collection.",
         "description": " Possible values 'locked,' 'unlocked,' 'unknown,' 'not-advertising.' The end point also publishes status messages and hits web hooks when applicable.",
+        "tags": [
+          "locks"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -5794,6 +6201,9 @@
       "get": {
         "summary": "Check if there are any version updates available and return a new firmware blob if there is a new version available",
         "description": "Returns 204 and no body if keypad has proper version.",
+        "tags": [
+          "keypads"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -5827,6 +6237,9 @@
       ],
       "get": {
         "summary": "Saves given version as current firmware version in db and returns new version if available.",
+        "tags": [
+          "keypads"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -5866,6 +6279,9 @@
       "get": {
         "summary": "Gets the reset code associate with that particular keypad.",
         "description": "returns a 404 if the keypad serial number is not found, 403 if it is associated with a lock the user is not a superuser of",
+        "tags": [
+          "keypads"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -5887,6 +6303,9 @@
       "put": {
         "summary": "Stores the resed code of the keypad, the reset code is retained accross lock disassociation",
         "description": "returns a 404 if the keypad SN is not found, 403 if there is a permission issue, 409 if the resetCode is not valid",
+        "tags": [
+          "keypads"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -5935,6 +6354,9 @@
       "get": {
         "summary": "Creates a handshake key and adds it to given lock's offline keys,",
         "description": "Calling user must be a lock super user.",
+        "tags": [
+          "keypads"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -5966,6 +6388,9 @@
     "/keypads": {
       "post": {
         "summary": "associate a keypad and a lock and returns the keypad id, the locks collection will be updated to reflect the association",
+        "tags": [
+          "keypads"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -5999,6 +6424,9 @@
       "put": {
         "summary": "This updates a keypad's currentHandshakeKey.",
         "description": "Calling user must be a lock super user.",
+        "tags": [
+          "keypads"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -6032,6 +6460,9 @@
       "get": {
         "summary": "gets a list of apps associated the callingUser",
         "description": "Response body is an array of connected apps.  If there are no apps, it is an array of length 0.",
+        "tags": [
+          "apps"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -6079,6 +6510,9 @@
       "get": {
         "summary": "retrives a list of service offerings from partners that integrate with August",
         "description": "Only return partners of type `WORKS_WITH`",
+        "tags": [
+          "partners"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -6137,6 +6571,9 @@
     "/partners/user": {
       "post": {
         "summary": "Create August user/identifiers per given partner user data. Generates access token and (returns) auth code and stores in cache for verification when calling OAuth service.",
+        "tags": [
+          "partners"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -6179,6 +6616,9 @@
       "put": {
         "summary": "Gives partners ability to edit partner user's user_id, name and email.",
         "description": "August user id obtained from access token",
+        "tags": [
+          "partners"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -6215,6 +6655,9 @@
     "/partners/user/verify": {
       "post": {
         "summary": "follows a specific flow of user identifier verifications, optionally creates a new user, and eventually signs-in the user",
+        "tags": [
+          "partners"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -6258,6 +6701,9 @@
       "post": {
         "summary": "Allows a partner to test whether a user with given identifiers exists. Responds with 200 if the user exists, 404 if not",
         "description": "We chose POST over GET so that we can have the partner provide an encrypted body payload",
+        "tags": [
+          "partners"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -6290,6 +6736,9 @@
     "/partners/tags": {
       "get": {
         "summary": "Retrives a list of tags and the partner IDs that have those tags",
+        "tags": [
+          "partners"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -6321,6 +6770,9 @@
       "get": {
         "summary": "Get an OAuth URL to use with 3rd party APIs",
         "description": "partner information must be in the db and retrievable by partner_id or a 404 is returned.  unexpected platform gives a 4xx response.\nstate information is tied to the user ID, platform, and partnerID. That value persists for 5 minutes",
+        "tags": [
+          "partners"
+        ],
         "parameters": [
           {
             "name": "partnerID",
@@ -6374,6 +6826,9 @@
       ],
       "post": {
         "summary": "Adds a given email to a partner mailing list.",
+        "tags": [
+          "partners"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -6387,6 +6842,9 @@
       },
       "get": {
         "summary": "Returns an array of emails of a partner mailing list.",
+        "tags": [
+          "partners"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -6417,6 +6875,9 @@
     "/airbnb/listings": {
       "get": {
         "summary": "Returns an array of stripped down listing objects with lock associations",
+        "tags": [
+          "airbnb"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -6489,6 +6950,9 @@
       ],
       "put": {
         "summary": "pairs a lock and listing based on given parameter ids",
+        "tags": [
+          "airbnb"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -6519,6 +6983,9 @@
       },
       "delete": {
         "summary": "de-pairs a lock and listing based on given parameter ids",
+        "tags": [
+          "airbnb"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -6535,6 +7002,9 @@
       "post": {
         "summary": "associates the specified Airbnb authorization token with the calling user",
         "description": "creates the association if none exists, updates it if it does exist.",
+        "tags": [
+          "airbnb"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -6573,6 +7043,9 @@
     "/airbnb": {
       "delete": {
         "summary": "Removes Airbnb credentials for calling user",
+        "tags": [
+          "airbnb"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -6599,6 +7072,9 @@
       "delete": {
         "summary": "disconnects August App from app specified by appID for callingUser",
         "description": "if callingUser is not associated with the app specified, no error is returned",
+        "tags": [
+          "apps"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -6624,6 +7100,9 @@
       ],
       "delete": {
         "summary": "Delete token for a given app",
+        "tags": [
+          "users"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -6638,6 +7117,9 @@
       "get": {
         "summary": "Get or generate a token for a given app",
         "description": "Current use: The subscription management web UI needs to retrieve some subscriptions related data. We do not want to have that web app access REST API directly. august-subscription-server has been created to provide the required data. To authenticate against august-subscription-server a temporary (30min) token will be used by the web app. The mobile clients will provide that token to the web app after requesting it from REST API.",
+        "tags": [
+          "users"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -6671,6 +7153,9 @@
       ],
       "get": {
         "summary": "Checks whether the application needs an compulsary upgrade",
+        "tags": [
+          "augustappversionok"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -6686,6 +7171,9 @@
     "/clientlogdata": {
       "post": {
         "summary": "Post client log data",
+        "tags": [
+          "clientlogdata"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -6702,6 +7190,9 @@
       "post": {
         "summary": "stores the specifice client serial ID, request time, and response time",
         "description": "/! DEPRECATED: 410 GoneError",
+        "tags": [
+          "logrequesttime"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -6727,6 +7218,9 @@
       ],
       "put": {
         "summary": "Updates the status of a lock in the locks collection. Possible values 'locked,' 'unlocked,' 'unknown.'",
+        "tags": [
+          "private"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -6740,6 +7234,9 @@
       },
       "get": {
         "summary": "Gets status of lock",
+        "tags": [
+          "private"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -6774,6 +7271,9 @@
       "post": {
         "summary": "Creates a log entry per given post data; special handling for manual operation. Notifies listeners and issues push notifications to applicable parties.",
         "description": "/! DEPRECATED: 410 GoneError",
+        "tags": [
+          "private"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -6808,6 +7308,9 @@
       "delete": {
         "summary": "Deletes user specified by otherUserID from doorbell specified by doorbellID",
         "description": "Returns Unauthorized if the calling user is not a user of the doorbell.Returns Not Found if doorbell or otherUserID do not exist.Returns PreconditionFailed if otherUserID is not a user of the doorbell",
+        "tags": [
+          "doorbells"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -6834,6 +7337,9 @@
       "delete": {
         "summary": "Remove all Doorbell Images",
         "description": "This will return a 404 if doorbellID does not exist and a NotAuthorizedError if user is not a user of the doorbell",
+        "tags": [
+          "doorbells"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -6868,6 +7374,9 @@
       "delete": {
         "summary": "Deletes a connection between a doorbell and a lock",
         "description": "This will return a 404 if doorbellID/lockID does not exist and a NotAuthorizedError if user is not a user of the doorbell",
+        "tags": [
+          "doorbells"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -6882,6 +7391,9 @@
       "put": {
         "summary": "Creates a connection between a doorbell and a lock",
         "description": "This will return a 404 if doorbellID/lockID does not exist and a NotAuthorizedError if user is not a user of the doorbell",
+        "tags": [
+          "doorbells"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -6908,6 +7420,9 @@
       "put": {
         "summary": "Update Doorbell/User Settings",
         "description": "Must put the whole settings object.  Cannot update individual field",
+        "tags": [
+          "doorbells"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -6960,6 +7475,9 @@
       "put": {
         "summary": "Add doorbell users",
         "description": "Returns 404 if doorbell is not found.  Returns Not Authorized if calling user is not a user of the doorbell",
+        "tags": [
+          "doorbells"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -7002,6 +7520,9 @@
       "put": {
         "summary": "Update Doorbell Settings using presets or custom body with settings",
         "description": "Can update individual field \nstatus code 409 if powerProfilePreset is an invalid preset",
+        "tags": [
+          "doorbells"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -7048,6 +7569,9 @@
       "get": {
         "summary": "Gets a temporary viewable URL for archived video",
         "description": "returns UnauthorizedError if the user is not of that doorbell.  Returns 404 if m3u file is not found.  Returns 401 if no DVR subscription is found.  Returns 404 if video is unavailable in activity log",
+        "tags": [
+          "doorbells"
+        ],
         "parameters": [
           {
             "name": "dvrID",
@@ -7105,6 +7629,9 @@
       "get": {
         "summary": "Gets a temporary viewable URL for archived video",
         "description": " This endpoint is the same (has the same middleware) as GET /doorbells/:doorbellID/videoevent except it uses activitylog Object ID instead of dvrID when querying the database.",
+        "tags": [
+          "doorbells"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -7143,6 +7670,9 @@
       "get": {
         "summary": "Gets proxy information for Alexa to view a stream",
         "description": "returns UnauthorizedError if the user is not of that doorbell.  Endpoint responds in 5 seconds or times out",
+        "tags": [
+          "doorbells"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -7193,6 +7723,9 @@
       "get": {
         "summary": "Gets a temporary viewable URL for a downloadable video",
         "description": "Returns a 202 if no errors are thrown.  Returns UnauthorizedError if the user is not of that doorbell or if the doorbell does not have a DVR subscription.  Returns 404 if the doorbellID or dvrID do not exist.",
+        "tags": [
+          "doorbells"
+        ],
         "parameters": [
           {
             "name": "fields",
@@ -7246,6 +7779,9 @@
       "get": {
         "summary": "Returns the snapshot associated with a doorbell call",
         "description": "returns UnauthorizedError if the video does not belong to that doorbell or if the user is not of that doorbell",
+        "tags": [
+          "doorbells"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -7270,6 +7806,9 @@
       "get": {
         "summary": "(TEMPORARY)",
         "description": "does a redirect",
+        "tags": [
+          "ivservers"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -7296,6 +7835,9 @@
       "post": {
         "summary": "Adds a doorbell to a house.",
         "description": "the pin returned might be different than the one requested if it was already used.",
+        "tags": [
+          "doorbells"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -7355,6 +7897,9 @@
       "post": {
         "summary": "Shares a DVR Video With August Marketing",
         "description": "Returns 404 if HLS video stream is unavailable",
+        "tags": [
+          "doorbells"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -7412,6 +7957,9 @@
       "post": {
         "summary": "Application hits this endpoint when they want to join, leave, or heartbeat for an AV Session related to a doorbell press or IR sensor.",
         "description": "Valid actions are ['heartbeat' 'join', 'leave', 'status'].Only 1 user is allowed to respond to the doorbell press.  Otherwise a ConflictError (409) is sent back.When a user responds a pubnub message is sent to the other listeners to disable their response capability on the client.In the event that this API is not called with a hangup or heartbeat (client power or connection failure) the call will be ended when the key expiresWhen a call is hung up, an object called callStats is expected in the request body.videoAvailable flag is only present for 'respond'",
+        "tags": [
+          "doorbells"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -7614,6 +8162,9 @@
       "post": {
         "summary": "Generates a pubnub message when a doorbell is pressed or motion is detected.  An image is taken from the camera and sent in another pubnub message to the doorbell user",
         "description": "THIS FUNCTION WAS MOVED TO THE MARS API SERVER.  POSTing to /doorbells/:doorbellID/event/:eventType will upload the image taken from the camera in the body and send the url of the image in the pubnub message image for the other user.  eventType is either 'presence' or 'buttonpush'.  doorbellID is also required in params",
+        "tags": [
+          "doorbells"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -7648,6 +8199,9 @@
       "put": {
         "summary": "adds a user to a doorbell",
         "description": "If the doorbell or other user doesn't exist return ResourceNotFound error.  If calling user is not a user of the doorbell return NotAuthorizedError",
+        "tags": [
+          "doorbells"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -7674,6 +8228,9 @@
       "put": {
         "summary": "Publishes a message so the doorbell knows to reboot",
         "description": "If the doorbell or other user doesn't exist return ResourceNotFound error.  If calling user is not a user of the doorbell return NotAuthorizedError",
+        "tags": [
+          "doorbells"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -7700,6 +8257,9 @@
       "put": {
         "summary": "Publishes a message so the doorbell knows to wakeup",
         "description": "If the doorbell or other user doesn't exist return ResourceNotFound error.  If calling user is not a user of the doorbell return NotAuthorizedError",
+        "tags": [
+          "doorbells"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -7726,6 +8286,9 @@
       "post": {
         "summary": "Writes to the logs",
         "description": "If the doorbell or other user doesn't exist return ResourceNotFound error.If calling user is not a user of the doorbell return NotAuthorizedError.Takes an array of log objects or a log object in the body of the request.",
+        "tags": [
+          "doorbells"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -7742,6 +8305,9 @@
       "post": {
         "summary": "Creates an unverified user with lock and credential types",
         "description": "If the credentialType is null we can treat it as pin.Only the credentialType is pin/null, the response.body will contain pin.",
+        "tags": [
+          "unverifiedusers"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -7813,6 +8379,9 @@
       ],
       "put": {
         "summary": "Updates an unverified user associated with a lock",
+        "tags": [
+          "unverifiedusers"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -7867,6 +8436,9 @@
       "delete": {
         "summary": "deletes a reserved pin",
         "description": "the call will be successful, if the pin had already been expired or doesn't exists",
+        "tags": [
+          "locks"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -7893,6 +8465,9 @@
       "get": {
         "summary": "Returns homekit key for given lock and calling user.",
         "description": "/! DEPRECATED: 410 GoneError",
+        "tags": [
+          "locks"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -7927,6 +8502,9 @@
       "put": {
         "summary": "Creates or change the pin on the specified lock for the specified user",
         "description": "created: means that the PIN should be loaded onto the lock, first step of associating a pin loaded: means that the PIN has been loaded to the lock, second and final step of associating a pin deleting: means that the PIN should be deleted, first step of removing a pin from a lock deleted: means that the PIN has been be deleted from the lock disabling: means the the PIN should be disabled disabled: means that the PIN has been marked as disabled on the lock enabling: means that the PIN should be enabled enabled: means that the PIN has been enabled, which means that it is back in the loaed group of PINs. The PIN is only necessary when creating it",
+        "tags": [
+          "locks"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -8010,6 +8588,9 @@
       "put": {
         "summary": "Creates or change the pin/rf/finger on the specified lock for the specified user",
         "description": "created: means that the PIN should be loaded onto the lock, first step of associating a pin loaded: means that the PIN has been loaded to the lock, second and final step of associating a pin deleting: means that the PIN should be deleted, first step of removing a pin from a lock deleted: means that the PIN has been be deleted from the lock disabling: means the the PIN should be disabled disabled: means that the PIN has been marked as disabled on the lock enabling: means that the PIN should be enabled enabled: means that the PIN has been enabled, which means that it is back in the loaed group of PINs. The 'pin' is only necessary when type euqals pin & create it. this is going to replace 'PUT /locks/:lockID/users/:otherUserID/pin'",
+        "tags": [
+          "locks"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -8136,6 +8717,9 @@
       "put": {
         "summary": "Inform server of time adjustment for a lock",
         "description": "When a mobile device detects the clock on the lock is out of sync, it sets the time and informs the server of the adjustment.  Returns authorization error if callingUser is not able to use lock.  Returns success otherwise.",
+        "tags": [
+          "private"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -8151,6 +8735,9 @@
     "/nest/cameras": {
       "get": {
         "summary": "returns all nest cameras that can be associated with a lock",
+        "tags": [
+          "nest"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -8167,6 +8754,9 @@
       "post": {
         "summary": "adds a nest camera to the system and associates it with the house represented by the camera's Nest structure",
         "description": "The camera ID in the response is the id to be used in all other August camera-related APIs. This is is NOT the Nest camera ID",
+        "tags": [
+          "nest"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -8245,6 +8835,9 @@
       "put": {
         "summary": "Associates camera specified by cameraID with lock specified by lockID.",
         "description": "A camera can be associated with multiple locks, but those locks must be in the same house",
+        "tags": [
+          "locks"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -8259,6 +8852,9 @@
       "delete": {
         "summary": "Disassociates camera specified by cameraID from lock specified by lockID",
         "description": "Does not disassociate the camera from the house",
+        "tags": [
+          "locks"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -8293,6 +8889,9 @@
       "put": {
         "summary": "Associates camera specified by cameraID with doorbell specified by doorbellID.",
         "description": "A camera can be associated with multiple doorbells, but those doorbells must be in the same house",
+        "tags": [
+          "doorbells"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -8307,6 +8906,9 @@
       "delete": {
         "summary": "Disassociates camera specified by cameraID from doorbell specified by doorbellID",
         "description": "Does not disassociate the camera from the house",
+        "tags": [
+          "doorbells"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -8341,6 +8943,9 @@
       "post": {
         "summary": "Associates camera specified by cameraID with a lock specified by lockID",
         "description": "A camera can be associated with multiple locks, but those locks must be in the same house",
+        "tags": [
+          "locks"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -8355,6 +8960,9 @@
       "delete": {
         "summary": "Disassociates camera specified by cameraID from lock specified by lockID",
         "description": "does not disassociate the camera from the house",
+        "tags": [
+          "locks"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -8380,6 +8988,9 @@
       ],
       "delete": {
         "summary": "deletes camera specified by cameraID and removes its association with house and locks",
+        "tags": [
+          "cameras"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -8405,6 +9016,9 @@
       ],
       "put": {
         "summary": "Returns the timezones hour offset from UTC",
+        "tags": [
+          "locks"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -8454,6 +9068,9 @@
       ],
       "get": {
         "summary": "Returns token information given a doorbell id",
+        "tags": [
+          "doorbells"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -8482,6 +9099,9 @@
     "/subscriptions/plans": {
       "get": {
         "summary": "Returns subscription plan details",
+        "tags": [
+          "subscriptions"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -8558,6 +9178,9 @@
       ],
       "get": {
         "summary": "Returns subscription plan details for a single plan",
+        "tags": [
+          "subscriptions"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -8622,6 +9245,9 @@
       "get": {
         "summary": "Returns subscriptions the calling user has access to",
         "description": "Returns device-level subscription.accepts GET parameters deviceType and deviceID to filter for a specific subscription",
+        "tags": [
+          "subscriptions"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -8672,6 +9298,9 @@
       ],
       "get": {
         "summary": "Return a subscription object",
+        "tags": [
+          "subscriptions"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -8708,6 +9337,9 @@
       "delete": {
         "summary": "Cancels a subscription",
         "description": "Can be used with any type of subscription, trial or paid",
+        "tags": [
+          "subscriptions"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -8734,6 +9366,9 @@
       "put": {
         "summary": "Allows to re-enable a subscription",
         "description": "Can be used with any type of subscription, trial or paid. Subscription must exist already.",
+        "tags": [
+          "subscriptions"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -8759,6 +9394,9 @@
       ],
       "put": {
         "summary": "Used to add a ruleset to nock",
+        "tags": [
+          "nock"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -8804,6 +9442,9 @@
     "/nock/cleanAll": {
       "get": {
         "summary": "Removes all nock rules",
+        "tags": [
+          "nock"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -8829,6 +9470,9 @@
       ],
       "get": {
         "summary": "Returns any mocks that have not been used",
+        "tags": [
+          "nock"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -8861,6 +9505,9 @@
       ],
       "get": {
         "summary": "Returns a boolean indicating whether all of the mocks have been used",
+        "tags": [
+          "nock"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -8884,6 +9531,9 @@
     "/nock/simulate": {
       "post": {
         "summary": "Runs a HTTP request from the server which may or may not use nock",
+        "tags": [
+          "nock"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -8920,6 +9570,9 @@
       "get": {
         "summary": "Get list of calling user's locks, their eligibility, and missing devices for August Access",
         "description": "Returns an empty body if the calling user has no eligible locks",
+        "tags": [
+          "homeaccess"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -8961,6 +9614,9 @@
     "/homeaccess/locks": {
       "get": {
         "summary": "Called by August Access seller/retailer partners with a parameter list of shippers/home accessing partner/access grantees to get a list of locks that match each grantees requirements (remote access/PIN)",
+        "tags": [
+          "homeaccess"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -9020,6 +9676,9 @@
       "put": {
         "summary": "Accepts August access terms of service agreement(aaTos) for a user",
         "description": "This will only approve home access legal docs like aaTos",
+        "tags": [
+          "homeaccess"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -9060,6 +9719,9 @@
       ],
       "put": {
         "summary": "Allows one to set the delivery property of a lock",
+        "tags": [
+          "homeaccess"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -9108,6 +9770,9 @@
       ],
       "get": {
         "summary": "Gets a single delivery using a provided deliveryId for a house",
+        "tags": [
+          "homeaccess"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -9176,6 +9841,9 @@
       ],
       "post": {
         "summary": "Called by August Access seller partners with a lock ID to create a home-access-token for a shipping partner",
+        "tags": [
+          "homeaccess"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -9219,6 +9887,9 @@
       },
       "delete": {
         "summary": "Allows a retailer/seller partner to revoke a Home-Access-Token",
+        "tags": [
+          "homeaccess"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -9234,6 +9905,9 @@
     "/homeaccess/partners/access": {
       "get": {
         "summary": "Called by August Access seller partners to list August Access delivery providers",
+        "tags": [
+          "homeaccess"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -9279,6 +9953,9 @@
       "put": {
         "summary": "Called by August Access access partners with a Home-Access-Token to unlock/lock a lock",
         "description": "command can be [lock|unlock]",
+        "tags": [
+          "homeaccess"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -9294,6 +9971,9 @@
     "/homeaccess/access/status": {
       "get": {
         "summary": "Called by August Access access partners with a Home-Access-Token to get its status",
+        "tags": [
+          "homeaccess"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -9320,6 +10000,9 @@
       "get": {
         "summary": "Called by the mobile app to list upcoming or past deliveries for an August Access user",
         "description": "window can be [current|past] to list current/upcoming or past deliveries, respectively",
+        "tags": [
+          "homeaccess"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -9387,6 +10070,9 @@
     "/partners/ujet/auth": {
       "post": {
         "summary": "Called by an authenticated user to generate a JWT for UJet end user authentication",
+        "tags": [
+          "partners"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -9410,6 +10096,9 @@
     "/partners/ujet/sign": {
       "post": {
         "summary": "Called by an authenticated user to generate jwt for custom data",
+        "tags": [
+          "partners"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -9450,6 +10139,9 @@
     "/credentials": {
       "get": {
         "summary": "Called by an authenticated user to get all the credentials needed for mobile clients",
+        "tags": [
+          "credentials"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -9495,6 +10187,9 @@
       "get": {
         "summary": "Get a list of calling user's devices.",
         "description": "Returns a device type key and empty array if the calling user has no devices of that type.",
+        "tags": [
+          "devices"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -9540,6 +10235,9 @@
       "get": {
         "summary": "Get the capabilities for a device",
         "description": "The response body may contain capabilities for multiple device types.  e.g. lock and keypad for Unity devices with a keypad.",
+        "tags": [
+          "devices"
+        ],
         "parameters": [
           {
             "name": "hhID",
@@ -9627,6 +10325,9 @@
       "get": {
         "summary": "Get the questionnaire for a device version",
         "description": "Once we get to the final question/answer, instead of destination, there will be a type and value",
+        "tags": [
+          "devices"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -9727,6 +10428,9 @@
       ],
       "post": {
         "summary": "Called by client apps when a user sets up a chime.",
+        "tags": [
+          "doorbells"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -9797,6 +10501,9 @@
       "put": {
         "summary": "Called by client apps when a user renames a chime.",
         "description": "Return 404 not found if the doorbell is not setup.  Return 403 unauthorized if the calling user cannot manage the doorbell.  Return 404 not found if the chime is not setup.",
+        "tags": [
+          "doorbells"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -9824,6 +10531,9 @@
       },
       "get": {
         "summary": "Get information about a chime.",
+        "tags": [
+          "doorbells"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -9889,6 +10599,9 @@
       "delete": {
         "summary": "Delete chime.",
         "description": "Return 403 unauthorized if the calling user cannot manage the doorbell.  Return 404 not found if the chime is not setup.",
+        "tags": [
+          "doorbells"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -9923,6 +10636,9 @@
       "put": {
         "summary": "Update Chime Settings",
         "description": "Must put the whole settings object.  Cannot update individual fields.",
+        "tags": [
+          "doorbells"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -9953,6 +10669,9 @@
       },
       "get": {
         "summary": "Get Chime Settings",
+        "tags": [
+          "doorbells"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -10006,6 +10725,9 @@
       "post": {
         "summary": "Sends sdp offer by proxying pubnub messages to the doorbell and awaits an sdp answer on that pubnub channel.  That sdp answer is returned to the caller.",
         "description": "Error Codes:\n403 NotAuthorized - user is not authorized to access doorbell\n404 ResourceNotFound - doorbellID not found\n408 RequestTimeoutError - Doorbell cannot wakeup || receives incorrectly formatted sdp offer || doorbell is not listening on the pubnub channel message was published to || doorbell is offline and has not yet been reported by server (15 minute window)\n409 ConflictError - doorbell has firmware that does not support webrtc || has not set the \"caps\" property with \"webrtc\"\n409 MissingParameter - missing body parameter \"offer\" or \"clientTransactionID\"\n422 UnprocessableEntityError - doorbell status is offline\n500 InternalServerError - other internal server error\n",
+        "tags": [
+          "doorbells"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -10053,6 +10775,9 @@
       "put": {
         "summary": "Wake a tcp connected device",
         "description": "Status Codes:\n200 OK - Device already online\n202 Accepted - Doorbell was in standby mode and is being woken up\n404 ResourceNotFound - doorbellID not found\n412 Precondition Failed - device not connected to tcp keep alive server || device is offline ||\nDoorbell does not support tcp keep alive || wakeup token not set || invalid doorbell status\n500 InternalServerError - other internal server error\n",
+        "tags": [
+          "doorbells"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -10079,6 +10804,9 @@
       "delete": {
         "summary": "Delete a user account.  The userID must match the one in the access token.",
         "description": "Status Codes:\n401 InvalidCredentialsError\n  - The userID does not match the one in the access token.\n  - The access token is invalid.\n  - The user is blacklisted.",
+        "tags": [
+          "users"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -10129,6 +10857,9 @@
       "get": {
         "summary": "Get brand and locale specific URLs",
         "description": "Status Codes:\n301 - Success/redirect to URL400 - Invalid brand404 - Link not found",
+        "tags": [
+          "brands"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -10155,6 +10886,9 @@
       "post": {
         "summary": "Add user to orchestra. The user is then linked and has a new property `orchestraCustomerId`",
         "description": "Error Codes:\n412 PreconditionFailedError - user already linked to orchestra\n500 InternalServerError - other internal server error",
+        "tags": [
+          "users"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -10169,6 +10903,9 @@
       "delete": {
         "summary": "Remove user to orchestra.  The userID must match the one in the access token.",
         "description": "Status Codes:\n401 InvalidCredentialsError\n  - The userID does not match the one in the access token.\n  - The access token is invalid.\n  - The user is blacklisted.\n412 PreconditionFailedError - user not linked to orchestra",
+        "tags": [
+          "users"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -10185,6 +10922,9 @@
       "get": {
         "summary": "Get user accesses and credentials to orchestra",
         "description": "Status Codes:\n401 InvalidCredentialsError\n  - The userID does not match the one in the access token.\n  - The access token is invalid.\n  - The user is blacklisted.\n412 PreconditionFailedError - user not linked to orchestra",
+        "tags": [
+          "orchestra-accesses"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -10211,6 +10951,9 @@
       "put": {
         "summary": "Update access to orchestra",
         "description": "Status Codes:\n400 BadRequestError - params and body do not match schema\n401 InvalidCredentialsError\n  - The userID does not match the one in the access token.\n  - The access token is invalid.\n  - The user is blacklisted.\n403 PreconditionFailedError - user does not owns access\n404 ResourceNotFoundError - access not found",
+        "tags": [
+          "orchestra-accesses"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -10243,6 +10986,9 @@
       "delete": {
         "summary": "Delete access to orchestra with it's credentials",
         "description": "Status Codes:\n400 BadRequestError - params do not match schema\n401 InvalidCredentialsError\n  - The userID does not match the one in the access token.\n  - The access token is invalid.\n  - The user is blacklisted.\n403 PreconditionFailedError - user does not owns access\n404 ResourceNotFoundError - access not found",
+        "tags": [
+          "orchestra-accesses"
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -10277,6 +11023,9 @@
       "delete": {
         "summary": "Delete credential to orchestra",
         "description": "Status Codes:\n400 BadRequestError - params do not match schema\n401 InvalidCredentialsError\n  - The userID does not match the one in the access token.\n  - The access token is invalid.\n  - The user is blacklisted.\n403 NotAuthorizedError\n  - user does not owns access\n  - credential does not belongs to the access\n404 ResourceNotFoundError\n  - access not found\n  - credential not found",
+        "tags": [
+          "orchestra-accesses"
+        ],
         "responses": {
           "200": {
             "description": "",

@@ -249,24 +249,15 @@ class SpecConvert extends Base.factory() {
     return Swagger.convertJsonSchema2Swagger(new_schema, 'path');
   }
 
-  /**
-   * convert api spec to api doc json
-   * @param {object} old_format_doc - key is api name,
-   * value is detail info
-   * @param {string} spec_output_path - output path
-   * @param {string} api_version - api version
-   * @return {object} new_format_doc - return api_doc_json, key is api name,
-   * value is detail info follow the api doc, such as
-  */
-  run(old_format_doc, spec_output_path, api_version) {
+  convertSpec2Swagger(spec_doc) {
     const path_items = {};
     let current_api_name = '';
 
     try {
-      Object.keys(old_format_doc).forEach((api_name) => {
+      Object.keys(spec_doc).forEach((api_name) => {
         current_api_name = api_name;
         let real_api_name = api_name;
-        const api = old_format_doc[api_name];
+        const api = spec_doc[api_name];
         const method_type = (api.method || api.method_type).toLowerCase();
         let real_method_type = method_type;
         const index = api_name.lastIndexOf(' ');
@@ -300,9 +291,23 @@ class SpecConvert extends Base.factory() {
       throw new TypeError(`SpecConvert::run: ${current_api_name} fail!err_msg: ${err.message}`);
     }
 
+    return path_items;
+  }
+
+  /**
+   * convert api spec to api doc json, overwrite
+   * @param {object} spec_dpc - key is api name,
+   * value is detail info
+   * @param {string} spec_output_path - output path
+   * @param {string} api_version - api version
+   * @return {object} new_format_doc - return api_doc_json, key is api name,
+   * value is detail info follow the api doc, such as
+  */
+  run(spec_doc, spec_output_path, api_version) {
+    const path_items = this.convertSpec2Swagger(spec_doc);
     const info_obj = Swagger.generateInfoObject('august-rest-api', 'If you want to refresh swagger, click terms of service and refersh the browser', config.get('terms_of_service'), api_version);
-    const openapi_obj = Swagger.generateOpenApiObject(info_obj, path_items);
-    fs.writeFileSync(`${spec_output_path}.json`, JSON.stringify(openapi_obj, null, 2));
+    const swagger = Swagger.generateOpenApiObject(info_obj, path_items);
+    fs.writeFileSync(`${spec_output_path}.json`, JSON.stringify(swagger, null, 2));
 
     return path_items;
   }
@@ -312,9 +317,18 @@ class SpecConvert extends Base.factory() {
     return JSON.parse(content);
   }
 
-  // parseApi(old_format_doc, spec_output_path) {
+  syncSwaggerJson(lastest_spec_doc, spec_path, api_version) {
+    const old_version_swagger = JSON.parse(fs.readFileSync(`${spec_path}.json`, 'utf8'));
 
-  // }
+    const path_items = this.convertSpec2Swagger(lastest_spec_doc);
+    const info_obj = Swagger.generateInfoObject('august-rest-api', 'If you want to refresh swagger, click terms of service and refersh the browser', config.get('terms_of_service'), api_version);
+    const new_version_swagger = Swagger.generateOpenApiObject(info_obj, path_items);
+
+    // a tricky way, no support a deleted param
+    const merged_swagger = _.merge(old_version_swagger, new_version_swagger);
+    fs.writeFileSync(`${spec_path}.json`, JSON.stringify(merged_swagger, null, 2));
+    return merged_swagger;
+  }
 }
 
 module.exports = SpecConvert;
