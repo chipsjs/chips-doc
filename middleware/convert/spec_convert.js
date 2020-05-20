@@ -254,10 +254,11 @@ class SpecConvert extends Base.factory() {
    * @param {object} old_format_doc - key is api name,
    * value is detail info
    * @param {string} spec_output_path - output path
+   * @param {string} api_version - api version
    * @return {object} new_format_doc - return api_doc_json, key is api name,
    * value is detail info follow the api doc, such as
   */
-  run(old_format_doc, spec_output_path) {
+  run(old_format_doc, spec_output_path, api_version) {
     const path_items = {};
     let current_api_name = '';
 
@@ -299,7 +300,7 @@ class SpecConvert extends Base.factory() {
       throw new TypeError(`SpecConvert::run: ${current_api_name} fail!err_msg: ${err.message}`);
     }
 
-    const info_obj = Swagger.generateInfoObject('august-rest-api', 'If you want to refresh swagger, click terms of service and refersh the browser', config.get('terms_of_service'), '8.8.0');
+    const info_obj = Swagger.generateInfoObject('august-rest-api', 'If you want to refresh swagger, click terms of service and refersh the browser', config.get('terms_of_service'), api_version);
     const openapi_obj = Swagger.generateOpenApiObject(info_obj, path_items);
     fs.writeFileSync(`${spec_output_path}.json`, JSON.stringify(openapi_obj, null, 2));
 

@@ -122,10 +122,8 @@ test_case层 -> middleware层 -> service层
 
 ### convert
 
-- tag 1
 - the security of cola-doc  1
-- sync the api_spec and swagger
-- swagger updated when api spec is updated/created
+- swagger updated  and push to repo when api spec is updated/created
 
 ### fake and mock
 
