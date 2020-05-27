@@ -298,6 +298,7 @@ class Fake extends Base.factory() {
 
     return test_cases;
   }
+
   /**
    * clean env
    * @return {valid}

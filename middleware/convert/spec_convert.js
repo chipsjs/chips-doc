@@ -269,7 +269,7 @@ class SpecConvert extends Base.factory() {
         }
 
         if (method_type !== real_method_type) {
-          this.logger().error(`SpecConvert:: ${current_api_name} spec error! method type is ${method_type}, real method type is ${real_method_type}`);
+          this.logger().warn(`SpecConvert:: ${current_api_name} spec warn! method type is ${method_type}, real method type is ${real_method_type}`);
         }
 
         if (!_.get(path_items, [real_api_name, 'parameters'])) {
@@ -317,17 +317,151 @@ class SpecConvert extends Base.factory() {
     return JSON.parse(content);
   }
 
-  syncSwaggerJson(lastest_spec_doc, spec_path, api_version) {
-    const old_version_swagger = JSON.parse(fs.readFileSync(`${spec_path}.json`, 'utf8'));
+  /**
+   * request body or response body
+   *
+   * @param {object} base_schema
+   * @param {object} extention_schema
+   * @returns {object} new_schema
+   * @memberof SpecConvert
+   */
+  _mergeBodySchema(base_schema, extention_schema) {
+    // if obj is undefined, use the other obj
+    if (!(base_schema && extention_schema)) {
+      return base_schema || extention_schema;
+    }
 
-    const path_items = this.convertSpec2Swagger(lastest_spec_doc);
+    // if type is undefined, extention_schema is all addtional property for spec
+    if (typeof base_schema.type === 'undefined') {
+      return _.merge(base_schema, extention_schema);
+    }
+
+    // if type is different, use base_obj
+    if (base_schema.type !== extention_schema.type) {
+      return base_schema;
+    }
+
+    const new_schema = _.merge(base_schema, extention_schema);
+
+    // if type is object, continue to recursive
+    // if type is array, items which convert from spec are inaccurate, use extention_obj to supple
+    if (base_schema.type === SwaggerDataType.object) {
+      new_schema.properties = this._mergeBodySchema(base_schema.properties,
+        extention_schema.properties);
+    }
+
+    return new_schema;
+  }
+
+  _mergeParameters() {
+
+  }
+
+  _mergeQuerySchema(base_schema, extention_schema) {
+
+  }
+
+  /**
+   * base_parameter must not have `schema`, so path
+   *
+   * @param {array} base_parameters
+   * @param {array} extention_path_object - key is path name and value is 
+   * @returns
+   * @memberof SpecConvert
+   */
+  _mergePathSchema(base_parameters, extention_path_object) {
+    const new_parameters = _.slice(base_parameters);
+
+    if (extention_path_object) {
+      base_parameters.forEach((parameter) => {
+        if (parameter.in === 'path') {
+          const { name } = parameter;
+          if (_.has(extention_path_object, [name])) {
+            Swagger.setPathSchema(new_parameters, name, extention_path_object[name]);
+          }
+        }
+      });
+    }
+
+    return new_parameters;
+  }
+
+  /**
+   * merge extention_object to base_operation_object
+   * operation_object is https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.3.md#operationObject
+   *
+   * @param {object} base_operation_object
+   * @param {object} extention_object - it may have four kinds of key: path, query, response, body
+   *  path value's format is json schema and other type is swagger operation object format
+   * @returns {object} new_operation_object
+   * @memberof SpecConvert
+   */
+  _mergePathItem(base_operation_object, extention_object) {
+    const new_operation_object = _.cloneDeep(base_operation_object);
+
+    if (Swagger.hasRequestBody(base_operation_object)) {
+      const base_schema = Swagger.getRequestBodySchema(base_operation_object);
+
+      Swagger.setRequestBodySchema(
+        new_operation_object,
+        this._mergeBodySchema(base_schema, extention_object.body)
+      );
+    }
+
+    // responses must have
+    if (Swagger.hasResponses(base_operation_object)) {
+      const base_schema = Swagger.getResponseSchema(base_operation_object);
+
+      Swagger.setResponseSchema(
+        new_operation_object,
+        this._mergeBodySchema(base_schema, extention_object.response)
+      );
+    } else {
+      this.logger().warn('SpecConvert:: _mergePathItem warn! responses no exists');
+    }
+
+    if (Swagger.hasPath(base_operation_object)) {
+      Swagger.setParamerters(
+        new_operation_object,
+        this._mergePathSchema(base_operation_object.parameters, extention_object.path)
+      );
+    }
+
+    // TODO, query needs parse
+
+    return new_operation_object;
+  }
+
+  syncSwaggerJson(lastest_spec_doc, extention_path_items_path, api_version) {
+    const extention_path_items = JSON.parse(fs.readFileSync(`${extention_path_items_path}.json`, 'utf8'));
+    const base_path_items = this.convertSpec2Swagger(lastest_spec_doc);
+
+    const new_path_items = Object.entries(base_path_items).reduce(
+      (result, [api_name, path_item]) => {
+        Object.entries(path_item).forEach(([method_type, base_operation_object]) => {
+          if (Swagger.hasMethodType(extention_path_items[api_name], method_type)) {
+            const extention_operation_object = Swagger.getOperationObject(
+              extention_path_items[api_name], method_type
+            );
+
+            const new_operation_object = this._mergePathItem(
+              base_operation_object, extention_operation_object
+            );
+            Swagger.setOperationObject(result[api_name], method_type, new_operation_object);
+          } else {
+            Swagger.setOperationObject(result[api_name], method_type, base_operation_object);
+          }
+        });
+        return result;
+      }, {}
+    );
+
     const info_obj = Swagger.generateInfoObject('august-rest-api', 'If you want to refresh swagger, click terms of service and refersh the browser', config.get('terms_of_service'), api_version);
-    const new_version_swagger = Swagger.generateOpenApiObject(info_obj, path_items);
+    const new_version_swagger = Swagger.generateOpenApiObject(info_obj, new_path_items);
 
-    // a tricky way, no support a deleted param
-    const merged_swagger = _.merge(old_version_swagger, new_version_swagger);
-    fs.writeFileSync(`${spec_path}.json`, JSON.stringify(merged_swagger, null, 2));
-    return merged_swagger;
+    // TODO
+    fs.writeFileSync(`${extention_path_items_path}.json`, JSON.stringify(new_version_swagger, null, 2));
+    return new_version_swagger;
   }
 }
 

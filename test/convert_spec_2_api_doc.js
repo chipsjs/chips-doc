@@ -1367,7 +1367,7 @@ describe('convert spec to generate api doc', () => {
       assert.nestedPropertyVal(body_result1, 'users.type', 'array');
       const body_result2 = _.get(api_result1, ['get', 'responses', '200', 'content', 'application/json', 'schema', 'properties']);
       assert.nestedPropertyVal(body_result2, 'id.type', 'integer');
-      
+
       const api_result2 = _.get(result, ['paths', '/test2']);
       assert.nestedProperty(api_result2, 'post');
     })
