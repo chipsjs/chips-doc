@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "config": "^3.2.4",
+    "faker": "^4.1.0",
     "json-schema-faker": "^0.5.0-rc23",
     "jsonschema": "^1.2.5",
     "lodash": "^4.17.15",
@@ -22,16 +23,16 @@
     "eslint-config-airbnb-base": "^14.1.0",
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-mocha": "^6.3.0",
-    "faker": "^4.1.0",
-    "mocha": "^7.1.1"
+    "mocha": "^7.1.1",
+    "nyc": "^15.0.1"
   },
   "scripts": {
     "fake": "node ./entry/fake.js",
     "mock": "node ./entry/mock.js",
     "convert": "node ./entry/convert.js",
     "test": "mocha",
-    "test-convert": "mocha ./test/convert_spec_2_api_doc.js",
-    "test-fake": "mocha ./test/fake_api_doc_2_test_case.js",
+    "test-convert": "mocha ./test/convert",
+    "test-fake": "mocha ./test/fake",
     "coverage": "nyc npm run test",
     "coverage-convert": "nyc npm run test-convert",
     "coverage-fake": "nyc npm run test-fake"

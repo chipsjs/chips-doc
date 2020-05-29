@@ -1,8 +1,8 @@
 const { assert } = require('chai');
 
-const Fake = require('../middleware/fake/fake');
+const Fake = require('../../middleware/fake/fake');
 const test_json = require('./test_api_doc.json');
-const test_flow = require('./test_api_flow.json');
+const test_flow = require('../test_api_flow.json');
 
 describe('fake pai doc to generate test case', () => {
   let test_cases = {};

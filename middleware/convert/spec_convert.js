@@ -159,6 +159,44 @@ class SpecConvert extends Base.factory() {
   }
 
   /**
+   * spec api_name is 'GET /test/:id/' and real_api_name is '/test/:id/'
+   *
+   * @param {string} api_name
+   * @returns {string} - real_api_name
+   * @memberof SpecConvert
+   */
+  _getRealApiName(api_name) {
+    const index = api_name.lastIndexOf(' ');
+    if (index !== -1) {
+      return api_name.substring(index + 1);
+    }
+
+    return api_name;
+  }
+
+  /**
+   * correct method type and warn when is not excepted_method_type
+   *
+   * @param {string} api_name - eg: 'GET /test/:id/'
+   * @param {string} excepted_method_type -
+   * excepted method type, it is from method or methodtype property of spec
+   * @returns
+   * @memberof SpecConvert
+   */
+  _getRealMethodType(api_name, excepted_method_type = '') {
+    let real_method_type = excepted_method_type;
+    const index = api_name.indexOf(' ');
+    if (index !== -1) {
+      real_method_type = api_name.substring(0, index).toLowerCase();
+      if ((excepted_method_type !== real_method_type) && (excepted_method_type !== '')) {
+        this.logger().warn(`SpecConvert:: ${api_name} spec warn! method type is ${excepted_method_type}, real method type is ${real_method_type}`);
+      }
+    }
+
+    return real_method_type;
+  }
+
+  /**
    * parse old_format_doc[api_name].request.body
    * @param {object} spec_schema - old_format_doc[api_name].request.body
    * @return {object} convert_query - api_doc[api_name].request.body
@@ -256,21 +294,12 @@ class SpecConvert extends Base.factory() {
     try {
       Object.keys(spec_doc).forEach((api_name) => {
         current_api_name = api_name;
-        let real_api_name = api_name;
         const api = spec_doc[api_name];
-        const method_type = (api.method || api.method_type).toLowerCase();
-        let real_method_type = method_type;
-        const index = api_name.lastIndexOf(' ');
-        if (index !== -1) {
-          // api_name is 'GET /test/:id/' and real_api_name is '/test/:id/'
-          real_api_name = api_name.substring(index + 1);
-          const start_index = api_name.indexOf(' ');
-          real_method_type = api_name.substring(0, start_index).toLowerCase();
-        }
-
-        if (method_type !== real_method_type) {
-          this.logger().warn(`SpecConvert:: ${current_api_name} spec warn! method type is ${method_type}, real method type is ${real_method_type}`);
-        }
+        const real_api_name = this._getRealApiName(api_name);
+        const real_method_type = this._getRealMethodType(
+          api_name,
+          (api.method || api.method_type).toLowerCase()
+        );
 
         if (!_.get(path_items, [real_api_name, 'parameters'])) {
           const parameters = this.parsePathSchema(real_api_name);
@@ -455,23 +484,21 @@ class SpecConvert extends Base.factory() {
    * used as sync swagger when spec updated
    *
    * @param {object} lastest_spec_doc - base spec doc
-   * @param {string} swagger_path - output path of new version swagger
-   * @param {string} extention_path_items_path -
-   * the depedence extention path of addtional properties for swagger
+   * @param {string} extention_path_items - the depedence extention path items of swagger
+   * @param {string} output_swagger_path - output path of new version swagger
    * @param {string} api_version - api version
    * @returns {object} new_version_swagger
    * @memberof SpecConvert
    */
-  syncSwaggerJson(lastest_spec_doc, output_swagger_path, extention_path_items_path, api_version) {
-    const extention_path_items = JSON.parse(fs.readFileSync(`${extention_path_items_path}.json`, 'utf8'));
+  syncSwaggerJson(lastest_spec_doc, extention_path_items, api_version = '0.0.0') {
     const base_path_items = this.convertSpec2Swagger(lastest_spec_doc);
 
     const new_path_items = Object.entries(base_path_items).reduce(
       (result, [api_name, base_path_item]) => {
-        Swagger.initPathItemObject(result[api_name], base_path_item);
+        Swagger.initPathItemObject(result, api_name, base_path_item);
 
         // path is special, just have schema
-        if (Swagger.hasPath(result[api_name].parameters)) {
+        if (Swagger.hasPath(result[api_name])) {
           Swagger.setParamerters(
             result[api_name],
             this._mergePathSchema(result[api_name].parameters, extention_path_items[api_name].path)
@@ -499,8 +526,11 @@ class SpecConvert extends Base.factory() {
 
     const info_obj = Swagger.generateInfoObject('august-rest-api', 'If you want to refresh swagger, click terms of service and refersh the browser', config.get('terms_of_service'), api_version);
     const new_version_swagger = Swagger.generateOpenApiObject(info_obj, new_path_items);
-    fs.writeFileSync(`${output_swagger_path}.json`, JSON.stringify(new_version_swagger, null, 2));
     return new_version_swagger;
+  }
+
+  outputNewSwagger(new_version_swagger, output_swagger_path) {
+    fs.writeFileSync(`${output_swagger_path}.json`, JSON.stringify(new_version_swagger, null, 2));
   }
 }
 

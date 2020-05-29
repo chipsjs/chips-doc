@@ -1,0 +1,24 @@
+{
+  "GET /newApi": {
+    "name": "created api",
+    "summary": "new api for test and swagger_extention.json has't this api",
+    "method": "GET",
+    "response": {
+      "body": {
+        "a": "string: a"
+      }
+    }
+  },
+  "GET /api/update/name/after": {
+    "name": "created api",
+    "summary": "new api for test and swagger_extention.json has't this api",
+    "method": "GET",
+    "response": {
+      "body": {
+        "a": "string: a"
+      }
+    }
+  }
+}
+
+

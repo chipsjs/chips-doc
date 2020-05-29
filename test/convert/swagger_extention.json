@@ -1,0 +1,50 @@
+{
+  "/api/update/name/before": {
+    "get": {
+      "responses": {
+        "200": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "a": {
+                  "type": "string",
+                  "description": "assss"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/deleted": {
+    "get": {
+      "responses": {
+        "200": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "a": "string: a"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/newApi": {
+    "post": {
+      "responses": {
+        "200": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "a": "string: a"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
