@@ -1,3 +1,5 @@
 /node_modules/*
 .idea/*
 /test_case/*
+coverage/
+.nyc_output/
