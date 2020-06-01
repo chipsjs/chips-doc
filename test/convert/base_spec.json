@@ -75,6 +75,11 @@
         "param_new": "string"
       }
     }
+  },
+  "Get /path/:name": {
+    "name": "api",
+    "summary": "new api for test and swagger_extention.json has't this api",
+    "method": "GET"
   }
 }
 

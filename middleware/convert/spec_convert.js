@@ -414,31 +414,6 @@ class SpecConvert extends Base.factory() {
   }
 
   /**
-   * base_parameter must not have `schema`, so path
-   *
-   * @param {array} base_parameters
-   * @param {array} extention_path_object - key is path name and value is path schema
-   * @returns
-   * @memberof SpecConvert
-   */
-  _mergePathSchema(base_parameters, extention_path_object) {
-    const new_parameters = _.slice(base_parameters);
-
-    if (extention_path_object) {
-      base_parameters.forEach((parameter) => {
-        if (parameter.in === 'path') {
-          const { name } = parameter;
-          if (_.has(extention_path_object, [name])) {
-            Swagger.setPathSchema(new_parameters, name, extention_path_object[name]);
-          }
-        }
-      });
-    }
-
-    return new_parameters;
-  }
-
-  /**
    * merge extention_object to base_operation_object
    * operation_object is https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.3.md#operationObject
    *
@@ -508,7 +483,10 @@ class SpecConvert extends Base.factory() {
         if (Swagger.hasPath(result[api_name])) {
           Swagger.setParamerters(
             result[api_name],
-            this._mergePathSchema(result[api_name].parameters, extention_path_items[api_name].path)
+            this._mergeParameters(
+              result[api_name].parameters,
+              extention_path_items[api_name].parameters
+            )
           );
         }
 

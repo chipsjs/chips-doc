@@ -198,8 +198,25 @@ describe('sync swagger from new spec and extention swagger', () => {
     });
   });
 
-  describe('path changed', () => {
+  describe('path have addtional schema', () => {
+    before('run', () => {
+      swagger = Convert.getInstance().syncSwaggerJson(
+        generateSpec('Get /path/:name'),
+        generateSwagger('/path/:name')
+      );
+    });
 
+    it('should be have correct swagger', () => {
+      const parameters = _.get(swagger, ['paths', '/path/:name']);
+      const schema = Swagger.getParametersSchema(parameters);
+      assert.strictEqual(schema.length, 1);
+      assert.nestedPropertyVal(schema[0], 'in', 'path');
+      assert.nestedPropertyVal(schema[0], 'name', 'name');
+      assert.nestedPropertyVal(schema[0], 'required', true);
+      assert.nestedPropertyVal(schema[0], 'schema.description', 'aaa');
+      assert.nestedPropertyVal(schema[0], 'schema.maxLength', 100);
+      assert.nestedPropertyVal(schema[0], 'schema.type', Swagger.dataType.string);
+    });
   });
 
   describe('request body changed', () => {

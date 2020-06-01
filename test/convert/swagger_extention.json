@@ -135,5 +135,18 @@
         }
       }
     }
+  },
+  "/path/:name": {
+    "parameters": [
+      {
+        "name": "name",
+        "in": "path",
+        "schema": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "aaa"
+        }
+      }
+    ]
   }
 }
