@@ -83,7 +83,7 @@
           "name": "param1",
           "schema": {
             "type": "object",
-            "propertities": {
+            "properties": {
               "k": {
                 "type": "string"
               }
@@ -101,11 +101,11 @@
           "name": "param",
           "schema": {
             "type": "object",
-            "propertities": {
+            "properties": {
               "sub_param": {
                 "description": "sub",
                 "type": "object",
-                "propertities": {
+                "properties": {
                   "sub_sub_param": {
                     "description": "sub_sub",
                     "type": "string"
@@ -125,7 +125,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "param": {
+                "param_deleted": {
                   "type": "string",
                   "description": "aaa"
                 }
@@ -148,5 +148,110 @@
         }
       }
     ]
+  },
+  "/body/base": {
+    "post": {
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "param": {
+                  "type": "string",
+                  "maxLength": 100
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/body/created": {
+    "post": {
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "param": {
+                  "type": "string",
+                  "maxLength": 100
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/body/different": {
+    "post": {
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "param": {
+                  "type": "number"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/body/deleted": {
+    "post": {
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "param": {
+                  "type": "number"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/body/recursive": {
+    "post": {
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "param": {
+                  "type": "object",
+                  "properties": {
+                    "sub_param": {
+                      "description": "sub",
+                      "type": "object",
+                      "properties": {
+                        "sub_sub_param": {
+                          "description": "sub_sub",
+                          "type": "string",
+                          "maxLength": 100
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }

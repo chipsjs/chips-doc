@@ -80,6 +80,61 @@
     "name": "api",
     "summary": "new api for test and swagger_extention.json has't this api",
     "method": "GET"
+  },
+  "Post /body/base": {
+    "name": "api",
+    "summary": "111",
+    "method": "POST",
+    "request": {
+      "body": {
+        "param": "string aaaa"
+      }
+    }
+  },
+  "Post /body/created": {
+    "name": "api",
+    "summary": "created",
+    "method": "POST",
+    "request": {
+      "body": {
+        "param": "string",
+        "new_param": "string aaa"
+      }
+    }
+  },
+  "Post /body/different": {
+    "name": "api",
+    "summary": "different",
+    "method": "POST",
+    "request": {
+      "body": {
+        "param": "string"
+      }
+    }
+  },
+  "Post /body/deleted": {
+    "name": "api",
+    "summary": "deleted",
+    "method": "POST",
+    "request": {
+      "body": {
+        "param": "string"
+      }
+    }
+  },
+  "Post /body/recursive": {
+    "name": "api",
+    "summary": "recursive",
+    "method": "POST",
+    "request": {
+      "body": {
+        "param": {
+          "sub_param": {
+            "sub_sub_param": "string a"
+          }
+        }
+      }
+    }
   }
 }
 

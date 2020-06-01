@@ -365,7 +365,8 @@ class SpecConvert extends Base.factory() {
 
     // if type is undefined, extention_schema is all addtional property for spec
     if (typeof base_schema.type === 'undefined') {
-      return _.merge(base_schema, extention_schema);
+      const new_schema = _.cloneDeep(extention_schema);
+      return _.merge(new_schema, base_schema);
     }
 
     // if type is different, use base_obj
@@ -373,13 +374,19 @@ class SpecConvert extends Base.factory() {
       return base_schema;
     }
 
-    const new_schema = _.merge(base_schema, extention_schema);
-
+    const new_schema = _.cloneDeep(extention_schema);
     // if type is object, continue to recursive
     // if type is array, items which convert from spec are inaccurate, use extention_obj to supple
     if (base_schema.type === SwaggerDataType.object) {
       new_schema.properties = this._mergeJsonSchema(base_schema.properties,
         extention_schema.properties);
+    }
+
+    _.merge(new_schema, base_schema);
+
+    // special case for description is null
+    if (new_schema.description === '' && typeof extention_schema.description === 'string') {
+      new_schema.description = extention_schema.description;
     }
 
     return new_schema;
