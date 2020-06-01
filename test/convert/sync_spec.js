@@ -86,7 +86,127 @@ describe('sync swagger from new spec and extention swagger', () => {
     });
   });
 
-  // describe('param name changed', () => {
+  describe('query in parameters', () => {
+    describe('param have extention propertites', () => {
+      before('run', () => {
+        swagger = Convert.getInstance().syncSwaggerJson(
+          generateSpec('Get /query/base'),
+          generateSwagger('/query/base')
+        );
+        operation_object = Swagger.getOperationObjectFromSwagger(swagger, '/query/base', 'get');
+      });
 
-  // });
+      it('should be have correct swagger', () => {
+        const schema = Swagger.getParametersSchema(operation_object);
+        assert.strictEqual(schema.length, 1);
+        assert.nestedPropertyVal(schema[0], 'in', 'query');
+        assert.nestedPropertyVal(schema[0], 'name', 'param1');
+        assert.nestedPropertyVal(schema[0], 'required', false);
+        assert.nestedPropertyVal(schema[0], 'schema.description', 'string kkk');
+        assert.nestedPropertyVal(schema[0], 'schema.maxLength', 100);
+        assert.nestedPropertyVal(schema[0], 'schema.type', Swagger.dataType.string);
+      });
+    });
+
+    describe('new param and can show correctly', () => {
+      before('run', () => {
+        swagger = Convert.getInstance().syncSwaggerJson(
+          generateSpec('Get /query/created'),
+          generateSwagger('/query/created')
+        );
+        operation_object = Swagger.getOperationObjectFromSwagger(swagger, '/query/created', 'get');
+      });
+
+      it('should be have correct swagger', () => {
+        const schema = Swagger.getParametersSchema(operation_object);
+        assert.strictEqual(schema.length, 2);
+        assert.nestedPropertyVal(schema[0], 'in', 'query');
+        assert.nestedPropertyVal(schema[0], 'name', 'param1');
+        assert.nestedPropertyVal(schema[0], 'required', false);
+        assert.nestedPropertyVal(schema[0], 'schema.description', 'string kkk');
+        assert.nestedPropertyVal(schema[0], 'schema.maxLength', 100);
+        assert.nestedPropertyVal(schema[0], 'schema.type', Swagger.dataType.string);
+        assert.nestedPropertyVal(schema[1], 'in', 'query');
+        assert.nestedPropertyVal(schema[1], 'name', 'param2');
+        assert.nestedPropertyVal(schema[1], 'required', false);
+        assert.nestedPropertyVal(schema[1], 'schema.description', 'string aaa');
+        assert.nestedPropertyVal(schema[1], 'schema.type', Swagger.dataType.string);
+      });
+    });
+
+    describe('type of param is different with extention propertities', () => {
+      before('run', () => {
+        swagger = Convert.getInstance().syncSwaggerJson(
+          generateSpec('Get /query/different'),
+          generateSwagger('/query/different')
+        );
+        operation_object = Swagger.getOperationObjectFromSwagger(swagger, '/query/different', 'get');
+      });
+
+      it('should be have correct swagger', () => {
+        const schema = Swagger.getParametersSchema(operation_object);
+        assert.strictEqual(schema.length, 1);
+        assert.nestedPropertyVal(schema[0], 'in', 'query');
+        assert.nestedPropertyVal(schema[0], 'name', 'param1');
+        assert.nestedPropertyVal(schema[0], 'required', false);
+        assert.nestedPropertyVal(schema[0], 'schema.description', 'string');
+        assert.nestedPropertyVal(schema[0], 'schema.type', Swagger.dataType.string);
+      });
+    });
+
+    describe('extention param is object and need recursive', () => {
+      before('run', () => {
+        swagger = Convert.getInstance().syncSwaggerJson(
+          generateSpec('Get /query/resursive'),
+          generateSwagger('/query/resursive')
+        );
+        operation_object = Swagger.getOperationObjectFromSwagger(swagger, '/query/resursive', 'get');
+      });
+
+      it('should be have correct swagger', () => {
+        const schema = Swagger.getParametersSchema(operation_object);
+        assert.strictEqual(schema.length, 1);
+        assert.nestedPropertyVal(schema[0], 'in', 'query');
+        assert.nestedPropertyVal(schema[0], 'name', 'param');
+        assert.nestedPropertyVal(schema[0], 'required', false);
+        assert.nestedPropertyVal(schema[0], 'schema.type', Swagger.dataType.object);
+        assert.nestedPropertyVal(schema[0], 'schema.propertities.sub_param.type', Swagger.dataType.object);
+        assert.nestedPropertyVal(schema[0], 'schema.propertities.sub_param.description', 'sub');
+        assert.nestedPropertyVal(schema[0], 'schema.propertities.sub_param.propertities.sub_sub_param.type', Swagger.dataType.string);
+        assert.nestedPropertyVal(schema[0], 'schema.propertities.sub_param.propertities.sub_sub_param.description', 'sub_sub');
+      });
+    });
+
+    describe('extention param has been deleted', () => {
+      before('run', () => {
+        swagger = Convert.getInstance().syncSwaggerJson(
+          generateSpec('Get /query/deleted'),
+          generateSwagger('/query/deleted')
+        );
+        operation_object = Swagger.getOperationObjectFromSwagger(swagger, '/query/deleted', 'get');
+      });
+
+      it('should be have correct swagger', () => {
+        const schema = Swagger.getParametersSchema(operation_object);
+        assert.strictEqual(schema.length, 1);
+        assert.nestedPropertyVal(schema[0], 'in', 'query');
+        assert.nestedPropertyVal(schema[0], 'name', 'param_new');
+        assert.nestedPropertyVal(schema[0], 'required', false);
+        assert.nestedPropertyVal(schema[0], 'schema.description', 'string');
+        assert.nestedPropertyVal(schema[0], 'schema.type', Swagger.dataType.string);
+      });
+    });
+  });
+
+  describe('path changed', () => {
+
+  });
+
+  describe('request body changed', () => {
+
+  });
+
+  describe('response changed', () => {
+
+  });
 });

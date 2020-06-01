@@ -88,7 +88,10 @@ class SpecConvert extends Base.factory() {
       } else {
         switch (typeof parameter_object) {
           case 'string':
-            convert_schema[param_name] = Swagger.generateSchemaByType(this._parseType(parameter_object), parameter_object);
+            convert_schema[param_name] = Swagger.generateSchemaByType(
+              this._parseType(parameter_object),
+              parameter_object
+            );
             if (!isRequired && parameter_object.indexOf('required') !== -1) {
               result.add(param_name);
             }
@@ -347,7 +350,7 @@ class SpecConvert extends Base.factory() {
   }
 
   /**
-   * request body or response body
+   * request body or response body, please note this function will change base_schema
    *
    * @param {object} base_schema
    * @param {object} extention_schema
@@ -383,7 +386,7 @@ class SpecConvert extends Base.factory() {
   }
 
   _mergeParameters(base_parameters, extention_parameters) {
-    const new_parameters = [];
+    let new_parameters = [];
 
     if (extention_parameters) {
       base_parameters.forEach((base_parameter) => {
@@ -393,14 +396,18 @@ class SpecConvert extends Base.factory() {
           base_parameter.in
         );
 
-        if (Object.keys(extention_parameter).length !== 0) {
+        if (_.has(extention_parameter, 'schema')) {
           Swagger.addParameter(
             new_parameters,
             base_parameter,
             this._mergeJsonSchema(base_parameter.schema, extention_parameter.schema)
           )
+        } else {
+          new_parameters.push(base_parameter);
         }
       });
+    } else {
+      new_parameters = base_parameters;
     }
 
     return new_parameters;

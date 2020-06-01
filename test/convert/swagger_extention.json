@@ -46,5 +46,94 @@
         }
       }
     }
+  },  
+  "/query/base": {
+    "get": {
+      "parameters": [
+        {
+          "in": "query",
+          "name": "param1",
+          "schema": {
+            "type": "string",
+            "maxLength": 100
+          }
+        }
+      ]
+    }
+  },
+  "/query/created": {
+    "get": {
+      "parameters": [
+        {
+          "in": "query",
+          "name": "param1",
+          "schema": {
+            "type": "string",
+            "maxLength": 100
+          }
+        }
+      ]
+    }
+  },
+  "/query/different": {
+    "get": {
+      "parameters": [
+        {
+          "in": "query",
+          "name": "param1",
+          "schema": {
+            "type": "object",
+            "propertities": {
+              "k": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "/query/resursive": {
+    "get": {
+      "parameters": [
+        {
+          "in": "query",
+          "name": "param",
+          "schema": {
+            "type": "object",
+            "propertities": {
+              "sub_param": {
+                "description": "sub",
+                "type": "object",
+                "propertities": {
+                  "sub_sub_param": {
+                    "description": "sub_sub",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "/query/deleted": {
+    "get": {
+      "responses": {
+        "200": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "param": {
+                  "type": "string",
+                  "description": "aaa"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }

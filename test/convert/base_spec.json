@@ -1,6 +1,6 @@
 {
   "GET /newApi": {
-    "name": "created api",
+    "name": "api",
     "summary": "new api for test and swagger_extention.json has't this api",
     "method": "GET",
     "response": {
@@ -10,12 +10,69 @@
     }
   },
   "GET /api/update/name/after": {
-    "name": "created api",
+    "name": "api",
     "summary": "new api for test and swagger_extention.json has't this api",
     "method": "GET",
     "response": {
       "body": {
         "a": "string: a"
+      }
+    }
+  },
+  "Get /query/base": {
+    "name": "api",
+    "summary": "new api for test and swagger_extention.json has't this api",
+    "method": "GET",
+    "request": {
+      "query": {
+        "param1": "string kkk"
+      }
+    }
+  },
+  "Get /query/created": {
+    "name": "api",
+    "summary": "new api for test and swagger_extention.json has't this api",
+    "method": "GET",
+    "request": {
+      "query": {
+        "param1": "string kkk",
+        "param2": "string aaa" 
+      }
+    }
+  },
+  "Get /query/different": {
+    "name": "api",
+    "summary": "new api for test and swagger_extention.json has't this api",
+    "method": "GET",
+    "request": {
+      "query": {
+        "param1": "string"
+      }
+    }
+  },
+  "Get /query/resursive": {
+    "name": "api",
+    "summary": "new api for test and swagger_extention.json has't this api",
+    "method": "GET",
+    "request": {
+      "query": {
+        "param": {
+          "sub_param": {
+            "sub_sub_param": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Get /query/deleted": {
+    "name": "api",
+    "summary": "new api for test and swagger_extention.json has't this api",
+    "method": "GET",
+    "request": {
+      "query": {
+        "param_new": "string"
       }
     }
   }
