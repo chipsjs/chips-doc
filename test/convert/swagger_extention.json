@@ -93,7 +93,7 @@
       ]
     }
   },
-  "/query/resursive": {
+  "/query/recursive": {
     "get": {
       "parameters": [
         {
@@ -245,6 +245,27 @@
                         }
                       }
                     }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/response/base": {
+    "post": {
+      "responses": {
+        "200": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "param": {
+                    "type": "string",
+                    "maxLength": 100
                   }
                 }
               }

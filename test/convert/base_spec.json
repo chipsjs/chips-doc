@@ -50,7 +50,7 @@
       }
     }
   },
-  "Get /query/resursive": {
+  "Get /query/recursive": {
     "name": "api",
     "summary": "new api for test and swagger_extention.json has't this api",
     "method": "GET",
@@ -58,9 +58,7 @@
       "query": {
         "param": {
           "sub_param": {
-            "sub_sub_param": {
-              "type": "string"
-            }
+            "sub_sub_param": "sub sub spec"
           }
         }
       }
@@ -130,9 +128,19 @@
       "body": {
         "param": {
           "sub_param": {
-            "sub_sub_param": "string a"
+            "sub_sub_param": "sub sub spec"
           }
         }
+      }
+    }
+  },
+  "Post /response/base": {
+    "name": "api",
+    "summary": "111",
+    "method": "POST",
+    "response": {
+      "body": {
+        "param": "string aaaa"
       }
     }
   }

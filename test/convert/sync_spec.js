@@ -157,10 +157,10 @@ describe('sync swagger from new spec and extention swagger', () => {
     describe('extention param is object and need recursive', () => {
       before('run', () => {
         swagger = Convert.getInstance().syncSwaggerJson(
-          generateSpec('Get /query/resursive'),
-          generateSwagger('/query/resursive')
+          generateSpec('Get /query/recursive'),
+          generateSwagger('/query/recursive')
         );
-        operation_object = Swagger.getOperationObjectFromSwagger(swagger, '/query/resursive', 'get');
+        operation_object = Swagger.getOperationObjectFromSwagger(swagger, '/query/recursive', 'get');
       });
 
       it('should be have correct swagger', () => {
@@ -173,7 +173,7 @@ describe('sync swagger from new spec and extention swagger', () => {
         assert.nestedPropertyVal(schema[0], 'schema.properties.sub_param.type', Swagger.dataType.object);
         assert.nestedPropertyVal(schema[0], 'schema.properties.sub_param.description', 'sub');
         assert.nestedPropertyVal(schema[0], 'schema.properties.sub_param.properties.sub_sub_param.type', Swagger.dataType.string);
-        assert.nestedPropertyVal(schema[0], 'schema.properties.sub_param.properties.sub_sub_param.description', 'sub_sub');
+        assert.nestedPropertyVal(schema[0], 'schema.properties.sub_param.properties.sub_sub_param.description', 'sub sub spec');
       });
     });
 
@@ -306,8 +306,28 @@ describe('sync swagger from new spec and extention swagger', () => {
         assert.nestedPropertyVal(schema, 'properties.param.properties.sub_param.type', Swagger.dataType.object);
         assert.nestedPropertyVal(schema, 'properties.param.properties.sub_param.properties.sub_sub_param.type', Swagger.dataType.string);
         assert.nestedPropertyVal(schema, 'properties.param.properties.sub_param.properties.sub_sub_param.maxLength', 100);
-        assert.nestedPropertyVal(schema, 'properties.param.properties.sub_param.properties.sub_sub_param.type', 'sub_sub');
+        assert.nestedPropertyVal(schema, 'properties.param.properties.sub_param.properties.sub_sub_param.description', 'sub sub spec');
       });
     });
+  });
+
+  describe('response schema changed', () => {
+    describe('param have extention properties', () => {
+      before('run', () => {
+        swagger = Convert.getInstance().syncSwaggerJson(
+          generateSpec('Post /response/base'),
+          generateSwagger('/response/base')
+        );
+        operation_object = Swagger.getOperationObjectFromSwagger(swagger, '/response/base', 'post');
+      });
+
+      it('should be have correct swagger', () => {
+        const schema = Swagger.getResponseSchema(operation_object);
+        assert.exists(schema, 'properties.param');
+        assert.nestedPropertyVal(schema, 'properties.param.type', 'string');
+        assert.nestedPropertyVal(schema, 'properties.param.maxLength', 100);
+        assert.nestedPropertyVal(schema, 'properties.param.description', 'string aaaa');
+      });
+    })
   });
 });
