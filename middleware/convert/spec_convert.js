@@ -497,7 +497,7 @@ class SpecConvert extends Base.factory() {
             result[api_name],
             this._mergeParameters(
               result[api_name].parameters,
-              extention_path_items[api_name].parameters
+              _.get(extention_path_items, [api_name, 'parameters'])
             )
           );
         }
