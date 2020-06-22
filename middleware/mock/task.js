@@ -1,132 +1,164 @@
-const queryString = require('query-string');
-const dataValidate = require('jsonschema').validate;
+const fake = require('openapi-sampler');
+const _ = require('lodash');
 
-const { httpRequest } = require('../../lib/assist_macro');
-const { header, base_url } = require('../../api_dependence.json');
-// to optimize,智能识别所有url并替换,第一期先只要base_url
+const { Swagger, request: httpRequest } = require('../../lib');
 
 class Task {
-  constructor(task_name, test_case_queue, context, log_module) {
-    this._task_name = task_name;
-    this._test_case_queue = test_case_queue;
-    this._logger = log_module;
-    this._context = new Map();
-
-    if (Array.isArray(context) === true && context.length !== 0) {
-      context.forEach((ele) => {
-        this._context.set(ele, null);
-      })
-    }
+  /**
+   *Creates an instance of Task.
+   * @param {string} api_name
+   * @param {string} method_type
+   * @param {object} operation_object
+   * @param {object} real_data
+   * @param {array} path_parameters
+   * @memberof Task
+   */
+  constructor(api_name, method_type, operation_object, real_data, path_parameters = []) {
+    this._api_name = api_name;
+    this._method_type = method_type;
+    this._operation_object = operation_object;
+    this._path_parameters = path_parameters;
+    this._real_data = real_data;
   }
 
-  _check(test_case) {
-    if (typeof test_case.url !== 'string' || typeof test_case.method_type !== 'string') {
-      throw `${new TypeError(`Task::_check: error! task name is ${this._task_name}`)}. It doesnt have url or method_type`;
-    }
-  }
+  /**
+   *
+   *
+   * @static
+   * @param {object} fake_data
+   * @param {object} real_data
+   * @returns
+   * @memberof Task
+   */
+  static _mergeRequestData(fake_data, real_data) {
+    const final_data = _.cloneDeep(fake_data);
+    const specific_data = _.pick(real_data, Object.keys(fake_data));
 
-  _joinQueryField(query) {
-    return queryString.stringify(query);
-  }
-
-  _overwriteDataByContext(obj) {
-    if (typeof obj !== 'object') return;
-
-    Object.keys(obj).forEach((ele) => {
-      if (this._context.has(ele)) {
-        const value = this._context.get(ele);
-        if (value !== null) {
-          obj[ele] = value;
-        } else {
-          this._context.set(ele, obj[ele]);
-        }
+    Object.entries(specific_data).forEach(([key, value]) => {
+      if (typeof value === 'object') {
+        _.set(final_data, key, this._mergeRequestData(final_data[key], value))
+      } else {
+        _.set(final_data, key, value);
       }
     });
+
+    return final_data;
   }
 
-  _overwriteContextByResponse(obj) {
-    if (typeof obj !== 'object') return;
+  /**
+   *
+   *
+   * @static
+   * @param {object} schema - a openapi shcema object
+   * @param {object} real_data - specific request data
+   * @returns {object} final_data - object in request body
+   * @memberof Task
+   */
+  static _fakeBody(schema, real_data) {
+    if (typeof schema !== 'object') return {};
 
-    Object.keys(obj).forEach((ele) => {
-      if (this._context.has(ele)) {
-        this._context.set(ele, obj[ele]);
-      }
+    const fake_data = fake.sample(schema, {
+      skipNonRequired: false, skipReadOnly: false, skiWriteOnly: false
     });
+
+    const final_data = this._mergeRequestData(fake_data, real_data);
+
+    return final_data;
   }
 
-  _replaceUrl(url) {
-    return url.replace('{base_url}', base_url);
-  }
+  /**
+   *
+   *
+   * @static
+   * @param {array} parameters
+   * @param {object} real_data
+   * @returns {object}
+   * @memberof Task
+   */
+  static _fakeQuery(parameters, real_data) {
+    if (Array.isArray(parameters) === false) return {};
 
-  async _sendHttpRequest(test_case) {
-    let url = this._replaceUrl(test_case.url);
+    return parameters.reduce((result, item) => {
+      if (item.in !== 'query') return result;
 
-    this._overwriteDataByContext(test_case.query);
-    this._overwriteDataByContext(test_case.body);
-
-    if (typeof test_case.query === 'object') {
-      url += `?${this._joinQueryField(test_case.query)}`;
-    }
-
-    let response = {};
-    switch (test_case.method_type) {
-      case 'get':
-        response = await httpRequest.get({
-          url,
-          headers: header
-        });
-        break;
-      case 'post':
-        response = await httpRequest.post(url, test_case.body);
-        break;
-      case 'put':
-        response = await httpRequest.put(url, test_case.body);
-        break;
-      case 'delete':
-        response = await httpRequest.delete(url, test_case.body);
-        break;
-      default:
-        throw `${new TypeError(`Task::sendHttpRequest: fail! task name is ${this._task_name}`)}. It has unsupported method_type`;
-    }
-
-    // response check
-    if (response.statusCode === 200) {
-      // context overwrite
-      const response_body = JSON.parse(response.body);
-      this._overwriteContextByResponse(response_body);
-
-      if (typeof test_case.response === 'object' && test_case.response.success === 'object') {
-        const result = dataValidate(response_body, test_case.response.success);
-        if (Array.isArray(result.errors) && result.errors.length !== 0) throw new TypeError(result.errors.toString());
-      }
-    } else if (typeof test_case.response === 'object' && test_case.response.failure === 'object') {
-      const result = dataValidate(JSON.parse(response.body), test_case.response.failure);
-      if (Array.isArray(result.errors) && result.errors.length !== 0) throw new TypeError(result.errors.toString());
-    }
-
-    this._logger.debug(`Task::_sendHttpGet:task name is ${this._task_name
-    } , api_name is ${test_case.api_name}, result is ${response.body}`);
-  }
-
-  async execute() {
-    try {
-      for (const i in this._test_case_queue) {
-        const test_case = this._test_case_queue[i];
-        this._check(test_case);
-
-        await this._sendHttpRequest(test_case);
+      if (_.has(real_data, [item.name])) {
+        _.set(result, [item.name], real_data[item.name])
+      } else if (item.schema) {
+        _.set(result, [item.name], fake.sample(item.schema));
+      } else {
+        _.set(result, [item.name], '');
       }
 
-      return {
-        msg: `Task:: [${this._task_name}] execute success!!!`,
-        success_flag: true
-      };
-    } catch (e) {
-      return {
-        msg: `Task:: [${this._task_name}] execute fail!err_msg is ${e.message}`,
-        isSuccess: false
-      };
-    }
+      return result;
+    }, {})
+  }
+
+  /**
+   *
+   *
+   * @static
+   * @param {string} api_name - api name
+   * @param {array} path_parameters - swagger parameters about path
+   * @param {object} context - context param in a flow, but it's priority lower than specific
+   * @param {object} specific - specific param
+   * @returns {string} api_url
+   * @memberof Task
+   */
+  static _fakePath(api_name, path_parameters, real_data) {
+    if (Array.isArray(path_parameters) === false) return {};
+
+    const path_fake_data = path_parameters.reduce((result, item) => {
+      if (item.in !== 'path') return result;
+
+      if (_.has(real_data, [item.name])) {
+        _.set(result, [item.name], real_data[item.name])
+      } else if (item.schema) {
+        _.set(result, [item.name], fake.sample(item.schema));
+      } else {
+        _.set(result, [item.name], '');
+      }
+
+      return result;
+    }, {})
+
+    const new_url = Object.entries(path_fake_data).reduce((temp_url, [key, value]) => {
+      return temp_url.replace(`:${key}`, value);
+    }, api_name);
+
+    return new_url;
+  }
+
+  /**
+   *
+   *
+   * @param {object} context - context param in a flow, but it's priority lower than specific
+   * @param {object} specific - specific param
+   * @param {array} path_parameters - parameters of path
+   * @memberof Task
+   */
+  async request() {
+    const data = Task._fakeQuery(
+      Swagger.getParametersSchema(this._operation_object),
+      this._real_data
+    );
+    const query = Task._fakeBody(
+      Swagger.getRequestBodySchema(this._operation_object),
+      this._real_data
+    );
+    const url = Task._fakePath(
+      this._api_name,
+      this._path_parameters,
+      this._real_data
+    );
+
+    const response = await httpRequest(url, this._method_type, {
+      data,
+      query
+    })
+
+    return {
+      url, data, query, response
+    };
   }
 }
 

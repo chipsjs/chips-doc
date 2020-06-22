@@ -307,6 +307,8 @@ class Fake extends Base.factory() {
     this._api_doc_map.clear();
     fs.unlinkSync(this.temp_test_case_path());
   }
+
+  
 }
 
 module.exports = Fake;

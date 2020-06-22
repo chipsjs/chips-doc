@@ -3,5 +3,8 @@
   "temp_test_case_path": "test_case/temp.json",
   "report_path": "report",
   "openapi_version": "3.0.0",
-  "terms_of_service": "https://api-rlcn-dev-stdl.aaecosys.com"
+  "terms_of_service": "https://api-rlcn-dev-stdl.aaecosys.com",
+  "mock_server": "http://localhost:4002",
+  "cola-mock-server-port": "4002",
+  "max_report_num": 5
 }

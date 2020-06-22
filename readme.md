@@ -101,7 +101,6 @@ test_case层 -> middleware层 -> service层
 
 # todo
 - 单个mock
-- 编写快速开始的文档 (high)
 - 支持header的灵活定义 
 - api_doc实际业务的编写
 - api某些固定的调用依赖可以定义
@@ -120,12 +119,24 @@ test_case层 -> middleware层 -> service层
 
 ## todo
 
-### convert
-- the security of cola-doc  1
-
 ### fake and mock
 
-- convert swagger to json-schema 2
-- code, can't work because  backward two big version  2
+#### v1.0.0
+
+- test case
+- specific & context
+- flow 只支持 devel 的一些样本flow
+- fake, mock合并, 只提供两种模式. 清空数据/加载
+- 原mock用于test环境下的自动mock
+
+#### feature
+
 - support flow of flow
-- test case 2
+- 自定义flow
+- flow test环境
+- 提供自定义flow
+- 报告中记录每一步的输入输出
+- 第一次生成faker数据可以保留
+- 子层的flow
+
+- 用于测试整个flow的时间

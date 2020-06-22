@@ -2,8 +2,7 @@ const fs = require('fs');
 const _ = require('lodash');
 const config = require('config');
 
-const Base = require('../../lib/base_class');
-const { Swagger, SwaggerDataType } = require('../../lib/swagger_convert');
+const { Base, Swagger } = require('../../lib');
 
 class SpecConvert extends Base.factory() {
   static initialize({ log_module }) {
@@ -26,34 +25,34 @@ class SpecConvert extends Base.factory() {
 
     // there are two different schema: 1.[optional] string: or 2.String/string
     if (prefix_type === 'string' || lower_case_description.indexOf('string:') !== -1) {
-      return SwaggerDataType.string;
+      return Swagger.dataType.string;
     }
 
     if (prefix_type === 'number' || lower_case_description.indexOf('number:') !== -1) {
-      return SwaggerDataType.number;
+      return Swagger.dataType.number;
     }
 
     // A tricky way for match integer && <integer> &&
     // other cases when first ten characters have 'integer'
     if (lower_case_description === 'int' || lower_case_description.substr(0, 10).indexOf('integer') !== -1) {
-      return SwaggerDataType.integer;
+      return Swagger.dataType.integer;
     }
 
     if (prefix_type === 'object') {
-      return SwaggerDataType.object;
+      return Swagger.dataType.object;
     }
 
     if (lower_case_description.substr(0, 5) === 'array') {
-      return SwaggerDataType.array;
+      return Swagger.dataType.array;
     }
 
     // A tricky way for match boolean && <boolean> &&
     // other cases when first ten characters have 'boolean'
     if (lower_case_description.substr(0, 10).indexOf('boolean') !== -1) {
-      return SwaggerDataType.boolean;
+      return Swagger.dataType.boolean;
     }
 
-    return SwaggerDataType.unknown;
+    return Swagger.dataType.unknown;
   }
 
   /**
@@ -84,7 +83,7 @@ class SpecConvert extends Base.factory() {
 
       const parameter_object = schema[param_name];
       if (!parameter_object) {
-        convert_schema[param_name] = Swagger.generateSchemaByType(SwaggerDataType.unknown);
+        convert_schema[param_name] = Swagger.generateSchemaByType(Swagger.dataType.unknown);
       } else {
         switch (typeof parameter_object) {
           case 'string':
@@ -114,16 +113,16 @@ class SpecConvert extends Base.factory() {
             if (Array.isArray(parameter_object)) {
               // default spec format is as the same as api_spec['3.0,0'].xxx.events
               if (parameter_object.length === 0) {
-                convert_schema[param_name] = Swagger.generateSchemaByType(SwaggerDataType.array);
+                convert_schema[param_name] = Swagger.generateSchemaByType(Swagger.dataType.array);
               } else {
                 const temp_type = typeof parameter_object[0];
                 if (temp_type === 'object') {
                   // default spec format is as the same as api_spec['3.0,0'].xxx.events
                   const convert_child_schema = this._parseDetailSchema(parameter_object[0]);
-                  const items = Swagger.generateSchemaByType(SwaggerDataType.object, '', {
+                  const items = Swagger.generateSchemaByType(Swagger.dataType.object, '', {
                     properties: convert_child_schema.convert_schema
                   });
-                  convert_schema[param_name] = Swagger.generateSchemaByType(SwaggerDataType.array, '', { items });
+                  convert_schema[param_name] = Swagger.generateSchemaByType(Swagger.dataType.array, '', { items });
                 } else if (temp_type === 'string') {
                   // such as locks: ['lockid1', 'lockid2']
                   convert_schema[param_name] = Swagger.generateSchemaByType('array', parameter_object[0])
@@ -132,9 +131,9 @@ class SpecConvert extends Base.factory() {
             } else {
               const convert_child_schema = this._parseDetailSchema(parameter_object);
               if (Object.keys(convert_child_schema) === 0) {
-                convert_schema[param_name] = Swagger.generateSchemaByType(SwaggerDataType.object, '');
+                convert_schema[param_name] = Swagger.generateSchemaByType(Swagger.dataType.object, '');
               } else {
-                convert_schema[param_name] = Swagger.generateSchemaByType(SwaggerDataType.object, '', {
+                convert_schema[param_name] = Swagger.generateSchemaByType(Swagger.dataType.object, '', {
                   properties: convert_child_schema.convert_schema
                 });
               }
@@ -144,7 +143,7 @@ class SpecConvert extends Base.factory() {
             convert_schema[param_name] = Swagger.generateSchemaByType(this._parseType(schema[param_name].name, ''));
             break;
           default:
-            convert_schema[param_name] = Swagger.generateSchemaByType(SwaggerDataType.unknown, '');
+            convert_schema[param_name] = Swagger.generateSchemaByType(Swagger.dataType.unknown, '');
             break;
         }
       }
@@ -379,7 +378,7 @@ class SpecConvert extends Base.factory() {
 
     // if type is object, continue to recursive
     // if type is array, items which convert from spec are inaccurate, use extention_obj to supple
-    if (base_schema.type === SwaggerDataType.object) {
+    if (base_schema.type === Swagger.dataType.object) {
       new_schema.properties = Object.entries(base_schema.properties).reduce(
         (result, [key, value]) => {
           const sub_schema = this._mergeJsonSchema(value, _.get(extention_schema, ['properties', key]));

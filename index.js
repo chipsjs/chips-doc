@@ -1,5 +1,5 @@
-const Log = require('./middleware/log');
-const Setting = require('./middleware/setting');
-const Convert = require('./middleware/convert/spec_convert');
-
-module.exports = { Log, Setting, Convert };
+module.exports.Log = require('./middleware/log');
+module.exports.Setting = require('./middleware/setting');
+module.exports.Convert = require('./middleware/convert/spec_convert');
+module.exports.TaskFlow = require('./middleware/mock/task_flow');
+module.exports.Report = require('./middleware/mock/report');

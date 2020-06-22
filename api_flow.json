@@ -20,7 +20,7 @@
       },
       "B": {
         "action": "commit"
-      },
+      }
     },
   "schecule_2": {
     "flow": ["A", "B"],

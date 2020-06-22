@@ -1,6 +1,6 @@
 {
-  "single_1": {
-    "flow": ["basic"]
+  "flow_1": {
+    "flow": ["get /api1"]
   },
   "single_2": {
     "flow": ["string_types"]

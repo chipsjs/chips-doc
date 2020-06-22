@@ -6,10 +6,19 @@
       "otherUserID": "todo"
     },
     "postValidation_1": {
-      "action": "commit",
-      "accessType": "always",
-      "state": "load",
-      "otherUserID": "todo"
+      "request": {
+        "action": "context",
+        "accessType": "always",
+        "state": "load"
+      },
+      "response": {
+        "userInfo": {
+          "action": "action"
+        }
+      }
+    },
+    "context": {
+      "action": "aaa"
     }
   },
   "test": {
