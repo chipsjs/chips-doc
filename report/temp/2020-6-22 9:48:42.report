@@ -1,0 +1,10 @@
+[2020-06-22T21:48:42.127] [INFO] default - ******fail report: 0 errors******
+[2020-06-22T21:48:42.128] [INFO] default - ***************************************
+[2020-06-22T21:48:42.128] [INFO] default - ******normal reports******
+[2020-06-22T21:48:42.128] [INFO] default - REQUEST::url: /api1, method: get, query: {}, data: {"param1":"string"}
+[2020-06-22T21:48:42.128] [INFO] default - RESPONSE::url: /api1, method: get, response: {"data":{"success":true},"status":200}
+[2020-06-22T21:48:42.137] [INFO] default - ******fail report: 0 errors******
+[2020-06-22T21:48:42.137] [INFO] default - ***************************************
+[2020-06-22T21:48:42.137] [INFO] default - ******normal reports******
+[2020-06-22T21:48:42.137] [INFO] default - REQUEST::url: /api1, method: get, query: {}, data: {"param1":"a"}
+[2020-06-22T21:48:42.137] [INFO] default - RESPONSE::url: /api1, method: get, response: {"data":{"success":false},"status":200}

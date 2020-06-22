@@ -1,4 +1,5 @@
 const _ = require('lodash');
+const dataValidate = require('jsonschema').validate;
 
 const Task = require('./task');
 const Report = require('./report');
@@ -30,6 +31,27 @@ class TaskFlow {
   }
 
   /**
+   * validator reponse by swagger's response shcema
+   *
+   * @param {string} api_info_name
+   * @param {object} response
+   * @param {string} response.status
+   * @param {object} response.data
+   * @param {object} schema
+   * @memberof TaskFlow
+   */
+  _validatorResponse(api_info_name, response, schema) {
+    if (response.status !== 200) {
+      this._reporter().addFailReport(api_info_name, response, 'request fail');
+    } else {
+      const result = dataValidate(response.data, schema);
+      if (Array.isArray(result.errors) && result.errors.length !== 0) {
+        return this._reporter().addFailReport(api_info_name, response, `${result.errors.toString()}`);
+      }
+    }
+  }
+
+  /**
    *
    *
    * @param {object} swagger
@@ -45,7 +67,12 @@ class TaskFlow {
 
     try {
       await loop.forEach(api_flow.flow.values(), async (api_info_name) => {
-        const [method_type, api_name] = api_info_name.split(' ');
+        const [method_type, api_name_with_perfix] = api_info_name.split(' ');
+        let api_name = api_name_with_perfix;
+        const pos = api_name_with_perfix.indexOf('@');
+        if (pos !== -1) {
+          api_name = api_name_with_perfix.substr(0, pos);
+        }
         const operation_obj = Swagger.getOperationObjectFromSwagger(swagger, api_name, method_type);
         if (typeof operation_obj !== 'object') {
           this._reporter.addReport(`${api_name} no exist in swagger`, false);
@@ -61,14 +88,14 @@ class TaskFlow {
         );
 
         const {
-          url, data, query, response
+          data, params, response
         } = await task.request();
 
-        this._reporter.addRequestReport(url, method_type, query, data);
-        this._reporter.addResponseReport(url, method_type, response);
-        if (response.status !== 200) {
-          throw new TypeError(`${api_name} request fail`);
-        }
+        this._reporter.addRequestReport(api_info_name, params, data, response);
+        this._validatorResponse(
+          api_info_name, response,
+          Swagger.getResponseSchema(operation_obj)
+        );
 
         this._updateContext(response.data, _.get(api_flow, [api_info_name, 'response']));
       });

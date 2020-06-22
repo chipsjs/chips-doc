@@ -9,22 +9,19 @@
   "paths": {
     "/api1": {
       "get": {
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "propertities": {
-                  "param1": {
-                    "type": "string",
-                    "maxLength": 10,
-                    "minLength": 2
-                  }
-                }
-              }
+        "parameters": [
+          {
+            "name": "param1",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 10,
+              "minLength": 2,
+              "description": "param1"
             }
           }
-        },
+        ],
         "responses": {
           "200": {
             "description": "",

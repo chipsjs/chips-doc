@@ -121,9 +121,7 @@ class Task {
       return result;
     }, {})
 
-    const new_url = Object.entries(path_fake_data).reduce((temp_url, [key, value]) => {
-      return temp_url.replace(`:${key}`, value);
-    }, api_name);
+    const new_url = Object.entries(path_fake_data).reduce((temp_url, [key, value]) => temp_url.replace(`:${key}`, value), api_name);
 
     return new_url;
   }
@@ -137,11 +135,11 @@ class Task {
    * @memberof Task
    */
   async request() {
-    const data = Task._fakeQuery(
+    const params = Task._fakeQuery(
       Swagger.getParametersSchema(this._operation_object),
       this._real_data
     );
-    const query = Task._fakeBody(
+    const data = Task._fakeBody(
       Swagger.getRequestBodySchema(this._operation_object),
       this._real_data
     );
@@ -152,12 +150,12 @@ class Task {
     );
 
     const response = await httpRequest(url, this._method_type, {
-      data,
-      query
+      params,
+      data
     })
 
     return {
-      url, data, query, response
+      url, data, params, response
     };
   }
 }

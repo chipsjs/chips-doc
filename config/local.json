@@ -6,5 +6,5 @@
   "terms_of_service": "https://api-rlcn-dev-stdl.aaecosys.com",
   "mock_server": "http://localhost:4002",
   "cola-mock-server-port": "4002",
-  "max_report_num": 5
+  "max_report_num": 4
 }

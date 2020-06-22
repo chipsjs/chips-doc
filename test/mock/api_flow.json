@@ -2,6 +2,14 @@
   "flow_1": {
     "flow": ["get /api1"]
   },
+  "flow_2": {
+    "flow": ["get /api1"],
+    "get /api1": {
+      "request": {
+        "param1": "a"
+      }
+    }
+  },
   "single_2": {
     "flow": ["string_types"]
   }

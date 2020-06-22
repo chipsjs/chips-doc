@@ -29,7 +29,7 @@ class Report {
       }
     }
 
-    // TODO, 未来同一个reporter只留三份report
+    // TODO, 文件名排序, 直接取0有问题
     const time = moment().format('YYYY-M-D h:mm:ss');
     this._report_path = `${report_path}/${time}.report`;
     log4js.configure({
@@ -47,61 +47,59 @@ class Report {
   /**
    *
    *
-   * @param {string} url
-   * @param {string} method_type
+   * @param {string} api_info_name - eg: 'POST /test@1'
    * @param {object} response
+   * @param {string} response.status
+   * @param {object} response.data
+   * @param {string} message - err message
    * @memberof Report
    */
-  addResponseReport(url, method_type, response) {
-    if (response.status !== 200) {
-      this._fail_report_queue.push({
-        url,
-        method_type,
-        response,
-        isRequest: false
-      });
-    }
-
-    this._report_queue.push({
-      url,
-      method_type,
+  addFailReport(api_info_name, response, message) {
+    this._fail_report_queue.push({
+      api_info_name,
       response,
-      isRequest: false
+      message
     });
   }
 
   /**
    *
    *
-   * @param {string} url
-   * @param {string} method_type
+   * @param {string} api_info_name - eg: 'POST /test@1'
    * @param {object} query
    * @param {object} data
+   * @param {object} response
    * @memberof Report
    */
-  addRequestReport(url, method_type, query, data) {
+  addRequestReport(api_info_name, params, data, response) {
     this._report_queue.push({
-      url,
-      method_type,
-      query,
+      api_info_name,
+      params,
       data,
       isRequest: true
+    });
+
+    this._report_queue.push({
+      api_info_name,
+      response,
+      isRequest: false
     });
   }
 
   report() {
     this._logger.info(`******fail report: ${this._fail_report_queue.length} errors******`);
-    this._fail_report_queue.forEach((ele) => this._logger.info(ele));
+    this._fail_report_queue.forEach((ele) => {
+      this._logger.error(`Fail::api name: ${ele.api_info_name}, response: ${JSON.stringify(ele.response)}, message: ${ele.message}`);
+      this._logger.info(ele);
+    });
     this._logger.info('***************************************');
     this._logger.info('******normal reports******');
 
     this._report_queue.forEach((ele) => {
-      const { url, method_type, isRequest } = ele;
-
-      if (isRequest) {
-        this._logger.info(`REQUEST::url: ${url}, method: ${method_type}, query: ${JSON.stringify(ele.query)}, data: ${JSON.stringify(ele.data)}`);
+      if (ele.isRequest) {
+        this._logger.info(`REQUEST::api name: ${ele.api_info_name}, query: ${JSON.stringify(ele.params)}, data: ${JSON.stringify(ele.data)}`);
       } else {
-        this._logger.info(`RESPONSE::url: ${url}, method: ${method_type}, response: ${JSON.stringify(ele.response)}`);
+        this._logger.info(`RESPONSE::api name: ${ele.api_info_name}, response: ${JSON.stringify(ele.response)}`);
       }
     });
   }
