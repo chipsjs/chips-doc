@@ -66,14 +66,16 @@ class Report {
    *
    *
    * @param {string} api_info_name - eg: 'POST /test@1'
+   * @param {string} url - eg: 'POST /test'
    * @param {object} query
    * @param {object} data
    * @param {object} response
    * @memberof Report
    */
-  addRequestReport(api_info_name, params, data, response) {
+  addRequestReport(api_info_name, url, params, data, response) {
     this._report_queue.push({
       api_info_name,
+      url,
       params,
       data,
       isRequest: true
@@ -81,6 +83,7 @@ class Report {
 
     this._report_queue.push({
       api_info_name,
+      url,
       response,
       isRequest: false
     });
@@ -89,17 +92,16 @@ class Report {
   report() {
     this._logger.info(`******fail report: ${this._fail_report_queue.length} errors******`);
     this._fail_report_queue.forEach((ele) => {
-      this._logger.error(`Fail::api name: ${ele.api_info_name}, response: ${JSON.stringify(ele.response)}, message: ${ele.message}`);
-      this._logger.info(ele);
+      this._logger.info(`Fail::api name: ${ele.api_info_name}, response: ${JSON.stringify(ele.response)}, message: ${ele.message}`);
     });
-    this._logger.info('***************************************');
+    this._logger.info('------------------------------------');
     this._logger.info('******normal reports******');
 
     this._report_queue.forEach((ele) => {
       if (ele.isRequest) {
-        this._logger.info(`REQUEST::api name: ${ele.api_info_name}, query: ${JSON.stringify(ele.params)}, data: ${JSON.stringify(ele.data)}`);
+        this._logger.info(`REQUEST::api name: ${ele.api_info_name}, url: ${ele.url}, query: ${JSON.stringify(ele.params)}, data: ${JSON.stringify(ele.data)}`);
       } else {
-        this._logger.info(`RESPONSE::api name: ${ele.api_info_name}, response: ${JSON.stringify(ele.response)}`);
+        this._logger.info(`RESPONSE::api name: ${ele.api_info_name}, url: ${ele.url}, response: ${JSON.stringify(ele.response)}`);
       }
     });
   }

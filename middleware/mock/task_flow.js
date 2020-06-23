@@ -9,17 +9,25 @@ class TaskFlow {
   constructor(user, log_module) {
     this._logger = log_module || console;
     this._reporter = new Report(user);
+    this._context = {};
   }
 
   /**
    *
    *
    * @param {object} response_data
-   * @param {object} need_update_context_data
+   * @param {object} need_update_context_data - todo
    * @memberof TaskFlow
    */
   _updateContext(response_data, need_update_context_data) {
-    if (typeof need_update_context_data === 'undefined') return;
+    if (typeof need_update_context_data !== 'object' || Object.keys(need_update_context_data).length === 0) {
+      Object.keys(this._context).forEach((key) => {
+        if (_.has(response_data, key) && typeof response_data[key] !== 'undefined' && typeof response_data[key] !== 'object') {
+          _.set(this._context, key, response_data[key]);
+        }
+      });
+      return;
+    }
 
     Object.entries(need_update_context_data).forEach(([key, value]) => {
       if (typeof value === 'string') {
@@ -46,7 +54,7 @@ class TaskFlow {
     } else {
       const result = dataValidate(response.data, schema);
       if (Array.isArray(result.errors) && result.errors.length !== 0) {
-        return this._reporter().addFailReport(api_info_name, response, `${result.errors.toString()}`);
+        this._reporter().addFailReport(api_info_name, response, `${result.errors.toString()}`);
       }
     }
   }
@@ -62,11 +70,19 @@ class TaskFlow {
    * key is api info name, value is the specific param in this api
    * @memberof TaskQueue
    */
-  async excute(swagger, api_flow) {
-    this._context = api_flow.context || {};
+  async execute(swagger, api_flow) {
+    let step_name = '';
 
     try {
+      if (Array.isArray(api_flow.context)) {
+        api_flow.context.forEach((key) => {
+          _.set(this._context, key, null);
+        })
+      }
+
       await loop.forEach(api_flow.flow.values(), async (api_info_name) => {
+        step_name = api_info_name;
+
         const [method_type, api_name_with_perfix] = api_info_name.split(' ');
         let api_name = api_name_with_perfix;
         const pos = api_name_with_perfix.indexOf('@');
@@ -75,7 +91,6 @@ class TaskFlow {
         }
         const operation_obj = Swagger.getOperationObjectFromSwagger(swagger, api_name, method_type);
         if (typeof operation_obj !== 'object') {
-          this._reporter.addReport(`${api_name} no exist in swagger`, false);
           throw new TypeError(`${api_name} no exist in swagger`);
         }
 
@@ -88,10 +103,10 @@ class TaskFlow {
         );
 
         const {
-          data, params, response
+          url, data, params, response
         } = await task.request();
 
-        this._reporter.addRequestReport(api_info_name, params, data, response);
+        this._reporter.addRequestReport(api_info_name, url, params, data, response);
         this._validatorResponse(
           api_info_name, response,
           Swagger.getResponseSchema(operation_obj)
@@ -100,6 +115,7 @@ class TaskFlow {
         this._updateContext(response.data, _.get(api_flow, [api_info_name, 'response']));
       });
     } catch (err) {
+      this._reporter.addFailReport(step_name, {}, err.message);
       this._logger.error(`TaskQueue::excute fail, err msg is ${err.message}`);
     }
 

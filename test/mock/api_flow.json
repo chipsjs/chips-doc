@@ -10,7 +10,41 @@
       }
     }
   },
-  "single_2": {
-    "flow": ["string_types"]
+  "flow_3": {
+    "flow": ["post /api2"]
+  },
+  "flow_4": {
+    "flow": ["post /api2"],
+    "post /api2": {
+      "request": {
+        "param1": "D"
+      }
+    }
+  },
+  "flow_5": {
+    "flow": ["get /api3/:param1"]
+  },
+  "flow_6": {
+    "flow": ["get /api3/:param1"],
+    "get /api4": {
+      "request": {
+        "param1": "D"
+      }
+    }
+  },
+  "flow_7": {
+    "flow": ["post /api2@1", "post /api2@2"],
+    "post /api2@2": {
+      "request": {
+        "param1": "D"
+      }
+    }
+  },
+  "flow_8": {
+    "flow": ["post /api2", "get /api1"]
+  },
+  "flow_9": {
+    "flow": ["post /api2", "post /api4"],
+    "context": ["success"]
   }
 }

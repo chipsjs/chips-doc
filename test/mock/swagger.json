@@ -18,13 +18,92 @@
               "type": "string",
               "maxLength": 10,
               "minLength": 2,
-              "description": "param1"
+              "description": "when length >= 2 && < 10, api server will return true, or not return false"
             }
           }
         ],
         "responses": {
           "200": {
             "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "true, false"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "api 1"
+        ],
+        "summary": "1"
+      }
+    },
+    "/api2": {
+      "post": {
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "param1": {
+                    "type": "string",
+                    "desription": "",
+                    "enum": ["A", "B", "C"]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "when key is A, B, C, will return true, or not return false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "true, false"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "api 2"
+        ],
+        "summary": "2"
+      }
+    },
+    "/api3/:param1": {
+      "parameters": [
+        {
+          "name": "param1",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "enum": ["A", "B", "C"]
+          }
+        }
+      ],
+      "get": {
+        "responses": {
+          "200": {
+            "description": "when path key is A, B, C, will return true, or not return false",
             "content": {
               "application/json": {
                 "schema": {
@@ -41,9 +120,50 @@
           }
         },
         "tags": [
-          "api 1"
+          "api"
         ],
-        "summary": "1"
+        "summary": "3"
+      }
+    },
+    "/api4": {
+      "post": {
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "success": {
+                    "type": "string",
+                    "desription": "depend on api2 response"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "when key is true, will return true, or not return false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "true, false"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "api"
+        ],
+        "summary": "4"
       }
     }
   }

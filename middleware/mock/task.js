@@ -37,7 +37,7 @@ class Task {
     Object.entries(specific_data).forEach(([key, value]) => {
       if (typeof value === 'object') {
         _.set(final_data, key, this._mergeRequestData(final_data[key], value))
-      } else {
+      } else if (value) {
         _.set(final_data, key, value);
       }
     });
@@ -57,9 +57,7 @@ class Task {
   static _fakeBody(schema, real_data) {
     if (typeof schema !== 'object') return {};
 
-    const fake_data = fake.sample(schema, {
-      skipNonRequired: false, skipReadOnly: false, skiWriteOnly: false
-    });
+    const fake_data = fake.sample(schema);
 
     const final_data = this._mergeRequestData(fake_data, real_data);
 
@@ -105,7 +103,7 @@ class Task {
    * @memberof Task
    */
   static _fakePath(api_name, path_parameters, real_data) {
-    if (Array.isArray(path_parameters) === false) return {};
+    if (Array.isArray(path_parameters) === false || path_parameters.length === 0) return api_name;
 
     const path_fake_data = path_parameters.reduce((result, item) => {
       if (item.in !== 'path') return result;

@@ -1,5 +1,0 @@
-[2020-06-22T21:44:57.249] [INFO] default - ******fail report: 0 errors******
-[2020-06-22T21:44:57.250] [INFO] default - ***************************************
-[2020-06-22T21:44:57.250] [INFO] default - ******normal reports******
-[2020-06-22T21:44:57.250] [INFO] default - REQUEST::url: /api1, method: get, query: {}, data: {"param1":"string"}
-[2020-06-22T21:44:57.251] [INFO] default - RESPONSE::url: /api1, method: get, response: {"data":{"success":true},"status":200}
