@@ -28,10 +28,8 @@
     "nyc": "^15.0.1"
   },
   "scripts": {
-    "fake": "node ./entry/fake.js",
-    "mock": "node ./entry/mock.js",
     "convert": "node ./entry/convert.js",
-    "test": "mocha",
+    "test": "mocha ./test/*",
     "test-convert": "mocha ./test/convert",
     "test-mock": "mocha ./test/mock",
     "coverage": "nyc npm run test",

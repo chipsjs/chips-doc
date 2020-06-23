@@ -15,6 +15,28 @@ class TaskFlow {
   /**
    *
    *
+   * @static
+   * @param {string} api_name - step n's name, eg: '/user/:id@1'
+   * @returns {{method_type: string, url: string}} eg: {'Get', '/user/:id'}
+   * @memberof TaskFlow
+   */
+  static getApiInfoFromStepName(step_name) {
+    const [method_type, api_name_with_suffix] = step_name.split(' ');
+
+    const pos = api_name_with_suffix.indexOf('@');
+    if (pos !== -1) {
+      return {
+        method_type,
+        url: api_name_with_suffix.substr(0, pos)
+      };
+    }
+
+    return { method_type, url: api_name_with_suffix };
+  }
+
+  /**
+   *
+   *
    * @param {object} response_data
    * @param {object} need_update_context_data - todo
    * @memberof TaskFlow
@@ -41,20 +63,20 @@ class TaskFlow {
   /**
    * validator reponse by swagger's response shcema
    *
-   * @param {string} api_info_name
+   * @param {string} step_name - step n in the flow, eg: 'Get /test/id'
    * @param {object} response
    * @param {string} response.status
    * @param {object} response.data
    * @param {object} schema
    * @memberof TaskFlow
    */
-  _validatorResponse(api_info_name, response, schema) {
+  _validatorResponse(step_name, response, schema) {
     if (response.status !== 200) {
-      this._reporter().addFailReport(api_info_name, response, 'request fail');
+      this._reporter.addFailReport(step_name, response, 'request fail');
     } else {
       const result = dataValidate(response.data, schema);
       if (Array.isArray(result.errors) && result.errors.length !== 0) {
-        this._reporter().addFailReport(api_info_name, response, `${result.errors.toString()}`);
+        this._reporter.addFailReport(step_name, response, `${result.errors.toString()}`);
       }
     }
   }
@@ -63,59 +85,56 @@ class TaskFlow {
    *
    *
    * @param {object} swagger
-   * @param {object} api_flow
-   * @param {array} api_flow.flow - array of string , string is api info name,
-   *  such as ["post /User", "post /Validation_1", "post /Validation_2"]
-   * @param {object} api_flow[api_info_name] -
-   * key is api info name, value is the specific param in this api
+   * @param {{flow: string[], context: string[], extension: object}} api_flow
    * @memberof TaskQueue
    */
   async execute(swagger, api_flow) {
-    let step_name = '';
+    let current_step_name = '';
+    const { flow, context, extension } = api_flow;
 
     try {
-      if (Array.isArray(api_flow.context)) {
-        api_flow.context.forEach((key) => {
+      if (Array.isArray(context)) {
+        this._context = context.reduce((result, key) => {
+          _.set(result, key, null);
+          return result;
+        }, {});
+
+        context.forEach((key) => {
           _.set(this._context, key, null);
         })
       }
 
-      await loop.forEach(api_flow.flow.values(), async (api_info_name) => {
-        step_name = api_info_name;
+      await loop.forEach(flow.values(), async (step_name) => {
+        current_step_name = step_name;
 
-        const [method_type, api_name_with_perfix] = api_info_name.split(' ');
-        let api_name = api_name_with_perfix;
-        const pos = api_name_with_perfix.indexOf('@');
-        if (pos !== -1) {
-          api_name = api_name_with_perfix.substr(0, pos);
-        }
-        const operation_obj = Swagger.getOperationObjectFromSwagger(swagger, api_name, method_type);
+        const { method_type, url } = TaskFlow.getApiInfoFromStepName(step_name);
+        const operation_obj = Swagger.getOperationObjectFromSwagger(swagger, url, method_type);
         if (typeof operation_obj !== 'object') {
-          throw new TypeError(`${api_name} no exist in swagger`);
+          throw new TypeError(`${url} no exist in swagger`);
         }
 
-        const task = new Task(
-          api_name,
+        const task = new Task({
+          url,
           method_type,
           operation_obj,
-          _.merge({}, this._context, _.get(api_flow, [api_info_name, 'request'])),
-          Swagger.getPathParameters(swagger, api_name)
-        );
+          real_data: _.merge({}, this._context, _.get(extension, [step_name, 'request'])),
+          path_parameters: Swagger.getPathParameters(swagger, url)
+        });
 
         const {
-          url, data, params, response
+          new_url, data, params, response
         } = await task.request();
 
-        this._reporter.addRequestReport(api_info_name, url, params, data, response);
+        this._reporter.addRequestReport(step_name, new_url, params, data, response);
         this._validatorResponse(
-          api_info_name, response,
+          step_name, response,
           Swagger.getResponseSchema(operation_obj)
         );
 
-        this._updateContext(response.data, _.get(api_flow, [api_info_name, 'response']));
+        this._updateContext(response.data, _.get(extension, [step_name, 'response']));
       });
     } catch (err) {
-      this._reporter.addFailReport(step_name, {}, err.message);
+      this._reporter.addFailReport(current_step_name, {}, err.message);
       this._logger.error(`TaskQueue::excute fail, err msg is ${err.message}`);
     }
 
@@ -132,5 +151,3 @@ class TaskFlow {
 }
 
 module.exports = TaskFlow;
-
-// 加载任务，加载公用数据到loader中

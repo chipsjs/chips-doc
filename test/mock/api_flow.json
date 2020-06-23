@@ -4,9 +4,11 @@
   },
   "flow_2": {
     "flow": ["get /api1"],
-    "get /api1": {
-      "request": {
-        "param1": "a"
+    "extension": {
+      "get /api1": {
+        "request": {
+          "param1": "a"
+        }
       }
     }
   },
@@ -15,9 +17,11 @@
   },
   "flow_4": {
     "flow": ["post /api2"],
-    "post /api2": {
-      "request": {
-        "param1": "D"
+    "extension": {
+      "post /api2": {
+        "request": {
+          "param1": "D"
+        }
       }
     }
   },
@@ -26,17 +30,21 @@
   },
   "flow_6": {
     "flow": ["get /api3/:param1"],
-    "get /api4": {
-      "request": {
-        "param1": "D"
+    "extension": {
+      "get /api4": {
+        "request": {
+          "param1": "D"
+        }
       }
     }
   },
   "flow_7": {
     "flow": ["post /api2@1", "post /api2@2"],
-    "post /api2@2": {
-      "request": {
-        "param1": "D"
+    "extension": {
+      "post /api2@2": {
+        "request": {
+          "param1": "D"
+        }
       }
     }
   },

@@ -1,0 +1,28 @@
+[2020-06-23T18:46:57.015] [INFO] default - ******fail report: 1 errors******
+[2020-06-23T18:46:57.015] [INFO] default - Fail::api name: post /api2, response: {}, message: connect ECONNREFUSED 127.0.0.1:4002
+[2020-06-23T18:46:57.015] [INFO] default - ------------------------------------
+[2020-06-23T18:46:57.015] [INFO] default - ******normal reports******
+[2020-06-23T18:46:57.017] [INFO] default - ******fail report: 1 errors******
+[2020-06-23T18:46:57.018] [INFO] default - Fail::api name: post /api2, response: {}, message: connect ECONNREFUSED 127.0.0.1:4002
+[2020-06-23T18:46:57.018] [INFO] default - ------------------------------------
+[2020-06-23T18:46:57.018] [INFO] default - ******normal reports******
+[2020-06-23T18:46:57.020] [INFO] default - ******fail report: 1 errors******
+[2020-06-23T18:46:57.020] [INFO] default - Fail::api name: get /api3/:param1, response: {}, message: connect ECONNREFUSED 127.0.0.1:4002
+[2020-06-23T18:46:57.020] [INFO] default - ------------------------------------
+[2020-06-23T18:46:57.020] [INFO] default - ******normal reports******
+[2020-06-23T18:46:57.023] [INFO] default - ******fail report: 1 errors******
+[2020-06-23T18:46:57.023] [INFO] default - Fail::api name: get /api3/:param1, response: {}, message: connect ECONNREFUSED 127.0.0.1:4002
+[2020-06-23T18:46:57.023] [INFO] default - ------------------------------------
+[2020-06-23T18:46:57.023] [INFO] default - ******normal reports******
+[2020-06-23T18:46:57.025] [INFO] default - ******fail report: 1 errors******
+[2020-06-23T18:46:57.026] [INFO] default - Fail::api name: post /api2@1, response: {}, message: connect ECONNREFUSED 127.0.0.1:4002
+[2020-06-23T18:46:57.026] [INFO] default - ------------------------------------
+[2020-06-23T18:46:57.026] [INFO] default - ******normal reports******
+[2020-06-23T18:46:57.028] [INFO] default - ******fail report: 1 errors******
+[2020-06-23T18:46:57.028] [INFO] default - Fail::api name: post /api2, response: {}, message: connect ECONNREFUSED 127.0.0.1:4002
+[2020-06-23T18:46:57.028] [INFO] default - ------------------------------------
+[2020-06-23T18:46:57.028] [INFO] default - ******normal reports******
+[2020-06-23T18:46:57.030] [INFO] default - ******fail report: 1 errors******
+[2020-06-23T18:46:57.030] [INFO] default - Fail::api name: post /api2, response: {}, message: connect ECONNREFUSED 127.0.0.1:4002
+[2020-06-23T18:46:57.031] [INFO] default - ------------------------------------
+[2020-06-23T18:46:57.031] [INFO] default - ******normal reports******

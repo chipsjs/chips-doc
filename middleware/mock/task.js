@@ -2,21 +2,22 @@ const fake = require('openapi-sampler');
 const _ = require('lodash');
 
 const { Swagger, request: httpRequest } = require('../../lib');
+const { keys } = require('lodash');
 
 class Task {
   /**
    *Creates an instance of Task.
-   * @param {string} api_name
-   * @param {string} method_type
-   * @param {object} operation_object
-   * @param {object} real_data
-   * @param {array} path_parameters
+   * @param {{url: string, method_type: string,
+   *  operation_obj: object, real_data: object, path_parameters: object[]
+   * }}
    * @memberof Task
    */
-  constructor(api_name, method_type, operation_object, real_data, path_parameters = []) {
-    this._api_name = api_name;
+  constructor({
+    url, method_type, operation_obj, real_data, path_parameters = []
+  }) {
+    this._url = url;
     this._method_type = method_type;
-    this._operation_object = operation_object;
+    this._operation_object = operation_obj;
     this._path_parameters = path_parameters;
     this._real_data = real_data;
   }
@@ -74,7 +75,7 @@ class Task {
    * @memberof Task
    */
   static _fakeQuery(parameters, real_data) {
-    if (Array.isArray(parameters) === false) return {};
+    if (!Array.isArray(parameters)) return {};
 
     return parameters.reduce((result, item) => {
       if (item.in !== 'query') return result;
@@ -103,7 +104,7 @@ class Task {
    * @memberof Task
    */
   static _fakePath(api_name, path_parameters, real_data) {
-    if (Array.isArray(path_parameters) === false || path_parameters.length === 0) return api_name;
+    if (!Array.isArray(path_parameters) || path_parameters.length === 0) return api_name;
 
     const path_fake_data = path_parameters.reduce((result, item) => {
       if (item.in !== 'path') return result;
@@ -119,7 +120,17 @@ class Task {
       return result;
     }, {})
 
-    const new_url = Object.entries(path_fake_data).reduce((temp_url, [key, value]) => temp_url.replace(`:${key}`, value), api_name);
+    const new_url = Object.entries(path_fake_data).reduce((temp_url, [key, value]) => {
+      if (temp_url.indexOf(`/:${key}/`) !== -1) {
+        return temp_url.replace(`/:${key}/`, `/${value}/`);
+      }
+
+      if (temp_url.substr(temp_url.length - key.length - 1) === `:${key}`) {
+        return `${temp_url.substr(0, temp_url.length - key.length - 1)}${value}`;
+      }
+
+      return temp_url;
+    }, api_name);
 
     return new_url;
   }
@@ -141,19 +152,19 @@ class Task {
       Swagger.getRequestBodySchema(this._operation_object),
       this._real_data
     );
-    const url = Task._fakePath(
-      this._api_name,
+    const new_url = Task._fakePath(
+      this._url,
       this._path_parameters,
       this._real_data
     );
 
-    const response = await httpRequest(url, this._method_type, {
+    const response = await httpRequest(new_url, this._method_type, {
       params,
       data
     })
 
     return {
-      url, data, params, response
+      new_url, data, params, response
     };
   }
 }

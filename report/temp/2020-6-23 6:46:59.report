@@ -1,0 +1,50 @@
+[2020-06-23T18:46:59.812] [INFO] default - ******fail report: 0 errors******
+[2020-06-23T18:46:59.813] [INFO] default - ------------------------------------
+[2020-06-23T18:46:59.813] [INFO] default - ******normal reports******
+[2020-06-23T18:46:59.813] [INFO] default - REQUEST::api name: get /api1, url: /api1, query: {"param1":"string"}, data: {}
+[2020-06-23T18:46:59.813] [INFO] default - RESPONSE::api name: get /api1, url: /api1, response: {"data":{"success":true},"status":200}
+[2020-06-23T18:46:59.822] [INFO] default - ******fail report: 0 errors******
+[2020-06-23T18:46:59.822] [INFO] default - ------------------------------------
+[2020-06-23T18:46:59.822] [INFO] default - ******normal reports******
+[2020-06-23T18:46:59.822] [INFO] default - REQUEST::api name: get /api1, url: /api1, query: {"param1":"a"}, data: {}
+[2020-06-23T18:46:59.822] [INFO] default - RESPONSE::api name: get /api1, url: /api1, response: {"data":{"success":false},"status":200}
+[2020-06-23T18:46:59.827] [INFO] default - ******fail report: 0 errors******
+[2020-06-23T18:46:59.827] [INFO] default - ------------------------------------
+[2020-06-23T18:46:59.827] [INFO] default - ******normal reports******
+[2020-06-23T18:46:59.827] [INFO] default - REQUEST::api name: post /api2, url: /api2, query: {}, data: {"param1":"A"}
+[2020-06-23T18:46:59.827] [INFO] default - RESPONSE::api name: post /api2, url: /api2, response: {"data":{"success":true},"status":200}
+[2020-06-23T18:46:59.831] [INFO] default - ******fail report: 0 errors******
+[2020-06-23T18:46:59.831] [INFO] default - ------------------------------------
+[2020-06-23T18:46:59.831] [INFO] default - ******normal reports******
+[2020-06-23T18:46:59.831] [INFO] default - REQUEST::api name: post /api2, url: /api2, query: {}, data: {"param1":"D"}
+[2020-06-23T18:46:59.831] [INFO] default - RESPONSE::api name: post /api2, url: /api2, response: {"data":{"success":false},"status":200}
+[2020-06-23T18:46:59.834] [INFO] default - ******fail report: 0 errors******
+[2020-06-23T18:46:59.834] [INFO] default - ------------------------------------
+[2020-06-23T18:46:59.834] [INFO] default - ******normal reports******
+[2020-06-23T18:46:59.834] [INFO] default - REQUEST::api name: get /api3/:param1, url: /api3/A, query: {}, data: {}
+[2020-06-23T18:46:59.834] [INFO] default - RESPONSE::api name: get /api3/:param1, url: /api3/A, response: {"data":{"success":true},"status":200}
+[2020-06-23T18:46:59.837] [INFO] default - ******fail report: 0 errors******
+[2020-06-23T18:46:59.837] [INFO] default - ------------------------------------
+[2020-06-23T18:46:59.837] [INFO] default - ******normal reports******
+[2020-06-23T18:46:59.837] [INFO] default - REQUEST::api name: get /api3/:param1, url: /api3/A, query: {}, data: {}
+[2020-06-23T18:46:59.837] [INFO] default - RESPONSE::api name: get /api3/:param1, url: /api3/A, response: {"data":{"success":true},"status":200}
+[2020-06-23T18:46:59.850] [INFO] default - ******fail report: 0 errors******
+[2020-06-23T18:46:59.851] [INFO] default - ------------------------------------
+[2020-06-23T18:46:59.851] [INFO] default - ******normal reports******
+[2020-06-23T18:46:59.851] [INFO] default - REQUEST::api name: post /api2@1, url: /api2, query: {}, data: {"param1":"A"}
+[2020-06-23T18:46:59.851] [INFO] default - RESPONSE::api name: post /api2@1, url: /api2, response: {"data":{"success":true},"status":200}
+[2020-06-23T18:46:59.851] [INFO] default - REQUEST::api name: post /api2@2, url: /api2, query: {}, data: {"param1":"D"}
+[2020-06-23T18:46:59.851] [INFO] default - RESPONSE::api name: post /api2@2, url: /api2, response: {"data":{"success":false},"status":200}
+[2020-06-23T18:46:59.855] [INFO] default - ******fail report: 0 errors******
+[2020-06-23T18:46:59.855] [INFO] default - ------------------------------------
+[2020-06-23T18:46:59.856] [INFO] default - ******normal reports******
+[2020-06-23T18:46:59.856] [INFO] default - REQUEST::api name: post /api2, url: /api2, query: {}, data: {"param1":"A"}
+[2020-06-23T18:46:59.856] [INFO] default - RESPONSE::api name: post /api2, url: /api2, response: {"data":{"success":true},"status":200}
+[2020-06-23T18:46:59.856] [INFO] default - REQUEST::api name: get /api1, url: /api1, query: {"param1":"string"}, data: {}
+[2020-06-23T18:46:59.856] [INFO] default - RESPONSE::api name: get /api1, url: /api1, response: {"data":{"success":true},"status":200}
+[2020-06-23T18:46:59.861] [INFO] default - ******fail report: 0 errors******
+[2020-06-23T18:46:59.861] [INFO] default - ------------------------------------
+[2020-06-23T18:46:59.861] [INFO] default - ******normal reports******
+[2020-06-23T18:46:59.861] [INFO] default - REQUEST::api name: post /api2, url: /api2, query: {}, data: {"param1":"A"}
+[2020-06-23T18:46:59.861] [INFO] default - RESPONSE::api name: post /api2, url: /api2, response: {"data":{"success":true},"status":200}
+[2020-06-23T18:46:59.861] [INFO] default - REQUEST::api name: post /api4, url: /api4, query: {}, data: {"success":true}
