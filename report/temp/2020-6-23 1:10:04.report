@@ -1,7 +1,0 @@
-[2020-06-23T13:10:04.004] [INFO] default - ******fail report: 0 errors******
-[2020-06-23T13:10:04.004] [INFO] default - ------------------------------------
-[2020-06-23T13:10:04.004] [INFO] default - ******normal reports******
-[2020-06-23T13:10:04.004] [INFO] default - REQUEST::api name: post /api2, url: /api2, query: {}, data: {"param1":"A"}
-[2020-06-23T13:10:04.004] [INFO] default - RESPONSE::api name: post /api2, url: /api2, response: {"data":{"success":true},"status":200}
-[2020-06-23T13:10:04.004] [INFO] default - REQUEST::api name: post /api4, url: /api4, query: {}, data: {"success":true}
-[2020-06-23T13:10:04.004] [INFO] default - RESPONSE::api name: post /api4, url: /api4, response: {"data":{"success":true},"status":200}
