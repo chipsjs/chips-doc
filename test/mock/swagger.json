@@ -165,6 +165,43 @@
         ],
         "summary": "4"
       }
+    },
+    "/api5/:id/": {
+      "parameters": [
+        {
+          "name":"id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "enum": ["1"]
+          }
+        }
+      ],
+      "post": {
+        "responses": {
+          "200": {
+            "description": "when key is true, will return true, or not return false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "true, false"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "api"
+        ],
+        "summary": "5"
+      }
     }
   }
 }

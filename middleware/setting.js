@@ -1,10 +1,3 @@
-/**
- * define process config,but config will overwrite by process.env
- *
- *
- * @author Kris Xu
- * @date 2019/12/18
- */
 const config = require('config');
 const Base = require('../lib/base_class');
 

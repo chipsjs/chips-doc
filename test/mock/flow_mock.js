@@ -119,6 +119,24 @@ describe('flow mock', () => {
         assert.nestedPropertyVal(report_queue[1], 'response.data.success', true);
       });
     });
+
+    describe('api5 | path is in the middle of url', () => {
+      let report_queue;
+
+      before('mock', async () => {
+        const task_flow = new TaskFlow('temp');
+        await task_flow.execute(swagger, api_flow.flow_10);
+        report_queue = task_flow.outputReport();
+      });
+
+      it('should have right output', () => {
+        assert.strictEqual(report_queue.length, 2);
+        assert.nestedPropertyVal(report_queue[0], 'api_info_name', api_flow.flow_10.flow[0]);
+        assert.nestedPropertyVal(report_queue[1], 'api_info_name', api_flow.flow_10.flow[0]);
+        assert.nestedPropertyVal(report_queue[1], 'response.status', 200);
+        assert.nestedPropertyVal(report_queue[1], 'response.data.success', true);
+      });
+    });
   });
 
   describe('same api call multi times', () => {
@@ -191,9 +209,6 @@ describe('flow mock', () => {
   });
 
   // TODO, context 是递归的
-
-  // TODO, path a/:userID/B
-
   after('stop mock server', () => {
     mock_server.shutdown();
   });

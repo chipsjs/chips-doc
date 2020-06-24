@@ -4,7 +4,7 @@ const _ = require('lodash');
 const base_spec = require('./base_spec.json');
 const extention_swagger = require('./swagger_extention');
 const Convert = require('../../middleware/convert/spec_convert');
-const { Swagger } = require('../../lib/swagger_convert');
+const { Swagger } = require('../../lib');
 
 /**
  * used to mock a spec

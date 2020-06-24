@@ -54,5 +54,8 @@
   "flow_9": {
     "flow": ["post /api2", "post /api4"],
     "context": ["success"]
+  },
+  "flow_10": {
+    "flow": ["post /api5/:id/"]
   }
 }

@@ -98,10 +98,12 @@ test_case层 -> middleware层 -> service层
 - 便于调试与定位bug，一次编写全组（cloud,android,ios）使用,不用费心调配各种环境
 - 解决同事之间的低效沟通，规范后端与悉相关业移动端之间的开发接口，避免出现一个业务流程中少api，调错api以及调乱api的情况 
 - 对不熟悉模块的开发更友善，能更快熟务逻辑
+- 用于测试整个flow的时间
 
 # todo
+
 - 单个mock
-- 支持header的灵活定义 
+- 支持header的灵活定义
 - api_doc实际业务的编写
 - api某些固定的调用依赖可以定义
 - special_case等改成文件夹，自动加载
@@ -139,8 +141,9 @@ test_case层 -> middleware层 -> service层
 - 第一次生成faker数据可以保留
 - 子层的flow
 
-- 用于测试整个flow的时间
+### optimize & thoughts
 
-### todo
 - coverage pending
-- items fake 
+- items fake
+- UT test mock不开server
+- 绝对路径来做key
