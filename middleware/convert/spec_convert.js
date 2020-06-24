@@ -17,7 +17,7 @@ class SpecConvert extends Base.factory() {
    * parse description to get data type
    *
    * @param {string} description - '[optional] string: user email'
-   * @return {string} type - string | number | object | array | boolean | unknown
+   * @returns {string} type - string | number | object | array | boolean | unknown
    */
   _parseType(description) {
     const lower_case_description = description.toLowerCase();
@@ -59,12 +59,12 @@ class SpecConvert extends Base.factory() {
    *
    * @param {object} schema - {pin: 'the pin for this user', slot: 'the slot for user'}
    * @param {boolean} isRequired - when is true, all params in shcema is required
-   * @return {object} value
-   * @return {object} value.convert_schema - {
+   * @returns {{convert_chema: object, required_param_arr: string[]}}
+   * convert_schema: {
    *    pin: {descriptions: 'the pin for this user', type: 'string' },
    *    slot: {descriptions: 'the slot for user', type: 'number' }
    * }
-   * @return {array} value.required_param_arr -  ['pin', 'slot']
+   * required_param_arr: ['pin', 'slot']
    */
   _parseDetailSchema(schema, isRequired = false) {
     let convert_schema = {};
@@ -163,7 +163,7 @@ class SpecConvert extends Base.factory() {
   /**
    * spec api_name is 'GET /test/:id/' and real_api_name is '/test/:id/'
    *
-   * @param {string} api_name
+   * @param {string} api_name - which is '${method_type} ${api_name}'
    * @returns {string} - real_api_name
    * @memberof SpecConvert
    */
@@ -182,7 +182,7 @@ class SpecConvert extends Base.factory() {
    * @param {string} api_name - eg: 'GET /test/:id/'
    * @param {string} excepted_method_type -
    * excepted method type, it is from method or methodtype property of spec
-   * @returns
+   * @returns {string} - real method_type
    * @memberof SpecConvert
    */
   _getRealMethodType(api_name, excepted_method_type = '') {
@@ -200,8 +200,9 @@ class SpecConvert extends Base.factory() {
 
   /**
    * parse old_format_doc[api_name].request.body
+   *
    * @param {object} spec_schema - old_format_doc[api_name].request.body
-   * @return {object} convert_query - api_doc[api_name].request.body
+   * @returns {object} convert_query - api_doc[api_name].request.body
    */
   _parseSpecSchema(spec_schema) {
     // filter spec_schema is string
@@ -237,8 +238,9 @@ class SpecConvert extends Base.factory() {
 
   /**
    * parse old_format_doc[api_name].request.body
+   *
    * @param {object} spec_schema - api_spec[api_name].request.body
-   * @return {object} convert_request - api_doc[api_name].request
+   * @returns {object} convert_request - api_doc[api_name].request
    */
   parseRequestBodySchema(spec_schema) {
     if (typeof spec_schema !== 'object' || Object.keys(spec_schema).length === 0) return null;
@@ -249,8 +251,9 @@ class SpecConvert extends Base.factory() {
 
   /**
    * parse old_format_doc[api_name].request.query
-   * @param {object} request - api_spec[api_name].request.body
-   * @return {object} convert_request - api_doc[api_name].request
+   *
+   * @param {object} spec_schema - api_spec[api_name].request.body
+   * @returns {object} convert_request - api_doc[api_name].request
    */
   parseQuerySchema(spec_schema) {
     if (!spec_schema) return null;
@@ -261,8 +264,9 @@ class SpecConvert extends Base.factory() {
 
   /**
    * parse old_format_doc[api_name].response
+   *
    * @param {object} spec_schema - api_spec[api_name].response
-   * @return {object} convert_response - api_doc[api_name].response
+   * @returns {object} convert_response - api_doc[api_name].response
    */
   parseResponseSchema(spec_schema) {
     if (!spec_schema) return null;
@@ -273,8 +277,9 @@ class SpecConvert extends Base.factory() {
 
   /**
    * parse path
+   *
    * @param {object} real_api_name - real_api_name
-   * @return {object} convert_schema -
+   * @returns {object} convert_schema -
    */
   parsePathSchema(real_api_name) {
     if (!real_api_name) return null;
@@ -327,13 +332,14 @@ class SpecConvert extends Base.factory() {
 
   /**
    * convert api spec to api doc json, overwrite
-   * @param {object} spec_dpc - key is api name,
-   * value is detail info
+   *
+   * @param {object} spec_doc - key is api name, value is detail info
    * @param {string} spec_output_path - output path
    * @param {string} api_version - api version
-   * @return {object} new_format_doc - return api_doc_json, key is api name,
+   * @returns {object} new_format_doc - return api_doc_json, key is api name,
    * value is detail info follow the api doc, such as
-  */
+   *
+   */
   run(spec_doc, spec_output_path, api_version) {
     const path_items = this.convertSpec2Swagger(spec_doc);
     const info_obj = Swagger.generateInfoObject('august-rest-api', 'If you want to refresh swagger, click terms of service and refersh the browser', config.get('terms_of_service'), api_version);
@@ -351,8 +357,8 @@ class SpecConvert extends Base.factory() {
   /**
    * request body or response body, please note this function will change base_schema
    *
-   * @param {object} base_schema
-   * @param {object} extention_schema
+   * @param {object} base_schema - convert from server spec
+   * @param {object} extention_schema - addtional schema
    * @returns {object} new_schema
    * @memberof SpecConvert
    */
@@ -428,7 +434,7 @@ class SpecConvert extends Base.factory() {
    * merge extention_object to base_operation_object
    * operation_object is https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.3.md#operationObject
    *
-   * @param {object} base_operation_object
+   * @param {object} base_operation_object - base operation object converted by server spec
    * @param {object} extention_object - it may have four kinds of key: path, query, response, body
    *  path value's format is json schema and other type is swagger operation object format
    * @returns {object} new_operation_object
@@ -478,7 +484,6 @@ class SpecConvert extends Base.factory() {
    *
    * @param {object} lastest_spec_doc - base spec doc
    * @param {string} extention_path_items - the depedence extention path items of swagger
-   * @param {string} output_swagger_path - output path of new version swagger
    * @param {string} api_version - api version
    * @returns {object} new_version_swagger
    * @memberof SpecConvert

@@ -1,8 +1,0 @@
-[2020-06-23T18:46:57.003] [INFO] default - ******fail report: 1 errors******
-[2020-06-23T18:46:57.004] [INFO] default - Fail::api name: get /api1, response: {}, message: read ECONNRESET
-[2020-06-23T18:46:57.004] [INFO] default - ------------------------------------
-[2020-06-23T18:46:57.005] [INFO] default - ******normal reports******
-[2020-06-23T18:46:57.006] [INFO] default - ******fail report: 1 errors******
-[2020-06-23T18:46:57.006] [INFO] default - Fail::api name: get /api1, response: {}, message: read ECONNRESET
-[2020-06-23T18:46:57.006] [INFO] default - ------------------------------------
-[2020-06-23T18:46:57.006] [INFO] default - ******normal reports******

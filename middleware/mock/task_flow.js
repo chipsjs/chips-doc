@@ -16,7 +16,7 @@ class TaskFlow {
    *
    *
    * @static
-   * @param {string} api_name - step n's name, eg: '/user/:id@1'
+   * @param {string} step_name - step n's name, eg: '/user/:id@1'
    * @returns {{method_type: string, url: string}} eg: {'Get', '/user/:id'}
    * @memberof TaskFlow
    */
@@ -37,7 +37,7 @@ class TaskFlow {
   /**
    *
    *
-   * @param {object} response_data
+   * @param {object} response_data - http response
    * @param {object} need_update_context_data - todo
    * @memberof TaskFlow
    */
@@ -64,10 +64,10 @@ class TaskFlow {
    * validator reponse by swagger's response shcema
    *
    * @param {string} step_name - step n in the flow, eg: 'Get /test/id'
-   * @param {object} response
-   * @param {string} response.status
-   * @param {object} response.data
-   * @param {object} schema
+   * @param {object} response - http response
+   * @param {string} response.status - http status code
+   * @param {object} response.data - http response body
+   * @param {object} schema - openapi response schema
    * @memberof TaskFlow
    */
   _validatorResponse(step_name, response, schema) {
@@ -84,8 +84,8 @@ class TaskFlow {
   /**
    *
    *
-   * @param {object} swagger
-   * @param {{flow: string[], context: string[], extension: object}} api_flow
+   * @param {object} swagger - swagger document
+   * @param {{flow: string[], context: string[], extension: object}} api_flow - flow
    * @memberof TaskQueue
    */
   async execute(swagger, api_flow) {
@@ -98,10 +98,6 @@ class TaskFlow {
           _.set(result, key, null);
           return result;
         }, {});
-
-        context.forEach((key) => {
-          _.set(this._context, key, null);
-        })
       }
 
       await loop.forEach(flow.values(), async (step_name) => {
@@ -125,7 +121,7 @@ class TaskFlow {
           new_url, data, params, response
         } = await task.request();
 
-        this._reporter.addRequestReport(step_name, new_url, params, data, response);
+        this._reporter.addReport(step_name, new_url, params, data, response);
         this._validatorResponse(
           step_name, response,
           Swagger.getResponseSchema(operation_obj)

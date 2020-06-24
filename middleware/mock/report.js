@@ -48,9 +48,9 @@ class Report {
    *
    *
    * @param {string} api_info_name - eg: 'POST /test@1'
-   * @param {object} response
-   * @param {string} response.status
-   * @param {object} response.data
+   * @param {object} response - http response
+   * @param {string} response.status - response status code
+   * @param {object} response.data - response response body
    * @param {string} message - err message
    * @memberof Report
    */
@@ -63,16 +63,15 @@ class Report {
   }
 
   /**
-   *
-   *
    * @param {string} api_info_name - eg: 'POST /test@1'
    * @param {string} url - eg: 'POST /test'
-   * @param {object} query
-   * @param {object} data
-   * @param {object} response
+   * @param {object} params - query data
+   * @param {object} data - request body
+   * @param {object} response - response data
+   * @returns {undefined}
    * @memberof Report
    */
-  addRequestReport(api_info_name, url, params, data, response) {
+  addReport(api_info_name, url, params, data, response) {
     this._report_queue.push({
       api_info_name,
       url,

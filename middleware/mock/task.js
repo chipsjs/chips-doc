@@ -2,14 +2,14 @@ const fake = require('openapi-sampler');
 const _ = require('lodash');
 
 const { Swagger, request: httpRequest } = require('../../lib');
-const { keys } = require('lodash');
 
 class Task {
   /**
-   *Creates an instance of Task.
+   * Creates an instance of Task.
+   *
    * @param {{url: string, method_type: string,
    *  operation_obj: object, real_data: object, path_parameters: object[]
-   * }}
+   * }} instance - instance args
    * @memberof Task
    */
   constructor({
@@ -26,9 +26,9 @@ class Task {
    *
    *
    * @static
-   * @param {object} fake_data
-   * @param {object} real_data
-   * @returns
+   * @param {object} fake_data - fake data from document
+   * @param {object} real_data - specific data or context data
+   * @returns {object} - final data which is based on fake data and is merged by real data
    * @memberof Task
    */
   static _mergeRequestData(fake_data, real_data) {
@@ -51,7 +51,7 @@ class Task {
    *
    * @static
    * @param {object} schema - a openapi shcema object
-   * @param {object} real_data - specific request data
+   * @param {object} real_data - data merged from specific data and context_data
    * @returns {object} final_data - object in request body
    * @memberof Task
    */
@@ -69,9 +69,9 @@ class Task {
    *
    *
    * @static
-   * @param {array} parameters
-   * @param {object} real_data
-   * @returns {object}
+   * @param {object[]} parameters - parameters which is openapi format
+   * @param {object} real_data - data merged from specific data and context_data
+   * @returns {object} - query data
    * @memberof Task
    */
   static _fakeQuery(parameters, real_data) {
@@ -93,13 +93,10 @@ class Task {
   }
 
   /**
-   *
-   *
    * @static
    * @param {string} api_name - api name
-   * @param {array} path_parameters - swagger parameters about path
-   * @param {object} context - context param in a flow, but it's priority lower than specific
-   * @param {object} specific - specific param
+   * @param {object[]} path_parameters - swagger parameters about path
+   * @param {object} real_data - will overwrite fake data
    * @returns {string} api_url
    * @memberof Task
    */
@@ -136,11 +133,9 @@ class Task {
   }
 
   /**
+   * fake data & http request
    *
-   *
-   * @param {object} context - context param in a flow, but it's priority lower than specific
-   * @param {object} specific - specific param
-   * @param {array} path_parameters - parameters of path
+   * @returns {{new_url: string, data: object, params: object, response: object}} - request info
    * @memberof Task
    */
   async request() {

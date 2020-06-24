@@ -1,12 +1,12 @@
 module.exports = {
-  extends: ['airbnb-base'],
+  extends: ['airbnb-base', 'plugin:jsdoc/recommended'],
   env: {
     browser: true,
     commonjs: true,
     es6: true,
     mocha: true
   },
-  plugins: ['import', 'mocha'],
+  plugins: ['import', 'mocha', 'jsdoc'],
   globals: {},
   parserOptions: {
     ecmaVersion: 2019,
