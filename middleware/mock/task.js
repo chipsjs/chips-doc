@@ -1,6 +1,5 @@
 const fake = require('openapi-sampler');
 const _ = require('lodash');
-const config = require('config');
 
 const { Swagger, request: httpRequest } = require('../../lib');
 
@@ -14,13 +13,14 @@ class Task {
    * @memberof Task
    */
   constructor({
-    url, method_type, operation_obj, real_data, path_parameters = []
+    url, method_type, headers, operation_obj, real_data, path_parameters = []
   }) {
     this._url = url;
     this._method_type = method_type;
     this._operation_object = operation_obj;
     this._path_parameters = path_parameters;
     this._real_data = real_data;
+    this._headers = headers;
   }
 
   /**
@@ -157,7 +157,7 @@ class Task {
     const response = await httpRequest(new_url, this._method_type, {
       params,
       data,
-      headers: config.get('headers') || {}
+      headers: this._headers
     })
 
     return {

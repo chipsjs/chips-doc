@@ -86,9 +86,10 @@ class TaskFlow {
    *
    * @param {object} swagger - swagger document
    * @param {{flow: string[], context: string[], extension: object}} api_flow - flow
+   * @param {object} headers - http headers
    * @memberof TaskQueue
    */
-  async execute(swagger, api_flow) {
+  async execute(swagger, api_flow, headers = {}) {
     let current_step_name = '';
     const { flow, context, extension } = api_flow;
 
@@ -114,7 +115,8 @@ class TaskFlow {
           method_type,
           operation_obj,
           real_data: _.merge({}, this._context, _.get(extension, [step_name, 'request'])),
-          path_parameters: Swagger.getPathParameters(swagger, url)
+          path_parameters: Swagger.getPathParameters(swagger, url),
+          headers
         });
 
         const {
