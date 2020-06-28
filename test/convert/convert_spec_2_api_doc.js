@@ -3,6 +3,7 @@ const fs = require('fs');
 const _ = require('lodash');
 
 const Convert = require('../../middleware/convert/spec_convert');
+const { Swagger } = require('../../lib');
 
 describe('convert spec to generate api doc', () => {
   let specJson = {};
@@ -1262,6 +1263,39 @@ describe('convert spec to generate api doc', () => {
 
     after('clean file', () => {
       fs.unlinkSync('test/convert/temp/tag.json');
+    });
+  });
+
+  describe('request body/query key is unstandard and should right it', () => {
+    before('set source data', () => {
+      specJson = {
+        'Get /test': {
+          method: 'post',
+          request: {
+            body: {
+              '[a]': 'ttt'
+            }
+          }
+        }
+      }
+    });
+
+    before('convert normal spec to api doc', () => {
+      specResult = Convert.getInstance().run(specJson, 'test/convert/temp/unstandard');
+    });
+
+    it('should generate correct api doc', () => {
+      const api_name = '/test';
+      assert.exists(specResult[api_name]);
+      assert.exists(specResult[api_name].get);
+      const operation_object = Swagger.getOperationObject(specResult[api_name], 'get');
+      const body = Swagger.getRequestBodySchema(operation_object);
+      assert.property(body.properties, 'a');
+      assert.notProperty(body.properties, '[a]');
+    });
+
+    after('clean file', () => {
+      fs.unlinkSync('test/convert/temp/unstandard.json');
     });
   });
 });

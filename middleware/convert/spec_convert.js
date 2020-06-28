@@ -69,8 +69,12 @@ class SpecConvert extends Base.factory() {
   _parseDetailSchema(schema, isRequired = false) {
     let convert_schema = {};
     let prev_param_name;
-    const required_param_set = Object.keys(schema).reduce((result, param_name) => {
-      if (param_name === '...') return result;
+    const required_param_set = Object.keys(schema).reduce((result, cur_param_name) => {
+      if (typeof cur_param_name !== 'string' || cur_param_name === '...') return result;
+      let param_name = cur_param_name;
+      if (cur_param_name[0] === '[' && cur_param_name[cur_param_name.length - 1] === ']') {
+        param_name = cur_param_name.substr(1, cur_param_name.length - 2);
+      }
 
       // param_name is userid2, prev_param_name is userid, param name will ignore
       if (param_name.indexOf(prev_param_name) === 0) {
@@ -81,7 +85,7 @@ class SpecConvert extends Base.factory() {
         }
       }
 
-      const parameter_object = schema[param_name];
+      const parameter_object = schema[cur_param_name];
       if (!parameter_object) {
         convert_schema[param_name] = Swagger.generateSchemaByType(Swagger.dataType.unknown);
       } else {
@@ -140,7 +144,7 @@ class SpecConvert extends Base.factory() {
             }
             break;
           case 'function': // super special schema, like spec[3.0.0].xxx.nextPage
-            convert_schema[param_name] = Swagger.generateSchemaByType(this._parseType(schema[param_name].name, ''));
+            convert_schema[param_name] = Swagger.generateSchemaByType(this._parseType(schema[cur_param_name].name, ''));
             break;
           default:
             convert_schema[param_name] = Swagger.generateSchemaByType(Swagger.dataType.unknown, '');
