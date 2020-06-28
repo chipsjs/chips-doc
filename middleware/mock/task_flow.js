@@ -144,6 +144,10 @@ class TaskFlow {
   destoryReport() {
     return this._reporter.destoryReport();
   }
+
+  readReport() {
+    return this._reporter.readReport();
+  }
 }
 
 module.exports = TaskFlow;
