@@ -6,5 +6,9 @@
   "terms_of_service": "https://api-rlcn-dev-stdl.aaecosys.com",
   "mock_server": "http://localhost:4002",
   "cola-mock-server-port": "4002",
-  "max_report_num": 4
+  "max_report_num": 4,
+  "headers": {
+    "user-agent": "August/Luna-1.0.6 (Android; SDK 28; PBDM00)",
+    "content-type": "application/json"
+  }
 }
