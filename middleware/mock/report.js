@@ -1,7 +1,4 @@
-const log4js = require('log4js');
 const fs = require('fs');
-const moment = require('moment');
-
 const config = require('config');
 
 const base_path = config.get('report_path') || './';
@@ -11,37 +8,28 @@ if (!fs.existsSync(base_path)) {
   fs.mkdirSync(base_path);
 }
 
+const _initReport = (reporter) => {
+  let report_path = `${base_path}/${reporter}`
+  if (!fs.existsSync(report_path)) {
+    fs.mkdirSync(report_path);
+  } else {
+    const file = fs.readdirSync(report_path);
+    if (file.length >= max_report_num) {
+      fs.unlinkSync(`${report_path}/${file[0]}`);
+    }
+  }
+
+  // TODO, 文件名排序, 直接取0有问题
+  const time = new Date().toISOString();
+  report_path = `${report_path}/${time}.report`;
+  return report_path;
+}
+
 class Report {
   constructor(reporter) {
     this._report_queue = [];
     this._fail_report_queue = [];
-    this._logger = this.initReport(reporter);
-  }
-
-  initReport(reporter) {
-    const report_path = `${base_path}/${reporter}`
-    if (!fs.existsSync(report_path)) {
-      fs.mkdirSync(report_path);
-    } else {
-      const file = fs.readdirSync(report_path);
-      if (file.length >= max_report_num) {
-        fs.unlinkSync(`${report_path}/${file[0]}`);
-      }
-    }
-
-    // TODO, 文件名排序, 直接取0有问题
-    const time = moment().format('YYYY-M-D h:mm:ss');
-    this._report_path = `${report_path}/${time}.report`;
-    log4js.configure({
-      appenders: {
-        report: { type: 'file', filename: this._report_path }
-      },
-      categories: {
-        default: { appenders: ['report'], level: 'info' }
-      }
-    });
-
-    return log4js.getLogger();
+    this._report_path = _initReport(reporter);
   }
 
   /**
@@ -89,20 +77,24 @@ class Report {
   }
 
   report() {
-    this._logger.info(`******fail report: ${this._fail_report_queue.length} errors******`);
+    const buffer = Buffer.from('', 'utf-8');
+
+    buffer.write(`******fail report: ${this._fail_report_queue.length} errors******\n`);
     this._fail_report_queue.forEach((ele) => {
-      this._logger.info(`Fail::api name: ${ele.api_info_name}, response: ${JSON.stringify(ele.response)}, message: ${ele.message}`);
+      buffer.write(`Fail::api name: ${ele.api_info_name}, response: ${JSON.stringify(ele.response)}, message: ${ele.message}\n`);
     });
-    this._logger.info('------------------------------------');
-    this._logger.info('******normal reports******');
+    buffer.write('------------------------------------\n');
+    buffer.write('******normal reports******\n');
 
     this._report_queue.forEach((ele) => {
       if (ele.isRequest) {
-        this._logger.info(`REQUEST::api name: ${ele.api_info_name}, url: ${ele.url}, query: ${JSON.stringify(ele.params)}, data: ${JSON.stringify(ele.data)}`);
+        buffer.write(`REQUEST::api name: ${ele.api_info_name}, url: ${ele.url}, query: ${JSON.stringify(ele.params)}, data: ${JSON.stringify(ele.data)}\n`);
       } else {
-        this._logger.info(`RESPONSE::api name: ${ele.api_info_name}, url: ${ele.url}, response: ${JSON.stringify(ele.response)}`);
+        buffer.write(`RESPONSE::api name: ${ele.api_info_name}, url: ${ele.url}, response: ${JSON.stringify(ele.response)}\n`);
       }
     });
+
+    fs.writeFileSync(this._report_path, buffer, 'binary');
   }
 
   outputReport() {

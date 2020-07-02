@@ -330,4 +330,20 @@ describe('sync swagger from new spec and extention swagger', () => {
       });
     })
   });
+
+  // describe('api no exist in base but exist in extention', () => {
+  //   before('run', () => {
+  //     swagger = Convert.getInstance().syncSwaggerJson(
+  //       {},
+  //       generateSwagger('/addtional')
+  //     );
+  //     operation_object = Swagger.getOperationObjectFromSwagger(swagger, '/addtional', 'post');
+  //   });
+
+  //   it('should be have correct swagger', () => {
+  //     const schema = Swagger.getRequestBodySchema(operation_object);
+  //     assert.nestedPropertyVal(schema, 'properties.param.type', Swagger.dataType.object);
+  //     assert.nestedPropertyVal(schema, 'properties.param.properties.param.type', Swagger.dataType.number);
+  //   });
+  // });
 });
