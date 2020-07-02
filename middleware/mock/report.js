@@ -77,24 +77,24 @@ class Report {
   }
 
   report() {
-    const buffer = Buffer.from('', 'utf-8');
+    const buffer_arr = [];
 
-    buffer.write(`******fail report: ${this._fail_report_queue.length} errors******\n`);
+    buffer_arr.push(Buffer.from(`------fail report: ${this._fail_report_queue.length} error------\n`));
     this._fail_report_queue.forEach((ele) => {
-      buffer.write(`Fail::api name: ${ele.api_info_name}, response: ${JSON.stringify(ele.response)}, message: ${ele.message}\n`);
+      buffer_arr.push(Buffer.from(`Fail::api name: ${ele.api_info_name}, response: ${JSON.stringify(ele.response)}, message: ${ele.message}\n`));
     });
-    buffer.write('------------------------------------\n');
-    buffer.write('******normal reports******\n');
+    buffer_arr.push(Buffer.from('------------------------------------\n'));
+    buffer_arr.push(Buffer.from('------normal reports------\n'));
 
     this._report_queue.forEach((ele) => {
       if (ele.isRequest) {
-        buffer.write(`REQUEST::api name: ${ele.api_info_name}, url: ${ele.url}, query: ${JSON.stringify(ele.params)}, data: ${JSON.stringify(ele.data)}\n`);
+        buffer_arr.push(Buffer.from(`REQUEST::api name: ${ele.api_info_name}, url: ${ele.url}, query: ${JSON.stringify(ele.params)}, data: ${JSON.stringify(ele.data)}\n`));
       } else {
-        buffer.write(`RESPONSE::api name: ${ele.api_info_name}, url: ${ele.url}, response: ${JSON.stringify(ele.response)}\n`);
+        buffer_arr.push(Buffer.from(`RESPONSE::api name: ${ele.api_info_name}, url: ${ele.url}, response: ${JSON.stringify(ele.response)}\n`));
       }
     });
 
-    fs.writeFileSync(this._report_path, buffer);
+    fs.writeFileSync(this._report_path, Buffer.concat(buffer_arr));
   }
 
   outputReport() {
