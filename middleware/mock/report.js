@@ -94,7 +94,7 @@ class Report {
       }
     });
 
-    fs.writeFileSync(this._report_path, buffer, 'binary');
+    fs.writeFileSync(this._report_path, buffer);
   }
 
   outputReport() {
