@@ -1,42 +1,19 @@
-# 结构介绍
+# Structure Introducation
+
 - 流程图见项目下cola-doc流程图.jpg
 
-## 文件结构 
-```
-.
-+-- script 脚本
-+-- api_doc jsonschema接口文档
-+-- api_flow 业务逻辑flow,用户自定义控制 
-+-- report 根据启动日期生成文件
-+-- test_case 测试数据
-|   +-- temp 根据json_schema随机生成的测试用例
-|   +-- base 一些必须跑的测试用例（手写，会增加到temp_test_case中）
-+-- store 临时文件
-|   +-- log_store 日志文件
-|   +-- swagger_store jsonschema转为swagger的输出
-+-- middleware  中间件
-|   +-- setting.js  配置中心
-|   +-- assist_macro.js 辅助宏
-|   +-- log.js  日志模块,多实例，不同的request_id
-|   +-- fake.js 数据处理，加载api_doc/api_flow并输出test_case
-|   +-- task.js 测试任务，一个task包含多个api，例如注册流程，生成一个log实例
-|   +-- taskqueue.js 任务队列
-+-- entry 入口
-|   +-- mock.js test_case输入进行测试
-|   +-- fake.js 根据json_schema自动生成test case
-```
+## project structure
 
-## 项目层次结构
-### generate_case module
-```
-api_doc/api_flow层 -> model层 -> middleware层 -> test_case层           
-```
+### convert module
+
+- api spec -> swagger
+
 ### mock module
-```
-test_case层 -> middleware层 -> service层           
-```
+
+swagger + extension + flow -> mock
 
 # feature
+
 - script for main flow checking
 
 ## 由接口文档自动生成test_case模块
@@ -53,6 +30,7 @@ test_case层 -> middleware层 -> service层
 - 对特定的special_test_case的处理
 
 # 文档编写教程
+
 - 首先，让我们统一上下文。flow指的是一个工作流，比如一个注册流程，其中包含多个case。
 
 ## api_doc.json
@@ -87,63 +65,18 @@ test_case层 -> middleware层 -> service层
 ```
 
 ## api_flow_template.json
+
 - 该文档是api_flow的模板文档，放置所有编写的api_flow，用户可以从里面找对应flow并放到自定义的api_flow中
 
 ## api_special_case.json
+
 - 一些特殊用例
 
 # 功能
+
 - 基于flow的数据模拟支持粒度更广，对header等公用字段的便捷化统一定义
 - 自动生成测试用例并支持自动request以及response 强check
 - 便于调试与定位bug，一次编写全组（cloud,android,ios）使用,不用费心调配各种环境
 - 解决同事之间的低效沟通，规范后端与悉相关业移动端之间的开发接口，避免出现一个业务流程中少api，调错api以及调乱api的情况 
 - 对不熟悉模块的开发更友善，能更快熟务逻辑
 - 用于测试整个flow的时间
-
-# todo
-
-- 单个mock
-- 支持header的灵活定义
-- api_doc实际业务的编写
-- api某些固定的调用依赖可以定义
-- special_case等改成文件夹，自动加载
-- faker的ut需要有一个服务(high)
-
-# important!!!
-## flow的flow - farmework
-
-- flow前的多个flow需要指定context param
-- 复杂度: 1.就是写多个flow 2.自下而上 3.图 4.自上而下 (todo)
-
-## spec转换出来需要人工fix的问题
-
-- /users/doorbells/mine
-
-## todo
-
-### fake and mock
-
-#### v1.0.0
-
-- test case
-- specific & context
-- flow 只支持 devel 的一些样本flow
-- fake, mock合并, 只提供两种模式. 清空数据/加载
-- 原mock用于test环境下的自动mock
-
-#### feature
-
-- support flow of flow
-- 自定义flow
-- flow test环境
-- 提供自定义flow
-- 报告中记录每一步的输入输出
-- 第一次生成faker数据可以保留
-- 子层的flow
-
-### optimize & thoughts
-
-- coverage pending
-- items fake
-- UT test mock不开server
-- 绝对路径来做key

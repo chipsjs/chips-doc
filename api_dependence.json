@@ -1,9 +1,0 @@
-{
-    "header": {
-        "x-august-api-key": "ee20d0a9-88ce-30cc-821d-877f883fa2bc",
-        "user-agent": "August/Luna-1.0.6 (Android; SDK 28; PBDM00)",
-        "content-type": "application/json",
-        "x-august-access-token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpbnN0YWxsSWQiOiIiLCJhcHBsaWNhdGlvbklkIjoiIiwidXNlcklkIjoiMmQ4ZTNiNmEtMzEwZC00ODgzLWI2NmMtMDljZmIzNjA1OWQxIiwidW5pcXVlVG9rZW4iOiIiLCJ2SW5zdGFsbElkIjp0cnVlLCJ2UGFzc3dvcmQiOnRydWUsInZFbWFpbCI6dHJ1ZSwidlBob25lIjp0cnVlLCJoYXNJbnN0YWxsSWQiOnRydWUsImhhc1Bhc3N3b3JkIjp0cnVlLCJoYXNFbWFpbCI6dHJ1ZSwiaGFzUGhvbmUiOnRydWUsImlzTG9ja2VkT3V0IjpmYWxzZSwiY2FwdGNoYSI6IiIsImVtYWlsIjpbImVtYWlsOjU4MzE1OTY4NUBxcS5jb20iXSwicGhvbmUiOlsicGhvbmU6Kzg2MTczMTY5MDIwNjIiXSwiZXhwaXJlc0F0IjoiMjAyMC0wNC0xNVQwNjo0MTo1My4xMzdaIiwidGVtcG9yYXJ5QWNjb3VudENyZWF0aW9uUGFzc3dvcmRMaW5rIjpudWxsLCJpYXQiOjE1NzU0NTIwMDgsImV4cCI6MTU4NjkzMjkxMywiRmlyc3ROYW1lIjoiY2hpcHMiLCJMYXN0TmFtZSI6ImFzc2FhYmxveUBMZW8ifQ.3uA7cV6xtMWq-OOd6d4j6kQsuVM1TrDbMfbrAguAh-Y"
-    },
-    "base_url": "http://127.0.0.1:3030"
-}
