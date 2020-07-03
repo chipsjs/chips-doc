@@ -79,12 +79,12 @@ class Report {
   report() {
     const buffer_arr = [];
 
-    buffer_arr.push(Buffer.from(`------fail report: ${this._fail_report_queue.length} error------\n`));
+    buffer_arr.push(Buffer.from(`--------FAIL REPORTS: ${this._fail_report_queue.length} error--------\n`));
     this._fail_report_queue.forEach((ele) => {
       buffer_arr.push(Buffer.from(`Fail::api name: ${ele.api_info_name}, response: ${JSON.stringify(ele.response)}, message: ${ele.message}\n`));
     });
     buffer_arr.push(Buffer.from('------------------------------------\n'));
-    buffer_arr.push(Buffer.from('------normal reports------\n'));
+    buffer_arr.push(Buffer.from(`--------NORMAL REPORTS: ${this._report_queue.length} reports--------\n`));
 
     this._report_queue.forEach((ele) => {
       if (ele.isRequest) {
