@@ -208,7 +208,12 @@ describe('flow mock', () => {
     });
   });
 
+  describe('control flow by response', () => {
+
+  });
+
   // TODO, context 是递归的
+  // TODO, context 在response中指定
   after('stop mock server', () => {
     mock_server.shutdown();
   });

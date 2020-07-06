@@ -57,5 +57,29 @@
   },
   "flow_10": {
     "flow": ["post /api5/:id/"]
+  },
+  "flow_11": {
+    "flow": ["1", "2"],
+    "extensions": {
+      "1": [
+        {
+          "middleware": "controller",
+          "params": {
+
+          }
+        },
+        {
+          "middleware": "HttpClient",
+          "params": {
+            "request": {
+
+            }, 
+            "response": {
+
+            }
+          }
+        }
+      ]
+    }
   }
 }

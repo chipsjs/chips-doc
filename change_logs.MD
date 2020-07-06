@@ -20,6 +20,7 @@
 ### 2020.6
 
 - 1.refactor fake&mock module 2.add ut test for them 3.fix some bugs
+- author: kris.xu
 
 ## Sechedule
 

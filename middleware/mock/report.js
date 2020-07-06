@@ -42,7 +42,7 @@ class Report {
    * @param {string} message - err message
    * @memberof Report
    */
-  addFailReport(api_info_name, response, message) {
+  addFailReport(api_info_name, response = {}, message) {
     this._fail_report_queue.push({
       api_info_name,
       response,
