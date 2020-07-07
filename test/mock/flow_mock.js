@@ -11,221 +11,221 @@ describe('flow mock', () => {
     mock_server.start();
   });
 
-  // describe('signle api mock', () => {
-  //   describe('api1 | query auto fake & response validator', () => {
-  //     let report_queue;
+  describe('signle api mock', () => {
+    describe('api1 | query auto fake & response validator', () => {
+      let report_queue;
 
-  //     before('mock', async () => {
-  //       const task_flow = new TaskFlow('temp');
-  //       await task_flow.execute(swagger, api_flow.flow_1);
-  //       report_queue = task_flow.outputReport();
-  //     });
+      before('mock', async () => {
+        const task_flow = new TaskFlow('temp');
+        await task_flow.execute(swagger, api_flow.flow_1);
+        report_queue = task_flow.outputReport();
+      });
 
-  //     it('should have right output', () => {
-  //       assert.strictEqual(report_queue.length, 2);
-  //       assert.nestedPropertyVal(report_queue[0], 'api_info_name', api_flow.flow_1.flow[0]);
-  //       assert.nestedPropertyVal(report_queue[1], 'api_info_name', api_flow.flow_1.flow[0]);
-  //       assert.nestedPropertyVal(report_queue[1], 'response.status', 200);
-  //       assert.nestedPropertyVal(report_queue[1], 'response.data.success', true);
-  //     });
-  //   })
+      it('should have right output', () => {
+        assert.strictEqual(report_queue.length, 2);
+        assert.nestedPropertyVal(report_queue[0], 'api_info_name', api_flow.flow_1.flow[0]);
+        assert.nestedPropertyVal(report_queue[1], 'api_info_name', api_flow.flow_1.flow[0]);
+        assert.nestedPropertyVal(report_queue[1], 'response.status', 200);
+        assert.nestedPropertyVal(report_queue[1], 'response.data.success', true);
+      });
+    })
 
-  //   describe('api1 | query specific & response validator', () => {
-  //     let report_queue;
+    describe('api1 | query specific & response validator', () => {
+      let report_queue;
 
-  //     before('mock', async () => {
-  //       const task_flow = new TaskFlow('temp');
-  //       await task_flow.execute(swagger, api_flow.flow_2);
-  //       report_queue = task_flow.outputReport();
-  //     });
+      before('mock', async () => {
+        const task_flow = new TaskFlow('temp');
+        await task_flow.execute(swagger, api_flow.flow_2);
+        report_queue = task_flow.outputReport();
+      });
 
-  //     it('should have right output', () => {
-  //       assert.strictEqual(report_queue.length, 2);
-  //       assert.nestedPropertyVal(report_queue[0], 'api_info_name', api_flow.flow_1.flow[0]);
-  //       assert.nestedPropertyVal(report_queue[1], 'api_info_name', api_flow.flow_1.flow[0]);
-  //       assert.nestedPropertyVal(report_queue[1], 'response.status', 200);
-  //       assert.nestedPropertyVal(report_queue[1], 'response.data.success', false);
-  //     });
-  //   });
+      it('should have right output', () => {
+        assert.strictEqual(report_queue.length, 2);
+        assert.nestedPropertyVal(report_queue[0], 'api_info_name', api_flow.flow_1.flow[0]);
+        assert.nestedPropertyVal(report_queue[1], 'api_info_name', api_flow.flow_1.flow[0]);
+        assert.nestedPropertyVal(report_queue[1], 'response.status', 200);
+        assert.nestedPropertyVal(report_queue[1], 'response.data.success', false);
+      });
+    });
 
-  //   describe('api2 | body auto fake & response validator', () => {
-  //     let report_queue;
+    describe('api2 | body auto fake & response validator', () => {
+      let report_queue;
 
-  //     before('mock', async () => {
-  //       const task_flow = new TaskFlow('temp');
-  //       await task_flow.execute(swagger, api_flow.flow_3);
-  //       report_queue = task_flow.outputReport();
-  //     });
+      before('mock', async () => {
+        const task_flow = new TaskFlow('temp');
+        await task_flow.execute(swagger, api_flow.flow_3);
+        report_queue = task_flow.outputReport();
+      });
 
-  //     it('should have right output', () => {
-  //       assert.strictEqual(report_queue.length, 2);
-  //       assert.nestedPropertyVal(report_queue[0], 'api_info_name', api_flow.flow_3.flow[0]);
-  //       assert.nestedPropertyVal(report_queue[1], 'api_info_name', api_flow.flow_3.flow[0]);
-  //       assert.nestedPropertyVal(report_queue[1], 'response.status', 200);
-  //       assert.nestedPropertyVal(report_queue[1], 'response.data.success', true);
-  //     });
-  //   });
+      it('should have right output', () => {
+        assert.strictEqual(report_queue.length, 2);
+        assert.nestedPropertyVal(report_queue[0], 'api_info_name', api_flow.flow_3.flow[0]);
+        assert.nestedPropertyVal(report_queue[1], 'api_info_name', api_flow.flow_3.flow[0]);
+        assert.nestedPropertyVal(report_queue[1], 'response.status', 200);
+        assert.nestedPropertyVal(report_queue[1], 'response.data.success', true);
+      });
+    });
 
-  //   describe('api2 | body specific & response validator', () => {
-  //     let report_queue;
+    describe('api2 | body specific & response validator', () => {
+      let report_queue;
 
-  //     before('mock', async () => {
-  //       const task_flow = new TaskFlow('temp');
-  //       await task_flow.execute(swagger, api_flow.flow_4);
-  //       report_queue = task_flow.outputReport();
-  //     });
+      before('mock', async () => {
+        const task_flow = new TaskFlow('temp');
+        await task_flow.execute(swagger, api_flow.flow_4);
+        report_queue = task_flow.outputReport();
+      });
 
-  //     it('should have right output', () => {
-  //       assert.strictEqual(report_queue.length, 2);
-  //       assert.nestedPropertyVal(report_queue[0], 'api_info_name', api_flow.flow_4.flow[0]);
-  //       assert.nestedPropertyVal(report_queue[1], 'api_info_name', api_flow.flow_4.flow[0]);
-  //       assert.nestedPropertyVal(report_queue[1], 'response.status', 200);
-  //       assert.nestedPropertyVal(report_queue[1], 'response.data.success', false);
-  //     });
-  //   });
+      it('should have right output', () => {
+        assert.strictEqual(report_queue.length, 2);
+        assert.nestedPropertyVal(report_queue[0], 'api_info_name', api_flow.flow_4.flow[0]);
+        assert.nestedPropertyVal(report_queue[1], 'api_info_name', api_flow.flow_4.flow[0]);
+        assert.nestedPropertyVal(report_queue[1], 'response.status', 200);
+        assert.nestedPropertyVal(report_queue[1], 'response.data.success', false);
+      });
+    });
 
-  //   describe('api3 | path auto fake & response validator', () => {
-  //     let report_queue;
+    describe('api3 | path auto fake & response validator', () => {
+      let report_queue;
 
-  //     before('mock', async () => {
-  //       const task_flow = new TaskFlow('temp');
-  //       await task_flow.execute(swagger, api_flow.flow_5);
-  //       report_queue = task_flow.outputReport();
-  //     });
+      before('mock', async () => {
+        const task_flow = new TaskFlow('temp');
+        await task_flow.execute(swagger, api_flow.flow_5);
+        report_queue = task_flow.outputReport();
+      });
 
-  //     it('should have right output', () => {
-  //       assert.strictEqual(report_queue.length, 2);
-  //       assert.nestedPropertyVal(report_queue[0], 'api_info_name', api_flow.flow_5.flow[0]);
-  //       assert.nestedPropertyVal(report_queue[1], 'api_info_name', api_flow.flow_5.flow[0]);
-  //       assert.nestedPropertyVal(report_queue[1], 'response.status', 200);
-  //       assert.nestedPropertyVal(report_queue[1], 'response.data.success', true);
-  //     });
-  //   });
+      it('should have right output', () => {
+        assert.strictEqual(report_queue.length, 2);
+        assert.nestedPropertyVal(report_queue[0], 'api_info_name', api_flow.flow_5.flow[0]);
+        assert.nestedPropertyVal(report_queue[1], 'api_info_name', api_flow.flow_5.flow[0]);
+        assert.nestedPropertyVal(report_queue[1], 'response.status', 200);
+        assert.nestedPropertyVal(report_queue[1], 'response.data.success', true);
+      });
+    });
 
-  //   describe('api3 | path specific & response validator', () => {
-  //     let report_queue;
+    describe('api3 | path specific & response validator', () => {
+      let report_queue;
 
-  //     before('mock', async () => {
-  //       const task_flow = new TaskFlow('temp');
-  //       await task_flow.execute(swagger, api_flow.flow_6);
-  //       report_queue = task_flow.outputReport();
-  //     });
+      before('mock', async () => {
+        const task_flow = new TaskFlow('temp');
+        await task_flow.execute(swagger, api_flow.flow_6);
+        report_queue = task_flow.outputReport();
+      });
 
-  //     it('should have right output', () => {
-  //       assert.strictEqual(report_queue.length, 2);
-  //       assert.nestedPropertyVal(report_queue[0], 'api_info_name', api_flow.flow_6.flow[0]);
-  //       assert.nestedPropertyVal(report_queue[1], 'api_info_name', api_flow.flow_6.flow[0]);
-  //       assert.nestedPropertyVal(report_queue[1], 'response.status', 200);
-  //       assert.nestedPropertyVal(report_queue[1], 'response.data.success', true);
-  //     });
-  //   });
+      it('should have right output', () => {
+        assert.strictEqual(report_queue.length, 2);
+        assert.nestedPropertyVal(report_queue[0], 'api_info_name', api_flow.flow_6.flow[0]);
+        assert.nestedPropertyVal(report_queue[1], 'api_info_name', api_flow.flow_6.flow[0]);
+        assert.nestedPropertyVal(report_queue[1], 'response.status', 200);
+        assert.nestedPropertyVal(report_queue[1], 'response.data.success', true);
+      });
+    });
 
-  //   describe('api5 | path is in the middle of url', () => {
-  //     let report_queue;
+    describe('api5 | path is in the middle of url', () => {
+      let report_queue;
 
-  //     before('mock', async () => {
-  //       const task_flow = new TaskFlow('temp');
-  //       await task_flow.execute(swagger, api_flow.flow_10);
-  //       report_queue = task_flow.outputReport();
-  //     });
+      before('mock', async () => {
+        const task_flow = new TaskFlow('temp');
+        await task_flow.execute(swagger, api_flow.flow_10);
+        report_queue = task_flow.outputReport();
+      });
 
-  //     it('should have right output', () => {
-  //       assert.strictEqual(report_queue.length, 2);
-  //       assert.nestedPropertyVal(report_queue[0], 'api_info_name', api_flow.flow_10.flow[0]);
-  //       assert.nestedPropertyVal(report_queue[1], 'api_info_name', api_flow.flow_10.flow[0]);
-  //       assert.nestedPropertyVal(report_queue[1], 'response.status', 200);
-  //       assert.nestedPropertyVal(report_queue[1], 'response.data.success', true);
-  //     });
-  //   });
-  // });
+      it('should have right output', () => {
+        assert.strictEqual(report_queue.length, 2);
+        assert.nestedPropertyVal(report_queue[0], 'api_info_name', api_flow.flow_10.flow[0]);
+        assert.nestedPropertyVal(report_queue[1], 'api_info_name', api_flow.flow_10.flow[0]);
+        assert.nestedPropertyVal(report_queue[1], 'response.status', 200);
+        assert.nestedPropertyVal(report_queue[1], 'response.data.success', true);
+      });
+    });
+  });
 
-  // describe('same api call multi times', () => {
-  //   let report_queue;
+  describe('same api call multi times', () => {
+    let report_queue;
 
-  //   before('mock', async () => {
-  //     const task_flow = new TaskFlow('temp');
-  //     await task_flow.execute(swagger, api_flow.flow_7);
-  //     report_queue = task_flow.outputReport();
-  //   });
+    before('mock', async () => {
+      const task_flow = new TaskFlow('temp');
+      await task_flow.execute(swagger, api_flow.flow_7);
+      report_queue = task_flow.outputReport();
+    });
 
-  //   it('should have right output', () => {
-  //     assert.strictEqual(report_queue.length, 4);
-  //     assert.nestedPropertyVal(report_queue[0], 'api_info_name', api_flow.flow_7.flow[0]);
-  //     assert.nestedPropertyVal(report_queue[1], 'api_info_name', api_flow.flow_7.flow[0]);
-  //     assert.nestedPropertyVal(report_queue[2], 'api_info_name', api_flow.flow_7.flow[1]);
-  //     assert.nestedPropertyVal(report_queue[3], 'api_info_name', api_flow.flow_7.flow[1]);
+    it('should have right output', () => {
+      assert.strictEqual(report_queue.length, 4);
+      assert.nestedPropertyVal(report_queue[0], 'api_info_name', api_flow.flow_7.flow[0]);
+      assert.nestedPropertyVal(report_queue[1], 'api_info_name', api_flow.flow_7.flow[0]);
+      assert.nestedPropertyVal(report_queue[2], 'api_info_name', api_flow.flow_7.flow[1]);
+      assert.nestedPropertyVal(report_queue[3], 'api_info_name', api_flow.flow_7.flow[1]);
 
-  //     assert.nestedPropertyVal(report_queue[1], 'response.status', 200);
-  //     assert.nestedPropertyVal(report_queue[1], 'response.data.success', true);
-  //     assert.nestedPropertyVal(report_queue[3], 'response.status', 200);
-  //     assert.nestedPropertyVal(report_queue[3], 'response.data.success', false);
-  //   });
-  // });
+      assert.nestedPropertyVal(report_queue[1], 'response.status', 200);
+      assert.nestedPropertyVal(report_queue[1], 'response.data.success', true);
+      assert.nestedPropertyVal(report_queue[3], 'response.status', 200);
+      assert.nestedPropertyVal(report_queue[3], 'response.data.success', false);
+    });
+  });
 
-  // describe('multi api mock', () => {
-  //   let report_queue;
+  describe('multi api mock', () => {
+    let report_queue;
 
-  //   before('mock', async () => {
-  //     const task_flow = new TaskFlow('temp');
-  //     await task_flow.execute(swagger, api_flow.flow_8);
-  //     report_queue = task_flow.outputReport();
-  //   });
+    before('mock', async () => {
+      const task_flow = new TaskFlow('temp');
+      await task_flow.execute(swagger, api_flow.flow_8);
+      report_queue = task_flow.outputReport();
+    });
 
-  //   it('should have right output', () => {
-  //     assert.strictEqual(report_queue.length, 4);
-  //     assert.nestedPropertyVal(report_queue[0], 'api_info_name', api_flow.flow_8.flow[0]);
-  //     assert.nestedPropertyVal(report_queue[1], 'api_info_name', api_flow.flow_8.flow[0]);
-  //     assert.nestedPropertyVal(report_queue[2], 'api_info_name', api_flow.flow_8.flow[1]);
-  //     assert.nestedPropertyVal(report_queue[3], 'api_info_name', api_flow.flow_8.flow[1]);
+    it('should have right output', () => {
+      assert.strictEqual(report_queue.length, 4);
+      assert.nestedPropertyVal(report_queue[0], 'api_info_name', api_flow.flow_8.flow[0]);
+      assert.nestedPropertyVal(report_queue[1], 'api_info_name', api_flow.flow_8.flow[0]);
+      assert.nestedPropertyVal(report_queue[2], 'api_info_name', api_flow.flow_8.flow[1]);
+      assert.nestedPropertyVal(report_queue[3], 'api_info_name', api_flow.flow_8.flow[1]);
 
-  //     assert.nestedPropertyVal(report_queue[1], 'response.status', 200);
-  //     assert.nestedPropertyVal(report_queue[1], 'response.data.success', true);
-  //     assert.nestedPropertyVal(report_queue[3], 'response.status', 200);
-  //     assert.nestedPropertyVal(report_queue[3], 'response.data.success', true);
-  //   });
-  // });
+      assert.nestedPropertyVal(report_queue[1], 'response.status', 200);
+      assert.nestedPropertyVal(report_queue[1], 'response.data.success', true);
+      assert.nestedPropertyVal(report_queue[3], 'response.status', 200);
+      assert.nestedPropertyVal(report_queue[3], 'response.data.success', true);
+    });
+  });
 
-  // describe('context api mock', () => {
-  //   let report_queue;
+  describe('context api mock', () => {
+    let report_queue;
 
-  //   before('mock', async () => {
-  //     const task_flow = new TaskFlow('temp');
-  //     await task_flow.execute(swagger, api_flow.flow_9);
-  //     report_queue = task_flow.outputReport();
-  //   });
+    before('mock', async () => {
+      const task_flow = new TaskFlow('temp');
+      await task_flow.execute(swagger, api_flow.flow_9);
+      report_queue = task_flow.outputReport();
+    });
 
-  //   it('should have right output', () => {
-  //     assert.strictEqual(report_queue.length, 4);
-  //     assert.nestedPropertyVal(report_queue[0], 'api_info_name', api_flow.flow_9.flow[0]);
-  //     assert.nestedPropertyVal(report_queue[1], 'api_info_name', api_flow.flow_9.flow[0]);
-  //     assert.nestedPropertyVal(report_queue[2], 'api_info_name', api_flow.flow_9.flow[1]);
-  //     assert.nestedPropertyVal(report_queue[3], 'api_info_name', api_flow.flow_9.flow[1]);
+    it('should have right output', () => {
+      assert.strictEqual(report_queue.length, 4);
+      assert.nestedPropertyVal(report_queue[0], 'api_info_name', api_flow.flow_9.flow[0]);
+      assert.nestedPropertyVal(report_queue[1], 'api_info_name', api_flow.flow_9.flow[0]);
+      assert.nestedPropertyVal(report_queue[2], 'api_info_name', api_flow.flow_9.flow[1]);
+      assert.nestedPropertyVal(report_queue[3], 'api_info_name', api_flow.flow_9.flow[1]);
 
-  //     assert.nestedPropertyVal(report_queue[1], 'response.status', 200);
-  //     assert.nestedPropertyVal(report_queue[1], 'response.data.success', true);
-  //     assert.nestedPropertyVal(report_queue[3], 'response.status', 200);
-  //     assert.nestedPropertyVal(report_queue[3], 'response.data.success', true);
-  //   });
-  // });
+      assert.nestedPropertyVal(report_queue[1], 'response.status', 200);
+      assert.nestedPropertyVal(report_queue[1], 'response.data.success', true);
+      assert.nestedPropertyVal(report_queue[3], 'response.status', 200);
+      assert.nestedPropertyVal(report_queue[3], 'response.data.success', true);
+    });
+  });
 
-  // describe('response validate error', () => {
-  //   let report_queue;
-  //   let fail_queue;
+  describe('response validate error', () => {
+    let report_queue;
+    let fail_queue;
 
-  //   before('mock', async () => {
-  //     const task_flow = new TaskFlow('temp');
-  //     await task_flow.execute(swagger, api_flow.flow_11);
-  //     report_queue = task_flow.outputReport();
-  //     fail_queue = task_flow.outputFailedReport()
-  //   });
+    before('mock', async () => {
+      const task_flow = new TaskFlow('temp');
+      await task_flow.execute(swagger, api_flow.flow_11);
+      report_queue = task_flow.outputReport();
+      fail_queue = task_flow.outputFailedReport()
+    });
 
-  //   it('should have right output', () => {
-  //     assert.strictEqual(report_queue.length, 0);
-  //     assert.strictEqual(fail_queue.length, 1);
-  //     assert.strictEqual(fail_queue[0].api_info_name, api_flow.flow_11.flow[0]);
-  //     assert.strictEqual(fail_queue[0].message, 'instance.success is not of a type(s) number');
-  //   });
-  // })
+    it('should have right output', () => {
+      assert.strictEqual(report_queue.length, 0);
+      assert.strictEqual(fail_queue.length, 1);
+      assert.strictEqual(fail_queue[0].api_info_name, api_flow.flow_11.flow[0]);
+      assert.strictEqual(fail_queue[0].message, 'instance.success is not of a type(s) number');
+    });
+  })
 
   describe('control flow by response | ignore', () => {
     let report_queue;
