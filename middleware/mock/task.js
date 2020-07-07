@@ -17,11 +17,11 @@ class Task {
   }
 
   async run() {
-    const extension = this.task.extensions;
+    const extension = _.get(this.context, ['task', 'extension'], []);
     const middlewares = extension.map((ele) => {
       const provider_type = ele.middleware;
       // ignore or throw, TO DO
-      if (!Task._isAllowExtension(providers)) {
+      if (!Task._isAllowExtension(provider_type)) {
         throw new TypeError(`Task::no support this extension: ${provider_type}`);
       }
 
@@ -29,7 +29,8 @@ class Task {
       return providers[provider_type].run.bind(null, this.context);
     });
 
-    await compose(middlewares);
+    const fnMiddleware = await compose(middlewares);
+    await fnMiddleware(this.context);
   }
 
   _createContext(options) {
@@ -41,10 +42,10 @@ class Task {
     this.context = context || {};
     this.context.task = {
       task_id,
-      url: url || '',
-      method_type: _.get(context, [method_type], 'unknown'),
+      url,
+      method_type,
       headers,
-      extension: _.get(context, ['extensions', task_id], [{ middleware: providers.type.HttpClient }]),
+      extension: _.get(context, ['extensions', task_id], [{ middleware: 'HttpClient' }]),
     }
   }
 

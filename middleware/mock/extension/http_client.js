@@ -125,7 +125,7 @@ class HttpClient {
    */
   static async run(ctx, next) {
     const {
-      task_id, url, headers, method_type
+      url, headers, method_type
     } = ctx.task;
 
     const { operation_obj, path_parameters, real_data } = HttpClient._parseArgs(ctx);
@@ -159,25 +159,26 @@ class HttpClient {
     _.set(ctx, ['result', 'params'], params);
     _.set(ctx, ['result', 'response'], response);
 
-    HttpClient._validatorResponse(
-      task_id, response,
+    await HttpClient._validatorResponse(
+      response,
       Swagger.getResponseSchema(operation_obj)
     );
-
-    await next();
   }
 
   static _parseArgs(ctx) {
     const { swagger, params } = ctx;
-    const { url, method_type, task_id } = ctx.task;
+    const { url, method_type } = ctx.task;
 
     return {
       operation_obj: Swagger.getOperationObjectFromSwagger(
         swagger, url, method_type
       ),
       path_parameters: Swagger.getPathParameters(swagger, url),
-      real_data: _.merge({}, params, _.get(ctx, ['task', task_id, 'params'])),
-    };
+      real_data: _.merge(
+        {}, params,
+        _.get(ctx, ['HttpClient', 'params', 'request'], {})
+      ),
+    }
   }
 
   /**
@@ -193,7 +194,6 @@ class HttpClient {
   static async _validatorResponse(response, schema) {
     if (response.status !== 200) {
       return Promise.reject(new TypeError('request fail'));
-      // eslint-disable-next-line prefer-promise-reject-errors
     }
 
     const result = dataValidate(response.data, schema);

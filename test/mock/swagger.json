@@ -202,6 +202,47 @@
         ],
         "summary": "5"
       }
+    },
+    "/api6": {
+      "post": {
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "success": {
+                    "type": "string",
+                    "desription": "depend on api6 response"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "when key is true, will return true, or not return false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "number",
+                      "description": "mock api will response true/false"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "api"
+        ],
+        "summary": "6"
+      }
     }
   }
 }

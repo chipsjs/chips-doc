@@ -208,6 +208,25 @@ describe('flow mock', () => {
     });
   });
 
+  describe('response validate error', () => {
+    let report_queue;
+    let fail_queue;
+
+    before('mock', async () => {
+      const task_flow = new TaskFlow('temp');
+      await task_flow.execute(swagger, api_flow.flow_11);
+      report_queue = task_flow.outputReport();
+      fail_queue = task_flow.outputFailedReport()
+    });
+
+    it('should have right output', () => {
+      assert.strictEqual(report_queue.length, 0);
+      assert.strictEqual(fail_queue.length, 1);
+      assert.strictEqual(fail_queue[0].api_info_name, api_flow.flow_11.flow[0]);
+      assert.strictEqual(fail_queue[0].message, 'instance.success is not of a type(s) number');
+    });
+  })
+
   describe('control flow by response', () => {
 
   });

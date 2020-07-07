@@ -4,12 +4,17 @@
   },
   "flow_2": {
     "flow": ["get /api1"],
-    "extension": {
-      "get /api1": {
-        "request": {
-          "param1": "a"
+    "extensions": {
+      "get /api1": [
+        {
+          "middleware": "HttpClient",
+          "params": {
+            "request": {
+              "param1": "A"
+            }
+          }
         }
-      }
+      ]
     }
   },
   "flow_3": {
@@ -17,12 +22,15 @@
   },
   "flow_4": {
     "flow": ["post /api2"],
-    "extension": {
-      "post /api2": {
-        "request": {
-          "param1": "D"
+    "extensions": {
+      "post /api2": [{
+        "middleware": "HttpClient",
+        "params": {
+          "request": {
+            "param1": "D"
+          }
         }
-      }
+      }]
     }
   },
   "flow_5": {
@@ -30,22 +38,28 @@
   },
   "flow_6": {
     "flow": ["get /api3/:param1"],
-    "extension": {
-      "get /api4": {
-        "request": {
-          "param1": "D"
+    "extensions": {
+      "get /api4": [{
+        "middleware": "HttpClient",
+        "params": {
+          "request": {
+            "param1": "D"
+          }
         }
-      }
+      }]
     }
   },
   "flow_7": {
     "flow": ["post /api2@1", "post /api2@2"],
-    "extension": {
-      "post /api2@2": {
-        "request": {
-          "param1": "D"
+    "extensions": {
+      "post /api2@2": [{
+        "middleware": "HttpClient",
+        "params": {
+          "request": {
+            "param1": "D"
+          }
         }
-      }
+      }]
     }
   },
   "flow_8": {
@@ -53,15 +67,20 @@
   },
   "flow_9": {
     "flow": ["post /api2", "post /api4"],
-    "context": ["success"]
+    "context": {
+      "params": ["success"]
+    }
   },
   "flow_10": {
     "flow": ["post /api5/:id/"]
   },
   "flow_11": {
-    "flow": ["post /apitemp1", "post /apitemp2"],
-    "extensions": {
-      "post /apitemp1": [
+    "flow": ["post /api6"]
+  },
+  "flow_12": {
+    "flow": ["get /api1", "post /api2"],
+    "extensionss": {
+      "get /api1": [
         {
           "middleware": "controller",
           "params": {
@@ -69,15 +88,7 @@
           }
         },
         {
-          "middleware": "HttpClient",
-          "params": {
-            "request": {
-
-            }, 
-            "response": {
-
-            }
-          }
+          "middleware": "HttpClient"
         }
       ]
     }

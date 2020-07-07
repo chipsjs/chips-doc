@@ -88,13 +88,13 @@ class TaskFlow {
     this.context = {
       current_task_id: '',
       flow: api_flow.flow,
-      context: api_flow.context,
       extensions: api_flow.extensions
     }
 
     try {
-      if (Array.isArray(context)) {
-        this.context.params = context.reduce((result, key) => {
+      const context_params = _.get(api_flow, ['context', 'params'], [])
+      if (Array.isArray(context_params)) {
+        this.context.params = context_params.reduce((result, key) => {
           _.set(result, key, null);
           return result;
         }, {});
@@ -116,15 +116,15 @@ class TaskFlow {
         await task.run();
 
         const {
-          new_url, params, data, response
+          new_url, params, body, response
         } = this.context.result;
-        this._reporter.addReport(task_id, new_url, params, data, response);
+        this._reporter.addReport(task_id, new_url, params, body, response);
         // this._updateContext(response.data, _.get(extension, [step_name, 'response', 'context']));
         // this._updateController(response.data, _.get(extension, [step_name, 'response', 'controller']))
       });
     } catch (err) {
       this._reporter.addFailReport(this.context.current_task_id, _.get(this.context, ['result', 'response']), err.message);
-      this._logger.error(`TaskQueue::excute fail, err msg is ${err.message}`);
+      this._logger.error(`TaskFlow::excute fail, err msg is ${err.message}`);
     }
 
     this._reporter.report();
@@ -132,6 +132,10 @@ class TaskFlow {
 
   outputReport() {
     return this._reporter.outputReport();
+  }
+
+  outputFailedReport() {
+    return this._reporter.outputFailedReport();
   }
 
   destoryReport() {
