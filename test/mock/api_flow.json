@@ -78,13 +78,18 @@
     "flow": ["post /api6"]
   },
   "flow_12": {
-    "flow": ["get /api1", "post /api2"],
-    "extensionss": {
-      "get /api1": [
+    "flow": ["post /api2", "get /api1"],
+    "extensions": {
+      "post /api2": [
         {
-          "middleware": "controller",
+          "middleware": "Controller",
           "params": {
-
+            "ignore": {
+              "task_id": "get /api1",
+              "condition": {
+                "success": true
+              }
+            }
           }
         },
         {
