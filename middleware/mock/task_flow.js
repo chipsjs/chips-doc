@@ -8,7 +8,6 @@ class TaskFlow {
   constructor(user, log_module) {
     this._logger = log_module || console;
     this._reporter = new Report(user);
-    this._context = {};
   }
 
   /**
@@ -86,42 +85,45 @@ class TaskFlow {
    * @memberof TaskQueue
    */
   async execute(swagger, api_flow, headers = {}) {
-    let current_step_name = '';
-    const { flow, context, extension } = api_flow;
+    this.context = {
+      current_task_id: '',
+      flow: api_flow.flow,
+      context: api_flow.context,
+      extensions: api_flow.extensions
+    }
 
     try {
       if (Array.isArray(context)) {
-        this._context = context.reduce((result, key) => {
+        this.context.params = context.reduce((result, key) => {
           _.set(result, key, null);
           return result;
         }, {});
       }
 
-      await loop.forEach(flow.values(), async (step_name) => {
-        current_step_name = step_name;
+      await loop.forEach(this.context.flow.values(), async (task_id) => {
+        this.context.current_task_id = task_id;
+        this.context.swagger = swagger;
 
-        const { method_type, url } = TaskFlow.getApiInfoFromStepName(step_name);
+        const { method_type, url } = TaskFlow.getApiInfoFromStepName(task_id);
 
         const task = new Task({
-          task_id: step_name,
-          swagger,
           url,
           method_type,
-          extension,
           headers,
-          context_params: this._context
+          context: this.context
         });
 
-        const {
-          new_url, data, params, response
-        } = await task.run();
+        await task.run();
 
-        this._reporter.addReport(step_name, new_url, params, data, response);
+        const {
+          new_url, params, data, response
+        } = this.context.result;
+        this._reporter.addReport(task_id, new_url, params, data, response);
         // this._updateContext(response.data, _.get(extension, [step_name, 'response', 'context']));
         // this._updateController(response.data, _.get(extension, [step_name, 'response', 'controller']))
       });
     } catch (err) {
-      this._reporter.addFailReport(current_step_name, err.response, err.message);
+      this._reporter.addFailReport(this.context.current_task_id, _.get(this.context, ['result', 'response']), err.message);
       this._logger.error(`TaskQueue::excute fail, err msg is ${err.message}`);
     }
 

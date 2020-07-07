@@ -7,18 +7,18 @@ class Task {
   /**
    * Creates an instance of Task.
    *
-   * @param {{task_id: string, url: string, method_type: string,
-   *  swagger: object, extension: object, context_params: object, headers: object
+   * @param {{url: string, method_type: string, swagger: object,
+   * context: {current_task_id: string, extensions: object}, headers: object
    * }} options - instance args
    * @memberof Task
    */
   constructor(options) {
-    this.extensions = options.extensions || [{ middleware: providers.type.HttpClient }];
     this._createContext(options);
   }
 
   async run() {
-    const middlewares = this.extensions.map((ele) => {
+    const extension = this.task.extensions;
+    const middlewares = extension.map((ele) => {
       const provider_type = ele.middleware;
       // ignore or throw, TO DO
       if (!Task._isAllowExtension(providers)) {
@@ -33,18 +33,19 @@ class Task {
   }
 
   _createContext(options) {
-    this.context = {};
-
     const {
-      task_id, url, method_type, swagger, context_params, headers
+      context, url, method_type, headers
     } = options;
+    const task_id = _.get(context, ['current_task_id'], {});
 
-    this.context.task_id = task_id || 'unknown';
-    this.context.url = url || 'unknown';
-    this.context.method_type = method_type || 'unknown';
-    this.context.swagger = swagger || {};
-    this.context.context_params = _.cloneDeep(context_params) || {};
-    this.context.headers = headers;
+    this.context = context || {};
+    this.context.task = {
+      task_id,
+      url: url || '',
+      method_type: _.get(context, [method_type], 'unknown'),
+      headers,
+      extension: _.get(context, ['extensions', task_id], [{ middleware: providers.type.HttpClient }]),
+    }
   }
 
   _createProviderContext(provider_type, params) {

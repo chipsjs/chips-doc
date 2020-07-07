@@ -59,9 +59,9 @@
     "flow": ["post /api5/:id/"]
   },
   "flow_11": {
-    "flow": ["1", "2"],
+    "flow": ["post /apitemp1", "post /apitemp2"],
     "extensions": {
-      "1": [
+      "post /apitemp1": [
         {
           "middleware": "controller",
           "params": {

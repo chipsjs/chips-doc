@@ -4,8 +4,6 @@ const dataValidate = require('jsonschema').validate;
 
 const { Swagger, request: httpRequest } = require('../../../lib');
 
-const provider_type = 'HttpClient';
-
 class HttpClient {
   /**
    *
@@ -128,7 +126,7 @@ class HttpClient {
   static async run(ctx, next) {
     const {
       task_id, url, headers, method_type
-    } = ctx;
+    } = ctx.task;
 
     const { operation_obj, path_parameters, real_data } = HttpClient._parseArgs(ctx);
 
@@ -156,10 +154,10 @@ class HttpClient {
       headers
     })
 
-    _.set(ctx, [provider_type, new_url], new_url);
-    _.set(ctx, [provider_type, data], data);
-    _.set(ctx, [provider_type, params], params);
-    _.set(ctx, [provider_type, response], response);
+    _.set(ctx, ['result', 'new_url'], new_url);
+    _.set(ctx, ['result', 'body'], data);
+    _.set(ctx, ['result', 'params'], params);
+    _.set(ctx, ['result', 'response'], response);
 
     HttpClient._validatorResponse(
       task_id, response,
@@ -170,46 +168,37 @@ class HttpClient {
   }
 
   static _parseArgs(ctx) {
-    const {
-      swagger, url, method_type, task_id, context_params
-    } = ctx;
+    const { swagger, params } = ctx;
+    const { url, method_type, task_id } = ctx.task;
 
     return {
       operation_obj: Swagger.getOperationObjectFromSwagger(
         swagger, url, method_type
       ),
       path_parameters: Swagger.getPathParameters(swagger, url),
-      real_data: _.merge({}, context_params, _.get(ctx, [task_id, 'params'])),
+      real_data: _.merge({}, params, _.get(ctx, ['task', task_id, 'params'])),
     };
   }
 
   /**
    * validator reponse by swagger's response shcema
    *
-   * @param {string} task_id - step n in the flow, eg: 'Get /test/id'
    * @param {object} response - http response
    * @param {string} response.status - http status code
    * @param {object} response.data - http response body
    * @param {object} schema - openapi response schema
-   * @returns {promise} - todo
+   * @returns {Promise} - todo
    * @memberof HttpClient
    */
-  static async _validatorResponse(task_id, response, schema) {
+  static async _validatorResponse(response, schema) {
     if (response.status !== 200) {
+      return Promise.reject(new TypeError('request fail'));
       // eslint-disable-next-line prefer-promise-reject-errors
-      return Promise.reject({
-        response,
-        message: 'request fail'
-      });
     }
 
     const result = dataValidate(response.data, schema);
     if (Array.isArray(result.errors) && result.errors.length !== 0) {
-      // eslint-disable-next-line prefer-promise-reject-errors
-      return Promise.reject({
-        response,
-        message: `${result.errors.toString()}`
-      });
+      return Promise.reject(new TypeError(`${result.errors.toString()}`));
     }
 
     return Promise.resolve();
