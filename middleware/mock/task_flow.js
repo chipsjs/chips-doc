@@ -58,24 +58,6 @@ class TaskFlow {
   //   });
   // }
 
-  // /**
-  //  *
-  //  *
-  //  * @param {object} response_data
-  //  * @param {object} controller_data - key is 'a.key.subkey'
-  //  * @memberof TaskFlow
-  //  */
-  // _updateController(response_data, controller_data) {
-  //   Object.entries(controller_data).forEach(([key, value]) => {
-  //     if (_.has(response_data, key)) {
-  //     }
-  //   });
-  // }
-
-  // _controlFlow(step_name) {
-
-  // }
-
   /**
    *
    *
@@ -120,7 +102,6 @@ class TaskFlow {
         } = this.context.result;
         this._reporter.addReport(task_id, new_url, params, body, response);
         // this._updateContext(response.data, _.get(extension, [step_name, 'response', 'context']));
-        // this._updateController(response.data, _.get(extension, [step_name, 'response', 'controller']))
       });
     } catch (err) {
       this._reporter.addFailReport(this.context.current_task_id, _.get(this.context, ['result', 'response']), err.message);

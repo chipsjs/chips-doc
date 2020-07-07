@@ -19,7 +19,7 @@ class Controller {
           Controller.ignoreCase(ctx, control_info);
           break;
         default:
-          // do nothing;
+          // do nothing; you can add new controller case here
           break;
       }
     })

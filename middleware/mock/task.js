@@ -26,7 +26,7 @@ class Task {
       }
 
       this._createProviderContext(provider_type, ele.params);
-      return providers[provider_type].run.bind(null, this.context);
+      return providers[provider_type].run.bind(null);
     });
 
     const fnMiddleware = await compose(middlewares);
