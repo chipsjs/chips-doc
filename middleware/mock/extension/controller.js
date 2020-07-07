@@ -5,7 +5,8 @@ const provider_type = 'Controller';
 
 class Controller {
   static _isIgnore(ctx) {
-    return _.get(ctx, ['task', 'controller', 'ignore'], false);
+    // todo , task_id
+    return _.get(ctx, [ctx.current_task_id, 'controller', 'ignore'], false);
   }
 
   static async run(ctx, next) {
