@@ -45,8 +45,17 @@ class Task {
       url,
       method_type,
       headers,
-      extension: _.get(context, ['extensions', task_id], [{ middleware: 'HttpClient' }]),
+      extension: Task.preExtension(context),
     }
+  }
+
+  // todo
+  static preExtension(context) {
+    const extension = _.get(context, ['extensions', context.current_task_id], [{ middleware: 'Controller' }, { middleware: 'HttpClient' }]);
+    // now only support extension overrides the default directly
+    // support merge in the future
+
+    return extension;
   }
 
   _createProviderContext(provider_type, params) {

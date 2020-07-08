@@ -138,7 +138,7 @@ class HttpClient {
       Swagger.getParametersSchema(operation_obj),
       real_data
     );
-    const data = HttpClient._fakeBody(
+    const body = HttpClient._fakeBody(
       Swagger.getRequestBodySchema(operation_obj),
       real_data
     );
@@ -150,14 +150,13 @@ class HttpClient {
 
     const response = await httpRequest(new_url, method_type, {
       params,
-      data,
+      body,
       headers
     })
 
-    _.set(ctx, ['result', 'new_url'], new_url);
-    _.set(ctx, ['result', 'body'], data);
-    _.set(ctx, ['result', 'params'], params);
-    _.set(ctx, ['result', 'response'], response);
+    _.set(ctx, [ctx.current_task_id, 'result'], {
+      new_url, body, params, response
+    });
 
     await HttpClient._validatorResponse(
       response,

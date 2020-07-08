@@ -238,14 +238,14 @@ describe('flow mock', () => {
 
     it('should have right output', () => {
       assert.strictEqual(report_queue.length, 2);
-      assert.strictEqual(report_queue[0].api_info_name, api_flow.flow_11.flow[0]);
-      assert.strictEqual(report_queue[1].api_info_name, api_flow.flow_11.flow[0]);
+      assert.strictEqual(report_queue[0].api_info_name, api_flow.flow_12.flow[0]);
+      assert.strictEqual(report_queue[1].api_info_name, api_flow.flow_12.flow[0]);
     });
   });
 
   // TODO, context 是递归的
   // TODO, context 在response中指定
-  after('stop mock server', () => {
-    mock_server.shutdown();
-  });
+  // after('stop mock server', () => {
+  //   mock_server.shutdown();
+  // });
 });

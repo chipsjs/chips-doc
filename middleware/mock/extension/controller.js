@@ -5,29 +5,27 @@ const provider_type = 'Controller';
 
 class Controller {
   static _isIgnore(ctx) {
-    // todo , task_id
     return _.get(ctx, [ctx.current_task_id, 'controller', 'ignore'], false);
   }
 
   static async run(ctx, next) {
-    await Controller.preProcess(ctx, next);
+    if (!Controller._isIgnore(ctx)) {
+      await next();
+      const params = _.get(ctx, [provider_type, 'params']);
 
-    const params = _.get(ctx, [provider_type, 'params']);
-
-    await loop.forEach(Object.entries(params), ([control_case, control_info]) => {
-      switch (control_case) {
-        case 'ignore':
-          Controller.ignoreCase(ctx, control_info);
-          break;
-        default:
-          // do nothing; you can add new controller case here
-          break;
-      }
-    })
-  }
-
-  static async preProcess(ctx, next) {
-    if (!Controller._isIgnore(ctx)) await next();
+      await loop.forEach(Object.entries(params).values(), ([control_case, control_info]) => {
+        switch (control_case) {
+          case 'ignore':
+            Controller.ignoreCase(ctx, control_info);
+            break;
+          default:
+            // do nothing; you can add new controller case here
+            break;
+        }
+      })
+    } else {
+      // log ignore task to report
+    }
   }
 
   static async ignoreCase(ctx, control_info) {

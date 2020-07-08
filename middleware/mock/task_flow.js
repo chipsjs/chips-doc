@@ -97,11 +97,12 @@ class TaskFlow {
 
         await task.run();
 
-        const {
-          new_url, params, body, response
-        } = this.context.result;
-        this._reporter.addReport(task_id, new_url, params, body, response);
-        // this._updateContext(response.data, _.get(extension, [step_name, 'response', 'context']));
+        if (_.has(this.context, [task_id, 'result'])) {
+          const {
+            new_url, params, body, response
+          } = _.get(this.context, [task_id, ['result']]);
+          this._reporter.addReport(task_id, new_url, params, body, response);
+        }
       });
     } catch (err) {
       this._reporter.addFailReport(this.context.current_task_id, _.get(this.context, ['result', 'response']), err.message);
