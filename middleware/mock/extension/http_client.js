@@ -39,7 +39,7 @@ class HttpClient {
    * @memberof Task
    */
   static _fakeBody(schema, real_data) {
-    if (typeof schema !== 'object') return {};
+    if (typeof schema !== 'object' || Object.keys(schema).length === 0) return {};
 
     const fake_data = fake.sample(schema);
 
@@ -150,13 +150,18 @@ class HttpClient {
 
     const response = await httpRequest(new_url, method_type, {
       params,
-      body,
+      data: body,
       headers
     })
 
-    _.set(ctx, [ctx.current_task_id, 'result'], {
-      new_url, body, params, response
-    });
+    ctx[ctx.current_task_id] = {
+      result: {
+        new_url, body, params, response
+      }
+    }
+    // _.set(ctx, [ctx.current_task_id, 'result'], {
+    //   new_url, body, params, response
+    // });
 
     await HttpClient._validatorResponse(
       response,

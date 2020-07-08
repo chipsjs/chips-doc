@@ -11,7 +11,7 @@ class Controller {
   static async run(ctx, next) {
     if (!Controller._isIgnore(ctx)) {
       await next();
-      const params = _.get(ctx, [provider_type, 'params']);
+      const params = _.get(ctx, [provider_type, 'params'], {});
 
       await loop.forEach(Object.entries(params).values(), ([control_case, control_info]) => {
         switch (control_case) {
@@ -31,7 +31,7 @@ class Controller {
   static async ignoreCase(ctx, control_info) {
     const { task_id: dest_task_id, condition } = control_info;
 
-    const http_response = _.get(ctx, ['result', 'response']);
+    const http_response = _.get(ctx, ['result', 'response'], {});
 
     let match_flag = true;
     const temp = Object.entries(condition);

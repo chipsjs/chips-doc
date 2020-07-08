@@ -94,7 +94,6 @@ class TaskFlow {
           headers,
           context: this.context
         });
-
         await task.run();
 
         if (_.has(this.context, [task_id, 'result'])) {
