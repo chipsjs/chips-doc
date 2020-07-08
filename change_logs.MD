@@ -22,6 +22,11 @@
 - 1.refactor fake&mock module 2.add ut test for them 3.fix some bugs
 - author: kris.xu
 
+### 2020.7
+
+- 1. refactor extension to support middlewares
+- author: kris.xu
+
 ## Sechedule
 
 ### v1.1.0
