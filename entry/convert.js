@@ -1,16 +1,10 @@
 // init convert, it is not necessary now;
 
-// const Setting = require('../middleware/setting');
 // const Convert = require('../middleware/convert/spec_convert');
 
 // const { paths } = require('../api_spec').api_all_spec;
 
 // async function execute() {
-//   try {
-//     Setting.initialize();
-//   } catch (e) {
-//     console.log(e.message);
-//   }
 
 //   try {
 //     Convert.initialize({ log_module: console });

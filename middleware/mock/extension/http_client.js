@@ -170,17 +170,15 @@ class HttpClient {
   }
 
   static _parseArgs(ctx) {
-    const { swagger, params } = ctx;
     const { url, method_type } = ctx.task;
-
     return {
       operation_obj: Swagger.getOperationObjectFromSwagger(
-        swagger, url, method_type
+        ctx.swagger, url, method_type
       ),
-      path_parameters: Swagger.getPathParameters(swagger, url),
+      path_parameters: Swagger.getPathParameters(ctx.swagger, url),
       real_data: _.merge(
-        {}, params,
-        _.get(ctx, [provider_type, 'params', 'request'], {})
+        {}, _.get(ctx, ['params'], {}),
+        _.get(ctx, [ctx.current_task_id, provider_type, 'params', 'request'], {})
       ),
     }
   }
@@ -196,9 +194,9 @@ class HttpClient {
    * @memberof HttpClient
    */
   static async _validatorResponse(response, schema) {
-    if (response.status !== 200) {
-      return Promise.reject(new TypeError('request fail'));
-    }
+    // if (response.status !== 200) { // axios will throw error when it is not 2xx
+    //   return Promise.reject(new TypeError('request fail'));
+    // }
 
     const result = dataValidate(response.data, schema);
     if (Array.isArray(result.errors) && result.errors.length !== 0) {

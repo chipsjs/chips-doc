@@ -22,7 +22,7 @@ class Task {
       const provider_type = ele.middleware;
       // ignore or throw, TO DO
       if (!Task._isAllowExtension(provider_type)) {
-        throw new TypeError(`Task::no support this extension: ${provider_type}`);
+        throw new TypeError(`no support this extension: ${provider_type}`);
       }
 
       this._createProviderContext(provider_type, ele.params);
@@ -99,7 +99,7 @@ class Task {
   }
 
   _createProviderContext(provider_type, params) {
-    _.set(this.context, [provider_type, 'params'], params);
+    _.set(this.context, [this.context.current_task_id, provider_type, 'params'], params);
   }
 
   static _isAllowExtension(provider_type) {

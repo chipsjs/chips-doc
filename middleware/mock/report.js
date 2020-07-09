@@ -106,7 +106,10 @@ class Report {
   }
 
   readReport() {
-    return fs.readFileSync(this._report_path);
+    if (fs.existsSync(this._report_path)) {
+      return fs.readFileSync(this._report_path);
+    }
+    return '';
   }
 
   destoryReport() {

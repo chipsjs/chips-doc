@@ -30,7 +30,7 @@ describe('flow mock', () => {
       });
     })
 
-    describe('api1 | query specific & response validator', () => {
+    describe('flow_2 | query specific & response validator', () => {
       let report_queue;
 
       before('mock', async () => {
@@ -298,6 +298,84 @@ describe('flow mock', () => {
       assert.strictEqual(report_queue[3].url, '/api1');
     });
   });
+
+  describe('unknown extension', () => {
+    let report_queue;
+    let fail_queue;
+
+    before('mock', async () => {
+      const task_flow = new TaskFlow('temp');
+      await task_flow.execute(swagger, api_flow.flow_16);
+      report_queue = task_flow.outputReport();
+      fail_queue = task_flow.outputFailedReport();
+    });
+
+    it('should have right output', () => {
+      assert.strictEqual(report_queue.length, 0);
+      assert.strictEqual(fail_queue.length, 1);
+      assert.strictEqual(fail_queue[0].api_info_name, api_flow.flow_16.flow[0]);
+      assert.strictEqual(fail_queue[0].message, 'no support this extension: unknown');
+    });
+  })
+
+  describe('get report', () => {
+    let before_destory_report;
+    let after_destory_report;
+
+    before('mock', async () => {
+      const task_flow = new TaskFlow('temp');
+      await task_flow.execute(swagger, api_flow.flow_1);
+      before_destory_report = task_flow.readReport();
+      task_flow.destoryReport();
+      after_destory_report = task_flow.readReport();
+    });
+
+    it('should have right output', () => {
+      assert.isDefined(before_destory_report);
+      assert.strictEqual(after_destory_report, '');
+    });
+  })
+
+  describe('swagger fake', () => {
+    describe('query schema no exist', () => {
+      let report_queue;
+
+      before('mock', async () => {
+        const task_flow = new TaskFlow('temp');
+        await task_flow.execute(swagger, api_flow.flow_17);
+        report_queue = task_flow.outputReport();
+      });
+
+      it('should have right output', () => {
+        assert.strictEqual(report_queue.length, 2);
+        assert.nestedPropertyVal(report_queue[0], 'api_info_name', api_flow.flow_17.flow[0]);
+        assert.nestedPropertyVal(report_queue[1], 'api_info_name', api_flow.flow_17.flow[0]);
+        assert.nestedPropertyVal(report_queue[1], 'response.status', 200);
+        assert.nestedPropertyVal(report_queue[1], 'response.data.success', false);
+      });
+    });
+  });
+
+  describe('path context data', () => {
+    let report_queue;
+
+    before('mock', async () => {
+      const task_flow = new TaskFlow('temp');
+      await task_flow.execute(swagger, api_flow.flow_18);
+      report_queue = task_flow.outputReport();
+    });
+
+    it('should have right output', () => {
+      assert.strictEqual(report_queue.length, 2);
+      assert.nestedPropertyVal(report_queue[0], 'api_info_name', api_flow.flow_18.flow[0]);
+      assert.nestedPropertyVal(report_queue[0], 'url', '/api3/C');
+      assert.nestedPropertyVal(report_queue[1], 'api_info_name', api_flow.flow_18.flow[0]);
+      assert.nestedPropertyVal(report_queue[1], 'response.status', 200);
+      assert.nestedPropertyVal(report_queue[1], 'response.data.success', true);
+    });
+  });
+
+  // context merge specific
 
   // TODO, context 是递归的
   // TODO, context 在response中指定

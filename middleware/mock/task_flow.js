@@ -104,7 +104,7 @@ class TaskFlow {
         }
       });
     } catch (err) {
-      this._reporter.addFailReport(this.context.current_task_id, _.get(this.context, ['result', 'response']), err.message);
+      this._reporter.addFailReport(this.context.current_task_id, _.get(this.context, ['result', 'response'], {}), err.message);
       this._logger.error(`TaskFlow::excute fail, err msg is ${err.message}`);
     }
 

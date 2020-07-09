@@ -22,7 +22,7 @@ class Controller {
   }
 
   static async process(ctx) {
-    const params = _.get(ctx, [provider_type, 'params'], {});
+    const params = _.get(ctx, [ctx.current_task_id, provider_type, 'params'], {});
 
     await loop.forEach(Object.entries(params).values(), ([control_case, control_info]) => {
       switch (control_case) {

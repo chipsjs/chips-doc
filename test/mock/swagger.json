@@ -96,7 +96,7 @@
           "required": true,
           "schema": {
             "type": "string",
-            "enum": ["A", "B", "C"]
+            "enum": ["A", "B"]
           }
         }
       ],
@@ -242,6 +242,39 @@
           "api"
         ],
         "summary": "6"
+      }
+    },
+    "/api7": {
+      "get": {
+        "parameters": [
+          {
+            "name": "param1",
+            "in": "query",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "true, false"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "api"
+        ],
+        "summary": "7"
       }
     }
   }

@@ -133,5 +133,41 @@
         }
       ]
     }
+  },
+  "flow_16": {
+    "flow": ["post /api2", "get /api1"],
+    "extensions": {
+      "post /api2": [
+        {
+          "middleware": "unknown",
+          "params": {
+            "ignore": {
+              "task_id": "get /api1",
+              "condition": {
+                "success": false
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "flow_17": {
+    "flow": ["get /api7"]
+  },
+  "flow_18": {
+    "flow": ["get /api3/:param1"],
+    "extensions": {
+      "get /api3/:param1": [
+          {
+            "middleware": "HttpClient",
+            "params": {
+              "request": {
+                "param1": "C"
+              }
+            }
+          }
+      ]
+    }
   }
 }
