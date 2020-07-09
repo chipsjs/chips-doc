@@ -24,7 +24,7 @@
 
 ### 2020.7
 
-- 1. refactor extension to support middlewares
+- 1. refactor extension to support middlewares 2.fix bugs and add ut test
 - author: kris.xu
 
 ## Sechedule

@@ -17,7 +17,6 @@
   },
   "devDependencies": {
     "chai": "^4.2.0",
-    "cola-mock-server": "git+ssh://git@bitbucket.org/apac_eco_system/cola-mock-server.git",
     "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.1.0",
     "eslint-plugin-import": "^2.20.2",
