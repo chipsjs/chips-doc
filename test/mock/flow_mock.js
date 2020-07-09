@@ -227,21 +227,59 @@ describe('flow mock', () => {
     });
   })
 
-  describe('control flow by response | ignore', () => {
-    let report_queue;
+  describe('controller', () => {
+    describe('ignore', () => {
+      let report_queue;
 
-    before('mock', async () => {
-      const task_flow = new TaskFlow('temp');
-      await task_flow.execute(swagger, api_flow.flow_12);
-      report_queue = task_flow.outputReport();
+      before('mock', async () => {
+        const task_flow = new TaskFlow('temp');
+        await task_flow.execute(swagger, api_flow.flow_12);
+        report_queue = task_flow.outputReport();
+      });
+
+      it('should have right output', () => {
+        assert.strictEqual(report_queue.length, 2);
+        assert.strictEqual(report_queue[0].api_info_name, api_flow.flow_12.flow[0]);
+        assert.strictEqual(report_queue[1].api_info_name, api_flow.flow_12.flow[0]);
+      });
     });
 
-    it('should have right output', () => {
-      assert.strictEqual(report_queue.length, 2);
-      assert.strictEqual(report_queue[0].api_info_name, api_flow.flow_12.flow[0]);
-      assert.strictEqual(report_queue[1].api_info_name, api_flow.flow_12.flow[0]);
+    describe('no ignore', () => {
+      let report_queue;
+
+      before('mock', async () => {
+        const task_flow = new TaskFlow('temp');
+        await task_flow.execute(swagger, api_flow.flow_14);
+        report_queue = task_flow.outputReport();
+      });
+
+      it('should have right output', () => {
+        assert.strictEqual(report_queue.length, 4);
+        assert.strictEqual(report_queue[0].api_info_name, api_flow.flow_14.flow[0]);
+        assert.strictEqual(report_queue[1].api_info_name, api_flow.flow_14.flow[0]);
+        assert.strictEqual(report_queue[2].api_info_name, api_flow.flow_14.flow[1]);
+        assert.strictEqual(report_queue[3].api_info_name, api_flow.flow_14.flow[1]);
+      });
     });
-  });
+
+    describe('useless control case', () => {
+      let report_queue;
+
+      before('mock', async () => {
+        const task_flow = new TaskFlow('temp');
+        await task_flow.execute(swagger, api_flow.flow_15);
+        report_queue = task_flow.outputReport();
+      });
+
+      it('should have right output', () => {
+        assert.strictEqual(report_queue.length, 4);
+        assert.strictEqual(report_queue[0].api_info_name, api_flow.flow_15.flow[0]);
+        assert.strictEqual(report_queue[1].api_info_name, api_flow.flow_15.flow[0]);
+        assert.strictEqual(report_queue[2].api_info_name, api_flow.flow_15.flow[1]);
+        assert.strictEqual(report_queue[3].api_info_name, api_flow.flow_15.flow[1]);
+      });
+    });
+  })
 
   describe('api can call multi times | has @id', () => {
     let report_queue;
@@ -255,9 +293,9 @@ describe('flow mock', () => {
     it('should have right output', () => {
       assert.strictEqual(report_queue.length, 4);
       assert.strictEqual(report_queue[0].url, '/api1');
-      assert.strictEqual(report_queue[0].url, '/api1');
       assert.strictEqual(report_queue[1].url, '/api1');
-      assert.strictEqual(report_queue[1].url, '/api1');
+      assert.strictEqual(report_queue[2].url, '/api1');
+      assert.strictEqual(report_queue[3].url, '/api1');
     });
   });
 

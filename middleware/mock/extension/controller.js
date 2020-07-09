@@ -39,20 +39,18 @@ class Controller {
   static async ignoreCase(ctx, control_info) {
     const { task_id: dest_task_id, condition } = control_info;
 
-    const http_response = _.get(ctx, ['result', 'response'], {});
+    const http_response = _.get(ctx, [ctx.current_task_id, 'result', 'response', 'data'], {});
 
-    let match_flag = true;
-    const temp = Object.entries(condition);
-    for (let index = 0; index < temp; index += 1) {
-      const [key, value] = temp[index];
-      if (_.get(http_response, key) !== value) {
-        match_flag = false;
-        break;
+    const exist_no_match = Object.entries(condition).find(
+      ([key, value]) => {
+        if (_.has(http_response, key)) {
+          return _.get(http_response, key) !== value
+        }
+        return false;
       }
-    }
-
+    );
     // TODO, dest task id support array
-    if (match_flag) {
+    if (!exist_no_match) {
       _.set(ctx, [dest_task_id, provider_type, 'ignore'], true);
     }
   }

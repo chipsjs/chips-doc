@@ -97,5 +97,41 @@
   },
   "flow_13": {
     "flow": ["get /api1@1", "get /api1@2"]
+  },
+  "flow_14": {
+    "flow": ["post /api2", "get /api1"],
+    "extensions": {
+      "post /api2": [
+        {
+          "middleware": "Controller",
+          "params": {
+            "ignore": {
+              "task_id": "get /api1",
+              "condition": {
+                "success": false
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "flow_15": {
+    "flow": ["post /api2", "get /api1"],
+    "extensions": {
+      "post /api2": [
+        {
+          "middleware": "Controller",
+          "params": {
+            "useless_key": {
+              "task_id": "get /api1",
+              "condition": {
+                "success": true
+              }
+            }
+          }
+        }
+      ]
+    }
   }
 }
