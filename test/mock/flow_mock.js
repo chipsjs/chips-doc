@@ -243,9 +243,27 @@ describe('flow mock', () => {
     });
   });
 
+  describe('api can call multi times | has @id', () => {
+    let report_queue;
+
+    before('mock', async () => {
+      const task_flow = new TaskFlow('temp');
+      await task_flow.execute(swagger, api_flow.flow_13);
+      report_queue = task_flow.outputReport();
+    });
+
+    it('should have right output', () => {
+      assert.strictEqual(report_queue.length, 4);
+      assert.strictEqual(report_queue[0].url, '/api1');
+      assert.strictEqual(report_queue[0].url, '/api1');
+      assert.strictEqual(report_queue[1].url, '/api1');
+      assert.strictEqual(report_queue[1].url, '/api1');
+    });
+  });
+
   // TODO, context 是递归的
   // TODO, context 在response中指定
-  // after('stop mock server', () => {
-  //   mock_server.shutdown();
-  // });
+  after('stop mock server', () => {
+    mock_server.shutdown();
+  });
 });

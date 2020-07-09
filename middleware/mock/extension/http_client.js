@@ -125,11 +125,10 @@ class HttpClient {
    * fake data & http request
    *
    * @param {object} ctx - options
-   * @param {Function} next - next middleware
    * @returns {{new_url: string, data: object, params: object, response: object}} - request info
    * @memberof Task
    */
-  static async run(ctx, next) {
+  static async run(ctx) {
     const {
       url, headers, method_type
     } = ctx.task;
@@ -193,7 +192,7 @@ class HttpClient {
    * @param {string} response.status - http status code
    * @param {object} response.data - http response body
    * @param {object} schema - openapi response schema
-   * @returns {Promise} - todo
+   * @returns {Promise} - success
    * @memberof HttpClient
    */
   static async _validatorResponse(response, schema) {
