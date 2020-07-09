@@ -1,10 +1,4 @@
-// const fakeResponse = (url, method, request_config) => {
-//   const data = {};
-//   let status = 200;
-
-//   // TODO, 路由解析
-// };
-
+// TODO, cant work
 module.exports = (target_function, hook_function) => {
   if (typeof hook_function === 'function') {
     // eslint-disable-next-line no-param-reassign
