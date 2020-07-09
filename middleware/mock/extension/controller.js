@@ -4,28 +4,36 @@ const { loop } = require('../../../lib');
 const provider_type = 'Controller';
 
 class Controller {
-  static _isIgnore(ctx) {
-    return _.get(ctx, [ctx.current_task_id, 'controller', 'ignore'], false);
+  static isIgnore(ctx) {
+    return _.get(ctx, [ctx.current_task_id, provider_type, 'ignore'], false);
+  }
+
+  static get type() {
+    return provider_type;
   }
 
   static async run(ctx, next) {
-    if (!Controller._isIgnore(ctx)) {
+    if (!Controller.isIgnore(ctx)) {
       await next();
-      const params = _.get(ctx, [provider_type, 'params'], {});
-
-      await loop.forEach(Object.entries(params).values(), ([control_case, control_info]) => {
-        switch (control_case) {
-          case 'ignore':
-            Controller.ignoreCase(ctx, control_info);
-            break;
-          default:
-            // do nothing; you can add new controller case here
-            break;
-        }
-      })
+      await Controller.process(ctx);
     } else {
       // log ignore task to report
     }
+  }
+
+  static async process(ctx) {
+    const params = _.get(ctx, [provider_type, 'params'], {});
+
+    await loop.forEach(Object.entries(params).values(), ([control_case, control_info]) => {
+      switch (control_case) {
+        case 'ignore':
+          Controller.ignoreCase(ctx, control_info);
+          break;
+        default:
+          // do nothing; you can add new controller case here
+          break;
+      }
+    })
   }
 
   static async ignoreCase(ctx, control_info) {
@@ -45,7 +53,7 @@ class Controller {
 
     // TODO, dest task id support array
     if (match_flag) {
-      _.set(ctx, [dest_task_id, 'controller', 'ignore'], true);
+      _.set(ctx, [dest_task_id, provider_type, 'ignore'], true);
     }
   }
 }

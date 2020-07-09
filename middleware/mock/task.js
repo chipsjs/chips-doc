@@ -45,17 +45,57 @@ class Task {
       url,
       method_type,
       headers,
-      extension: Task.preExtension(context),
+      extension: Task.preSetExtension(context),
     }
   }
 
-  // todo
-  static preExtension(context) {
-    const extension = _.get(context, ['extensions', context.current_task_id], [{ middleware: 'Controller' }, { middleware: 'HttpClient' }]);
-    // now only support extension overrides the default directly
-    // support merge in the future
+  /**
+   * set default middleware 'Controller' && 'HttpClient' when there is not in extension
+   *
+   * @static
+   * @param {object} ctx - ctx
+   * @returns {object []} - middlewares
+   * @memberof Task
+   */
+  static preSetExtension(ctx) {
+    let middlewares = _.get(ctx, ['extensions', ctx.current_task_id], []);
+    middlewares = Task.preSetController(middlewares);
+    middlewares = Task.preSetHttpClient(middlewares);
+    return middlewares;
+  }
 
-    return extension;
+  /**
+   *
+   *
+   * @static
+   * @param {object[]} middlewares - old middlewares
+   * @returns {object[]} - new middlewares
+   * @memberof Task
+   */
+  static preSetController(middlewares) {
+    const middleware = middlewares.find((ele) => ele.middleware === providers.types.controller);
+    if (middleware) {
+      return middlewares;
+    }
+
+    return [{ middleware: providers.types.controller }].concat(middlewares);
+  }
+
+  /**
+   *
+   *
+   * @static
+   * @param {object[]} middlewares - old middlewares
+   * @returns {object[]} - new middlewares
+   * @memberof Task
+   */
+  static preSetHttpClient(middlewares) {
+    const middleware = middlewares.find((ele) => ele.middleware === providers.types.http_client);
+    if (middleware) {
+      return middlewares;
+    }
+
+    return middlewares.concat([{ middleware: providers.types.http_client }]);
   }
 
   _createProviderContext(provider_type, params) {
@@ -63,7 +103,7 @@ class Task {
   }
 
   static _isAllowExtension(provider_type) {
-    return providers.types.includes(provider_type);
+    return providers.getTypes().includes(provider_type);
   }
 }
 

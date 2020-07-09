@@ -2,14 +2,11 @@ const providers = {};
 providers.HttpClient = require('./http_client');
 providers.Controller = require('./controller');
 
-providers.types = [
-  'HttpClient',
-  'Controller'
-];
-// class ExtensionFactory {
-//   static async run(provider_type) {
-//     await providers[provider_type].run();
-//   }
-// }
+providers.types = {
+  http_client: providers.HttpClient.type,
+  controller: providers.Controller.type
+}
+
+providers.getTypes = () => Object.values(providers.types);
 
 module.exports = providers;

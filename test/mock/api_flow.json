@@ -91,9 +91,6 @@
               }
             }
           }
-        },
-        {
-          "middleware": "HttpClient"
         }
       ]
     }

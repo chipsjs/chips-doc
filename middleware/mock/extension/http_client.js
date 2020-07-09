@@ -4,7 +4,13 @@ const dataValidate = require('jsonschema').validate;
 
 const { Swagger, request: httpRequest } = require('../../../lib');
 
+const provider_type = 'HttpClient';
+
 class HttpClient {
+  static get type() {
+    return provider_type;
+  }
+
   /**
    *
    *
@@ -175,7 +181,7 @@ class HttpClient {
       path_parameters: Swagger.getPathParameters(swagger, url),
       real_data: _.merge(
         {}, params,
-        _.get(ctx, ['HttpClient', 'params', 'request'], {})
+        _.get(ctx, [provider_type, 'params', 'request'], {})
       ),
     }
   }
