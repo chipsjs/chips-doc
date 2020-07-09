@@ -154,14 +154,9 @@ class HttpClient {
       headers
     })
 
-    ctx[ctx.current_task_id] = {
-      result: {
-        new_url, body, params, response
-      }
-    }
-    // _.set(ctx, [ctx.current_task_id, 'result'], {
-    //   new_url, body, params, response
-    // });
+    _.set(ctx, [ctx.current_task_id, 'result'], {
+      new_url, body, params, response
+    });
 
     await HttpClient._validatorResponse(
       response,
