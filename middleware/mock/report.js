@@ -4,9 +4,10 @@ const config = require('config');
 const base_path = config.get('report_path') || './';
 const max_report_num = config.get('max_report_num');
 
-if (!fs.existsSync(base_path)) {
-  fs.mkdirSync(base_path);
-}
+// if (!fs.existsSync(base_path)) {
+//   fs.mkdirSync(base_path);
+// }
+// base path should be created by self
 
 const _initReport = (reporter) => {
   let report_path = `${base_path}/${reporter}`

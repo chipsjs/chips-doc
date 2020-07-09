@@ -318,21 +318,23 @@ describe('flow mock', () => {
     });
   })
 
-  describe('get report', () => {
-    let before_destory_report;
-    let after_destory_report;
+  describe('report', () => {
+    describe('read && desctory report', () => {
+      let before_destory_report;
+      let after_destory_report;
 
-    before('mock', async () => {
-      const task_flow = new TaskFlow('temp');
-      await task_flow.execute(swagger, api_flow.flow_1);
-      before_destory_report = task_flow.readReport();
-      task_flow.destoryReport();
-      after_destory_report = task_flow.readReport();
-    });
+      before('mock', async () => {
+        const task_flow = new TaskFlow('temp');
+        await task_flow.execute(swagger, api_flow.flow_1);
+        before_destory_report = task_flow.readReport();
+        task_flow.destoryReport();
+        after_destory_report = task_flow.readReport();
+      });
 
-    it('should have right output', () => {
-      assert.isDefined(before_destory_report);
-      assert.strictEqual(after_destory_report, '');
+      it('should have right output', () => {
+        assert.isDefined(before_destory_report);
+        assert.strictEqual(after_destory_report, '');
+      });
     });
   })
 
