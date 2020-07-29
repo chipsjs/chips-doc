@@ -1,17 +1,14 @@
 const { assert } = require('chai');
 
-// eslint-disable-next-line prefer-const
-let { request } = require('../../lib');
 const { TaskFlow } = require('../../index');
 const api_flow = require('./api_flow.json');
 const swagger = require('./swagger.json');
-const hook = require('../tools/hook');
-const Router = require('../tools/router');
+const helper = require('../tools/helper');
 
 // here is the schema's link about string: https://json-schema.org/understanding-json-schema/reference/string.html#format
 describe('flow mock', () => {
   before('start mock server', () => {
-    hook(request, Router.mock);
+    helper.mockServerStart();
   });
 
   describe('signle api mock', () => {
@@ -381,10 +378,10 @@ describe('flow mock', () => {
   });
 
   // context merge specific
-
   // TODO, context 是递归的
   // TODO, context 在response中指定
-  // after('stop mock server', () => {
-  //   mock_server.shutdown();
-  // });
+
+  after('stop mock server', () => {
+    helper.mockServerRestore();
+  });
 });

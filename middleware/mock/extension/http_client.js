@@ -1,8 +1,9 @@
 const fake = require('openapi-sampler');
 const _ = require('lodash');
+const config = require('config');
 const dataValidate = require('jsonschema').validate;
 
-const { Swagger, request: httpRequest } = require('../../../lib');
+const { Swagger, http } = require('../../../lib');
 
 const provider_type = 'HttpClient';
 
@@ -153,9 +154,12 @@ class HttpClient {
       real_data
     );
 
-    const response = await httpRequest(new_url, method_type, {
+    const response = await http.request({
+      url: config.get('mock_server'),
+      path: new_url,
+      method: method_type,
       params,
-      data: body,
+      body,
       headers
     })
 

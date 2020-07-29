@@ -169,5 +169,43 @@
           }
       ]
     }
+  },
+  "flow_19": {
+    "flow": ["A", "B", "C", "D"],
+    "extensions": {
+      "A": [
+          {
+            "middleware": "HttpClient",
+            "params": {
+              "request": {
+                "param1": "context"
+              }
+            }
+          }
+      ],
+      "B": [
+        {
+          "middleware": "Controller",
+          "params": {
+            "ignore": {
+              "task_id": "D",
+              "condition": {
+                "user.b.success": true
+              }
+            }
+          }
+        }
+      ],
+      "D": [
+        {
+          "middleware": "HttpClient",
+          "params": {
+            "request": {
+              "param1": "kkk"
+            }
+          }
+        }
+      ]
+    }
   }
 }

@@ -1,54 +1,64 @@
 const _ = require('lodash');
 
 const methods = ['get', 'post', 'put', 'delete'];
-const router_map = {}; // key is url, value is funciton
 
 class Router {
-  static createMehotdsFunction() {
+  constructor() {
+    this.router_map = {}; // key is url, value is funciton
+  }
+
+  createMehotdsFunction() {
     methods.forEach((method) => {
       Router.prototype[method] = (url, callback) => {
-        const temp_arr = url.split('/').map((path) => {
-          if (path.indexOf(':') !== -1) {
-            return '*';
-          }
-          return path;
-        });
-
-        const new_url = temp_arr.join('/');
-
-        _.set(router_map, [new_url, method], callback);
+        _.set(this.router_map, [url, method], callback);
       }
     });
   }
 
-  static mock(url, method_type, request_config) {
+  /**
+   *
+   *
+   * @param {string} url - url
+   * @param {string} method_type - method
+   * @param {object} request_config - request_config
+   * @param {object} [request_config.params] - params
+   * @param {object} [request_config.body] - body
+   * @param {object} [request_config.headers] - headers
+   * @returns {object} {status, data}
+   * @memberof Router
+   */
+  fakeRequest(url, method_type, request_config) {
     const response = {
       status: 404
     };
-    if (_.has(router_map, [url, method_type])) {
-      const callback = _.get(router_map, [url, method_type]);
+    if (_.has(this.router_map, [url, method_type])) {
+      const callback = _.get(this.router_map, [url, method_type]);
       response.data = callback(request_config);
       response.status = 200;
     } else {
       const mock_path_arr = url.split('/');
-      const result = Object.entries(router_map).find(([router_url]) => {
+      const path = {};
+      const match_url = Object.keys(this.router_map).find((router_url) => {
         const router_path_arr = router_url.split('/');
-        if (mock_path_arr.length !== router_path_arr) return false;
+        if (mock_path_arr.length !== router_path_arr.length) return false;
 
         for (let index = 0; index < router_path_arr.length; index += 1) {
-          if ((mock_path_arr[index] !== router_path_arr[index]) && (router_path_arr[index] !== '*')) {
-            return false;
+          const router_path_item = router_path_arr[index];
+          if (mock_path_arr[index] !== router_path_item) {
+            if (router_path_arr[index].indexOf(':') === -1) {
+              return false;
+            }
+
+            path[router_path_item.substring(1)] = mock_path_arr[index];
           }
         }
 
         return true;
       });
 
-      if (result) {
-        const [, callback] = result;
-        // TODO, quick way to use path, optimize in the future
-        _.set(request_config, ['path'], mock_path_arr);
-        response.data = callback(request_config);
+      if (match_url) {
+        const callback = _.get(this.router_map, [match_url, method_type]);
+        response.data = callback({ ...request_config, path });
         response.status = 200;
       }
     }
@@ -57,14 +67,13 @@ class Router {
   }
 }
 
-Router.createMehotdsFunction();
 const router = new Router();
-
+router.createMehotdsFunction();
 router.get('/api1', (request_config) => {
   const { param1 } = request_config.params;
   if (typeof param1 === 'string' && param1.length < 10 && param1.length > 2) {
     return {
-      success: false
+      success: true
     }
   }
 
@@ -74,7 +83,7 @@ router.get('/api1', (request_config) => {
 });
 
 router.post('/api2', (request_config) => {
-  const { param1 } = request_config.data;
+  const { param1 } = request_config.body;
 
   switch (param1) {
     case 'A':
@@ -91,7 +100,7 @@ router.post('/api2', (request_config) => {
 });
 
 router.get('/api3/:param1', (request_config) => {
-  const param1 = request_config.path[1];
+  const { param1 } = request_config.path;
 
   switch (param1) {
     case 'A':
@@ -107,8 +116,8 @@ router.get('/api3/:param1', (request_config) => {
   }
 });
 
-router.post('/api4', async (request_config) => {
-  const { success } = request_config.data;
+router.post('/api4', (request_config) => {
+  const { success } = request_config.body;
 
   if (success) {
     return {
@@ -121,8 +130,8 @@ router.post('/api4', async (request_config) => {
   }
 });
 
-router.post('/api5/:id/', async (request_config) => {
-  const id = request_config.path[1];
+router.post('/api5/:id/', (request_config) => {
+  const { id } = request_config.path;
 
   if (id === '1') {
     return {
@@ -134,25 +143,25 @@ router.post('/api5/:id/', async (request_config) => {
   }
 });
 
-router.post('/api6', async (request_config) => {
-  const { success } = request_config.params;
+router.post('/api6', (request_config) => {
+  const { success } = request_config.body;
 
   return {
     success
   }
 });
 
-router.get('/api7', async (request_config) => {
+router.get('/api7', (request_config) => {
   const { param1 } = request_config.params;
   if (param1 === '') {
     return {
-      success: true
+      success: false
     };
   }
 
   return {
-    success: false
+    success: true
   };
 });
 
-module.exports = Router;
+module.exports = router;
