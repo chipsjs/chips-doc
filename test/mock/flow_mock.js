@@ -1,5 +1,4 @@
 const { assert } = require('chai');
-
 const { TaskFlow } = require('../../index');
 const api_flow = require('./api_flow.json');
 const swagger = require('./swagger.json');
@@ -279,6 +278,24 @@ describe('flow mock', () => {
         assert.strictEqual(report_queue[3].api_info_name, api_flow.flow_15.flow[1]);
       });
     });
+
+    // describe('four apis in flow', () => {
+    //   let report_queue;
+
+    //   before('mock', async () => {
+    //     const task_flow = new TaskFlow('temp');
+    //     await task_flow.execute(swagger, api_flow.flow_19);
+    //     report_queue = task_flow.outputReport();
+    //   });
+
+    //   it('should have right output', () => {
+    //     assert.strictEqual(report_queue.length, 4);
+    //     assert.strictEqual(report_queue[0].api_info_name, api_flow.flow_15.flow[0]);
+    //     assert.strictEqual(report_queue[1].api_info_name, api_flow.flow_15.flow[0]);
+    //     assert.strictEqual(report_queue[2].api_info_name, api_flow.flow_15.flow[1]);
+    //     assert.strictEqual(report_queue[3].api_info_name, api_flow.flow_15.flow[1]);
+    //   });
+    // });
   })
 
   describe('api can call multi times | has @id', () => {
