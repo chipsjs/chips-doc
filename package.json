@@ -23,11 +23,12 @@
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-jsdoc": "^28.5.1",
     "eslint-plugin-mocha": "^6.3.0",
+    "husky": "^4.2.5",
     "mocha": "^7.2.0",
-    "nyc": "^15.0.1"
+    "nyc": "^15.0.1",
+    "validate-commit-msg": "^2.14.0"
   },
   "scripts": {
-    "convert": "node ./entry/convert.js",
     "test": "mocha ./test/*",
     "test-convert": "mocha ./test/convert",
     "test-mock": "mocha ./test/mock",
@@ -38,6 +39,12 @@
   "repository": {
     "type": "git",
     "url": "git+ssh://git@bitbucket.org/apac_eco_system/cola-doc.git"
+  },
+  "husky": {
+    "hooks": {
+      "pre-push": "npm test",
+      "commit-msg": "validate-commit-msg"
+    }
   },
   "author": "krisxu",
   "license": "ISC",
