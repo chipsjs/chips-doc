@@ -32,6 +32,17 @@ class TaskFlow {
     return { method_type, url: api_name_with_suffix };
   }
 
+  /**
+   *
+   *
+   * @static
+   * @param {object} api_flow
+   * @memberof TaskFlow
+   */
+  static packageSwagger(api_flow) {
+    
+  }
+
   // /**
   //  *
   //  *
@@ -60,17 +71,18 @@ class TaskFlow {
 
   /**
    *
+   * TODO, api version is necessary
    *
-   * @param {object} swagger - swagger document
+   * @param {object} swaggers - key is version, value is swagger document
    * @param {{flow: string[], context: string[], extension: object}} api_flow - flow
    * @param {object} headers - http headers
    * @memberof TaskQueue
    */
-  async execute(swagger, api_flow, headers = {}) {
+  async execute(swaggers, api_flow, headers = {}) {
     this.context = {
       current_task_id: '',
       flow: api_flow.flow,
-      extensions: api_flow.extensions
+      swaggers
     }
 
     try {
@@ -84,7 +96,6 @@ class TaskFlow {
 
       await loop.forEach(this.context.flow.values(), async (task_id) => {
         this.context.current_task_id = task_id;
-        this.context.swagger = swagger;
 
         const { method_type, url } = TaskFlow.getApiInfoFromStepName(task_id);
 
@@ -92,6 +103,8 @@ class TaskFlow {
           url,
           method_type,
           headers,
+          task_id,
+          middlewares: _.get(api_flow, ['extensions', task_id], []),
           context: this.context
         });
         await task.run();

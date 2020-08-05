@@ -4,14 +4,9 @@ const config = require('config');
 const dataValidate = require('jsonschema').validate;
 
 const { Swagger, http } = require('../../../lib');
+const BaseExtension = require('./base_extension');
 
-const provider_type = 'HttpClient';
-
-class HttpClient {
-  static get type() {
-    return provider_type;
-  }
-
+class HttpClient extends BaseExtension {
   /**
    *
    *
@@ -132,7 +127,7 @@ class HttpClient {
   static async run(ctx) {
     const {
       url, headers, method_type
-    } = ctx.task;
+    } = ctx;
 
     const { operation_obj, path_parameters, real_data } = HttpClient._parseArgs(ctx);
 
@@ -163,7 +158,7 @@ class HttpClient {
       headers
     })
 
-    _.set(ctx, [ctx.current_task_id, 'result'], {
+    _.set(ctx, ['public', ctx.task_id, 'result'], {
       new_url, body, params, response
     });
 
@@ -174,15 +169,12 @@ class HttpClient {
   }
 
   static _parseArgs(ctx) {
-    const { url, method_type } = ctx.task;
     return {
-      operation_obj: Swagger.getOperationObjectFromSwagger(
-        ctx.swagger, url, method_type
-      ),
-      path_parameters: Swagger.getPathParameters(ctx.swagger, url),
+      operation_obj: ctx.operation_obj,
+      path_parameters: ctx.path_parameters,
       real_data: _.merge(
         {}, _.get(ctx, ['params'], {}),
-        _.get(ctx, [ctx.current_task_id, provider_type, 'params', 'request'], {})
+        _.get(ctx, [this.type, 'params', 'request'], {})
       ),
     }
   }

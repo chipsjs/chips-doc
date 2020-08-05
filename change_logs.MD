@@ -27,6 +27,11 @@
 - 1. refactor extension to support middlewares 2.fix bugs and add ut test
 - author: kris.xu
 
+### 2020.8
+
+- 1. optimize ut test 2.add husky
+- author: kris.xu
+
 ## Sechedule
 
 ### v1.1.0
@@ -34,6 +39,9 @@
 - items fake
 - 自定义flow: 1.单个api
 - 部分headers放入context中
+- context build的时候创建而不是run时
+- context 各层自己管理自己的context
+- extensions的解析和处理都在flow这一层
 
 ### v1.2.0
 

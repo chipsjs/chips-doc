@@ -1,8 +1,12 @@
 const { assert } = require('chai');
 const { TaskFlow } = require('../../index');
 const api_flow = require('./api_flow.json');
-const swagger = require('./swagger.json');
+const v1_swagger = require('./v1_swagger.json');
 const helper = require('../tools/helper');
+
+const swagger = {
+  v1: v1_swagger
+}
 
 // here is the schema's link about string: https://json-schema.org/understanding-json-schema/reference/string.html#format
 describe('flow mock', () => {

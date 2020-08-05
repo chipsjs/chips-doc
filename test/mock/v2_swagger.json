@@ -1,0 +1,50 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "test",
+    "description": "1111",
+    "termsOfService": "http://localhost"
+  },
+  "servers": [],
+  "paths": {
+    "/api1": {
+      "get": {
+        "parameters": [
+          {
+            "name": "param1",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 1,
+              "minLength": 1,
+              "description": "when length >= 2 && < 10, api server will return true, or not return false"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "true, false"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "api 1"
+        ],
+        "summary": "1"
+      }
+    }
+  }
+}

@@ -1,6 +1,6 @@
 const _ = require('lodash');
 
-const providers = require('./extension');
+const extensions = require('./extension');
 const { compose } = require('../../lib');
 
 class Task {
@@ -8,7 +8,7 @@ class Task {
    * Creates an instance of Task.
    *
    * @param {{url: string, method_type: string, swagger: object,
-   * context: {current_task_id: string, extensions: object}, headers: object
+   * task_id: string, middlewares: object, headers: object, swaggers: object, context: object
    * }} options - instance args
    * @memberof Task
    */
@@ -17,50 +17,57 @@ class Task {
   }
 
   async run() {
-    const extension = _.get(this.context, ['task', 'extension'], []);
-    const middlewares = extension.map((ele) => {
-      const provider_type = ele.middleware;
-      // ignore or throw, TO DO
-      if (!Task._isAllowExtension(provider_type)) {
-        throw new TypeError(`no support this extension: ${provider_type}`);
-      }
-
-      this._createProviderContext(provider_type, ele.params);
-      return providers[provider_type].run.bind(null);
-    });
-
-    const fnMiddleware = await compose(middlewares);
-    await fnMiddleware(this.context);
+    await this.fnMiddlewares(this.context);
   }
 
   _createContext(options) {
-    const {
-      context, url, method_type, headers
-    } = options;
-    const task_id = _.get(context, ['current_task_id'], {});
+    this.context = {
+      task_id: options.task_id,
+      url: options.url,
+      method_type: options.method_type,
+      headers: options.headers,
+      swaggers: options.swaggers,
+      public: options.context
+    };
 
-    this.context = context || {};
-    this.context.task = {
-      task_id,
-      url,
-      method_type,
-      headers,
-      extension: Task.preSetExtension(context),
-    }
+    const fnMiddlewares = Task.preSetExtension(options.middlewares).map((ele) => {
+      const extension_type = ele.middleware.toLowerCase();
+      // ignore or throw, TO DO
+      if (!Task._isAllowExtension(extension_type)) {
+        throw new TypeError(`no support this extension: ${extension_type}`);
+      }
+
+      _.set(this.context, [extension_type, 'params'], ele.params);
+      return extensions[extension_type].run.bind(extensions[extension_type]);
+    });
+    this.fnMiddlewares = compose(fnMiddlewares);
   }
 
   /**
    * set default middleware 'Controller' && 'HttpClient' when there is not in extension
    *
    * @static
-   * @param {object} ctx - ctx
+   * @param {object} middlewares - ctx
    * @returns {object []} - middlewares
    * @memberof Task
    */
-  static preSetExtension(ctx) {
-    let middlewares = _.get(ctx, ['extensions', ctx.current_task_id], []);
-    middlewares = Task.preSetController(middlewares);
-    middlewares = Task.preSetHttpClient(middlewares);
+  static preSetExtension(middlewares) {
+    let new_middlewares = _.cloneDeep(middlewares);
+    new_middlewares = Task.preSetController(new_middlewares);
+    new_middlewares = Task.preSetHttpClient(new_middlewares);
+    new_middlewares = Task.preSetGetSwagger(new_middlewares);
+    return new_middlewares;
+  }
+
+  static preSetGetSwagger(middlewares) {
+    const middleware = middlewares.find((ele) => ele.middleware === extensions.getswagger.type);
+    if (middleware) {
+      return middlewares;
+    }
+
+    // find index, insert getswagger middleware before httpclient middleware
+    const index = middlewares.findIndex((ele) => ele.middleware === extensions.httpclient.type);
+    middlewares.splice(index, 0, { middleware: extensions.getswagger.type });
     return middlewares;
   }
 
@@ -73,12 +80,12 @@ class Task {
    * @memberof Task
    */
   static preSetController(middlewares) {
-    const middleware = middlewares.find((ele) => ele.middleware === providers.types.controller);
+    const middleware = middlewares.find((ele) => ele.middleware === extensions.controller.type);
     if (middleware) {
       return middlewares;
     }
 
-    return [{ middleware: providers.types.controller }].concat(middlewares);
+    return [{ middleware: extensions.controller.type }].concat(middlewares);
   }
 
   /**
@@ -90,20 +97,16 @@ class Task {
    * @memberof Task
    */
   static preSetHttpClient(middlewares) {
-    const middleware = middlewares.find((ele) => ele.middleware === providers.types.http_client);
+    const middleware = middlewares.find((ele) => ele.middleware === extensions.httpclient.type);
     if (middleware) {
       return middlewares;
     }
 
-    return middlewares.concat([{ middleware: providers.types.http_client }]);
+    return middlewares.concat([{ middleware: extensions.httpclient.type }]);
   }
 
-  _createProviderContext(provider_type, params) {
-    _.set(this.context, [this.context.current_task_id, provider_type, 'params'], params);
-  }
-
-  static _isAllowExtension(provider_type) {
-    return providers.getTypes().includes(provider_type);
+  static _isAllowExtension(extension_type) {
+    return extensions.getTypes().includes(extension_type);
   }
 }
 

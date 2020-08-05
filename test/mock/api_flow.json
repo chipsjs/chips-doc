@@ -7,7 +7,7 @@
     "extensions": {
       "get /api1": [
         {
-          "middleware": "HttpClient",
+          "middleware": "httpclient",
           "params": {
             "request": {
               "param1": "A"
@@ -24,7 +24,7 @@
     "flow": ["post /api2"],
     "extensions": {
       "post /api2": [{
-        "middleware": "HttpClient",
+        "middleware": "httpclient",
         "params": {
           "request": {
             "param1": "D"
@@ -40,7 +40,7 @@
     "flow": ["get /api3/:param1"],
     "extensions": {
       "get /api4": [{
-        "middleware": "HttpClient",
+        "middleware": "httpclient",
         "params": {
           "request": {
             "param1": "D"
@@ -53,7 +53,7 @@
     "flow": ["post /api2@1", "post /api2@2"],
     "extensions": {
       "post /api2@2": [{
-        "middleware": "HttpClient",
+        "middleware": "httpclient",
         "params": {
           "request": {
             "param1": "D"
@@ -82,7 +82,7 @@
     "extensions": {
       "post /api2": [
         {
-          "middleware": "Controller",
+          "middleware": "controller",
           "params": {
             "ignore": {
               "task_id": "get /api1",
@@ -103,7 +103,7 @@
     "extensions": {
       "post /api2": [
         {
-          "middleware": "Controller",
+          "middleware": "controller",
           "params": {
             "ignore": {
               "task_id": "get /api1",
@@ -121,7 +121,7 @@
     "extensions": {
       "post /api2": [
         {
-          "middleware": "Controller",
+          "middleware": "controller",
           "params": {
             "useless_key": {
               "task_id": "get /api1",
@@ -160,7 +160,7 @@
     "extensions": {
       "get /api3/:param1": [
           {
-            "middleware": "HttpClient",
+            "middleware": "httpclient",
             "params": {
               "request": {
                 "param1": "C"
@@ -175,7 +175,7 @@
     "extensions": {
       "A": [
           {
-            "middleware": "HttpClient",
+            "middleware": "httpclient",
             "params": {
               "request": {
                 "param1": "context"
@@ -185,7 +185,7 @@
       ],
       "B": [
         {
-          "middleware": "Controller",
+          "middleware": "controller",
           "params": {
             "ignore": {
               "task_id": "D",
@@ -198,11 +198,24 @@
       ],
       "D": [
         {
-          "middleware": "HttpClient",
+          "middleware": "httpclient",
           "params": {
             "request": {
               "param1": "kkk"
             }
+          }
+        }
+      ]
+    }
+  },
+  "flow_20": {
+    "flow": ["get /api1"],
+    "extensions": {
+      "get /api1": [
+        {
+          "middleware": "getswagger",
+          "params": {
+            "version": "v2"
           }
         }
       ]

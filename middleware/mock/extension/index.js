@@ -1,12 +1,12 @@
-const providers = {};
-providers.HttpClient = require('./http_client');
-providers.Controller = require('./controller');
+const extensions = {};
+extensions.httpclient = require('./http_client');
+extensions.controller = require('./controller');
+extensions.getswagger = require('./get_swagger');
 
-providers.types = {
-  http_client: providers.HttpClient.type,
-  controller: providers.Controller.type
-}
+extensions.getTypes = () => [
+  extensions.httpclient.type,
+  extensions.controller.type,
+  extensions.getswagger.type
+];
 
-providers.getTypes = () => Object.values(providers.types);
-
-module.exports = providers;
+module.exports = extensions;
