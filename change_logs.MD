@@ -29,7 +29,7 @@
 
 ### 2020.8
 
-- 1. optimize ut test 2.add husky
+- 1. optimize ut test 2.add husky 3. support getswagger middleware
 - author: kris.xu
 
 ## Sechedule

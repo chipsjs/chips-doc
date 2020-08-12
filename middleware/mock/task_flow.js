@@ -32,17 +32,6 @@ class TaskFlow {
     return { method_type, url: api_name_with_suffix };
   }
 
-  /**
-   *
-   *
-   * @static
-   * @param {object} api_flow
-   * @memberof TaskFlow
-   */
-  static packageSwagger(api_flow) {
-    
-  }
-
   // /**
   //  *
   //  *

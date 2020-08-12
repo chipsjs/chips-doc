@@ -190,13 +190,13 @@ class HttpClient extends BaseExtension {
    * @memberof HttpClient
    */
   static async _validatorResponse(response, schema) {
-    // if (response.status !== 200) { // axios will throw error when it is not 2xx
-    //   return Promise.reject(new TypeError('request fail'));
-    // }
+    if (response.status !== 200) {
+      return Promise.reject(new Error(`request fail, status code is ${response.status}`));
+    }
 
     const result = dataValidate(response.data, schema);
     if (Array.isArray(result.errors) && result.errors.length !== 0) {
-      return Promise.reject(new TypeError(`${result.errors.toString()}`));
+      return Promise.reject(new Error(`${result.errors.toString()}`));
     }
 
     return Promise.resolve();
