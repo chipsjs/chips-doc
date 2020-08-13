@@ -150,7 +150,7 @@ class HttpClient extends BaseExtension {
     );
 
     const response = await http.request({
-      url: config.get('mock_server'),
+      base_url: config.get('mock_server'),
       path: new_url,
       method: method_type,
       params,
