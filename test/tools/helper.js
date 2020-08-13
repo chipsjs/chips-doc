@@ -7,9 +7,9 @@ const { request: originalRequest } = http;
 
 module.exports.mockServerStart = () => {
   http.request = ({
-    url, path, method, params = {}, body = null, headers = {}
+    base_url, path, method, params = {}, body = null, headers = {}
   }) => {
-    if (config.get('mock_server') !== url) {
+    if (config.get('mock_server') !== base_url) {
       throw new Error('url no match');
     }
 
