@@ -5,9 +5,36 @@ const Report = require('./report');
 const { loop } = require('../../lib');
 
 class TaskFlow {
-  constructor(user, log_module) {
+  /**
+   *Creates an instance of TaskFlow.
+   *
+   * @param {string} user - user name
+   * @param {object} options - arg
+   * @param {object} options.swaggers - key is version, value is swagger document
+   * @param {{flow: string[], context: string[], extension: object}} options.api_flow - flow
+   * @param {object} options.headers - http headers
+   * @param {*} log_module - log_module
+   * @memberof TaskFlow
+   */
+  constructor(user, { swaggers, api_flow, headers }, log_module) {
     this._logger = log_module || console;
     this._reporter = new Report(user);
+
+    this.context = {
+      current_task_id: '',
+      headers,
+      flow: api_flow.flow,
+      swaggers,
+      extensions: api_flow.extensions,
+    }
+
+    const context_params = _.get(api_flow, ['context', 'params'], [])
+    if (Array.isArray(context_params)) {
+      this.context.params = context_params.reduce((result, key) => {
+        _.set(result, key, null);
+        return result;
+      }, {});
+    }
   }
 
   /**
@@ -59,30 +86,33 @@ class TaskFlow {
   // }
 
   /**
+   * quickly run
    *
-   * TODO, api version is necessary
+   * @param {string} user - user name
+   * @param {object} options - arg
+   * @param {object} options.swaggers - key is version, value is swagger document
+   * @param {{flow: string[], context: string[], extension: object}} options.api_flow - flow
+   * @param {object} options.headers - http headers
+   * @returns {object} {report, fail_report}
+   * @memberof TaskFlow
+   */
+  static async run(user, options) {
+    const _instance = new TaskFlow(user, options);
+    await _instance.execute();
+    return {
+      report: _instance.outputReport(),
+      fail_report: _instance.outputFailedReport()
+    }
+  }
+
+  /**
    *
-   * @param {object} swaggers - key is version, value is swagger document
-   * @param {{flow: string[], context: string[], extension: object}} api_flow - flow
-   * @param {object} headers - http headers
+   *
+   *
    * @memberof TaskQueue
    */
-  async execute(swaggers, api_flow, headers = {}) {
-    this.context = {
-      current_task_id: '',
-      flow: api_flow.flow,
-      swaggers
-    }
-
+  async execute() {
     try {
-      const context_params = _.get(api_flow, ['context', 'params'], [])
-      if (Array.isArray(context_params)) {
-        this.context.params = context_params.reduce((result, key) => {
-          _.set(result, key, null);
-          return result;
-        }, {});
-      }
-
       await loop.forEach(this.context.flow.values(), async (task_id) => {
         this.context.current_task_id = task_id;
 
@@ -91,9 +121,9 @@ class TaskFlow {
         const task = new Task({
           url,
           method_type,
-          headers,
+          headers: this.context.headers,
           task_id,
-          middlewares: _.get(api_flow, ['extensions', task_id], []),
+          middlewares: _.get(this.context, ['extensions', task_id], []),
           context: this.context
         });
         await task.run();

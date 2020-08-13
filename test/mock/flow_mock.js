@@ -4,7 +4,7 @@ const api_flow = require('./api_flow.json');
 const v1_swagger = require('./v1_swagger.json');
 const helper = require('../tools/helper');
 
-const swagger = {
+const swaggers = {
   v1: v1_swagger
 }
 
@@ -19,9 +19,11 @@ describe('flow mock', () => {
       let report_queue;
 
       before('mock', async () => {
-        const task_flow = new TaskFlow('temp');
-        await task_flow.execute(swagger, api_flow.flow_1);
-        report_queue = task_flow.outputReport();
+        const { report } = await TaskFlow.run('temp', {
+          swaggers,
+          api_flow: api_flow.flow_1
+        });
+        report_queue = report;
       });
 
       it('should have right output', () => {
@@ -37,9 +39,11 @@ describe('flow mock', () => {
       let report_queue;
 
       before('mock', async () => {
-        const task_flow = new TaskFlow('temp');
-        await task_flow.execute(swagger, api_flow.flow_2);
-        report_queue = task_flow.outputReport();
+        const { report } = await TaskFlow.run('temp', {
+          swaggers,
+          api_flow: api_flow.flow_2
+        });
+        report_queue = report;
       });
 
       it('should have right output', () => {
@@ -55,9 +59,11 @@ describe('flow mock', () => {
       let report_queue;
 
       before('mock', async () => {
-        const task_flow = new TaskFlow('temp');
-        await task_flow.execute(swagger, api_flow.flow_3);
-        report_queue = task_flow.outputReport();
+        const { report } = await TaskFlow.run('temp', {
+          swaggers,
+          api_flow: api_flow.flow_3
+        });
+        report_queue = report;
       });
 
       it('should have right output', () => {
@@ -73,9 +79,11 @@ describe('flow mock', () => {
       let report_queue;
 
       before('mock', async () => {
-        const task_flow = new TaskFlow('temp');
-        await task_flow.execute(swagger, api_flow.flow_4);
-        report_queue = task_flow.outputReport();
+        const { report } = await TaskFlow.run('temp', {
+          swaggers,
+          api_flow: api_flow.flow_4
+        });
+        report_queue = report;
       });
 
       it('should have right output', () => {
@@ -91,9 +99,11 @@ describe('flow mock', () => {
       let report_queue;
 
       before('mock', async () => {
-        const task_flow = new TaskFlow('temp');
-        await task_flow.execute(swagger, api_flow.flow_5);
-        report_queue = task_flow.outputReport();
+        const { report } = await TaskFlow.run('temp', {
+          swaggers,
+          api_flow: api_flow.flow_5
+        });
+        report_queue = report;
       });
 
       it('should have right output', () => {
@@ -109,9 +119,11 @@ describe('flow mock', () => {
       let report_queue;
 
       before('mock', async () => {
-        const task_flow = new TaskFlow('temp');
-        await task_flow.execute(swagger, api_flow.flow_6);
-        report_queue = task_flow.outputReport();
+        const { report } = await TaskFlow.run('temp', {
+          swaggers,
+          api_flow: api_flow.flow_6
+        });
+        report_queue = report;
       });
 
       it('should have right output', () => {
@@ -127,9 +139,11 @@ describe('flow mock', () => {
       let report_queue;
 
       before('mock', async () => {
-        const task_flow = new TaskFlow('temp');
-        await task_flow.execute(swagger, api_flow.flow_10);
-        report_queue = task_flow.outputReport();
+        const { report } = await TaskFlow.run('temp', {
+          swaggers,
+          api_flow: api_flow.flow_10
+        });
+        report_queue = report;
       });
 
       it('should have right output', () => {
@@ -146,9 +160,11 @@ describe('flow mock', () => {
     let report_queue;
 
     before('mock', async () => {
-      const task_flow = new TaskFlow('temp');
-      await task_flow.execute(swagger, api_flow.flow_7);
-      report_queue = task_flow.outputReport();
+      const { report } = await TaskFlow.run('temp', {
+        swaggers,
+        api_flow: api_flow.flow_7
+      });
+      report_queue = report;
     });
 
     it('should have right output', () => {
@@ -169,9 +185,11 @@ describe('flow mock', () => {
     let report_queue;
 
     before('mock', async () => {
-      const task_flow = new TaskFlow('temp');
-      await task_flow.execute(swagger, api_flow.flow_8);
-      report_queue = task_flow.outputReport();
+      const { report } = await TaskFlow.run('temp', {
+        swaggers,
+        api_flow: api_flow.flow_8
+      });
+      report_queue = report;
     });
 
     it('should have right output', () => {
@@ -192,9 +210,11 @@ describe('flow mock', () => {
     let report_queue;
 
     before('mock', async () => {
-      const task_flow = new TaskFlow('temp');
-      await task_flow.execute(swagger, api_flow.flow_9);
-      report_queue = task_flow.outputReport();
+      const { report } = await TaskFlow.run('temp', {
+        swaggers,
+        api_flow: api_flow.flow_9
+      });
+      report_queue = report;
     });
 
     it('should have right output', () => {
@@ -216,10 +236,12 @@ describe('flow mock', () => {
     let fail_queue;
 
     before('mock', async () => {
-      const task_flow = new TaskFlow('temp');
-      await task_flow.execute(swagger, api_flow.flow_11);
-      report_queue = task_flow.outputReport();
-      fail_queue = task_flow.outputFailedReport()
+      const { report, fail_report } = await TaskFlow.run('temp', {
+        swaggers,
+        api_flow: api_flow.flow_11
+      });
+      report_queue = report;
+      fail_queue = fail_report;
     });
 
     it('should have right output', () => {
@@ -235,9 +257,11 @@ describe('flow mock', () => {
       let report_queue;
 
       before('mock', async () => {
-        const task_flow = new TaskFlow('temp');
-        await task_flow.execute(swagger, api_flow.flow_12);
-        report_queue = task_flow.outputReport();
+        const { report } = await TaskFlow.run('temp', {
+          swaggers,
+          api_flow: api_flow.flow_12
+        });
+        report_queue = report;
       });
 
       it('should have right output', () => {
@@ -251,9 +275,11 @@ describe('flow mock', () => {
       let report_queue;
 
       before('mock', async () => {
-        const task_flow = new TaskFlow('temp');
-        await task_flow.execute(swagger, api_flow.flow_14);
-        report_queue = task_flow.outputReport();
+        const { report } = await TaskFlow.run('temp', {
+          swaggers,
+          api_flow: api_flow.flow_14
+        });
+        report_queue = report;
       });
 
       it('should have right output', () => {
@@ -269,9 +295,11 @@ describe('flow mock', () => {
       let report_queue;
 
       before('mock', async () => {
-        const task_flow = new TaskFlow('temp');
-        await task_flow.execute(swagger, api_flow.flow_15);
-        report_queue = task_flow.outputReport();
+        const { report } = await TaskFlow.run('temp', {
+          swaggers,
+          api_flow: api_flow.flow_15
+        });
+        report_queue = report;
       });
 
       it('should have right output', () => {
@@ -306,9 +334,11 @@ describe('flow mock', () => {
     let report_queue;
 
     before('mock', async () => {
-      const task_flow = new TaskFlow('temp');
-      await task_flow.execute(swagger, api_flow.flow_13);
-      report_queue = task_flow.outputReport();
+      const { report } = await TaskFlow.run('temp', {
+        swaggers,
+        api_flow: api_flow.flow_13
+      });
+      report_queue = report;
     });
 
     it('should have right output', () => {
@@ -325,10 +355,12 @@ describe('flow mock', () => {
     let fail_queue;
 
     before('mock', async () => {
-      const task_flow = new TaskFlow('temp');
-      await task_flow.execute(swagger, api_flow.flow_16);
-      report_queue = task_flow.outputReport();
-      fail_queue = task_flow.outputFailedReport();
+      const { report, fail_report } = await TaskFlow.run('temp', {
+        swaggers,
+        api_flow: api_flow.flow_16
+      });
+      report_queue = report;
+      fail_queue = fail_report;
     });
 
     it('should have right output', () => {
@@ -345,8 +377,10 @@ describe('flow mock', () => {
       let after_destory_report;
 
       before('mock', async () => {
-        const task_flow = new TaskFlow('temp');
-        await task_flow.execute(swagger, api_flow.flow_1);
+        const task_flow = new TaskFlow('temp', {
+          swaggers, api_flow: api_flow.flow_1
+        });
+        await task_flow.execute();
         before_destory_report = task_flow.readReport();
         task_flow.destoryReport();
         after_destory_report = task_flow.readReport();
@@ -364,9 +398,11 @@ describe('flow mock', () => {
       let report_queue;
 
       before('mock', async () => {
-        const task_flow = new TaskFlow('temp');
-        await task_flow.execute(swagger, api_flow.flow_17);
-        report_queue = task_flow.outputReport();
+        const { report } = await TaskFlow.run('temp', {
+          swaggers,
+          api_flow: api_flow.flow_17
+        });
+        report_queue = report;
       });
 
       it('should have right output', () => {
@@ -383,9 +419,11 @@ describe('flow mock', () => {
     let report_queue;
 
     before('mock', async () => {
-      const task_flow = new TaskFlow('temp');
-      await task_flow.execute(swagger, api_flow.flow_18);
-      report_queue = task_flow.outputReport();
+      const { report } = await TaskFlow.run('temp', {
+        swaggers,
+        api_flow: api_flow.flow_18
+      });
+      report_queue = report;
     });
 
     it('should have right output', () => {

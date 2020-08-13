@@ -5,7 +5,7 @@ const v1_swagger = require('./v1_swagger.json');
 const v2_swagger = require('./v2_swagger.json');
 const helper = require('../tools/helper');
 
-const swagger = {
+const swaggers = {
   v1: v1_swagger,
   v2: v2_swagger
 }
@@ -20,9 +20,11 @@ describe('flow mock', () => {
     let report_queue;
 
     before('mock', async () => {
-      const task_flow = new TaskFlow('temp');
-      await task_flow.execute(swagger, api_flow.flow_20);
-      report_queue = task_flow.outputReport();
+      const { report } = await TaskFlow.run('temp', {
+        swaggers,
+        api_flow: api_flow.flow_20
+      });
+      report_queue = report;
     });
 
     it('should have right output', () => {
