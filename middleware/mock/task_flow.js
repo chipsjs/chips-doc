@@ -115,10 +115,9 @@ class TaskFlow {
     try {
       await loop.forEach(this.context.flow.values(), async (task_id) => {
         this.context.current_task_id = task_id;
-
         const { method_type, url } = TaskFlow.getApiInfoFromStepName(task_id);
 
-        const task = new Task({
+        await Task.run({
           url,
           method_type,
           headers: this.context.headers,
@@ -126,7 +125,6 @@ class TaskFlow {
           middlewares: _.get(this.context, ['extensions', task_id], []),
           context: this.context
         });
-        await task.run();
 
         if (_.has(this.context, [task_id, 'result'])) {
           const {

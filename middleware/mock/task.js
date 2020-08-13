@@ -16,8 +16,9 @@ class Task {
     this._createContext(options);
   }
 
-  async run() {
-    await this.fnMiddlewares(this.context);
+  static async run(options) {
+    const _instance = new Task(options);
+    await _instance.fnMiddlewares(_instance.context);
   }
 
   _createContext(options) {
