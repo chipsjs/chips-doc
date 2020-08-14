@@ -1,30 +1,8 @@
 const { assert } = require('chai');
 const _ = require('lodash');
-
-const base_spec = require('./base_spec.json');
-const extention_swagger = require('./swagger_extention');
 const Convert = require('../../middleware/convert/spec_convert');
 const { Swagger } = require('../../lib');
-
-/**
- * used to mock a spec
- *
- * @param {string} api_name
- * @returns
- */
-const generateSpec = (api_name) => {
-  const json = base_spec[api_name];
-  const spec = _.set({}, api_name, json);
-  return spec;
-};
-
-const generateSwagger = (api_name) => {
-  if (!api_name) return {};
-
-  const json = extention_swagger[api_name];
-  const spec = _.set({}, api_name, json);
-  return spec;
-};
+const { generateSpec, generateSwagger } = require('./helper');
 
 describe('sync swagger from new spec and extention swagger', () => {
   let operation_object;
@@ -98,7 +76,7 @@ describe('sync swagger from new spec and extention swagger', () => {
 
       it('should be have correct swagger', () => {
         const schema = Swagger.getParametersSchema(operation_object);
-        assert.strictEqual(schema.length, 1);
+        assert.strictEqual(schema.length, 2);
         assert.nestedPropertyVal(schema[0], 'in', 'query');
         assert.nestedPropertyVal(schema[0], 'name', 'param1');
         assert.nestedPropertyVal(schema[0], 'required', false);
@@ -119,7 +97,7 @@ describe('sync swagger from new spec and extention swagger', () => {
 
       it('should be have correct swagger', () => {
         const schema = Swagger.getParametersSchema(operation_object);
-        assert.strictEqual(schema.length, 2);
+        assert.strictEqual(schema.length, 3);
         assert.nestedPropertyVal(schema[0], 'in', 'query');
         assert.nestedPropertyVal(schema[0], 'name', 'param1');
         assert.nestedPropertyVal(schema[0], 'required', false);
@@ -145,7 +123,7 @@ describe('sync swagger from new spec and extention swagger', () => {
 
       it('should be have correct swagger', () => {
         const schema = Swagger.getParametersSchema(operation_object);
-        assert.strictEqual(schema.length, 1);
+        assert.strictEqual(schema.length, 2);
         assert.nestedPropertyVal(schema[0], 'in', 'query');
         assert.nestedPropertyVal(schema[0], 'name', 'param1');
         assert.nestedPropertyVal(schema[0], 'required', false);
@@ -165,7 +143,7 @@ describe('sync swagger from new spec and extention swagger', () => {
 
       it('should be have correct swagger', () => {
         const schema = Swagger.getParametersSchema(operation_object);
-        assert.strictEqual(schema.length, 1);
+        assert.strictEqual(schema.length, 2);
         assert.nestedPropertyVal(schema[0], 'in', 'query');
         assert.nestedPropertyVal(schema[0], 'name', 'param');
         assert.nestedPropertyVal(schema[0], 'required', false);
@@ -188,7 +166,7 @@ describe('sync swagger from new spec and extention swagger', () => {
 
       it('should be have correct swagger', () => {
         const schema = Swagger.getParametersSchema(operation_object);
-        assert.strictEqual(schema.length, 1);
+        assert.strictEqual(schema.length, 2);
         assert.nestedPropertyVal(schema[0], 'in', 'query');
         assert.nestedPropertyVal(schema[0], 'name', 'param_new');
         assert.nestedPropertyVal(schema[0], 'required', false);

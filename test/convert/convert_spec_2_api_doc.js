@@ -61,7 +61,7 @@ describe('convert spec to generate api doc', () => {
       assert.strictEqual(description, note);
       const outputResponseBody = _.get(specResult[api_name], ['get', 'responses', '200', 'content', 'application/json', 'schema']);
       const outputParameters = _.get(specResult[api_name], ['get', 'parameters']);
-      assert.strictEqual(outputParameters.length, 2);
+      assert.strictEqual(outputParameters.length, 3);
       assert.strictEqual(outputParameters[0].name, 'email');
       assert.strictEqual(outputParameters[0].in, 'query');
       assert.strictEqual(outputParameters[0].required, false);
@@ -132,7 +132,7 @@ describe('convert spec to generate api doc', () => {
       assert.strictEqual(description, note);
       const outputParameters = _.get(specResult[api_name], ['get', 'parameters']);
       const inputQuery = _.get(specJson, ['GET /test', 'request', 'query', 'required']);
-      assert.strictEqual(outputParameters.length, 2);
+      assert.strictEqual(outputParameters.length, 3);
       assert.strictEqual(outputParameters[0].name, 'email');
       assert.strictEqual(outputParameters[0].in, 'query');
       assert.strictEqual(outputParameters[0].required, true);
@@ -264,7 +264,7 @@ describe('convert spec to generate api doc', () => {
       assert.strictEqual(description, note);
 
       const outputParameters = _.get(specResult[api_name], ['get', 'parameters']);
-      assert.strictEqual(outputParameters.length, 2);
+      assert.strictEqual(outputParameters.length, 3);
       assert.strictEqual(outputParameters[0].name, 'email');
       assert.strictEqual(outputParameters[0].in, 'query');
       assert.strictEqual(outputParameters[0].required, false);
@@ -659,7 +659,7 @@ describe('convert spec to generate api doc', () => {
         assert.strictEqual(description, note);
 
         const outputParameters = _.get(specResult[api_name], ['get', 'parameters']);
-        assert.strictEqual(outputParameters.length, 2);
+        assert.strictEqual(outputParameters.length, 3);
         assert.strictEqual(outputParameters[0].name, 'email');
         assert.strictEqual(outputParameters[0].in, 'query');
         assert.strictEqual(outputParameters[0].required, false);
@@ -697,7 +697,7 @@ describe('convert spec to generate api doc', () => {
         assert.strictEqual(description, note);
 
         const outputParameters = _.get(specResult[api_name], ['get', 'parameters']);
-        assert.strictEqual(outputParameters.length, 2);
+        assert.strictEqual(outputParameters.length, 3);
         assert.strictEqual(outputParameters[0].name, 'email');
         assert.strictEqual(outputParameters[0].in, 'query');
         assert.strictEqual(outputParameters[0].required, true);
@@ -1042,7 +1042,7 @@ describe('convert spec to generate api doc', () => {
       } = specJson['POST /test'];
 
       const outputParameters1 = _.get(specResult[api_name], ['get', 'parameters']);
-      assert.strictEqual(outputParameters1.length, 1);
+      assert.strictEqual(outputParameters1.length, 2);
       assert.strictEqual(outputParameters1[0].name, 'id');
       assert.strictEqual(outputParameters1[0].in, 'query');
       assert.strictEqual(outputParameters1[0].required, false);

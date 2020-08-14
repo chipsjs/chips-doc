@@ -298,7 +298,22 @@ class SpecConvert extends Base.factory() {
     return Swagger.convertJsonSchema2Swagger(new_schema, 'path');
   }
 
-  convertSpec2Swagger(spec_doc) {
+  addAcceptVersionHeader(parameters = [], api_version) {
+    parameters.push({
+      name: 'accept-version',
+      in: 'header',
+      required: false,
+      schema: {
+        type: 'string',
+        enum: [api_version],
+        default: '0.0.1',
+      },
+      description: 'api version, default is 0.0.1',
+    });
+    return parameters;
+  }
+
+  convertSpec2Swagger(spec_doc, api_version = '0.0.1') {
     const path_items = {};
     let current_api_name = '';
 
@@ -318,14 +333,18 @@ class SpecConvert extends Base.factory() {
             _.set(path_items, [real_api_name, 'parameters'], parameters);
           }
         }
-        _.set(path_items, [real_api_name, real_method_type], Swagger.packagePathItem({
+
+        const path_item = Swagger.packagePathItem({
           summary: api.summary,
           description: api.note,
           tags: Swagger.parseTag(real_api_name),
           body: this.parseRequestBodySchema(_.get(api, ['request', 'body'])),
           query: this.parseQuerySchema(_.get(api, ['request', 'query'])),
           response: this.parseResponseSchema(_.get(api, ['response', 'body'])),
-        }));
+        });
+        path_item.parameters = this.addAcceptVersionHeader(path_item.parameters, api_version)
+
+        _.set(path_items, [real_api_name, real_method_type], path_item);
       });
     } catch (err) {
       throw new TypeError(`SpecConvert::run: ${current_api_name} fail!err_msg: ${err.message}`);
@@ -345,7 +364,7 @@ class SpecConvert extends Base.factory() {
    *
    */
   run(spec_doc, spec_output_path, api_version) {
-    const path_items = this.convertSpec2Swagger(spec_doc);
+    const path_items = this.convertSpec2Swagger(spec_doc, api_version);
     const info_obj = Swagger.generateInfoObject('august-rest-api', 'If you want to refresh swagger, click terms of service and refersh the browser', config.get('terms_of_service'), api_version);
     const swagger = Swagger.generateOpenApiObject(info_obj, path_items);
     fs.writeFileSync(`${spec_output_path}.json`, JSON.stringify(swagger, null, 2));
@@ -492,8 +511,8 @@ class SpecConvert extends Base.factory() {
    * @returns {object} new_version_swagger
    * @memberof SpecConvert
    */
-  syncSwaggerJson(lastest_spec_doc, extention_path_items, api_version = '0.0.0') {
-    const base_path_items = this.convertSpec2Swagger(lastest_spec_doc);
+  syncSwaggerJson(lastest_spec_doc, extention_path_items, api_version = '0.0.1') {
+    const base_path_items = this.convertSpec2Swagger(lastest_spec_doc, api_version);
 
     const new_path_items = Object.entries(base_path_items).reduce(
       (result, [api_name, base_path_item]) => {

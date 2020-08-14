@@ -50,6 +50,24 @@ class HttpClient extends BaseExtension {
     return final_data;
   }
 
+  static _fakeHeader(parameters, real_data) {
+    if (!Array.isArray(parameters)) return {};
+
+    return parameters.reduce((result, item) => {
+      if (item.in !== 'header') return result;
+
+      if (_.has(real_data, [item.name])) {
+        _.set(result, [item.name], real_data[item.name])
+      } else if (item.schema) {
+        _.set(result, [item.name], fake.sample(item.schema));
+      } else {
+        _.set(result, [item.name], '');
+      }
+
+      return result;
+    }, {})
+  }
+
   /**
    *
    *
@@ -135,6 +153,11 @@ class HttpClient extends BaseExtension {
       throw new TypeError(`${url} no exist in swagger`);
     }
 
+    const fake_headers = HttpClient._fakeHeader(
+      Swagger.getParametersSchema(operation_obj),
+      real_data
+    );
+
     const params = HttpClient._fakeQuery(
       Swagger.getParametersSchema(operation_obj),
       real_data
@@ -155,7 +178,7 @@ class HttpClient extends BaseExtension {
       method: method_type,
       params,
       body,
-      headers
+      headers: _.merge({}, fake_headers, headers)
     })
 
     _.set(ctx, ['public', ctx.task_id, 'result'], {
