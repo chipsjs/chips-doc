@@ -34,6 +34,8 @@ class TaskFlow {
         _.set(result, key, null);
         return result;
       }, {});
+    } else if (typeof context_params === 'object') {
+      this.context.params = context_params;
     }
   }
 

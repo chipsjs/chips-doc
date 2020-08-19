@@ -196,7 +196,7 @@ class HttpClient extends BaseExtension {
       operation_obj: ctx.operation_obj,
       path_parameters: ctx.path_parameters,
       real_data: _.merge(
-        {}, _.get(ctx, ['params'], {}),
+        {}, _.get(ctx, ['public', 'params'], {}),
         _.get(ctx, [this.type, 'params', 'request'], {})
       ),
     }
