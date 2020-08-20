@@ -373,8 +373,12 @@ class SpecConvert extends Base.factory() {
   }
 
   readSwaggerJson(spec_output_path) {
-    const content = fs.readFileSync(`${spec_output_path}.json`, 'utf8');
-    return JSON.parse(content);
+    const file = `${spec_output_path}.json`;
+    if (fs.existsSync(file)) {
+      const content = fs.readFileSync(file, 'utf8');
+      return JSON.parse(content);
+    }
+    return {};
   }
 
   /**
