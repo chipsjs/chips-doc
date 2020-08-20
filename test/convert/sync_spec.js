@@ -64,7 +64,7 @@ describe('sync swagger from new spec and extention swagger', () => {
     });
   });
 
-  describe('query in parameters', () => {
+  describe('query', () => {
     describe('param have extention propertites', () => {
       before('run', () => {
         swagger = Convert.getInstance().syncSwaggerJson(
@@ -83,6 +83,7 @@ describe('sync swagger from new spec and extention swagger', () => {
         assert.nestedPropertyVal(schema[0], 'schema.description', 'string kkk');
         assert.nestedPropertyVal(schema[0], 'schema.maxLength', 100);
         assert.nestedPropertyVal(schema[0], 'schema.type', Swagger.dataType.string);
+        assert.isArray(schema[0].schema.enum);
       });
     });
 

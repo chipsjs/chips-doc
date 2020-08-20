@@ -55,7 +55,8 @@
           "name": "param1",
           "schema": {
             "type": "string",
-            "maxLength": 100
+            "maxLength": 100,
+            "enum": ["aaa", "bbb"]
           }
         }
       ]
