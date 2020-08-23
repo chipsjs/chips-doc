@@ -436,10 +436,6 @@ describe('flow mock', () => {
     });
   });
 
-  // context merge specific
-  // TODO, context 是递归的
-  // TODO, context 在response中指定
-
   after('stop mock server', () => {
     helper.mockServerRestore();
   });

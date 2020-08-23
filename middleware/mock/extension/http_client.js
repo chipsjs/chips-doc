@@ -7,28 +7,27 @@ const { Swagger, http } = require('../../../lib');
 const BaseExtension = require('./base_extension');
 
 class HttpClient extends BaseExtension {
-  /**
-   *
-   *
-   * @static
-   * @param {object} fake_data - fake data from document
-   * @param {object} real_data - specific data or context data
-   * @returns {object} - final data which is based on fake data and is merged by real data
-   * @memberof Task
-   */
-  static _mergeRequestData(fake_data, real_data) {
-    const final_data = _.cloneDeep(fake_data);
-    const specific_data = _.pick(real_data, Object.keys(fake_data));
+  static _generateRealData(specific_data, context_data, path, schema) {
+    // specific data is higest priority
+    if (_.has(specific_data, path)) {
+      return _.get(specific_data, path);
+    }
 
-    Object.entries(specific_data).forEach(([key, value]) => {
-      if (typeof value === 'object') {
-        _.set(final_data, key, this._mergeRequestData(final_data[key], value))
-      } else if (value) {
-        _.set(final_data, key, value);
+    // context_data is the second priority
+    if (_.has(context_data, ['scope', path])) {
+      const key = _.get(context_data, ['scope', path]);
+      const context_parmas = _.get(context_data, ['params', key]);
+      if (context_parmas) {
+        return context_parmas;
       }
-    });
+    }
 
-    return final_data;
+    // schema is the lowest
+    if (schema) {
+      return fake.sample(schema);
+    }
+
+    return '';
   }
 
   /**
@@ -36,33 +35,42 @@ class HttpClient extends BaseExtension {
    *
    * @static
    * @param {object} schema - a openapi shcema object
-   * @param {object} real_data - data merged from specific data and context_data
+   * @param {object} specific_data - specific_data
+   * @param {object} context_data - context_data
    * @returns {object} final_data - object in request body
    * @memberof Task
    */
-  static _fakeBody(schema, real_data) {
+  static _fakeBody(schema, specific_data, context_data) {
     if (typeof schema !== 'object' || Object.keys(schema).length === 0) return {};
 
     const fake_data = fake.sample(schema);
 
-    const final_data = this._mergeRequestData(fake_data, real_data);
+    const context_scope = _.get(context_data, ['scope'], {});
+    Object.entries(context_scope).forEach(([key, value]) => {
+      if (_.has(fake_data, key) && !!_.get(context_data, ['params', value])) {
+        _.set(fake_data, key, _.get(context_data, ['params', value]));
+      }
+    });
 
-    return final_data;
+    Object.entries(specific_data).forEach(([key, value]) => {
+      if (_.has(fake_data, key)) {
+        _.set(fake_data, key, value);
+      }
+    });
+
+    return fake_data;
   }
 
-  static _fakeHeader(parameters, real_data) {
+  static _fakeHeader(parameters, specific_data, context_data) {
     if (!Array.isArray(parameters)) return {};
 
     return parameters.reduce((result, item) => {
       if (item.in !== 'header') return result;
 
-      if (_.has(real_data, [item.name])) {
-        _.set(result, [item.name], real_data[item.name])
-      } else if (item.schema) {
-        _.set(result, [item.name], fake.sample(item.schema));
-      } else {
-        _.set(result, [item.name], '');
-      }
+      const real_data = HttpClient._generateRealData(
+        specific_data, context_data, item.name, item.schema
+      );
+      _.set(result, [item.name], real_data);
 
       return result;
     }, {})
@@ -73,23 +81,21 @@ class HttpClient extends BaseExtension {
    *
    * @static
    * @param {object[]} parameters - parameters which is openapi format
-   * @param {object} real_data - data merged from specific data and context_data
+   * @param {object} specific_data - data is specific data
+   * @param {object} context_data - data is context data
    * @returns {object} - query data
    * @memberof Task
    */
-  static _fakeQuery(parameters, real_data) {
+  static _fakeQuery(parameters, specific_data, context_data) {
     if (!Array.isArray(parameters)) return {};
 
     return parameters.reduce((result, item) => {
       if (item.in !== 'query') return result;
 
-      if (_.has(real_data, [item.name])) {
-        _.set(result, [item.name], real_data[item.name])
-      } else if (item.schema) {
-        _.set(result, [item.name], fake.sample(item.schema));
-      } else {
-        _.set(result, [item.name], '');
-      }
+      const real_data = HttpClient._generateRealData(
+        specific_data, context_data, item.name, item.schema
+      );
+      _.set(result, [item.name], real_data);
 
       return result;
     }, {})
@@ -99,23 +105,21 @@ class HttpClient extends BaseExtension {
    * @static
    * @param {string} api_name - api name
    * @param {object[]} path_parameters - swagger parameters about path
-   * @param {object} real_data - will overwrite fake data
+   * @param {object} specific_data - data is specific data
+   * @param {object} context_data - data is context data
    * @returns {string} api_url
    * @memberof Task
    */
-  static _fakePath(api_name, path_parameters, real_data) {
+  static _fakePath(api_name, path_parameters, specific_data, context_data) {
     if (!Array.isArray(path_parameters) || path_parameters.length === 0) return api_name;
 
     const path_fake_data = path_parameters.reduce((result, item) => {
       if (item.in !== 'path') return result;
 
-      if (_.has(real_data, [item.name])) {
-        _.set(result, [item.name], real_data[item.name])
-      } else if (item.schema) {
-        _.set(result, [item.name], fake.sample(item.schema));
-      } else {
-        _.set(result, [item.name], '');
-      }
+      const real_data = HttpClient._generateRealData(
+        specific_data, context_data, item.name, item.schema
+      );
+      _.set(result, [item.name], real_data);
 
       return result;
     }, {})
@@ -147,7 +151,9 @@ class HttpClient extends BaseExtension {
       url, headers, method_type
     } = ctx;
 
-    const { operation_obj, path_parameters, real_data } = HttpClient._parseArgs(ctx);
+    const {
+      operation_obj, path_parameters, specific_data, context_data
+    } = HttpClient._parseArgs(ctx);
 
     if (typeof operation_obj !== 'object') {
       throw new TypeError(`${url} no exist in swagger`);
@@ -155,21 +161,21 @@ class HttpClient extends BaseExtension {
 
     const fake_headers = HttpClient._fakeHeader(
       Swagger.getParametersSchema(operation_obj),
-      real_data
+      specific_data, context_data
     );
 
     const params = HttpClient._fakeQuery(
       Swagger.getParametersSchema(operation_obj),
-      real_data
+      specific_data, context_data
     );
     const body = HttpClient._fakeBody(
       Swagger.getRequestBodySchema(operation_obj),
-      real_data
+      specific_data, context_data
     );
     const new_url = HttpClient._fakePath(
       url,
       path_parameters,
-      real_data
+      specific_data, context_data
     );
 
     const response = await http.request({
@@ -179,7 +185,7 @@ class HttpClient extends BaseExtension {
       params,
       body,
       headers: _.merge({}, fake_headers, headers)
-    })
+    });
 
     _.set(ctx, ['public', ctx.task_id, 'result'], {
       new_url, body, params, response
@@ -195,10 +201,8 @@ class HttpClient extends BaseExtension {
     return {
       operation_obj: ctx.operation_obj,
       path_parameters: ctx.path_parameters,
-      real_data: _.merge(
-        {}, _.get(ctx, ['public', 'params'], {}),
-        _.get(ctx, [this.type, 'params', 'request'], {})
-      ),
+      specific_data: _.get(ctx, [this.type, 'params', 'request'], {}),
+      context_data: _.get(ctx, ['public', 'context'])
     }
   }
 

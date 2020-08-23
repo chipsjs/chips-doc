@@ -276,6 +276,152 @@
         ],
         "summary": "7"
       }
+    },
+    "/api8": {
+      "post": {
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "param": {
+                    "type": "object",
+                    "desription": "",
+                    "properties": {
+                      "a": {
+                        "type": "string",
+                        "enum": ["a"]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "when key is true, will return true, or not return false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "true, false"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "api"
+        ],
+        "summary": "4"
+      }
+    },
+    "/api9": {
+      "post": {
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "param": {
+                    "type": "object",
+                    "desription": "",
+                    "properties": {
+                      "a": {
+                        "type": "string",
+                        "enum": ["d"]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "when key is true, will return true, or not return false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "true, false"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "api"
+        ],
+        "summary": "4"
+      }
+    },
+    "/api10": {
+      "post": {
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "param": {
+                    "type": "object",
+                    "desription": "",
+                    "properties": {
+                      "a": {
+                        "type": "string",
+                        "enum": ["kkk"]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "when key is true, will return true, or not return false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "param": {
+                      "type": "object",
+                      "description": "true, false",
+                      "properties": {
+                        "a": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "api"
+        ],
+        "summary": "4"
+      }
     }
   }
 }

@@ -220,5 +220,59 @@
         }
       ]
     }
+  },
+  "flow_21": {
+    "flow": ["post /api8"],
+    "context": {
+      "params": {
+        "id": "b"
+      },
+      "scope": {
+        "id": ["param.a"]
+      }
+    }
+  },
+  "flow_22": {
+    "flow": ["post /api8"],
+    "extensions": {
+      "post /api8": [
+        {
+          "middleware": "httpclient",
+          "params": {
+            "request": {
+              "param.a": "c"
+            }
+          }
+        }
+      ]
+    },
+    "context": {
+      "params": {
+        "id": "b"
+      },
+      "scope": {
+        "id": ["param.a"]
+      }
+    }
+  },
+  "flow_23": {
+    "flow": ["post /api8"],
+    "context": {
+      "params": {
+        "param.a": "b"
+      }
+    }
+  },
+  "flow_24": {
+    "flow": ["post /api8", "post /api9"],
+    "context": {
+      "params": ["param.a"]
+    }
+  },
+  "flow_25": {
+    "flow": ["post /api10", "post /api9"],
+    "context": {
+      "params": ["param.a"]
+    }
   }
 }

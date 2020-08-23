@@ -11,7 +11,7 @@ const swaggers = {
 }
 
 // here is the schema's link about string: https://json-schema.org/understanding-json-schema/reference/string.html#format
-describe('flow mock', () => {
+describe('get swagger', () => {
   before('start mock server', () => {
     helper.mockServerStart();
   });

@@ -164,4 +164,47 @@ router.get('/api7', (request_config) => {
   };
 });
 
+router.post('/api8', (request_config) => {
+  const { param } = request_config.body;
+  if (param.a === 'b') {
+    return {
+      success: true
+    };
+  }
+
+  return {
+    success: false
+  };
+});
+
+router.post('/api9', (request_config) => {
+  const { param } = request_config.body;
+  if (param.a === 'a') {
+    return {
+      success: true
+    };
+  }
+
+  return {
+    success: false
+  };
+});
+
+router.post('/api10', (request_config) => {
+  const { param } = request_config.body;
+  if (param.a === 'kkk') {
+    return {
+      param: {
+        a: 'a'
+      }
+    };
+  }
+
+  return {
+    param: {
+      a: 'b'
+    }
+  };
+});
+
 module.exports = router;

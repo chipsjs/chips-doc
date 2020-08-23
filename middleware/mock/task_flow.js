@@ -26,17 +26,44 @@ class TaskFlow {
       flow: api_flow.flow,
       swaggers,
       extensions: api_flow.extensions,
+      context: this._initContextParams(api_flow.context)
     }
+  }
 
-    const context_params = _.get(api_flow, ['context', 'params'], [])
-    if (Array.isArray(context_params)) {
-      this.context.params = context_params.reduce((result, key) => {
-        _.set(result, key, null);
+  _initContextParams(flow_context) {
+    if (!flow_context) return {};
+
+    const before_convert_params = _.get(flow_context, 'params', {});
+
+    let params;
+    // convert array to key value format
+    if (Array.isArray(before_convert_params)) {
+      params = before_convert_params.reduce((result, key) => {
+        // eslint-disable-next-line no-param-reassign
+        result[key] = null;
         return result;
       }, {});
-    } else if (typeof context_params === 'object') {
-      this.context.params = context_params;
+    } else if (typeof before_convert_params === 'object') {
+      params = before_convert_params;
     }
+
+    // define default scope
+    const scope = {};
+    Object.keys(params).forEach((key) => {
+      scope[key] = key;
+    });
+
+    // define addtional scope
+    const addtional_scope = _.get(flow_context, 'scope', {});
+    Object.entries(addtional_scope).forEach(([key, values]) => {
+      if (!Array.isArray(values)) return;
+
+      values.forEach((value) => {
+        scope[value] = key;
+      });
+    });
+
+    return { params, scope };
   }
 
   /**
@@ -61,31 +88,33 @@ class TaskFlow {
     return { method_type, url: api_name_with_suffix };
   }
 
-  // /**
-  //  *
-  //  *
-  //  * @param {object} response_data - http response
-  //  * @param {object} context_data - todo
-  //  * @memberof TaskFlow
-  //  */
-  // _updateContext(response_data, context_data) {
-  //   if (typeof context_data !== 'object' || Object.keys(context_data).length === 0) {
-  //     Object.keys(this._context).forEach((key) => {
-  //       if (_.has(response_data, key) && typeof response_data[key] !== 'undefined' && typeof response_data[key] !== 'object') {
-  //         _.set(this._context, key, response_data[key]);
-  //       }
-  //     });
-  //     return;
-  //   }
+  // do not support path update context
+  _updateContextParams(context_data, response, params, body) {
+    const new_context_data = _.cloneDeep(context_data);
+    const data = _.get(response, 'data');
+    const context_scope = _.get(new_context_data, 'scope', {});
 
-  //   Object.entries(context_data).forEach(([key, value]) => {
-  //     if (typeof value === 'string') {
-  //       // _.set(this)
-  //     } else if (typeof value === 'object') {
-  //       // to do
-  //     }
-  //   });
-  // }
+    Object.entries(context_scope).forEach(([key, value]) => {
+      if (_.has(data, key)) {
+        _.set(new_context_data, ['params', value], _.get(data, key));
+        return new_context_data;
+      }
+
+      if (_.has(params, key)) {
+        _.set(new_context_data, ['params', value], _.get(params, key));
+        return new_context_data;
+      }
+
+      if (_.has(body, key)) {
+        _.set(new_context_data, ['params', value], _.get(body, key));
+        return new_context_data;
+      }
+
+      return new_context_data;
+    });
+
+    return new_context_data;
+  }
 
   /**
    * quickly run
@@ -132,6 +161,9 @@ class TaskFlow {
           const {
             new_url, params, body, response
           } = _.get(this.context, [task_id, ['result']]);
+          this.context.context = this._updateContextParams(
+            this.context.context, response, params, body
+          );
           this._reporter.addReport(task_id, new_url, params, body, response);
         }
       });
