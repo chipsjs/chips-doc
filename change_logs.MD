@@ -29,27 +29,15 @@
 
 ### 2020.8
 
-- 1. optimize ut test 2.add husky 3. support getswagger middleware 4.import context scope concept
+- 1. optimize ut test 2.add husky 3. support getswagger middleware 4.import context scope concept 5.support header mock
 - author: kris.xu
 
 ## Sechedule
 
-### v1.1.0
+### to do
 
 - items fake
-- 自定义flow: 1.单个api
-- 部分headers放入context中
-- context build的时候创建而不是run时
-- context 各层自己管理自己的context
-- extensions的解析和处理都在flow这一层
-
-### v1.2.0
-
-- 更改flow test方式, 不用使用真实的mock server
-- 记录flow中的历史数据, 不用重复输入
 
 ### no plan
 
 - support flows
-- support dependence flow of flow
-- 考虑绝对路径来做key
