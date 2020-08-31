@@ -225,4 +225,13 @@ router.get('/api12', (request_config) => {
   return false;
 });
 
+router.post('/api13', (request_config) => {
+  const { ids } = request_config.body;
+  if (ids[0] === '0' && ids[1] === '1') {
+    return true;
+  }
+
+  return false;
+});
+
 module.exports = router;

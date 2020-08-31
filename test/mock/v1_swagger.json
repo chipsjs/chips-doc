@@ -490,6 +490,45 @@
         ],
         "summary": "12"
       }
+    },
+    "/api13": {
+      "post": {
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "ids": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "description": "aaa"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "when params[0]&&params[1] is 'id:1,name:x', will return true, or not return false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean",
+                  "description": "true, false"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "api 11"
+        ],
+        "summary": "11"
+      }
     }
   }
 }

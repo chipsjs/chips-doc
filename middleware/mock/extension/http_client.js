@@ -64,7 +64,7 @@ class HttpClient extends BaseExtension {
   }
 
   /**
-   *
+   * only body support variable array
    *
    * @static
    * @param {object} schema - a openapi shcema object
@@ -87,7 +87,16 @@ class HttpClient extends BaseExtension {
 
     Object.entries(specific_data).forEach(([key, value]) => {
       if (_.has(fake_data, key)) {
-        const instead_value = HttpClient._insteadVariable(value, context_data);
+        let instead_value;
+        if (Array.isArray(value)) {
+          // eslint-disable-next-line arrow-body-style
+          instead_value = value.map((variable) => {
+            return HttpClient._insteadVariable(variable, context_data);
+          })
+        } else {
+          instead_value = HttpClient._insteadVariable(value, context_data);
+        }
+
         _.set(fake_data, key, instead_value);
       }
     });

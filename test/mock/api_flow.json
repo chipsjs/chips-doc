@@ -316,5 +316,26 @@
         "name": "x"
       }
     }
+  },
+  "flow_28": {
+    "flow": ["post /api13"],
+    "extensions": {
+      "post /api13": [
+        {
+          "middleware": "httpclient",
+          "params": {
+            "request": {
+              "ids": ["${a}", "${b}"]
+            }
+          }
+        }
+      ]
+    },
+    "context": {
+      "params": {
+        "a": "0",
+        "b": "1"
+      }
+    }
   }
 }
