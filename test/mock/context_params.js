@@ -116,6 +116,46 @@ describe('context params', () => {
     });
   });
 
+  // eslint-disable-next-line no-template-curly-in-string
+  describe('suport query exist "${xxx}" as variable', () => {
+    let report_queue;
+
+    before('mock', async () => {
+      const report = await TaskFlow.run('temp', {
+        swaggers,
+        api_flow: api_flow.flow_27
+      });
+      report_queue = report.report;
+    });
+
+    it('should have right output', () => {
+      assert.strictEqual(report_queue.length, 2);
+      assert.nestedPropertyVal(report_queue[0], 'api_info_name', api_flow.flow_27.flow[0]);
+      assert.nestedPropertyVal(report_queue[0], 'params.param', 'id:1,name:x');
+      assert.nestedPropertyVal(report_queue[1], 'response.data', true);
+    });
+  });
+
+  // eslint-disable-next-line no-template-curly-in-string
+  describe('suport body exist "${xxx}" as variable', () => {
+    let report_queue;
+
+    before('mock', async () => {
+      const report = await TaskFlow.run('temp', {
+        swaggers,
+        api_flow: api_flow.flow_26
+      });
+      report_queue = report.report;
+    });
+
+    it('should have right output', () => {
+      assert.strictEqual(report_queue.length, 2);
+      assert.nestedPropertyVal(report_queue[0], 'api_info_name', api_flow.flow_26.flow[0]);
+      assert.nestedPropertyVal(report_queue[0], 'data.param', 'id:1,name:x');
+      assert.nestedPropertyVal(report_queue[1], 'response.data', true);
+    });
+  });
+
   after('stop mock server', () => {
     helper.mockServerRestore();
   });

@@ -207,4 +207,22 @@ router.post('/api10', (request_config) => {
   };
 });
 
+router.post('/api11', (request_config) => {
+  const { param } = request_config.body;
+  if (param === 'id:1,name:x') {
+    return true;
+  }
+
+  return false;
+});
+
+router.get('/api12', (request_config) => {
+  const { param } = request_config.params;
+  if (param === 'id:1,name:x') {
+    return true;
+  }
+
+  return false;
+});
+
 module.exports = router;

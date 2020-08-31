@@ -422,6 +422,74 @@
         ],
         "summary": "4"
       }
+    },
+    "/api11": {
+      "post": {
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "param": {
+                    "type": "string",
+                    "desription": ""
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "when param is 'id:1,name:x', will return true, or not return false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean",
+                  "description": "true, false"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "api 11"
+        ],
+        "summary": "11"
+      }
+    },
+    "/api12": {
+      "get": {
+        "parameters": [
+          {
+            "name": "param",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": ""
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "when param is 'id:1,name:x', will return true, or not return false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean",
+                  "description": "true, false"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "api 12"
+        ],
+        "summary": "12"
+      }
     }
   }
 }

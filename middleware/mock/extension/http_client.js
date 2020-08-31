@@ -7,10 +7,43 @@ const { Swagger, http } = require('../../../lib');
 const BaseExtension = require('./base_extension');
 
 class HttpClient extends BaseExtension {
+  static _insteadVariable(data, context_data) {
+    // support ${} as variable
+    const reg = /\$?{[a-z|A-Z|0-9|_|.]+}/g;
+    const temp_arr_1 = data.split(reg);
+    const match_arr = data.match(reg);
+    if (Array.isArray(match_arr)) {
+      const temp_arr_2 = match_arr.map((match_item) => {
+        const variable = match_item.substr(2, match_item.length - 3);
+        if (_.has(context_data, ['scope', variable])) {
+          const key = _.get(context_data, ['scope', variable]);
+          const context_parmas = _.get(context_data, ['params', key]);
+          if (context_parmas) {
+            return context_parmas;
+          }
+        }
+        return match_item;
+      })
+
+      const sum_arr = [];
+      let i = 0;
+      for (; i < temp_arr_1.length - 1; i += 1) {
+        sum_arr.push(temp_arr_1[i]);
+        sum_arr.push(temp_arr_2[i]);
+      }
+      sum_arr.push(temp_arr_1[i]);
+
+      return sum_arr.join('');
+    }
+
+    return data;
+  }
+
   static _generateRealData(specific_data, context_data, path, schema) {
     // specific data is higest priority
     if (_.has(specific_data, path)) {
-      return _.get(specific_data, path);
+      const data = _.get(specific_data, path);
+      return HttpClient._insteadVariable(data, context_data);
     }
 
     // context_data is the second priority
@@ -54,7 +87,8 @@ class HttpClient extends BaseExtension {
 
     Object.entries(specific_data).forEach(([key, value]) => {
       if (_.has(fake_data, key)) {
-        _.set(fake_data, key, value);
+        const instead_value = HttpClient._insteadVariable(value, context_data);
+        _.set(fake_data, key, instead_value);
       }
     });
 

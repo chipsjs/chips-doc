@@ -29,7 +29,7 @@
 
 ### 2020.8
 
-- 1. optimize ut test 2.add husky 3. support getswagger middleware 4.import context scope concept 5.support header mock
+- 1. optimize ut test 2.add husky 3. support getswagger middleware 4.import context scope concept 5.support header mock 6.support ${} as variable in params
 - author: kris.xu
 
 ## Sechedule
@@ -37,6 +37,7 @@
 ### to do
 
 - items fake
+- support context function so that can adjust more flexible
 
 ### no plan
 

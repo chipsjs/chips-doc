@@ -274,5 +274,47 @@
     "context": {
       "params": ["param.a"]
     }
+  },
+  "flow_26": {
+    "flow": ["post /api11"],
+    "extensions": {
+      "post /api11": [
+        {
+          "middleware": "httpclient",
+          "params": {
+            "request": {
+              "param": "id:${id},name:${name}"
+            }
+          }
+        }
+      ]
+    },
+    "context": {
+      "params": {
+        "id": "1",
+        "name": "x"
+      }
+    }
+  },
+  "flow_27": {
+    "flow": ["get /api12"],
+    "extensions": {
+      "get /api12": [
+        {
+          "middleware": "httpclient",
+          "params": {
+            "request": {
+              "param": "id:${id},name:${name}"
+            }
+          }
+        }
+      ]
+    },
+    "context": {
+      "params": {
+        "id": "1",
+        "name": "x"
+      }
+    }
   }
 }
