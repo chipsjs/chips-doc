@@ -74,7 +74,7 @@ class HttpClient extends BaseExtension {
   }
 
   /**
-   * only body support variable array, optimize in the future
+   *
    *
    * @static
    * @param {object} schema - a openapi shcema object
