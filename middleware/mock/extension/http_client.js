@@ -7,7 +7,17 @@ const { Swagger, http } = require('../../../lib');
 const BaseExtension = require('./base_extension');
 
 class HttpClient extends BaseExtension {
-  static _insteadVariable(data, context_data) {
+  static insteadVariable(data, context_data) {
+    if (Array.isArray(data)) {
+      // eslint-disable-next-line arrow-body-style
+      return data.map((variable) => {
+        return HttpClient._insteadSingleVariable(variable, context_data);
+      })
+    }
+    return HttpClient._insteadSingleVariable(data, context_data);
+  }
+
+  static _insteadSingleVariable(data, context_data) {
     // support ${} as variable
     const reg = /\$?{[a-z|A-Z|0-9|_|.]+}/g;
     const temp_arr_1 = data.split(reg);
@@ -43,7 +53,7 @@ class HttpClient extends BaseExtension {
     // specific data is higest priority
     if (_.has(specific_data, path)) {
       const data = _.get(specific_data, path);
-      return HttpClient._insteadVariable(data, context_data);
+      return HttpClient.insteadVariable(data, context_data);
     }
 
     // context_data is the second priority
@@ -64,7 +74,7 @@ class HttpClient extends BaseExtension {
   }
 
   /**
-   * only body support variable array
+   * only body support variable array, optimize in the future
    *
    * @static
    * @param {object} schema - a openapi shcema object
@@ -87,16 +97,7 @@ class HttpClient extends BaseExtension {
 
     Object.entries(specific_data).forEach(([key, value]) => {
       if (_.has(fake_data, key)) {
-        let instead_value;
-        if (Array.isArray(value)) {
-          // eslint-disable-next-line arrow-body-style
-          instead_value = value.map((variable) => {
-            return HttpClient._insteadVariable(variable, context_data);
-          })
-        } else {
-          instead_value = HttpClient._insteadVariable(value, context_data);
-        }
-
+        const instead_value = HttpClient.insteadVariable(value, context_data);
         _.set(fake_data, key, instead_value);
       }
     });
