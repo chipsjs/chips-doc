@@ -50,6 +50,7 @@
 ### to do
 
 - support context function so that can adjust more flexible
+- optimize report module
 
 ### no plan
 
