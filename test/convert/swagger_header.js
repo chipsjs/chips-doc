@@ -33,7 +33,6 @@ describe('header', () => {
       assert.nestedPropertyVal(schema[1], 'name', 'accept-version');
       assert.nestedPropertyVal(schema[1], 'required', false);
       assert.nestedPropertyVal(schema[1], 'description', 'api version, default is 0.0.1');
-      assert.nestedPropertyVal(schema[1], 'schema.default', '0.0.1');
       assert.strictEqual(schema[1].schema.enum.length, 1);
       assert.nestedPropertyVal(schema[1], 'schema.enum.0', '0.0.1');
     });
@@ -58,7 +57,6 @@ describe('header', () => {
       assert.nestedPropertyVal(schema[0], 'name', 'accept-version');
       assert.nestedPropertyVal(schema[0], 'required', false);
       assert.nestedPropertyVal(schema[0], 'description', 'api version, default is 0.0.1');
-      assert.nestedPropertyVal(schema[0], 'schema.default', '0.0.1');
       assert.strictEqual(schema[0].schema.enum.length, 1);
       assert.nestedPropertyVal(schema[0], 'schema.enum.0', '0.0.2');
     });
