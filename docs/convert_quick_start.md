@@ -155,7 +155,3 @@ body | [Spec Object](#specObject) | http response body
 #### ifPresent
 
 - it is the special key as the same as optional
-
-# mock
-
-- 默认第一层context, 子层context需要指定 ( 暂时不考虑)
