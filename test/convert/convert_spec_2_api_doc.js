@@ -1298,4 +1298,46 @@ describe('convert spec to generate api doc', () => {
       fs.unlinkSync('test/convert/temp/unstandard.json');
     });
   });
+
+  describe('exist required and optional in spec', () => {
+    before('set source data', () => {
+      specJson = {
+        'Post /test': {
+          method: 'post',
+          request: {
+            body: {
+              required: {
+                a: 'a',
+                b: 'b'
+              },
+              optional: {
+                c: 'c'
+              }
+            }
+          }
+        }
+      }
+    });
+
+    before('convert normal spec to api doc', () => {
+      specResult = Convert.getInstance().run(specJson, 'test/convert/temp/standard');
+    });
+
+    it('should generate correct api doc', () => {
+      const api_name = '/test';
+      assert.exists(specResult[api_name]);
+      assert.exists(specResult[api_name].post);
+      const operation_object = Swagger.getOperationObject(specResult[api_name], 'post');
+      const body = Swagger.getRequestBodySchema(operation_object);
+      assert.property(body.properties, 'a');
+      assert.property(body.properties, 'b');
+      assert.property(body.properties, 'c');
+      assert.nestedPropertyVal(body, 'required.0', 'a');
+      assert.nestedPropertyVal(body, 'required.1', 'b');
+    });
+
+    after('clean file', () => {
+      fs.unlinkSync('test/convert/temp/standard.json');
+    });
+  })
 });

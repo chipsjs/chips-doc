@@ -102,14 +102,14 @@ class SpecConvert extends Base.factory() {
           case 'object':
             if (Swagger.isCombiningSchemas(param_name) || param_name === 'ifPresent' || param_name === 'optional' || param_name === 'header') {
               const child_convert_schema = this._parseDetailSchema(parameter_object, false);
-              convert_schema = child_convert_schema.convert_schema;
+              convert_schema = _.merge(convert_schema, child_convert_schema.convert_schema);
               child_convert_schema.param_arr.forEach((item) => result.add(item));
               break;
             }
 
             if (param_name === 'required') {
               const child_convert_schema = this._parseDetailSchema(parameter_object, true);
-              convert_schema = child_convert_schema.convert_schema;
+              convert_schema = _.merge(convert_schema, child_convert_schema.convert_schema);
               child_convert_schema.param_arr.forEach((item) => result.add(item));
               break;
             }
