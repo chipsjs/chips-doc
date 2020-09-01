@@ -337,5 +337,31 @@
         "b": "1"
       }
     }
+  },
+  "onlymock_post": {
+    "flow": ["post /api/onlymock"],
+    "extensions": {
+      "post /api/onlymock": [
+        {
+          "middleware": "getswagger",
+          "params": {
+            "onlymock": ["a"]
+          }
+        }
+      ]
+    }
+  },
+  "onlymock_query": {
+    "flow": ["get /api/onlymock"],
+    "extensions": {
+      "get /api/onlymock": [
+        {
+          "middleware": "getswagger",
+          "params": {
+            "onlymock": ["a"]
+          }
+        }
+      ]
+    }
   }
 }

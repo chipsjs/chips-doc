@@ -234,4 +234,22 @@ router.post('/api13', (request_config) => {
   return false;
 });
 
+router.get('/api/onlymock', (request_config) => {
+  const { a, b } = request_config.params;
+  if (a && !b) {
+    return true;
+  }
+
+  return false;
+});
+
+router.post('/api/onlymock', (request_config) => {
+  const { a, b } = request_config.body;
+  if (a && !b) {
+    return true;
+  }
+
+  return false;
+});
+
 module.exports = router;

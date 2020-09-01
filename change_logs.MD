@@ -40,6 +40,11 @@
 - 6.support ${} as variable in params 7.support items
 - author: kris.xu
 
+### 2020.9
+
+- 1.support getswagger onlymock feature
+- author: kris.xu
+
 ## Sechedule
 
 ### to do

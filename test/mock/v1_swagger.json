@@ -529,6 +529,72 @@
         ],
         "summary": "11"
       }
+    },
+    "/api/onlymock": {
+      "get": {
+        "parameters": [
+          {
+            "name": "a",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "b",
+            "in": "query",
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean",
+                  "description": "true, false"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "a": {
+                    "type": "string",
+                    "description": "aaa"
+                  },
+                  "b": {
+                    "type": "string",
+                    "description": "bbb"                    
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "when params[0]&&params[1] is 'id:1,name:x', will return true, or not return false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean",
+                  "description": "true, false"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }
