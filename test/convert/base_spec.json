@@ -29,6 +29,17 @@
       }
     }
   },
+  "Get /query/multi": {
+    "name": "api",
+    "summary": "multi",
+    "method": "GET",
+    "request": {
+      "query": {
+        "param1": "string kkk",
+        "param2": "string aaa"
+      }
+    }
+  },
   "Get /query/created": {
     "name": "api",
     "summary": "new api for test and swagger_extention.json has't this api",

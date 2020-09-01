@@ -175,6 +175,35 @@ describe('sync swagger from new spec and extention swagger', () => {
         assert.nestedPropertyVal(schema[0], 'schema.type', Swagger.dataType.string);
       });
     });
+
+    describe('have multi param', () => {
+      before('run', () => {
+        swagger = Convert.getInstance().syncSwaggerJson(
+          generateSpec('Get /query/multi'),
+          generateSwagger('/query/multi')
+        );
+        operation_object = Swagger.getOperationObjectFromSwagger(swagger, '/query/multi', 'get');
+      });
+
+      it('should be have correct swagger', () => {
+        const schema = Swagger.getParametersSchema(operation_object);
+        assert.strictEqual(schema.length, 3);
+        assert.nestedPropertyVal(schema[0], 'in', 'query');
+        assert.nestedPropertyVal(schema[0], 'name', 'param1');
+        assert.nestedPropertyVal(schema[0], 'required', false);
+        assert.nestedPropertyVal(schema[0], 'schema.description', 'string kkk');
+        assert.nestedPropertyVal(schema[0], 'schema.maxLength', 100);
+        assert.nestedPropertyVal(schema[0], 'schema.type', Swagger.dataType.string);
+        assert.nestedPropertyVal(schema[1], 'in', 'query');
+        assert.nestedPropertyVal(schema[1], 'name', 'param2');
+        assert.nestedPropertyVal(schema[1], 'required', false);
+        assert.nestedPropertyVal(schema[1], 'schema.description', 'string aaa');
+        assert.nestedPropertyVal(schema[1], 'schema.default', 'aaa');
+        assert.nestedPropertyVal(schema[1], 'schema.type', Swagger.dataType.string);
+        assert.isArray(schema[0].schema.enum);
+        assert.isArray(schema[1].schema.enum);
+      });
+    });
   });
 
   describe('path have addtional schema', () => {

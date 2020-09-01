@@ -62,6 +62,30 @@
       ]
     }
   },
+  "/query/multi": {
+    "get": {
+      "parameters": [
+        {
+          "in": "query",
+          "name": "param1",
+          "schema": {
+            "type": "string",
+            "maxLength": 100,
+            "enum": ["aaa", "bbb"]
+          }
+        },
+        {
+          "in": "query",
+          "name": "param2",
+          "schema": {
+            "type": "string",
+            "default": "aaa",
+            "enum": ["aaa", "bbb"]
+          }
+        }
+      ]
+    }
+  },
   "/query/created": {
     "get": {
       "parameters": [
