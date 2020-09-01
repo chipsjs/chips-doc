@@ -262,7 +262,7 @@ class HttpClient extends BaseExtension {
    */
   static async _validatorResponse(response, schema) {
     if (response.status !== 200) {
-      return Promise.reject(new Error(`request fail, status code is ${response.status}`));
+      return Promise.reject(new Error(`request fail, response is ${JSON.stringify(response)}`));
     }
 
     const result = dataValidate(response.data, schema);
