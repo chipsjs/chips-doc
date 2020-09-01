@@ -305,8 +305,7 @@ class SpecConvert extends Base.factory() {
       required: false,
       schema: {
         type: 'string',
-        enum: [api_version],
-        default: '0.0.1',
+        enum: [api_version]
       },
       description: 'api version, default is 0.0.1',
     });
