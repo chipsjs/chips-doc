@@ -452,4 +452,22 @@ module.exports = {
       ]
     }
   },
+  controller_dest_flow: {
+    flow: ['post /api2', 'post /api4', 'get /api1'],
+    extensions: {
+      'post /api2': [
+        {
+          middleware: 'controller',
+          params: {
+            dest: {
+              flow_id: 'controller_dest_task',
+              condition: {
+                success: true
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
 }

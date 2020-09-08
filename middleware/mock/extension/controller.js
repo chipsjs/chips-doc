@@ -77,10 +77,12 @@ class Controller extends BaseExtension {
     if (!exist_no_match) {
       if (_.has(control_info, ['flow_id'])) {
         _.set(ctx, ['public', 'next_task_id'], 'next_task_no_exist');
+        const next_flow_id = _.get(control_info, ['flow_id']);
+        _.set(ctx, ['public', 'next_flow_id'], next_flow_id);
       }
       if (_.has(control_info, ['task_id'])) {
-        const dest_task_id = _.get(control_info, ['task_id']);
-        _.set(ctx, ['public', 'next_task_id'], dest_task_id);
+        const next_task_id = _.get(control_info, ['task_id']);
+        _.set(ctx, ['public', 'next_task_id'], next_task_id);
       }
     }
   }

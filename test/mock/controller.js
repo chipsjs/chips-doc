@@ -95,6 +95,24 @@ describe('controller', () => {
     });
   });
 
+  describe('if dest exist flow id, next tasks will not excute', () => {
+    let report_queue;
+
+    before('mock', async () => {
+      const { report } = await TaskFlow.run('temp', {
+        swaggers,
+        api_flow: api_flow.controller_dest_flow
+      });
+      report_queue = report;
+    });
+
+    it('should have right output', () => {
+      assert.strictEqual(report_queue.length, 2);
+      assert.strictEqual(report_queue[0].api_info_name, api_flow.controller_dest_flow.flow[0]);
+      assert.strictEqual(report_queue[1].api_info_name, api_flow.controller_dest_flow.flow[0]);
+    });
+  });
+
   after('stop mock server', () => {
     helper.mockServerRestore();
   });
