@@ -42,14 +42,14 @@
 
 ### 2020.9
 
-- 1.support getswagger onlymock feature
+- 1.support getswagger onlymock feature 2.support controller function so that can adjust more flexible
 - author: kris.xu
 
 ## Sechedule
 
 ### to do
 
-- support context function so that can adjust more flexible
+- support function variable in controller
 - optimize report module
 
 ### no plan

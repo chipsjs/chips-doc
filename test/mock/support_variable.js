@@ -1,6 +1,6 @@
 const { assert } = require('chai');
 const { TaskFlow } = require('../../index');
-const api_flow = require('./api_flow.json');
+const api_flow = require('./api_flow');
 const v1_swagger = require('./v1_swagger.json');
 const v2_swagger = require('./v2_swagger.json');
 const helper = require('../tools/helper');

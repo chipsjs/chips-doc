@@ -26,6 +26,7 @@
     "husky": "^4.2.5",
     "mocha": "^7.2.0",
     "nyc": "^15.0.1",
+    "sinon": "^9.0.3",
     "validate-commit-msg": "^2.14.0"
   },
   "scripts": {

@@ -23,3 +23,7 @@ module.exports.mockServerRestore = () => {
   http.request = originalRequest;
 };
 
+module.exports.callFunction = () => {
+  // do nothing
+};
+

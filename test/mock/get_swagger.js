@@ -1,6 +1,6 @@
 const { assert } = require('chai');
 const { TaskFlow } = require('../../index');
-const api_flow = require('./api_flow.json');
+const api_flow = require('./api_flow');
 const v1_swagger = require('./v1_swagger.json');
 const v2_swagger = require('./v2_swagger.json');
 const helper = require('../tools/helper');
@@ -16,25 +16,25 @@ describe('get swagger', () => {
     helper.mockServerStart();
   });
 
-  // describe('api use swagger v2', () => {
-  //   let report_queue;
+  describe('api use swagger v2', () => {
+    let report_queue;
 
-  //   before('mock', async () => {
-  //     const { report } = await TaskFlow.run('temp', {
-  //       swaggers,
-  //       api_flow: api_flow.flow_20
-  //     });
-  //     report_queue = report;
-  //   });
+    before('mock', async () => {
+      const { report } = await TaskFlow.run('temp', {
+        swaggers,
+        api_flow: api_flow.flow_20
+      });
+      report_queue = report;
+    });
 
-  //   it('should have right output', () => {
-  //     assert.strictEqual(report_queue.length, 2);
-  //     assert.nestedPropertyVal(report_queue[0], 'api_info_name', api_flow.flow_1.flow[0]);
-  //     assert.nestedPropertyVal(report_queue[1], 'api_info_name', api_flow.flow_1.flow[0]);
-  //     assert.nestedPropertyVal(report_queue[1], 'response.status', 200);
-  //     assert.nestedPropertyVal(report_queue[1], 'response.data.success', false);
-  //   });
-  // })
+    it('should have right output', () => {
+      assert.strictEqual(report_queue.length, 2);
+      assert.nestedPropertyVal(report_queue[0], 'api_info_name', api_flow.flow_1.flow[0]);
+      assert.nestedPropertyVal(report_queue[1], 'api_info_name', api_flow.flow_1.flow[0]);
+      assert.nestedPropertyVal(report_queue[1], 'response.status', 200);
+      assert.nestedPropertyVal(report_queue[1], 'response.data.success', false);
+    });
+  })
 
   describe('onlymock feature in post', () => {
     let report_queue;
