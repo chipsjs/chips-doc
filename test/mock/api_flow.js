@@ -372,7 +372,7 @@ module.exports = {
     extensions: {
       'get /api1': [
         {
-          middleware: 'controller',
+          middleware: 'secretfunction',
           params: {
             after: (ctx, res) => {
               const a = res.success;
@@ -393,7 +393,7 @@ module.exports = {
     extensions: {
       'get /api1': [
         {
-          middleware: 'controller',
+          middleware: 'secretfunction',
           params: {
             before: (ctx) => {
               const { a } = ctx.params;
@@ -416,7 +416,7 @@ module.exports = {
     extensions: {
       'get /api1': [
         {
-          middleware: 'controller',
+          middleware: 'secretfunction',
           params: {
             after: (ctx, res) => {
               const { success } = ctx.params;
@@ -432,6 +432,24 @@ module.exports = {
       params: {
         success: true
       }
+    }
+  },
+  controller_dest_task: {
+    flow: ['post /api2', 'post /api4', 'get /api1'],
+    extensions: {
+      'post /api2': [
+        {
+          middleware: 'controller',
+          params: {
+            dest: {
+              task_id: 'get /api1',
+              condition: {
+                success: true
+              }
+            }
+          }
+        }
+      ]
     }
   },
 }

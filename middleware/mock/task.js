@@ -66,9 +66,9 @@ class Task {
       return middlewares;
     }
 
-    // find index, insert getswagger middleware before httpclient middleware
-    const index = middlewares.findIndex((ele) => ele.middleware === extensions.httpclient.type);
-    middlewares.splice(index, 0, { middleware: extensions.getswagger.type });
+    // find index, insert getswagger middleware after controller middleware
+    const index = middlewares.findIndex((ele) => ele.middleware === extensions.controller.type);
+    middlewares.splice(index + 1, 0, { middleware: extensions.getswagger.type });
     return middlewares;
   }
 
