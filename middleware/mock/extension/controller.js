@@ -8,8 +8,16 @@ class Controller extends BaseExtension {
   }
 
   static isDest(ctx) {
-    const next_task_id = _.get(ctx, ['public', 'next_task_id'], ctx.task_id);
-    return next_task_id === ctx.task_id;
+    if (_.has(ctx, ['public', 'next_task_id'])) {
+      const next_task_id = _.get(ctx, ['public', 'next_task_id'], ctx.task_id);
+      if (next_task_id !== ctx.task_id) {
+        return false;
+      }
+
+      delete ctx.public.next_task_id;
+    }
+
+    return true;
   }
 
   static async run(ctx, next) {

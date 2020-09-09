@@ -87,11 +87,13 @@ describe('controller', () => {
     });
 
     it('should have right output', () => {
-      assert.strictEqual(report_queue.length, 4);
+      assert.strictEqual(report_queue.length, 6);
       assert.strictEqual(report_queue[0].api_info_name, api_flow.controller_dest_task.flow[0]);
       assert.strictEqual(report_queue[1].api_info_name, api_flow.controller_dest_task.flow[0]);
       assert.strictEqual(report_queue[2].api_info_name, api_flow.controller_dest_task.flow[2]);
       assert.strictEqual(report_queue[3].api_info_name, api_flow.controller_dest_task.flow[2]);
+      assert.strictEqual(report_queue[4].api_info_name, api_flow.controller_dest_task.flow[3]);
+      assert.strictEqual(report_queue[5].api_info_name, api_flow.controller_dest_task.flow[3]);
     });
   });
 

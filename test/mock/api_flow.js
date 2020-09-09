@@ -435,7 +435,7 @@ module.exports = {
     }
   },
   controller_dest_task: {
-    flow: ['post /api2', 'post /api4', 'get /api1'],
+    flow: ['post /api2', 'post /api4', 'get /api1', 'get /api7'],
     extensions: {
       'post /api2': [
         {
