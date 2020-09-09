@@ -132,7 +132,8 @@ class TaskFlow {
     await _instance.execute();
     return {
       report: _instance.outputReport(),
-      fail_report: _instance.outputFailedReport()
+      fail_report: _instance.outputFailedReport(),
+      context: _instance.context,
     }
   }
 

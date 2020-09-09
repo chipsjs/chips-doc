@@ -595,6 +595,47 @@
           }
         }
       }
+    },
+    "/api14": {
+      "post": {
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "success": {
+                    "type": "string",
+                    "desription": ""
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "when key is true, will return false, or not return true",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "true, false"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "api"
+        ],
+        "summary": "14"
+      }
     }
   }
 }

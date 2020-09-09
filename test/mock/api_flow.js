@@ -460,7 +460,7 @@ module.exports = {
           middleware: 'controller',
           params: {
             dest: {
-              flow_id: 'controller_dest_task',
+              flow_id: 'controller_dest_flow_2',
               condition: {
                 success: true
               }
@@ -468,6 +468,17 @@ module.exports = {
           }
         }
       ]
+    },
+    context: {
+      params: ['success']
     }
   },
+  controller_dest_flow_2: {
+    flow: ['post /api14'],
+    context: {
+      params: {
+        success: false
+      }
+    }
+  }
 }
