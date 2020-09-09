@@ -5,33 +5,7 @@
 - Generic call way: /flow/list && /flow/run
 - Quick api for bind lock: /bind/lock
 
-## 02-What it can do?
-
-- 快速方便的模拟api 调用flow: 1.支持上下文字段与字段作用域 2.支持变量 3. 三个插件随用随加: controller, getswagger, httpclient
-- 三个真实的案例
-
-```
-1. kris, 你去测一下pin code与masterpin一样时会怎么样? 
-理论上会被挡掉: 结果kris绑定过程中陆陆续续遇到6处困难, 绑锁耗时3h
-- 清空正在debug的开发环境上下文 
-- 锁没电池  
-- 找不到锁 
-- 好不容易绑锁成功了App版本需要更新:从jekins上下载安装 
-- 扩展坞的usb连接报accessories disables,mac上安装不下去 
-- 出现异常情况,Pincode处于creating状态,不清楚后端的response是否success 由于prod环境不能抓包回到devel环境打开抓包工具分析问题
--> 现在: 登录cola-doc使用bind lock flow, 1min
-
-2.一个flow如果要用postman模拟需要发送多次请求, 不断对其请求参数进行修改, 手动获取上下文参数, 如果需要多次重复调用, 累死人
--> 现在: 一次调用瞬间跑完整个流程，无需关心上下文参数的传递
-
-3.前端: activity log使用v4版本啦, 但是解析失败会报错, 前端问我们能否帮忙看一下这个接口返回的是不是有问题? 
-	后端: 你能把这个功能传的接口和参数给我吗?
-	...half hour later
-	前端: 怎么了? (两个人的上下文早就丢光啦)
--> 现在: - 前端: 能看下response吗, 后端: 可以用cola-doc自己调一下 - 后端: 能帮忙看下这个功能调用的接口吗 前端: 自己看cola-doc
-```
-
-## 03-How to use it
+## 02-How to use it
 
 - 1.  In cola-server-repo(https://bitbucket.org/apac_eco_system/cola-server), there is a dir named `flow`
 - 2. create a new json file or add flow to exist json file
@@ -46,13 +20,13 @@
 ```jsx
 eg in *.json:
 {
-	"random_key": {
-		"flow": [],
-		"extensions": {
-		},
-		"context": {
-		}
-	}
+  "random_key": {
+    "flow": [],
+    "extensions": {
+    },
+    "context": {
+    }
+  }
 }
 ```
 
@@ -121,16 +95,22 @@ eg in *.json:
 - eg:
 
 ```jsx
-"flow": ["post /api2", "get /api1"],
+"flow": ["post /api2", "get /api1", "get /api3"],
 "extensions": {
   "post /api2": [
     {
       "middleware": "controller",
       "params": {
         "ignore": {
-          "task_id": "get /api1",
-          "condition": {
-            "success": false // when api1 response.data.success === false, get /api1 不将会调用
+          "task_id": "get /api1", // default ignore
+          "and_condition": {
+            "data.success": false // when api1 response.data.success === false, get /api1 will execute
+          },
+          "un_condition": {
+            "status": 200 // when api1 response.data.status !== 200, will execute get /api1
+          },
+          "or_condition": {
+            "data.success": false // 一个匹配上则ignore
           }
         }
       }

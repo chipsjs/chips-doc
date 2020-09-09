@@ -48,20 +48,57 @@ class Controller extends BaseExtension {
   }
 
   static async ignoreCase(ctx, control_info) {
-    const { task_id: dest_task_id, condition } = control_info;
+    const { task_id: dest_task_id } = control_info;
 
-    const http_response = _.get(ctx, ['public', ctx.task_id, 'result', 'response', 'data'], {});
+    let ignore_flag = false; // default is no ignore
 
-    const exist_no_match = Object.entries(condition).find(
-      ([key, value]) => {
-        if (_.has(http_response, key)) {
-          return _.get(http_response, key) !== value
+    const http_response = _.get(ctx, ['public', ctx.task_id, 'result', 'response'], {});
+
+    if (_.has(control_info, 'and_condition')) {
+      const condition = _.get(control_info, 'and_condition', {});
+
+      const exist_no_match = Object.entries(condition).find(
+        ([key, value]) => {
+          if (_.has(http_response, key)) {
+            return _.get(http_response, key) !== value
+          }
+          return false;
         }
-        return false;
+      );
+
+      ignore_flag = !exist_no_match;
+    }
+
+    if (_.has(control_info, 'or_condition')) {
+      const condition = _.get(control_info, 'or_condition', {});
+      const exist_match = Object.entries(condition).find(
+        ([key, value]) => {
+          if (_.has(http_response, key)) {
+            return _.get(http_response, key) === value
+          }
+          return false;
+        }
+      );
+      ignore_flag = !!exist_match;
+    }
+
+    // TODO, un condition only support one key!!!
+    if (_.has(control_info, 'un_condition')) {
+      const condition = _.get(control_info, 'un_condition', {});
+      if (Object.keys(condition).length === 1) {
+        const exist_match = Object.entries(condition).find(
+          ([key, value]) => {
+            if (_.has(http_response, key)) {
+              return _.get(http_response, key) === value
+            }
+            return false;
+          }
+        );
+        ignore_flag = !exist_match;
       }
-    );
-    // TODO, dest task id support array
-    if (!exist_no_match) {
+    }
+
+    if (ignore_flag) {
       _.set(ctx, ['public', dest_task_id, this.type, 'ignore'], true);
     }
   }

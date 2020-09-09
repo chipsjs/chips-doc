@@ -89,8 +89,8 @@ module.exports = {
           params: {
             ignore: {
               task_id: 'get /api1',
-              condition: {
-                success: true
+              and_condition: {
+                'data.success': true
               }
             }
           }
@@ -110,8 +110,8 @@ module.exports = {
           params: {
             ignore: {
               task_id: 'get /api1',
-              condition: {
-                success: false
+              and_condition: {
+                'data.success': false
               }
             }
           }
@@ -128,7 +128,7 @@ module.exports = {
           params: {
             useless_key: {
               task_id: 'get /api1',
-              condition: {
+              and_condition: {
                 success: true
               }
             }
@@ -146,8 +146,8 @@ module.exports = {
           params: {
             ignore: {
               task_id: 'get /api1',
-              condition: {
-                success: false
+              and_condition: {
+                'data.success': false
               }
             }
           }
@@ -192,8 +192,8 @@ module.exports = {
           params: {
             ignore: {
               task_id: 'D',
-              condition: {
-                'user.b.success': true
+              and_condition: {
+                'data.user.b.success': true
               }
             }
           }
@@ -480,5 +480,42 @@ module.exports = {
         success: false
       }
     }
-  }
+  },
+  ignore_or_condition: {
+    flow: ['post /api2', 'get /api1'],
+    extensions: {
+      'post /api2': [
+        {
+          middleware: 'controller',
+          params: {
+            ignore: {
+              task_id: 'get /api1',
+              or_condition: {
+                'data.success': true,
+                'data.flag': true
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  ignore_un_condition: {
+    flow: ['post /api2', 'get /api1'],
+    extensions: {
+      'post /api2': [
+        {
+          middleware: 'controller',
+          params: {
+            ignore: {
+              task_id: 'get /api1',
+              un_condition: {
+                'data.success': false
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
 }
