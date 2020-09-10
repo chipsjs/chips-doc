@@ -1,5 +1,6 @@
 const fs = require('fs');
 const config = require('config');
+const _ = require('lodash');
 
 const base_path = config.get('report_path') || './';
 const max_report_num = config.get('max_report_num');
@@ -43,9 +44,12 @@ class Report {
    * @memberof Report
    */
   addFailReport(api_info_name, response = {}, message) {
+    const { data, status } = response;
     this._fail_report_queue.push({
       api_info_name,
-      response,
+      response: {
+        data, status
+      },
       message
     });
   }
@@ -60,6 +64,8 @@ class Report {
    * @memberof Report
    */
   addReport(api_info_name, url, params, data, response) {
+    const { data, status } = response;
+
     this._report_queue.push({
       api_info_name,
       url,
@@ -71,7 +77,9 @@ class Report {
     this._report_queue.push({
       api_info_name,
       url,
-      response,
+      response: {
+        data, status
+      },
       isRequest: false
     });
   }
