@@ -195,6 +195,7 @@ class TaskFlow {
           this.context.context = this._updateContextParams(
             this.context.context, response, params, body
           );
+          this._updateContextHeaders(this.context.headers, this.context.context);
           this._reporter.addReport(task_id, new_url, params, body, response);
         }
       });
