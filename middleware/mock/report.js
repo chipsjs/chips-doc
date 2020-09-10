@@ -37,19 +37,17 @@ class Report {
    *
    *
    * @param {string} api_info_name - eg: 'POST /test@1'
-   * @param {object} response - http response
-   * @param {string} response.status - response status code
-   * @param {object} response.data - response response body
+   * @param {object} http_response - http response
+   * @param {string} http_response.status - response status code
+   * @param {object} http_response.data - response response body
    * @param {string} message - err message
    * @memberof Report
    */
-  addFailReport(api_info_name, response = {}, message) {
-    const { data, status } = response;
+  addFailReport(api_info_name, http_response = {}, message) {
+    const response = _.pick(http_response, ['status', 'data']);
     this._fail_report_queue.push({
       api_info_name,
-      response: {
-        data, status
-      },
+      response,
       message
     });
   }
@@ -59,12 +57,12 @@ class Report {
    * @param {string} url - eg: 'POST /test'
    * @param {object} params - query data
    * @param {object} data - request body
-   * @param {object} response - response data
+   * @param {object} http_response - response data
    * @returns {undefined}
    * @memberof Report
    */
-  addReport(api_info_name, url, params, data, response) {
-    const { data, status } = response;
+  addReport(api_info_name, url, params, data, http_response) {
+    const response = _.pick(http_response, ['status', 'data']);
 
     this._report_queue.push({
       api_info_name,
@@ -77,9 +75,7 @@ class Report {
     this._report_queue.push({
       api_info_name,
       url,
-      response: {
-        data, status
-      },
+      response,
       isRequest: false
     });
   }
