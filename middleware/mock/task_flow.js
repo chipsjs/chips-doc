@@ -88,6 +88,14 @@ class TaskFlow {
     return { method_type, url: api_name_with_suffix };
   }
 
+  static updateContextValue(new_context_data, context_key, new_value) {
+    const old_value = _.get(new_context_data, ['params', context_key]);
+    if (!old_value || typeof old_value === typeof new_value) {
+      _.set(new_context_data, ['params', context_key], new_value);
+    }
+    return new_context_data;
+  }
+
   // do not support path update context
   _updateContextParams(context_data, response, params, body) {
     const new_context_data = _.cloneDeep(context_data);
@@ -97,22 +105,26 @@ class TaskFlow {
 
     Object.entries(context_scope).forEach(([key, value]) => {
       if (_.has(data, key)) {
-        _.set(new_context_data, ['params', value], _.get(data, key));
+        const new_value = _.get(data, key);
+        TaskFlow.updateContextValue(new_context_data, value, new_value);
         return new_context_data;
       }
 
       if (_.has(headers, key)) {
-        _.set(new_context_data, ['params', value], _.get(headers, [key, 0]));
+        const new_value = _.get(headers, [key, 0]);
+        TaskFlow.updateContextValue(new_context_data, value, new_value);
         return new_context_data;
       }
 
       if (_.has(params, key)) {
-        _.set(new_context_data, ['params', value], _.get(params, key));
+        const new_value = _.get(params, key);
+        TaskFlow.updateContextValue(new_context_data, value, new_value);
         return new_context_data;
       }
 
       if (_.has(body, key)) {
-        _.set(new_context_data, ['params', value], _.get(body, key));
+        const new_value = _.get(body, key);
+        TaskFlow.updateContextValue(new_context_data, value, new_value);
         return new_context_data;
       }
 
