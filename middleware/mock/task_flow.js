@@ -134,6 +134,18 @@ class TaskFlow {
     return new_context_data;
   }
 
+  // update context headers
+  _updateContextHeaders(context_headers, context_data) {
+    Object.entries(context_data).forEach(([key, value]) => {
+      if (_.has(context_headers, key)) {
+        const old_value = _.get(context_headers, [key]);
+        if (!old_value || typeof old_value === typeof value) {
+          _.set(context_headers, key, value);
+        }
+      }
+    });
+  }
+
   /**
    * quickly run
    *
