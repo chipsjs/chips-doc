@@ -636,6 +636,28 @@
         ],
         "summary": "14"
       }
+    },
+    "/context/updatedByHeaders": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "propertities": {
+                    "header_a": {
+                      "type": "string",
+                      "description": "aaa"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

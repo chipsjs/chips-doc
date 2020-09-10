@@ -116,7 +116,7 @@ class FlowManager {
   }
 
   async updateContext(context_params) {
-    _.merge(this.flows_context, context_params);
+    this.flows_context = _.merge(this.flows_context, context_params);
   }
 }
 

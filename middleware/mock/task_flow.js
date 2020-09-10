@@ -92,11 +92,17 @@ class TaskFlow {
   _updateContextParams(context_data, response, params, body) {
     const new_context_data = _.cloneDeep(context_data);
     const data = _.get(response, 'data');
+    const headers = _.get(response, 'headers');
     const context_scope = _.get(new_context_data, 'scope', {});
 
     Object.entries(context_scope).forEach(([key, value]) => {
       if (_.has(data, key)) {
         _.set(new_context_data, ['params', value], _.get(data, key));
+        return new_context_data;
+      }
+
+      if (_.has(headers, key)) {
+        _.set(new_context_data, ['params', value], _.get(headers, [key, 0]));
         return new_context_data;
       }
 

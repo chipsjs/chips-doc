@@ -518,4 +518,10 @@ module.exports = {
       ]
     }
   },
+  context_updated_by_headers: {
+    flow: ['get /context/updatedByHeaders'],
+    context: {
+      params: ['header_a']
+    }
+  }
 }

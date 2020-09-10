@@ -33,7 +33,9 @@ class Router {
     };
     if (_.has(this.router_map, [url, method_type])) {
       const callback = _.get(this.router_map, [url, method_type]);
-      response.data = callback(request_config);
+      const { data, headers } = callback(request_config);
+      response.data = data;
+      response.headers = headers;
       response.status = 200;
     } else {
       const mock_path_arr = url.split('/');
@@ -58,7 +60,9 @@ class Router {
 
       if (match_url) {
         const callback = _.get(this.router_map, [match_url, method_type]);
-        response.data = callback({ ...request_config, path });
+        const { data, headers } = callback({ ...request_config, path });
+        response.data = data;
+        response.headers = headers;
         response.status = 200;
       }
     }
@@ -73,12 +77,16 @@ router.get('/api1', (request_config) => {
   const { param1 } = request_config.params;
   if (typeof param1 === 'string' && param1.length < 10 && param1.length > 2) {
     return {
-      success: true
+      data: {
+        success: true
+      }
     }
   }
 
   return {
-    success: false
+    data: {
+      success: false
+    }
   }
 });
 
@@ -90,11 +98,15 @@ router.post('/api2', (request_config) => {
     case 'B':
     case 'C':
       return {
-        success: true
+        data: {
+          success: true
+        }
       };
     default:
       return {
-        success: false
+        data: {
+          success: false
+        }
       };
   }
 });
@@ -107,11 +119,15 @@ router.get('/api3/:param1', (request_config) => {
     case 'B':
     case 'C':
       return {
-        success: true
+        data: {
+          success: true
+        }
       };
     default:
       return {
-        success: false
+        data: {
+          success: false
+        }
       };
   }
 });
@@ -121,12 +137,16 @@ router.post('/api4', (request_config) => {
 
   if (success) {
     return {
-      success: true
+      data: {
+        success: true
+      }
     }
   }
 
   return {
-    success: false
+    data: {
+      success: false
+    }
   }
 });
 
@@ -135,11 +155,15 @@ router.post('/api5/:id/', (request_config) => {
 
   if (id === '1') {
     return {
-      success: true
+      data: {
+        success: true
+      }
     }
   }
   return {
-    success: false
+    data: {
+      success: false
+    }
   }
 });
 
@@ -147,7 +171,9 @@ router.post('/api6', (request_config) => {
   const { success } = request_config.body;
 
   return {
-    success
+    data: {
+      success
+    }
   }
 });
 
@@ -155,12 +181,16 @@ router.get('/api7', (request_config) => {
   const { param1 } = request_config.params;
   if (param1 === '') {
     return {
-      success: false
+      data: {
+        success: false
+      }
     };
   }
 
   return {
-    success: true
+    data: {
+      success: true
+    }
   };
 });
 
@@ -168,12 +198,16 @@ router.post('/api8', (request_config) => {
   const { param } = request_config.body;
   if (param.a === 'b') {
     return {
-      success: true
+      data: {
+        success: true
+      }
     };
   }
 
   return {
-    success: false
+    data: {
+      success: false
+    }
   };
 });
 
@@ -181,12 +215,16 @@ router.post('/api9', (request_config) => {
   const { param } = request_config.body;
   if (param.a === 'a') {
     return {
-      success: true
+      data: {
+        success: true
+      }
     };
   }
 
   return {
-    success: false
+    data: {
+      success: false
+    }
   };
 });
 
@@ -194,15 +232,19 @@ router.post('/api10', (request_config) => {
   const { param } = request_config.body;
   if (param.a === 'kkk') {
     return {
-      param: {
-        a: 'a'
+      data: {
+        param: {
+          a: 'a'
+        }
       }
     };
   }
 
   return {
-    param: {
-      a: 'b'
+    data: {
+      param: {
+        a: 'b'
+      }
     }
   };
 });
@@ -210,53 +252,83 @@ router.post('/api10', (request_config) => {
 router.post('/api11', (request_config) => {
   const { param } = request_config.body;
   if (param === 'id:1,name:x') {
-    return true;
+    return {
+      data: true
+    };
   }
 
-  return false;
+  return {
+    data: false
+  };
 });
 
 router.get('/api12', (request_config) => {
   const { param } = request_config.params;
   if (param === 'id:1,name:x') {
-    return true;
+    return {
+      data: true
+    };
   }
 
-  return false;
+  return {
+    data: false
+  };
 });
 
 router.post('/api13', (request_config) => {
   const { ids } = request_config.body;
   if (ids[0] === '0' && ids[1] === '1') {
-    return true;
+    return {
+      data: true
+    };
   }
 
-  return false;
+  return {
+    data: false
+  };
 });
 
 router.get('/api/onlymock', (request_config) => {
   const { a, b } = request_config.params;
   if (a && !b) {
-    return true;
+    return {
+      data: true
+    };
   }
 
-  return false;
+  return {
+    data: false
+  };
 });
 
 router.post('/api/onlymock', (request_config) => {
   const { a, b } = request_config.body;
   if (a && !b) {
-    return true;
+    return {
+      data: true
+    };
   }
 
-  return false;
+  return {
+    data: false
+  };
 });
 
 router.post('/api14', (request_config) => {
   const { success } = request_config.body;
 
   return {
-    success: !success
+    data: {
+      success: !success
+    }
+  }
+});
+
+router.get('/context/updatedByHeaders', () => {
+  return {
+    headers: {
+      header_a: ['a']
+    }
   }
 });
 

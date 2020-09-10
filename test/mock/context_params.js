@@ -116,43 +116,19 @@ describe('context params', () => {
     });
   });
 
-  // eslint-disable-next-line no-template-curly-in-string
-  describe('suport query exist "${xxx}" as variable', () => {
-    let report_queue;
+  describe('context updated by response headers', () => {
+    let context_params;
 
     before('mock', async () => {
-      const report = await TaskFlow.run('temp', {
+      const { context: updated_context } = await TaskFlow.run('temp', {
         swaggers,
-        api_flow: api_flow.flow_27
+        api_flow: api_flow.context_updated_by_headers
       });
-      report_queue = report.report;
+      context_params = updated_context.context.params;
     });
 
-    it('should have right output', () => {
-      assert.strictEqual(report_queue.length, 2);
-      assert.nestedPropertyVal(report_queue[0], 'api_info_name', api_flow.flow_27.flow[0]);
-      assert.nestedPropertyVal(report_queue[0], 'params.param', 'id:1,name:x');
-      assert.nestedPropertyVal(report_queue[1], 'response.data', true);
-    });
-  });
-
-  // eslint-disable-next-line no-template-curly-in-string
-  describe('suport body exist "${xxx}" as variable', () => {
-    let report_queue;
-
-    before('mock', async () => {
-      const report = await TaskFlow.run('temp', {
-        swaggers,
-        api_flow: api_flow.flow_26
-      });
-      report_queue = report.report;
-    });
-
-    it('should have right output', () => {
-      assert.strictEqual(report_queue.length, 2);
-      assert.nestedPropertyVal(report_queue[0], 'api_info_name', api_flow.flow_26.flow[0]);
-      assert.nestedPropertyVal(report_queue[0], 'data.param', 'id:1,name:x');
-      assert.nestedPropertyVal(report_queue[1], 'response.data', true);
+    it('should have right context params', () => {
+      assert.nestedPropertyVal(context_params, 'header_a', 'a');
     });
   });
 
