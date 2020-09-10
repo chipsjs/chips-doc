@@ -1,13 +1,13 @@
 const _ = require('lodash');
 const TaskFlow = require('./task_flow');
-
+const { looper } = require('../../lib');
 // TODO,  add test
 
 class FlowManager {
   constructor({
-    user_id, template_flows, swaggers, headers,
+    user_id, template_flows, swaggers, headers, flows_context
   }) {
-    this.flows_context = {};
+    this.flows_context = _.cloneDeep(flows_context);
     this.reports = [];
     this.user_id = user_id;
     this.template_flows = template_flows; // do not clone deep because this object is big
@@ -26,12 +26,20 @@ class FlowManager {
    * @param {object} options.swaggers - swaggers
    * @param {object} options.headers - headers
    * @param {object} options.flow_name - flow_name
+   * @param {object} options.flows_context - context
    * @returns {object} - flows context
    * @memberof FlowManager
    */
   static async run(options) {
     const instance = new FlowManager(options);
-    await instance.excute(options.flow_name);
+    const { flow_name } = options;
+    if (typeof flow_name === 'string') {
+      await instance.excute(flow_name);
+    } else if (Array.isArray(flow_name)) {
+      looper.forEach(flow_name, async (single_flow_name) => {
+        await instance.excute(single_flow_name);
+      });
+    }
 
     return {
       flows_context: instance.flows_context,
@@ -70,7 +78,7 @@ class FlowManager {
 
     if (fail_report.length !== 0) {
       this.reports.push({ report, fail_report });
-      throw new Error('task flows excute fail');
+      // throw new Error('task flows excute fail');
     } else {
       this.reports.push({ report });
     }
