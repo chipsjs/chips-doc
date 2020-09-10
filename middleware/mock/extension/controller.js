@@ -56,17 +56,18 @@ class Controller extends BaseExtension {
 
     if (_.has(control_info, 'and_condition')) {
       const condition = _.get(control_info, 'and_condition', {});
+      const key_value_arr = Object.entries(condition);
 
-      const exist_no_match = Object.entries(condition).find(
-        ([key, value]) => {
-          if (_.has(http_response, key)) {
-            return _.get(http_response, key) !== value
+      for (let i = 0; i < key_value_arr.length; i += 1) {
+        const [key, value] = key_value_arr[i];
+        if (_.has(http_response, key)) {
+          if (_.get(http_response, key) !== value) {
+            ignore_flag = false;
+            break;
           }
-          return false;
+          ignore_flag = true;
         }
-      );
-
-      ignore_flag = !exist_no_match;
+      }
     }
 
     if (_.has(control_info, 'or_condition')) {
