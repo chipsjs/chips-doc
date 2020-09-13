@@ -105,10 +105,21 @@ class HttpClient extends BaseExtension {
     return fake_data;
   }
 
-  static _fakeHeader(parameters, specific_data, context_data) {
+  /**
+   *
+   *
+   * @static
+   * @param {arrya} parameters
+   * @param {object} specific_data
+   * @param {object} context_data
+   * @param {object} additional_headers - additional headers such as headers in config
+   * @returns
+   * @memberof HttpClient
+   */
+  static _fakeHeader(parameters, specific_data, context_data, additional_headers) {
     if (!Array.isArray(parameters)) return {};
 
-    return parameters.reduce((result, item) => {
+    const fake_headers = parameters.reduce((result, item) => {
       if (item.in !== 'header') return result;
 
       const real_data = HttpClient._generateRealData(
@@ -118,6 +129,8 @@ class HttpClient extends BaseExtension {
 
       return result;
     }, {})
+
+    return _.merge({}, fake_headers, additional_headers)
   }
 
   /**
@@ -192,7 +205,7 @@ class HttpClient extends BaseExtension {
    */
   static async run(ctx) {
     const {
-      url, headers, method_type
+      url, method_type
     } = ctx;
 
     const {
@@ -203,9 +216,9 @@ class HttpClient extends BaseExtension {
       throw new TypeError(`${url} no exist in swagger`);
     }
 
-    const fake_headers = HttpClient._fakeHeader(
+    const headers = HttpClient._fakeHeader(
       Swagger.getParametersSchema(operation_obj),
-      specific_data, context_data
+      specific_data, context_data, ctx.headers
     );
 
     const params = HttpClient._fakeQuery(
@@ -222,18 +235,18 @@ class HttpClient extends BaseExtension {
       specific_data, context_data
     );
 
-    const response = await http.request({
+    const request_config = {
       base_url: config.get('mock_server'),
       path: new_url,
       method: method_type,
       params,
       body,
-      headers: _.merge({}, fake_headers, headers)
-    });
+      headers
+    }
 
-    _.set(ctx, ['public', ctx.task_id, 'result'], {
-      new_url, body, params, response
-    });
+    const response = await http.request(request_config);
+
+    _.set(ctx, ['public', ctx.task_id, 'result'], { ...request_config, response });
 
     await HttpClient._validatorResponse(
       response,

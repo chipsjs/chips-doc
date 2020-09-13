@@ -523,5 +523,14 @@ module.exports = {
     context: {
       params: ['header_a']
     }
+  },
+  context_updated_by_headers_2: {
+    flow: ['get /context/updatedByHeaders', 'get /api1'],
+    context: {
+      params: ['key1'],
+      scope: {
+        key1: ['header_a']
+      }
+    }
   }
 }

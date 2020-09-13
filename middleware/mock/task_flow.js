@@ -45,6 +45,8 @@ class TaskFlow {
       }, {});
     } else if (typeof before_convert_params === 'object') {
       params = before_convert_params;
+    } else {
+      throw new TypeError(`before_convert_params type error, its type is ${typeof before_convert_params} `);
     }
 
     // define default scope
@@ -136,11 +138,13 @@ class TaskFlow {
 
   // update context headers
   _updateContextHeaders(context_headers, context_data) {
-    Object.entries(context_data).forEach(([key, value]) => {
+    const context_scope = _.get(context_data, 'scope', {});
+
+    Object.entries(context_scope).forEach(([key, value]) => {
       if (_.has(context_headers, key)) {
         const old_value = _.get(context_headers, [key]);
         if (!old_value || typeof old_value === typeof value) {
-          _.set(context_headers, key, value);
+          _.set(context_headers, key, _.get(context_data, ['params', value]));
         }
       }
     });
@@ -189,14 +193,12 @@ class TaskFlow {
         });
 
         if (_.has(this.context, [task_id, 'result'])) {
-          const {
-            new_url, params, body, response
-          } = _.get(this.context, [task_id, ['result']]);
+          const result = _.get(this.context, [task_id, ['result']]);
           this.context.context = this._updateContextParams(
-            this.context.context, response, params, body
+            this.context.context, result.response, result.params, result.body
           );
           this._updateContextHeaders(this.context.headers, this.context.context);
-          this._reporter.addReport(task_id, new_url, params, body, response);
+          this._reporter.addReport(task_id, result);
         }
       });
     } catch (err) {

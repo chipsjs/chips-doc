@@ -40,11 +40,12 @@ class Report {
    * @param {object} http_response - http response
    * @param {string} http_response.status - response status code
    * @param {object} http_response.data - response response body
+   * @param {object} http_response.headers - response response body
    * @param {string} message - err message
    * @memberof Report
    */
   addFailReport(api_info_name, http_response = {}, message) {
-    const response = _.pick(http_response, ['status', 'data']);
+    const response = _.pick(http_response, ['status', 'data', 'headers']);
     this._fail_report_queue.push({
       api_info_name,
       response,
@@ -61,20 +62,24 @@ class Report {
    * @returns {undefined}
    * @memberof Report
    */
-  addReport(api_info_name, url, params, data, http_response) {
-    const response = _.pick(http_response, ['status', 'data']);
-
+  addReport(api_info_name, {
+    base_url, path, method, params, body, headers, response
+  }) {
+    // TODO, simifiy report
     this._report_queue.push({
       api_info_name,
-      url,
+      base_url,
+      url: path,
+      method,
       params,
-      data,
+      data: body,
+      headers,
       isRequest: true
     });
 
     this._report_queue.push({
       api_info_name,
-      url,
+      url: path,
       response,
       isRequest: false
     });

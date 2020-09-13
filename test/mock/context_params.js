@@ -116,21 +116,49 @@ describe('context params', () => {
     });
   });
 
-  describe('context updated by response headers', () => {
-    let context_params;
+  describe('headers', () => {
+    describe('context updated by response', () => {
+      let context_params;
 
-    before('mock', async () => {
-      const { context: updated_context } = await TaskFlow.run('temp', {
-        swaggers,
-        api_flow: api_flow.context_updated_by_headers
+      before('mock', async () => {
+        const { context: updated_context } = await TaskFlow.run('temp', {
+          swaggers,
+          api_flow: api_flow.context_updated_by_headers
+        });
+        context_params = updated_context.context.params;
       });
-      context_params = updated_context.context.params;
+
+      it('should have right context params', () => {
+        assert.nestedPropertyVal(context_params, 'header_a', 'a');
+      });
     });
 
-    it('should have right context params', () => {
-      assert.nestedPropertyVal(context_params, 'header_a', 'a');
+    describe('context updated by scope param and apply this header in the next api', () => {
+      let context_params;
+      let report_queue;
+
+      before('mock', async () => {
+        const { report, context: updated_context } = await TaskFlow.run('temp', {
+          swaggers,
+          api_flow: api_flow.context_updated_by_headers_2,
+          headers: {
+            header_a: 'b'
+          }
+        });
+        context_params = updated_context.context.params;
+        report_queue = report;
+      });
+
+      it('should have right context params', () => {
+        assert.nestedPropertyVal(context_params, 'key1', 'a');
+      });
+
+      it('should have correct request and response', () => {
+        assert.lengthOf(report_queue, 4, 'array has length of 4');
+        assert.nestedPropertyVal(report_queue, '2.headers.header_a', 'a');
+      });
     });
-  });
+  })
 
   after('stop mock server', () => {
     helper.mockServerRestore();
