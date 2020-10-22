@@ -7,10 +7,10 @@
 
 ## 02-How to use it
 
-- 1. In cola-server-repo(https://bitbucket.org/apac_eco_system/cola-server), there is a dir named `flow`
+- 1.  In cola-server-repo(https://bitbucket.org/apac_eco_system/cola-server), there is a dir named `flow`
 - 2. create a new json file or add flow to exist json file
 - 3. Write the flow according to cola-doc schema (Introduction Later)
-- 4. call api /cola/api/flow/list/:version/:name get flow and update it
+- 4.  call api /cola/api/flow/list/:version/:name get flow and update it
 - 4. call api /cola/api/flow/run and you will get the report about this flow
 
 ## 04-Introduction cola-doc's schema
@@ -236,83 +236,3 @@ eg:
     }
   },
 ```
-
-## 06-real flow
-
-```jsx
-{
-  "lock": {
-    "flow": ["get /devices/capabilities", "post /houses", "post /locks", "put /locks/:lockID"],
-    "extensions": {
-      "get /devices/capabilities": [
-        {
-          "middleware": "getswagger",
-          "params": {
-            "onlymock": ["deviceType", "productID", "productTypeID"]
-          }
-        }
-      ],
-      "post /locks": [
-        {
-          "middleware": "getswagger",
-          "params": {
-            "version": "v2.0.0",
-            "onlymock": ["houseID", "serialNumber", "LockIDs", "LockName"]        
-          }
-        },
-        {
-          "middleware": "httpclient",
-          "params": {
-            "request": {
-              "LockIDs": ["${lockID}"]
-            }
-          }
-        }
-      ],
-      "put /locks/:lockID": [
-        {
-          "middleware": "getswagger",
-          "params": {
-            "onlymock": ["LockName", "hostLockInfo"]
-          }
-        }
-      ]
-    },
-    "context": {
-      "params": {
-        "serialNumber": "a",
-        "lockID": "b",
-        "productID": "111",
-        "productTypeID": "2222",
-        "manufacturer": "",
-        "lockSerialNumber": "",
-        "lockType": "",
-        "houseID": ""
-      },
-      "scope": {
-        "productID": ["hostLockInfo.productID"],
-        "productTypeID": ["hostLockInfo.productTypeID"],
-        "manufacturer": ["lock.manufacturer", "hostLockInfo.manufacturer"],
-        "lockSerialNumber": ["lock.serialNumber", "hostLockInfo.serialNumber"],
-        "lockType": ["lock.type", "hostLockInfo.Type"],
-        "houseID": ["HouseID"]
-      }
-    }
-  }
-}
-```
-
-## 07-Common Issues
-
-### swagger extension
-
-- Sometimes,  our august-api-spec translates to  swagger that doesn't quite convey what this interface means. So we need to add swagger-extension. Cola-Doc support add swagger additional type and can sync it well.
-- add spec in xxx_extention.json and create  pr to cola-server
-- click the refresh button in cola-frontend after this pr is merged
-- eg:
-
-```jsx
-/device/capabilities
-```
-
-## 08-question
