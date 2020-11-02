@@ -1340,4 +1340,38 @@ describe('convert spec to generate api doc', () => {
       fs.unlinkSync('test/convert/temp/standard.json');
     });
   })
+
+  describe('filter <> in description', () => {
+    before('set source data', () => {
+      specJson = {
+        'Post /test': {
+          method: 'post',
+          request: {
+            body: {
+              c: ' <string iphone kkk> <email>'
+            }
+          }
+        }
+      }
+    });
+
+    before('convert normal spec to api doc', () => {
+      specResult = Convert.getInstance().run(specJson, 'test/convert/temp/filter');
+    });
+
+    after('clean file', () => {
+      fs.unlinkSync('test/convert/temp/filter.json');
+    });
+
+    it('should generate correct api doc', () => {
+      const api_name = '/test';
+      assert.exists(specResult[api_name]);
+      assert.exists(specResult[api_name].post);
+      const operation_object = Swagger.getOperationObject(specResult[api_name], 'post');
+      const body = Swagger.getRequestBodySchema(operation_object);
+      assert.property(body.properties, 'c');
+      assert.nestedPropertyVal(body, 'properties.c.type', 'string');
+      assert.nestedPropertyVal(body, 'properties.c.description', ' string iphone kkk email');
+    });
+  })
 });

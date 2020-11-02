@@ -21,34 +21,34 @@ class SpecConvert extends Base.factory() {
    */
   _parseType(description) {
     const lower_case_description = description.toLowerCase();
-    const prefix_type = lower_case_description.substr(0, 6);
+    const prefix_type = lower_case_description.substr(0, 10);
 
     // there are two different schema: 1.[optional] string: or 2.String/string
-    if (prefix_type === 'string' || lower_case_description.indexOf('string:') !== -1) {
+    if (prefix_type.indexOf('string') !== -1 || lower_case_description.indexOf('string:') !== -1) {
       return Swagger.dataType.string;
     }
 
-    if (prefix_type === 'number' || lower_case_description.indexOf('number:') !== -1) {
+    if (prefix_type.indexOf('number') !== -1 || lower_case_description.indexOf('number:') !== -1) {
       return Swagger.dataType.number;
     }
 
     // A tricky way for match integer && <integer> &&
     // other cases when first ten characters have 'integer'
-    if (lower_case_description === 'int' || lower_case_description.substr(0, 10).indexOf('integer') !== -1) {
+    if (prefix_type.indexOf('int') !== -1 || prefix_type.indexOf('integer') !== -1 || lower_case_description.indexOf('integer:') !== -1) {
       return Swagger.dataType.integer;
     }
 
-    if (prefix_type === 'object') {
+    if (prefix_type.indexOf('object') !== -1 || lower_case_description.indexOf('object:') !== -1) {
       return Swagger.dataType.object;
     }
 
-    if (lower_case_description.substr(0, 5) === 'array') {
+    if (prefix_type.indexOf('array') !== -1 || lower_case_description.indexOf('array:') !== -1) {
       return Swagger.dataType.array;
     }
 
     // A tricky way for match boolean && <boolean> &&
     // other cases when first ten characters have 'boolean'
-    if (lower_case_description.substr(0, 10).indexOf('boolean') !== -1) {
+    if (prefix_type.indexOf('boolean') !== -1 || lower_case_description.indexOf('boolean:') !== -1) {
       return Swagger.dataType.boolean;
     }
 
@@ -91,9 +91,12 @@ class SpecConvert extends Base.factory() {
       } else {
         switch (typeof parameter_object) {
           case 'string':
+            // eslint-disable-next-line no-case-declarations
+            const description = (parameter_object.split(/<(.*?)>/g)).join('');
+
             convert_schema[param_name] = Swagger.generateSchemaByType(
-              this._parseType(parameter_object),
-              parameter_object
+              this._parseType(description),
+              description // filter <> in string, not support <> in <>, such as<xxx <xx>x>
             );
             if (!isRequired && parameter_object.indexOf('required') !== -1) {
               result.add(param_name);
