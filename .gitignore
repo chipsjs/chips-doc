@@ -1,7 +1,13 @@
-/node_modules/*
+## ide config ignore
 .idea/*
+.vscode/
+
+## chore output ignore
 /test_case/*
 coverage/
 .nyc_output/
+/node_modules/*
+
+## log ignore
 report/*
 *.log
