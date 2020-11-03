@@ -52,12 +52,11 @@ describe('convert spec to auto generate tag', () => {
         description, summary: outputSummary,
       } = specResult[api_name].get;
       const {
-        summary: inputSummary,
         note,
         response: { body: inputResponse }
       } = specJson['GET /test'];
 
-      assert.strictEqual(outputSummary, inputSummary);
+      assert.strictEqual(outputSummary, `get ${api_name}`);
       assert.strictEqual(description, note);
       const outputParameters = _.get(specResult[api_name], ['get', 'parameters']);
       const inputQuery = _.get(specJson, ['GET /test', 'request', 'query', 'required']);
@@ -122,12 +121,11 @@ describe('convert spec to auto generate tag', () => {
         description, summary: outputSummary,
       } = specResult[api_name].post;
       const {
-        summary: inputSummary,
         note,
         response: { body: inputResponse }
       } = specJson['POST /test'];
 
-      assert.strictEqual(outputSummary, inputSummary);
+      assert.strictEqual(outputSummary, `post ${api_name}`);
       assert.strictEqual(description, note);
 
       const outputRequestBody = _.get(specResult, [api_name, 'post', 'requestBody', 'content', 'application/json', 'schema']);
