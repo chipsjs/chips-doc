@@ -337,7 +337,7 @@ class SpecConvert extends Base.factory() {
         }
 
         const path_item = Swagger.packagePathItem({
-          summary: `${real_method_type} ${real_api_name}`,
+          summary: real_api_name,
           description: api.note || api.summary,
           tags: Swagger.parseTag(real_api_name),
           body: this.parseRequestBodySchema(_.get(api, ['request', 'body'])),

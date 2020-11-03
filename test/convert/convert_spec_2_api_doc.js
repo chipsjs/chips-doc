@@ -56,7 +56,7 @@ describe('convert spec to generate api doc', () => {
         response: { body: inputResponse }
       } = specJson['GET /test'];
 
-      assert.strictEqual(outputSummary, `get ${api_name}`);
+      assert.strictEqual(outputSummary, api_name);
       assert.strictEqual(description, note);
       const outputResponseBody = _.get(specResult[api_name], ['get', 'responses', '200', 'content', 'application/json', 'schema']);
       const outputParameters = _.get(specResult[api_name], ['get', 'parameters']);
@@ -123,7 +123,7 @@ describe('convert spec to generate api doc', () => {
         response: { body: inputResponse }
       } = specJson['GET /test'];
 
-      assert.strictEqual(outputSummary, `get ${api_name}`);
+      assert.strictEqual(outputSummary, api_name);
       assert.strictEqual(description, inputSummary);
 
       const outputParameters = _.get(specResult[api_name], ['get', 'parameters']);
@@ -517,7 +517,7 @@ describe('convert spec to generate api doc', () => {
           response: { body: inputResponse }
         } = specJson['GET /test1'];
 
-        assert.strictEqual(outputSummary, `get ${api_name}`);
+        assert.strictEqual(outputSummary, api_name);
         assert.strictEqual(description, inputSummary);
 
         const outputParameters = _.get(specResult[api_name], ['get', 'parameters']);
@@ -549,13 +549,12 @@ describe('convert spec to generate api doc', () => {
           description, summary: outputSummary,
         } = specResult[api_name].get;
         const {
-          summary: inputSummary,
           note,
           request: { query: inputQuery },
           response: { body: inputResponse }
         } = specJson['GET /test2'];
 
-        assert.strictEqual(outputSummary, `get ${api_name}`);
+        assert.strictEqual(outputSummary, api_name);
         assert.strictEqual(description, note);
 
         const outputParameters = _.get(specResult[api_name], ['get', 'parameters']);
