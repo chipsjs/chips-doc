@@ -554,7 +554,7 @@ class SpecConvert extends Base.factory() {
       }, {}
     );
 
-    const info_obj = Swagger.generateInfoObject('august-rest-api', 'If you want to refresh swagger, click terms of service and refersh the browser', config.get('terms_of_service'), api_version);
+    const info_obj = Swagger.generateInfoObject('august-rest-api', '', config.get('terms_of_service'), api_version);
     const new_version_swagger = Swagger.generateOpenApiObject(info_obj, new_path_items);
     return new_version_swagger;
   }
