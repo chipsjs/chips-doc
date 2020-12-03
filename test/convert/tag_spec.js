@@ -1,9 +1,7 @@
 const { assert } = require('chai');
 const fs = require('fs');
-const _ = require('lodash');
 
 const Convert = require('../../middleware/convert/spec_convert');
-const { Swagger } = require('../../lib');
 
 describe('convert spec to auto generate tag', () => {
   let specJson = {};
@@ -184,6 +182,37 @@ describe('convert spec to auto generate tag', () => {
 
     after('clean file', () => {
       fs.unlinkSync('test/convert/temp/tag.json');
+    });
+  });
+
+  describe('api name like A/:id/B/:id', () => {
+    before('set source data', () => {
+      specJson = {
+        'Get /A/:id/B/:id': {
+          method: 'get',
+          response: {
+            body: {
+            }
+          }
+        }
+      }
+    });
+
+    before('extension tag overwrite base', () => {
+      specResult = Convert.getInstance().syncSwaggerJson(specJson, {
+        '/A/:id/B/:id': {
+          get: {
+            tags: ['C']
+          }
+        }
+      }).paths;
+    });
+
+    it('should generate correct api doc', () => {
+      const api_name = '/A/:id/B/:id';
+      assert.exists(specResult[api_name]);
+      assert.exists(specResult[api_name].get);
+      assert.nestedPropertyVal(specResult[api_name], 'get.tags[0]', 'C');
     });
   });
 });

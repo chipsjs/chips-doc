@@ -64,12 +64,14 @@ class SpecConvert extends Base.factory() {
    * @memberof SpecConvert
    */
   _filterType(type, description) {
+    let final_description = description;
     const addtional_description = `<${type}>`;
     const index = description.indexOf(addtional_description);
     if (index !== -1) {
-      return description.substring(index + addtional_description.length);
+      final_description = description.substring(index + addtional_description.length);
     }
-    return description;
+
+    return final_description.split(/<(.*?)>/g).join('');
   }
 
   /**
@@ -108,8 +110,7 @@ class SpecConvert extends Base.factory() {
       } else {
         switch (typeof parameter_object) {
           case 'string': {
-            // eslint-disable-next-line no-case-declarations
-            const description = (parameter_object.split(/<(.*?)>/g)).join('');
+            const description = parameter_object;
 
             const type = this._parseType(description);
             convert_schema[param_name] = Swagger.generateSchemaByType(
@@ -522,6 +523,11 @@ class SpecConvert extends Base.factory() {
         new_operation_object,
         this._mergeParameters(base_schema, extention_schema)
       );
+    }
+
+    // tags overwrite base
+    if (Swagger.hasTags(extention_object)) {
+      Swagger.setTags(new_operation_object, Swagger.getTags(extention_object));
     }
 
     return new_operation_object;
