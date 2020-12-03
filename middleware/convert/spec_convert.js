@@ -56,6 +56,23 @@ class SpecConvert extends Base.factory() {
   }
 
   /**
+   * filter type to get pure description
+   *
+   * @param {string} type - 'string'
+   * @param {string} description - '<string>: user email'
+   * @returns {string} type - string | number | object | array | boolean | unknown
+   * @memberof SpecConvert
+   */
+  _filterType(type, description) {
+    const addtional_description = `<${type}>`;
+    const index = description.indexOf(addtional_description);
+    if (index !== -1) {
+      return description.substring(index + addtional_description.length);
+    }
+    return description;
+  }
+
+  /**
    *
    * @param {object} schema - {pin: 'the pin for this user', slot: 'the slot for user'}
    * @param {boolean} isRequired - when is true, all params in shcema is required
@@ -90,18 +107,20 @@ class SpecConvert extends Base.factory() {
         convert_schema[param_name] = Swagger.generateSchemaByType(Swagger.dataType.unknown);
       } else {
         switch (typeof parameter_object) {
-          case 'string':
+          case 'string': {
             // eslint-disable-next-line no-case-declarations
             const description = (parameter_object.split(/<(.*?)>/g)).join('');
 
+            const type = this._parseType(description);
             convert_schema[param_name] = Swagger.generateSchemaByType(
-              this._parseType(description),
-              description // filter <> in string, not support <> in <>, such as<xxx <xx>x>
+              type,
+              this._filterType(type, description) // filter <> in string, not support <xxx <xx>x>
             );
             if (!isRequired && parameter_object.indexOf('required') !== -1) {
               result.add(param_name);
             }
             break;
+          }
           case 'object':
             if (Swagger.isCombiningSchemas(param_name) || param_name === 'ifPresent' || param_name === 'optional' || param_name === 'header') {
               const child_convert_schema = this._parseDetailSchema(parameter_object, false);
