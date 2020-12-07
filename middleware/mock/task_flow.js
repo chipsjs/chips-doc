@@ -114,7 +114,7 @@ class TaskFlow {
     this.context.context = this._updateContextParams(
       this.context.context, result.response, result.params, result.body, current_task_id
     );
-    this._updateContextHeaders(this.context.headers, this.context.context);
+    this._updateContextHeaders(this.context.headers, this.context.context, current_task_id);
   }
 
   // do not support path update context
@@ -123,8 +123,6 @@ class TaskFlow {
     const data = _.get(response, 'data');
     const headers = _.get(response, 'headers');
     const scope = _.get(new_context_data, 'scope', {});
-
-    // scope get task_id 则过滤掉it
 
     Object.entries(scope).forEach(([key, value]) => {
       let real_key = key;
@@ -165,14 +163,21 @@ class TaskFlow {
   }
 
   // update context headers
-  _updateContextHeaders(context_headers, context_data) {
+  _updateContextHeaders(context_headers, context_data, task_id) {
     const context_scope = _.get(context_data, 'scope', {});
 
     Object.entries(context_scope).forEach(([key, value]) => {
-      if (_.has(context_headers, key)) {
-        const old_value = _.get(context_headers, [key]);
+      let real_key = key;
+
+      const index = key.indexOf(task_id);
+      if (index !== -1) {
+        real_key = key.substr(index + task_id.length + 1);
+      }
+
+      if (_.has(context_headers, real_key)) {
+        const old_value = _.get(context_headers, [real_key]);
         if (!old_value || typeof old_value === typeof value) {
-          _.set(context_headers, key, _.get(context_data, ['params', value]));
+          _.set(context_headers, real_key, _.get(context_data, ['params', value]));
         }
       }
     });
