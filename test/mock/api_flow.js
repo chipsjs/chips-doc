@@ -532,5 +532,14 @@ module.exports = {
         key1: ['header_a']
       }
     }
+  },
+  context_update_by_spefic_task: {
+    flow: ['post /return/success', 'delete /return/success'],
+    context: {
+      params: ['success'],
+      scope: {
+        success: ['post /return/success.success']
+      }
+    }
   }
 }

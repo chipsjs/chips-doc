@@ -324,12 +324,22 @@ router.post('/api14', (request_config) => {
   }
 });
 
-router.get('/context/updatedByHeaders', () => {
-  return {
-    headers: {
-      header_a: ['a']
-    }
+router.get('/context/updatedByHeaders', () => ({
+  headers: {
+    header_a: ['a']
   }
-});
+}));
+
+router.post('/return/success', () => ({
+  data: {
+    success: true
+  }
+}));
+
+router.delete('/return/success', () => ({
+  data: {
+    success: false
+  }
+}));
 
 module.exports = router;

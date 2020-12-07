@@ -30,6 +30,13 @@ class TaskFlow {
     }
   }
 
+  /**
+   *
+   *
+   * @param {Object} flow_context - eg: { params: ['a'], scope: {'a': ['user.a', 'member.a']}}, eg
+   * @returns {{Object, Object}} - {params, scope}
+   * @memberof TaskFlow
+   */
   _initContextParams(flow_context) {
     if (!flow_context) return {};
 
@@ -49,21 +56,24 @@ class TaskFlow {
       throw new TypeError(`before_convert_params type error, its type is ${typeof before_convert_params} `);
     }
 
-    // define default scope
     const scope = {};
-    Object.keys(params).forEach((key) => {
-      scope[key] = key;
-    });
 
-    // define addtional scope
     const addtional_scope = _.get(flow_context, 'scope', {});
-    Object.entries(addtional_scope).forEach(([key, values]) => {
-      if (!Array.isArray(values)) return;
+    if (Object.keys(addtional_scope).length !== 0) {
+      // define addtional scope
+      Object.entries(addtional_scope).forEach(([key, values]) => {
+        if (!Array.isArray(values)) return;
 
-      values.forEach((value) => {
-        scope[value] = key;
+        values.forEach((value) => {
+          scope[value] = key;
+        });
       });
-    });
+    } else {
+      // define default scope
+      Object.keys(params).forEach((key) => {
+        scope[key] = key;
+      });
+    }
 
     return { params, scope };
   }
@@ -99,33 +109,42 @@ class TaskFlow {
   }
 
   // do not support path update context
-  _updateContextParams(context_data, response, params, body) {
+  _updateContextParams(context_data, response, params, body, task_id) {
     const new_context_data = _.cloneDeep(context_data);
     const data = _.get(response, 'data');
     const headers = _.get(response, 'headers');
-    const context_scope = _.get(new_context_data, 'scope', {});
+    const scope = _.get(new_context_data, 'scope', {});
 
-    Object.entries(context_scope).forEach(([key, value]) => {
-      if (_.has(data, key)) {
-        const new_value = _.get(data, key);
+    // scope get task_id 则过滤掉it
+
+    Object.entries(scope).forEach(([key, value]) => {
+      let real_key = key;
+
+      const index = key.indexOf(task_id);
+      if (index !== -1) {
+        real_key = key.substr(index + task_id.length + 1);
+      }
+
+      if (_.has(data, real_key)) {
+        const new_value = _.get(data, real_key);
         TaskFlow.updateContextValue(new_context_data, value, new_value);
         return new_context_data;
       }
 
-      if (_.has(headers, key)) {
-        const new_value = _.get(headers, [key, 0]);
+      if (_.has(headers, real_key)) {
+        const new_value = _.get(headers, [real_key, 0]);
         TaskFlow.updateContextValue(new_context_data, value, new_value);
         return new_context_data;
       }
 
-      if (_.has(params, key)) {
-        const new_value = _.get(params, key);
+      if (_.has(params, real_key)) {
+        const new_value = _.get(params, real_key);
         TaskFlow.updateContextValue(new_context_data, value, new_value);
         return new_context_data;
       }
 
-      if (_.has(body, key)) {
-        const new_value = _.get(body, key);
+      if (_.has(body, real_key)) {
+        const new_value = _.get(body, real_key);
         TaskFlow.updateContextValue(new_context_data, value, new_value);
         return new_context_data;
       }
@@ -195,7 +214,7 @@ class TaskFlow {
         if (_.has(this.context, [task_id, 'result'])) {
           const result = _.get(this.context, [task_id, ['result']]);
           this.context.context = this._updateContextParams(
-            this.context.context, result.response, result.params, result.body
+            this.context.context, result.response, result.params, result.body, task_id
           );
           this._updateContextHeaders(this.context.headers, this.context.context);
           this._reporter.addReport(task_id, result);

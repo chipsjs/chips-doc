@@ -160,6 +160,28 @@ describe('context params', () => {
     });
   })
 
+  describe('context updated by spefic', () => {
+    let context_params;
+    let report_queue;
+
+    before('mock', async () => {
+      const { report, context: updated_context } = await TaskFlow.run('temp', {
+        swaggers,
+        api_flow: api_flow.context_update_by_spefic_task
+      });
+      context_params = updated_context.context.params;
+      report_queue = report;
+    });
+
+    it('should have right context params', () => {
+      assert.nestedPropertyVal(context_params, 'success', true);
+    });
+
+    it('should have correct request and response', () => {
+      assert.lengthOf(report_queue, 4, 'array has length of 4');
+    });
+  });
+
   after('stop mock server', () => {
     helper.mockServerRestore();
   });

@@ -81,9 +81,18 @@ eg in *.json:
 "context": {
 	"params": ['lockID'],
 	"scope": {
-		"lockID": ["lockinfo.id", "hostlockInfo.lockID"]
+		"lockID": ["lockID", "lockinfo.id", "hostlockInfo.lockID"]
 	}
 }
+```
+- 假设需要特定task上的response去覆盖context.params, 可以这样写, 代表post /a@1.lockID的参数将会去覆盖context
+```jsx
+"flow": ['post /a@1', 'post /a@2'],
+"context": {
+	"params": ['lockID'],
+	"scope": {
+		"lockID": ["post /a@1.lockID"]
+	}
 ```
 
 ## 05-Introduction cola-doc's extensions
