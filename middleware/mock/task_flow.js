@@ -108,6 +108,15 @@ class TaskFlow {
     return new_context_data;
   }
 
+  updateContext() {
+    const { current_task_id } = this.context;
+    const result = _.get(this.context, [current_task_id, ['result']]);
+    this.context.context = this._updateContextParams(
+      this.context.context, result.response, result.params, result.body, current_task_id
+    );
+    this._updateContextHeaders(this.context.headers, this.context.context);
+  }
+
   // do not support path update context
   _updateContextParams(context_data, response, params, body, task_id) {
     const new_context_data = _.cloneDeep(context_data);
@@ -212,11 +221,8 @@ class TaskFlow {
         });
 
         if (_.has(this.context, [task_id, 'result'])) {
+          this.updateContext();
           const result = _.get(this.context, [task_id, ['result']]);
-          this.context.context = this._updateContextParams(
-            this.context.context, result.response, result.params, result.body, task_id
-          );
-          this._updateContextHeaders(this.context.headers, this.context.context);
           this._reporter.addReport(task_id, result);
         }
       });
