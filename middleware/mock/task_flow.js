@@ -68,12 +68,13 @@ class TaskFlow {
           scope[value] = key;
         });
       });
-    } else {
-      // define default scope
-      Object.keys(params).forEach((key) => {
-        scope[key] = key;
-      });
     }
+
+    const default_params = _.omit(params, Object.keys(addtional_scope))
+    // define default scope
+    Object.keys(default_params).forEach((key) => {
+      scope[key] = key;
+    });
 
     return { params, scope };
   }
