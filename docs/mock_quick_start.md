@@ -1,19 +1,12 @@
-# 04-Cola Doc Mock
-
-## 01-Bind Lock && Unbind Lock Demo
-
-- Generic call way: /flow/list && /flow/run
-- Quick api for bind lock: /bind/lock
-
 ## 02-How to use it
 
-- 1. In cola-server-repo(https://bitbucket.org/apac_eco_system/cola-server), there is a dir named `flow`
+- 1. In chipsjs-doc-server-repo, there is a dir named `flow`
 - 2. create a new json file or add flow to exist json file
-- 3. Write the flow according to cola-doc schema (Introduction Later)
-- 4. call api /cola/api/flow/list/:version/:name get flow and update it
-- 4. call api /cola/api/flow/run and you will get the report about this flow
+- 3. Write the flow according to chips-doc schema (Introduction Later)
+- 4. call api /chips/api/flow/list/:version/:name get flow and update it
+- 4. call api /chips/api/flow/run and you will get the report about this flow
 
-## 04-Introduction cola-doc's schema
+## 04-Introduction chips-doc's schema
 
 - There are three key param: flow(required), extensions, context
 
@@ -95,7 +88,7 @@ eg in *.json:
 	}
 ```
 
-## 05-Introduction cola-doc's extensions
+## 05-Introduction chips-doc's extensions
 
 ### controller
 
@@ -315,9 +308,9 @@ eg:
 
 ### swagger extension
 
-- Sometimes,  our august-api-spec translates to  swagger that doesn't quite convey what this interface means. So we need to add swagger-extension. Cola-Doc support add swagger additional type and can sync it well.
-- add spec in xxx_extention.json and create  pr to cola-server
-- click the refresh button in cola-frontend after this pr is merged
+- Sometimes,  our august-api-spec translates to  swagger that doesn't quite convey what this interface means. So we need to add swagger-extension. chips-Doc support add swagger additional type and can sync it well.
+- add spec in xxx_extention.json and create  pr to chips-server
+- click the refresh button in chips-frontend after this pr is merged
 - eg:
 
 ```jsx

@@ -1,5 +1,5 @@
 {
-  "name": "cola-doc",
+  "name": "chips-doc",
   "version": "1.8.5",
   "description": "",
   "main": "generate_case.js",
@@ -31,15 +31,11 @@
   },
   "scripts": {
     "test": "mocha ./test/*",
-    "test-convert": "mocha ./test/convert",
-    "test-mock": "mocha ./test/mock",
-    "coverage": "nyc npm run test",
-    "coverage-convert": "nyc npm run test-convert",
-    "coverage-mock": "nyc npm run test-mock"
+    "coverage": "nyc npm run test"
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@bitbucket.org/apac_eco_system/cola-doc.git"
+    "url": "https://github.com/chipsjs/chipjs-doc.git"
   },
   "husky": {
     "hooks": {
@@ -49,5 +45,5 @@
   },
   "author": "krisxu",
   "license": "ISC",
-  "homepage": "https://bitbucket.org/apac_eco_system/cola-doc#docs/readme"
+  "homepage": "https://github.com/chipsjs/chipjs-doc#docs/readme"
 }

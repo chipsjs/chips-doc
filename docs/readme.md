@@ -1,6 +1,6 @@
 # Structure Introducation
 
-- 流程图见项目下cola-doc流程图.jpg
+- 流程图见项目下chips-doc流程图.jpg
 
 ## project structure
 
