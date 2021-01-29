@@ -304,17 +304,4 @@ eg:
 }
 ```
 
-## 07-Common Issues
-
-### swagger extension
-
-- Sometimes,  our august-api-spec translates to  swagger that doesn't quite convey what this interface means. So we need to add swagger-extension. chips-Doc support add swagger additional type and can sync it well.
-- add spec in xxx_extention.json and create  pr to chips-server
-- click the refresh button in chips-frontend after this pr is merged
-- eg:
-
-```jsx
-/device/capabilities
-```
-
 ## 08-question
