@@ -10,7 +10,7 @@
     "config": "^3.2.4",
     "faker": "^4.1.0",
     "jsonschema": "^1.2.5",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "nock": "^13.0.3",
     "node-fetch": "^2.6.0",
     "openapi-sampler": "^1.0.0-beta.16",
