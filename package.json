@@ -1,8 +1,8 @@
 {
   "name": "chips-doc",
-  "version": "1.8.5",
+  "version": "0.0.1",
   "description": "",
-  "main": "generate_case.js",
+  "main": "index.js",
   "directories": {
     "lib": "lib"
   },
@@ -43,7 +43,7 @@
       "commit-msg": "validate-commit-msg"
     }
   },
-  "author": "krisxu",
+  "author": "chips",
   "license": "ISC",
-  "homepage": "https://github.com/chipsjs/chipjs-doc#docs/readme"
+  "homepage": "https://github.com/chipsjs/chipjs-doc#docs/quick_start/mock_module.md"
 }
