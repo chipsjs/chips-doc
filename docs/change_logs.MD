@@ -45,6 +45,10 @@
 - 1.support getswagger onlymock feature 2.support controller function so that can adjust more flexible
 - author: kris.xu
 
+### 2021.3
+
+- refactor chips-doc
+
 ## Sechedule
 
 ### to do

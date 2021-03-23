@@ -2,26 +2,28 @@
 
 - 流程图见项目下chips-doc流程图.jpg
 
-## project structure
+## Project Structure
 
-### convert module
+### Convert Module
 
-- api spec -> swagger
+- chips spec -> swagger
 
-### mock module
+### Mock Module
 
 swagger + extension + flow -> mock
 
-# feature
+## Feature
 
 - script for main flow checking
 
-## 由接口文档自动生成test_case模块
+### 由接口文档自动生成test_case模块
+
 - 从接口文档中自动fake接口的body/params/path数据
 - 同一个flow中可自定义多个api请求的public字段
 - 支持flow中定义多个api，支持对flow中api的特殊要求（例如一个flow中某个api的特殊的数据）
 
-## mock以及check业务flow模块
+### mock以及check业务flow模块
+
 - 支持多flow从test_case中加载测试用例并同步发送多api的http请求
 - 支持case response的数据类型校验（to optimize，除数据类型外，对特定的值进行判断）
 - 分为成功和失败输出每个flow的报告
@@ -29,13 +31,15 @@ swagger + extension + flow -> mock
 - base_url变量的处理(to optimize, 未来支持不同url的变量)
 - 对特定的special_test_case的处理
 
-# 文档编写教程
+## 文档编写教程
 
 - 首先，让我们统一上下文。flow指的是一个工作流，比如一个注册流程，其中包含多个case。
 
-## api_doc.json
+### api_doc.json
+
 - api_doc是api粒度的接口文档，其中key是接口名，value是一个对象，需要包含以下内容
-```
+
+``` markdown
 .
 +-- method_type http的方法，例如get
 +-- url 例如http://127.0.0.1:3030/locks/proide
@@ -49,30 +53,24 @@ swagger + extension + flow -> mock
 ```
 
 ## api_flow.json
-- 用于自定义用户mock,不在此文件中的接口不会被生成测试用例.key为flow名字， value是一个对象，需要包含以下内容
-```
 
-        "": ["getHouseLog", "getHouseLog"],
+- 用于自定义用户mock,不在此文件中的接口不会被生成测试用例.key为flow名字， value是一个对象，需要包含以下内容
+
+``` json
+    testFlows: {
+        "flow": ["getHouseLog", "updateHouseLog"],
         "context": ["houseID"],
         "getHouseLog": {
-            "clientSerial": "4DD02574-CF63-4BEC-B3BF-75CE3ECAD057",
-            "houseID": "3818a476-5a9c-43fe-8523-7787327cdfd4"
+            "houseID": "1"
         }
+    }
 .
 +-- flow 具体flow需要依次跑的case排序
 +-- context 会根据request,reponse变化的Flow上下文字段
 +-- api_case名     (optional) 一个对象，代表这个api中一些特定的字段
 ```
 
-## api_flow_template.json
-
-- 该文档是api_flow的模板文档，放置所有编写的api_flow，用户可以从里面找对应flow并放到自定义的api_flow中
-
-## api_special_case.json
-
-- 一些特殊用例
-
-# 功能
+## 功能
 
 - 基于flow的数据模拟支持粒度更广，对header等公用字段的便捷化统一定义
 - 自动生成测试用例并支持自动request以及response 强check

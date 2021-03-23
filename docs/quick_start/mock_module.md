@@ -1,23 +1,27 @@
-## 02-How to use it
+[TOC]
 
-- 1. In chipsjs-doc-server-repo, there is a dir named `flow`
-- 2. create a new json file or add flow to exist json file
-- 3. Write the flow according to chips-doc schema (Introduction Later)
-- 4. call api /chips/api/flow/list/:version/:name get flow and update it
-- 4. call api /chips/api/flow/run and you will get the report about this flow
+# Chips-Doc Mock Module
+
+## 02-How to use
+
+- 1. import chips-doc
+- 2. call FlowManager.run with the following parameters: user_id, template_flows, swaggers, flow_name, headers, flows_context
+- 3. the function will return the report and the flows_context which you can update into user context
 
 ## 04-Introduction chips-doc's schema
 
 - There are three key param: flow(required), extensions, context
 
-```jsx
-eg in *.json:
+```json
+// In this case, this file is template_flows and flow_name is register
 {
-  "random_key": {
-    "flow": [],
+  "register": {
+    "flow": ["get /user", "post /login"],
     "extensions": {
+      
     },
     "context": {
+      "params": ["user_id"]
     }
   }
 }
@@ -27,7 +31,7 @@ eg in *.json:
 
 - flow意味着具体的调用过程,  加入一个flow调用了post /a 以及 get /b, 则这个flow这样写:
 
-```jsx
+```json
 "flow": ['post /a', 'get /b']
 ```
 
@@ -43,14 +47,29 @@ eg in *.json:
 
 ### extensions
 
-- extensions用于灵活可插拔的对flow进行自定义控制, 目前支持controller, getswagger, httpclient.
+- extensions用于灵活可插拔的对flow进行自定义控制, 目前支持controller, getswagger, httpclient and secrectFunction
 - 具体写法如下:
 
-```jsx
-"flow": ['post /a@1', 'post /a@2'],
-"extensions": {
-	"post /a@1": [extension1, extension2]
+```json
+{
+  "flow": ['post /a@1', 'post /a@2'],
+  "extensions": {
+    "post /a@1": [{
+      "middleware": 'getswagger',
+      "params": {
+        "onlymock": ['firstName', 'lastName']
+      }
+    }, {
+      "middleware": 'httpclient',
+      "params": {
+        "request": {
+          "lastName": "Xu"
+        }
+      }
+    }]
+  }
 }
+
 ```
 
 ### context
@@ -59,65 +78,77 @@ eg in *.json:
 - 它有两个Key, params(required), scope
 - 一个简单的例子如下:
 
-```jsx
-"context": {
-	"params": {
-		"lockID": "a"
-	}
+```json
+{
+  "flow": ['post /a@1', 'post /a@2'],
+  "context": {
+    "params": {
+      "name": "a"
+    }
+  }
 }
-// 代表mock的lockID是a并且会根据response回来的lockID进行更新
+// 代表mock的name是a并且会根据response回来的name进行更新
 ```
 
-- 假设需要/a 接口下的response  [lock](http://lock.id)info.id 更新 lockID, 并且使下一个/b接口的request hostlockInfo.lockID 使用lockID, 可以这样写
+- 假设需要/a 接口下的response的userInfo.id 更新 user, 并且使下一个/b接口的request user.id 使用该更新后的userId, 可以这样写
 
-```jsx
-"context": {
-	"params": ['lockID'],
-	"scope": {
-		"lockID": ["lockID", "lockinfo.id", "hostlockInfo.lockID"]
-	}
+```json
+{
+  "flow": ['post /a', 'post /a'],
+  "context": {
+    "params": ['userId'],
+    "scope": {
+      "userId": ["userId", "userInfo.id", "user.ID"]
+    }
+  }
 }
 ```
-- 假设需要特定task上的response去覆盖context.params, 可以这样写, 代表post /a@1.lockID的参数将会去覆盖context
-```jsx
-"flow": ['post /a@1', 'post /a@2'],
-"context": {
-	"params": ['lockID'],
-	"scope": {
-		"lockID": ["post /a@1.lockID"]
-	}
+
+- 假设需要特定task上的response去覆盖context.params, 可以这样写, 代表post /a@1.userId的参数将会去覆盖context
+
+```json
+{
+  "flow": ['post /a@1', 'post /a@2'],
+  "context": {
+    "params": ['userId'],
+    "scope": {
+      "userId": ["userId", "post /a@1.userId"]
+    }
+  }
 ```
 
 ## 05-Introduction chips-doc's extensions
 
 ### controller
 
-- 用于控制flow, 有两个功能
+- 用于控制flow的执行流程, 有两个功能： 分别是ignore和dest
 - 第一个是ignore功能, 用于控制当接口的response满足某个条件时控制后面flow中的某个接口不去调用
 - eg:
 
-```jsx
-"flow": ["post /api2", "get /api1", "get /api3"],
-"extensions": {
-  "post /api2": [
-    {
-      "middleware": "controller",
-      "params": {
-        "ignore": {
-          "task_id": "get /api1", // default ignore
-          "and_condition": {
-            "data.success": false // when api1 response.data.success === false, get /api1 will execute
-          },
-          "un_condition": {
-            "status": 200 // when api1 response.data.status !== 200, will execute get /api1
-          },
-          "or_condition": {
-            "data.success": false // 一个匹配上则ignore
+```json
+{
+  "flow": ["post /api2", "get /api1", "get /api3"],
+  "extensions": {
+    "post /api2": [
+      {
+        "middleware": "controller",
+        "params": {
+          "ignore": {
+            "task_id": "get /api1", // default ignore
+            "and_condition": {
+              "data.success": false // when api1 response.data.success === false, get /api1 will execute
+            },
+            "un_condition": {
+              "status": 200 // when api1 response.data.status !== 200, will execute get /api1
+            },
+            "or_condition": {
+              "data.success": false // 一个匹配上则ignore
+            }
           }
         }
       }
-    }
-  ]
+    ]
+  }
 }
 ```
 
@@ -146,7 +177,7 @@ eg in *.json:
 
 ### getswagger
 
-- 用于获取api对应的swagger文档
+- 对swagger进行版本控制以及定制化mock对应字段
 - 目前有两个功能: 1.version 2.onlymock
 - 如果不使用这个插件, 默认获取config下default_version的swagger并且对swagger里的字段都mock
 - eg:
@@ -168,20 +199,20 @@ eg in *.json:
 
 ### httpclient
 
-- 有以下两个功能:
+- 提供给用户指定request参数或者从运行时上下文中更新参数的功能:
 - 1.可以覆盖context params, 用于想要给某个api强行指定request param的值
 
 eg:
 
 ```jsx
-// 代表/ap1中的lockID使用a, 不管context中的lockID是什么值
+// 代表/ap1中的userId使用a, 不管context中的userId是什么值
 "extensions": {
     "post /api1": [
       {
         "middleware": "httpclient",
         "params": {
           "request": {
-            "lockID": "a"
+            "userName": "a"
           }
         }
       }
@@ -215,10 +246,11 @@ eg:
 ```
 
 ### secretfunction
-- 该插件用于执行api前或者执行api后执行function, 以此来实现接口没办法做到的一些功能
+
+- 提供在task执行前/后的函数编程入口. 当用户场景用上述三个插件无法做到时, 可以使用该插件自定义编程
 - 以下这个例子代表当api1的返回存在success.a时将a打印出来
 
-```js
+```json
   testflow: {
     flow: ['get /api1'],
     extensions: {
@@ -303,18 +335,3 @@ eg:
   }
 }
 ```
-
-## 07-Common Issues
-
-### swagger extension
-
-- Sometimes,  our august-api-spec translates to  swagger that doesn't quite convey what this interface means. So we need to add swagger-extension. chips-Doc support add swagger additional type and can sync it well.
-- add spec in xxx_extention.json and create  pr to chips-server
-- click the refresh button in chips-frontend after this pr is merged
-- eg:
-
-```jsx
-/device/capabilities
-```
-
-## 08-question
