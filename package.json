@@ -1,0 +1,49 @@
+{
+  "name": "chips-doc",
+  "version": "1.0.0-alpha",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "dependencies": {
+    "config": "^3.2.4",
+    "faker": "^4.1.0",
+    "jsonschema": "^1.2.5",
+    "nock": "^13.0.3",
+    "node-fetch": "^2.6.0",
+    "openapi-sampler": "^1.0.0-beta.16",
+    "query-string": "^6.9.0"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.1.0",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-jsdoc": "^28.5.1",
+    "eslint-plugin-mocha": "^6.3.0",
+    "husky": "^4.2.5",
+    "lodash": "^4.17.21",
+    "mocha": "^7.2.0",
+    "nyc": "^15.0.1",
+    "sinon": "^9.0.3",
+    "validate-commit-msg": "^2.14.0"
+  },
+  "scripts": {
+    "test": "mocha ./test/*",
+    "coverage": "nyc npm run test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chipsjs/chipjs-doc.git"
+  },
+  "husky": {
+    "hooks": {
+      "pre-push": "npm test",
+      "commit-msg": "validate-commit-msg"
+    }
+  },
+  "author": "chips",
+  "license": "ISC",
+  "homepage": "https://github.com/chipsjs/chipjs-doc#docs/quick_start/mock_module.md"
+}
