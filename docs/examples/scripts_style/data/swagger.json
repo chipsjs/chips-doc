@@ -1,0 +1,122 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "chips-example-api",
+    "description": "# Introduction \n This API is documented in **OpenAPI format** and is based on",
+    "termsOfService": "https://localhost/chips/api",
+    "version": "1.0.0"
+  },
+  "servers": [],
+  "paths": {
+    "/session": {
+      "post": {
+        "summary": "login api",
+        "description": "获得user access token",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "password": {
+                    "type": "string",
+                    "description": "password"
+                  },
+                  "phone": {
+                    "type": "string",
+                    "description": "user phone"
+                  }
+                },
+                "required": [
+                  "password",
+                  "phone"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "hasVerified": {
+                      "type": "boolean",
+                      "description": "Has the device been verified"
+                    },
+                    "accessToken": {
+                      "type": "string",
+                      "description": "access token"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/validation/:type": {
+      "parameters": [
+        {
+          "name": "idtype",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "description": "validation type",
+            "enum": ["phone", "email"]
+          }
+        }
+      ],
+      "post": {
+        "summary": "verify device",
+        "description": "验证该设备",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "phone's value or email's value"
+                  },
+                  "accessToken": {
+                    "type": "string",
+                    "description": "access toekn created by post /session"
+                  }
+                },
+                "required": [
+                  "value",
+                  "accessToken"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "verified flag"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

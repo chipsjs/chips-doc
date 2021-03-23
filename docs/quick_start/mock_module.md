@@ -4,9 +4,38 @@
 
 ## 02-How to use
 
-- 1. import chips-doc
-- 2. call FlowManager.run with the following parameters: user_id, template_flows, swaggers, flow_name, headers, flows_context
-- 3. the function will return the report and the flows_context which you can update into user context
+- import chips-doc
+- call FlowManager.run with the following parameters: user_id, template_flows, swaggers, flow_name, headers, flows_context
+- the function will return the report and the flows_context which you can update into user context
+- eg1(import chips-doc in server):
+
+```js
+const { FlowManager } = require('chips-doc');
+const { flows, swaggers } = require('../data')
+
+const runFlows = async (ctx, next) => {
+  const { reports, flows_context } = await FlowManager.run({
+    user_id: ctx.user_id,
+    template_flows: flows.major,
+    swaggers,
+    flow_name: ctx.flow_name,
+    headers: ctx.user_headers,
+    flows_context: ctx.context || {}
+  });
+
+  ctx.body = {
+    reports
+  };
+  ctx.context = flows_context;
+
+  await next();
+};
+
+module.exports = { runFlows };
+
+```
+
+- eg2(import chips-doc in script): read this dir: example/scripts_style/
 
 ## 04-Introduction chips-doc's schema
 
