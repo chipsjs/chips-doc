@@ -1,0 +1,160 @@
+{
+  "GET /newApi": {
+    "name": "api",
+    "summary": "new api for test and swagger_extention.json has't this api",
+    "method": "GET",
+    "response": {
+      "body": {
+        "a": "string: a"
+      }
+    }
+  },
+  "GET /api/update/name/after": {
+    "name": "api",
+    "summary": "new api for test and swagger_extention.json has't this api",
+    "method": "GET",
+    "response": {
+      "body": {
+        "a": "string: a"
+      }
+    }
+  },
+  "Get /query/base": {
+    "name": "api",
+    "summary": "new api for test and swagger_extention.json has't this api",
+    "method": "GET",
+    "request": {
+      "query": {
+        "param1": "string kkk"
+      }
+    }
+  },
+  "Get /query/multi": {
+    "name": "api",
+    "summary": "multi",
+    "method": "GET",
+    "request": {
+      "query": {
+        "param1": "string kkk",
+        "param2": "string aaa"
+      }
+    }
+  },
+  "Get /query/created": {
+    "name": "api",
+    "summary": "new api for test and swagger_extention.json has't this api",
+    "method": "GET",
+    "request": {
+      "query": {
+        "param1": "string kkk",
+        "param2": "string aaa" 
+      }
+    }
+  },
+  "Get /query/different": {
+    "name": "api",
+    "summary": "new api for test and swagger_extention.json has't this api",
+    "method": "GET",
+    "request": {
+      "query": {
+        "param1": "string"
+      }
+    }
+  },
+  "Get /query/recursive": {
+    "name": "api",
+    "summary": "new api for test and swagger_extention.json has't this api",
+    "method": "GET",
+    "request": {
+      "query": {
+        "param": {
+          "sub_param": {
+            "sub_sub_param": "sub sub spec"
+          }
+        }
+      }
+    }
+  },
+  "Get /query/deleted": {
+    "name": "api",
+    "summary": "new api for test and swagger_extention.json has't this api",
+    "method": "GET",
+    "request": {
+      "query": {
+        "param_new": "string"
+      }
+    }
+  },
+  "Get /path/:name": {
+    "name": "api",
+    "summary": "new api for test and swagger_extention.json has't this api",
+    "method": "GET"
+  },
+  "Post /body/base": {
+    "name": "api",
+    "summary": "111",
+    "method": "POST",
+    "request": {
+      "body": {
+        "param": "string aaaa"
+      }
+    }
+  },
+  "Post /body/created": {
+    "name": "api",
+    "summary": "created",
+    "method": "POST",
+    "request": {
+      "body": {
+        "param": "string",
+        "new_param": "string aaa"
+      }
+    }
+  },
+  "Post /body/different": {
+    "name": "api",
+    "summary": "different",
+    "method": "POST",
+    "request": {
+      "body": {
+        "param": "string"
+      }
+    }
+  },
+  "Post /body/deleted": {
+    "name": "api",
+    "summary": "deleted",
+    "method": "POST",
+    "request": {
+      "body": {
+        "param": "string"
+      }
+    }
+  },
+  "Post /body/recursive": {
+    "name": "api",
+    "summary": "recursive",
+    "method": "POST",
+    "request": {
+      "body": {
+        "param": {
+          "sub_param": {
+            "sub_sub_param": "sub sub spec"
+          }
+        }
+      }
+    }
+  },
+  "Post /response/base": {
+    "name": "api",
+    "summary": "111",
+    "method": "POST",
+    "response": {
+      "body": {
+        "param": "string aaaa"
+      }
+    }
+  }
+}
+
+

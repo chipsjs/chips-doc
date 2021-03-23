@@ -7,5 +7,6 @@
     "user-agent": "August/Luna-1.0.6 (Android; SDK 28; PBDM00)",
     "content-type": "application/json"
   },
-  "default_swagger_version": "v1"
+  "default_swagger_version": "v1",
+  "terms_of_service": "https://localhost"
 }
