@@ -1,5 +1,9 @@
 # ReadMe
 
+## Project Introduction
+
+- 一个E2E测试框架，用于。与开发有关的测试有两种， UT和E2E测试。 UT是单元测试， 用来保证某个函数或者某个中间件是稳定可靠的，但是有部分场景，比如想要知道线上某个接口，某个模块（如注册模块）是否是可靠的，这通过UT是没办法测试到的。E2E测试全名叫做端到端测试， 如字面意思， 从一端发起到另一端，保证的是这个过程中输入输出的可靠性和稳定性。市面上目前有一些e2e测试框架，但是都不足够通用不够灵活不够智能化。但是这个框架可以做到一次编写，case可以给多个使用。quick start可以见 <https://github.com/chipsjs/chips-doc/blob/master/docs/quick_start/mock_module.md>
+
 ## Project Structure
 
 ### Convert Module
