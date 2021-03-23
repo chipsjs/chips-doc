@@ -53,7 +53,7 @@ class Helper {
     ctx.user_id = 'scripts';
     ctx.log_level = 'info';
     ctx.user_headers = {
-      'user-agent': 'August/Luna-1.0.6 (Android; SDK 28; PBDM00)',
+      'user-agent': 'Luna-1.0.6 (Android; SDK 28; PBDM00)',
       'content-type': 'application/json',
     };
 
