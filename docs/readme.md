@@ -1,28 +1,24 @@
-# Structure Introducation
-
-- 流程图见项目下chips-doc流程图.jpg
+# ReadMe
 
 ## Project Structure
 
 ### Convert Module
 
-- chips spec -> swagger
+- doc: docs/quick_start/convert_module.md
+- feat: chips spec -> swagger
 
 ### Mock Module
 
-swagger + extension + flow -> mock
+- doc: docs/quick_start/mock_module.md
+- feat: swagger + extension + flow -> mock
 
-## Feature
-
-- script for main flow checking
-
-### 由接口文档自动生成test_case模块
+#### feat1: 由接口文档自动生成test_case模块
 
 - 从接口文档中自动fake接口的body/params/path数据
 - 同一个flow中可自定义多个api请求的public字段
 - 支持flow中定义多个api，支持对flow中api的特殊要求（例如一个flow中某个api的特殊的数据）
 
-### mock以及check业务flow模块
+#### feat2: mock以及check业务flow模块
 
 - 支持多flow从test_case中加载测试用例并同步发送多api的http请求
 - 支持case response的数据类型校验（to optimize，除数据类型外，对特定的值进行判断）
@@ -31,46 +27,7 @@ swagger + extension + flow -> mock
 - base_url变量的处理(to optimize, 未来支持不同url的变量)
 - 对特定的special_test_case的处理
 
-## 文档编写教程
-
-- 首先，让我们统一上下文。flow指的是一个工作流，比如一个注册流程，其中包含多个case。
-
-### api_doc.json
-
-- api_doc是api粒度的接口文档，其中key是接口名，value是一个对象，需要包含以下内容
-
-``` markdown
-.
-+-- method_type http的方法，例如get
-+-- url 例如http://127.0.0.1:3030/locks/proide
-+-- request     (optional,每个字段都是Json_schema形式)
-|   +-- path    url中可变字段
-|   +-- query   http params
-|   +-- body    http body
-+-- response    (optional，每个字段都是Json_schema形式)
-|   +-- success statuscode为200的回复
-|   +-- failure 除200外的回复（未来会新增其他statuscode，todo）
-```
-
-## api_flow.json
-
-- 用于自定义用户mock,不在此文件中的接口不会被生成测试用例.key为flow名字， value是一个对象，需要包含以下内容
-
-``` json
-    testFlows: {
-        "flow": ["getHouseLog", "updateHouseLog"],
-        "context": ["houseID"],
-        "getHouseLog": {
-            "houseID": "1"
-        }
-    }
-.
-+-- flow 具体flow需要依次跑的case排序
-+-- context 会根据request,reponse变化的Flow上下文字段
-+-- api_case名     (optional) 一个对象，代表这个api中一些特定的字段
-```
-
-## 功能
+## 优势
 
 - 基于flow的数据模拟支持粒度更广，对header等公用字段的便捷化统一定义
 - 自动生成测试用例并支持自动request以及response 强check
