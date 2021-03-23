@@ -11,7 +11,7 @@
     "faker": "^4.1.0",
     "jsonschema": "^1.2.5",
     "nock": "^13.0.3",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^2.6.1",
     "openapi-sampler": "^1.0.0-beta.16",
     "query-string": "^6.9.0"
   },
