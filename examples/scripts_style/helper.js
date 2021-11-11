@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-const { FlowManager } = require('chips-doc');
+const { FlowManager } = require('../../index');
 const template_flows = require('./data/flows')
 const swaggers = require('./data/swagger.json');
 
@@ -69,7 +69,10 @@ class Helper {
     ctx.context = flows_context;
 
     Helper.outputResult(reports[0], ctx.log_level);
-    callback(reports);
+
+    if (callback) {
+      callback(reports);
+    }
   }
 }
 
